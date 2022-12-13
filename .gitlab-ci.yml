@@ -1,0 +1,15 @@
+image: alpine
+
+default:
+  tags:
+    - dockerlocal
+
+stages:
+  - test
+
+Api tests Dataplan:
+  stage: test
+  script:
+    - pytest -v -s tests/test_api.py
+
+
