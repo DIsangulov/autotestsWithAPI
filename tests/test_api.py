@@ -9,6 +9,8 @@ from req.Helpers.base_req import BaseReq
 from req.Api.req_absorber import Absorber
 from req.Api.req_alarmer import Alarmer
 from req.Api.req_core import Core
+from req.Api.req_licenser import Licenser
+from req.Api.req_peopler import Peopler
 
 urllib3.disable_warnings()
 # ________Constants________
@@ -19,6 +21,7 @@ host = "https://10.130.0.22"
 # _________Globals_________
 auth_token = None
 uid = None
+user_id = None
 
 
 # _________Globals_________
@@ -566,4 +569,89 @@ class TestCore:
     def test_core_syslog_post(self):
         req = Core(sess, host)
         resp = req.core_syslog_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+@pytest.mark.skip
+class TestLicenser:
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_licenser_activate(self):
+        req = Licenser(sess, host)
+        resp = req.licenser_activate(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_licenser_license_info(self):
+        req = Licenser(sess, host)
+        resp = req.licenser_license_info(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestPeopler:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_peopler_many_users_put(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_many_users_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_peopler_many_users_post(self):  # пропущен, сначала надо удалить юзера, а потом уже добавлять
+        req = Peopler(sess, host)
+        resp = req.peopler_many_users_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_profile(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_profile(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_profiles(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_profiles(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_peopler_users_get(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_users_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_users_post(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_users_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_users_id_get(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_users_id_get(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_users_id_put(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_users_id_put(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_users_delete(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_users_delete(auth_token)
+        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

@@ -8,7 +8,7 @@ class Core(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.core/active_directory", headers=header, verify=False)
         return resp
 
-    def core_active_directory_post(self, token):  # попробовать сваггер (со сваггера тоже 403)
+    def core_active_directory_post(self, token):
         body = {
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
