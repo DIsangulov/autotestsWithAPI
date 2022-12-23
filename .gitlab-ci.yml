@@ -1,15 +1,12 @@
-image: alpine
-
-default:
-  tags:
-    - dockerlocal
-
-stages:
+stages:          # List of stages for jobs, and their order of execution
   - test
 
-Api tests Dataplan:
-  stage: test
-  script:
-    - pytest -v -s tests/test_api.py
+run_tests:
+    image: python:3.11.0
+    stage: test
 
+    before_script:
+        - pip install -r requirements.txt
 
+    script:
+        - pytest --testit

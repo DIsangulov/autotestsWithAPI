@@ -1,7 +1,9 @@
 import json
 import pytest
 import requests
+import testit
 import urllib3
+
 from self import self
 
 from req.Api.req_auth import AuthApi
@@ -606,6 +608,9 @@ class TestPeopler:
         auth_token = dct['token']
         print(auth_token)
 
+    @testit.displayName("peopler_many_users_put")
+    @testit.externalID("привет")
+    @testit.workItemID(1959)
     def test_peopler_many_users_put(self):
         req = Peopler(sess, host)
         resp = req.peopler_many_users_put(auth_token)
@@ -627,7 +632,7 @@ class TestPeopler:
         resp = req.peopler_profiles(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
+
     def test_peopler_users_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_get(auth_token)
