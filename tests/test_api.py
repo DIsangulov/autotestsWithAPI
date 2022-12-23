@@ -609,7 +609,7 @@ class TestPeopler:
         print(auth_token)
 
     @testit.displayName("peopler_many_users_put")
-    @testit.externalID("привет")
+    @testit.externalID("peopler_many_users_put")
     @testit.workItemID(1959)
     def test_peopler_many_users_put(self):
         req = Peopler(sess, host)
@@ -617,7 +617,7 @@ class TestPeopler:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_peopler_many_users_post(self):  # пропущен, сначала надо удалить юзера, а потом уже добавлять
+    def test_peopler_many_users_post(self):
         req = Peopler(sess, host)
         resp = req.peopler_many_users_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
