@@ -1,4 +1,3 @@
 pytest
-testit-pytest
 testit-adapter-pytest
 testit-api-client
