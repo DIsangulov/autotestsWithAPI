@@ -9,4 +9,6 @@ run_tests:
         - pip install -r requirements.txt
 
     script:
-        - pytest --testit --testrunid=${TEST_RUN_ID} --testit_url=${URL} --privatetoken=${PRIVATE_TOKEN} --configurationid=5aa0c7a7-4d2d-4547-aff3-3af8d0048fa2
+        - pytest -v -s tests/test_api.py
+
+        #- pytest --testit --testrunid=${TEST_RUN_ID} --testit_url=${URL} --privatetoken=${PRIVATE_TOKEN} --configurationid=5aa0c7a7-4d2d-4547-aff3-3af8d0048fa2

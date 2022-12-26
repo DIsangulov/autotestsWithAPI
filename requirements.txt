@@ -1,4 +1,5 @@
 pytest
+requests
 testit-pytest
 testit-api-client
 selenium-wire
