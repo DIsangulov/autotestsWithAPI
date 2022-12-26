@@ -4,3 +4,6 @@ testit-pytest
 testit-api-client
 selenium-wire
 selenium==4.7.2
+self
+urllib3
+
