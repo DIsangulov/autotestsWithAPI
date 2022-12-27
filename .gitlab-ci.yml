@@ -2,7 +2,8 @@ stages:          # List of stages for jobs, and their order of execution
   - test
 
 run_tests:
-    image: python:3.11.0
+    #image: python:3.11.0
+    image: registry.ngrsoftlab.ru:8888/python:3.10.5
     stage: test
 
     before_script:
