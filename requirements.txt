@@ -6,4 +6,5 @@ selenium-wire
 selenium==4.7.2
 self
 urllib3
+datetime
 

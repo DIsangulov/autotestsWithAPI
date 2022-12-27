@@ -13,6 +13,7 @@ from req.Api.req_alarmer import Alarmer
 from req.Api.req_core import Core
 from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
+from utilities.logger import Logger
 
 urllib3.disable_warnings()
 # ________Constants________
@@ -28,7 +29,7 @@ user_id = None
 
 # _________Globals_________
 
-@pytest.mark.skip
+
 class TestAuth:
 
     def test_get_token(self):
@@ -84,7 +85,7 @@ class TestAuth:
     # __________________________________ABSORBER_______________________________________
 
 
-@pytest.mark.skip
+
 class TestAbsorber:
 
     def test_get_token(self):
@@ -167,7 +168,7 @@ class TestAbsorber:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
+
 class TestAlarmer:
 
     def test_get_token(self):
@@ -250,7 +251,7 @@ class TestAlarmer:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
+
 class TestCore:
 
     def test_get_token(self):
@@ -574,7 +575,7 @@ class TestCore:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
+
 class TestLicenser:
     def test_get_token(self):
         req = BaseReq(sess, host)
