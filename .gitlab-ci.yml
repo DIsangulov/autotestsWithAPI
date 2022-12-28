@@ -1,6 +1,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - test
   - reports
+  - deploy
 
 run_tests:
     #image: python:3.11.0
@@ -38,3 +39,14 @@ allure_job: # Название job
      expire_in: 1 day
    rules:
      - when: always
+
+pages: # Названием этой job говорим гитлабу, чтобы захостил результат у себя в pages
+    stage: deploy # третий stage, который будет выполнен
+    script:
+      - mkdir public # Создаем папку public. По умолчанию гитлаб хостит в gitlab pages только из папки public
+      - mv ./allure-report/* public # Перемещаем в папку public сгенерированный отчет.
+    artifacts:
+      paths:
+        - public
+    rules:
+      - when: always
