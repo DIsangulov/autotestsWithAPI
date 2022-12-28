@@ -43,7 +43,7 @@ allure_job: # Название job
 pages: # Названием этой job говорим гитлабу, чтобы захостил результат у себя в pages
     stage: deploy # третий stage, который будет выполнен
     script:
-      - mkdir public # Создаем папку public. По умолчанию гитлаб хостит в gitlab pages только из папки public
+      #- mkdir public # Создаем папку public. По умолчанию гитлаб хостит в gitlab pages только из папки public
       - mv ./allure-report/* public # Перемещаем в папку public сгенерированный отчет.
     artifacts:
       paths:
