@@ -600,10 +600,11 @@ class TestLicenser:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@allure.story("Peopler")
+
 class TestPeopler:
 
     @allure.feature("test_get_token")
+    @allure.story("test_get_token")
     def test_get_token(self):
         req = BaseReq(sess, host)
         resp = req.auth()
@@ -613,9 +614,11 @@ class TestPeopler:
         auth_token = dct['token']
         print(auth_token)
 
-    @testit.displayName("peopler_many_users_put")
-    @testit.externalID("peopler_many_users_put")
-    @testit.workItemID(1959)
+    # @testit.displayName("peopler_many_users_put")
+    # @testit.externalID("peopler_many_users_put")
+    # @testit.workItemID(1959)
+    @allure.feature("test_peopler_many_users_put")
+    @allure.story("test_peopler_many_users_put")
     def test_peopler_many_users_put(self):
         req = Peopler(sess, host)
         resp = req.peopler_many_users_put(auth_token)
@@ -627,59 +630,61 @@ class TestPeopler:
         resp = req.peopler_many_users_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_profile_get")
-    @testit.externalID("peopler_profile_get")
-    @testit.workItemID(1961)
+    # @testit.displayName("peopler_profile_get")
+    # @testit.externalID("peopler_profile_get")
+    # @testit.workItemID(1961)
+    @allure.feature("test_peopler_profile")
+    @allure.story("test_peopler_profile")
     def test_peopler_profile(self):
         req = Peopler(sess, host)
         resp = req.peopler_profile(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_profiles_get")
-    @testit.externalID("peopler_profiles_get")
-    @testit.workItemID(1962)
+    # @testit.displayName("peopler_profiles_get")
+    # @testit.externalID("peopler_profiles_get")
+    # @testit.workItemID(1962)
     def test_peopler_profiles(self):
         req = Peopler(sess, host)
         resp = req.peopler_profiles(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_users_get")
-    @testit.externalID("peopler_users_get")
-    @testit.workItemID(1963)
+    # @testit.displayName("peopler_users_get")
+    # @testit.externalID("peopler_users_get")
+    # @testit.workItemID(1963)
     def test_peopler_users_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_users_post")
-    @testit.externalID("peopler_users_post")
-    @testit.workItemID(1964)
+    # @testit.displayName("peopler_users_post")
+    # @testit.externalID("peopler_users_post")
+    # @testit.workItemID(1964)
     def test_peopler_users_post(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_users_id_get")
-    @testit.externalID("peopler_users_id_get")
-    @testit.workItemID(1965)
+    # @testit.displayName("peopler_users_id_get")
+    # @testit.externalID("peopler_users_id_get")
+    # @testit.workItemID(1965)
     def test_peopler_users_id_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_id_get(auth_token)
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_users_id_put")
-    @testit.externalID("peopler_users_id_put")
-    @testit.workItemID(1966)
+    # @testit.displayName("peopler_users_id_put")
+    # @testit.externalID("peopler_users_id_put")
+    # @testit.workItemID(1966)
     def test_peopler_users_id_put(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_id_put(auth_token)
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @testit.displayName("peopler_users_delete")
-    @testit.externalID("peopler_users_delete")
-    @testit.workItemID(1967)
+    # @testit.displayName("peopler_users_delete")
+    # @testit.externalID("peopler_users_delete")
+    # @testit.workItemID(1967)
     def test_peopler_users_delete(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_delete(auth_token)
