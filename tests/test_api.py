@@ -1,4 +1,6 @@
 import json
+
+import allure
 import pytest
 import requests
 import testit
@@ -29,7 +31,7 @@ user_id = None
 
 # _________Globals_________
 
-
+@pytest.mark.skip
 class TestAuth:
 
     def test_get_token(self):
@@ -85,7 +87,7 @@ class TestAuth:
     # __________________________________ABSORBER_______________________________________
 
 
-
+@pytest.mark.skip
 class TestAbsorber:
 
     def test_get_token(self):
@@ -168,7 +170,7 @@ class TestAbsorber:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestAlarmer:
 
     def test_get_token(self):
@@ -251,7 +253,7 @@ class TestAlarmer:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestCore:
 
     def test_get_token(self):
@@ -575,7 +577,7 @@ class TestCore:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestLicenser:
     def test_get_token(self):
         req = BaseReq(sess, host)
@@ -598,8 +600,10 @@ class TestLicenser:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@allure.story("Peopler")
 class TestPeopler:
 
+    @allure.feature("test_get_token")
     def test_get_token(self):
         req = BaseReq(sess, host)
         resp = req.auth()
