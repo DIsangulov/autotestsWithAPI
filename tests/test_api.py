@@ -603,7 +603,7 @@ class TestLicenser:
 
 class TestPeopler:
 
-    @allure.feature("test_get_token")
+    @allure.feature("TestPeopler")
     @allure.story("test_get_token")
     def test_get_token(self):
         req = BaseReq(sess, host)
@@ -617,7 +617,7 @@ class TestPeopler:
     # @testit.displayName("peopler_many_users_put")
     # @testit.externalID("peopler_many_users_put")
     # @testit.workItemID(1959)
-    @allure.feature("test_peopler_many_users_put")
+    @allure.feature("TestPeopler")
     @allure.story("test_peopler_many_users_put")
     def test_peopler_many_users_put(self):
         req = Peopler(sess, host)
@@ -633,16 +633,19 @@ class TestPeopler:
     # @testit.displayName("peopler_profile_get")
     # @testit.externalID("peopler_profile_get")
     # @testit.workItemID(1961)
-    @allure.feature("test_peopler_profile")
+    @allure.feature("TestPeopler")
     @allure.story("test_peopler_profile")
     def test_peopler_profile(self):
         req = Peopler(sess, host)
         resp = req.peopler_profile(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+
     # @testit.displayName("peopler_profiles_get")
     # @testit.externalID("peopler_profiles_get")
     # @testit.workItemID(1962)
+    @allure.feature("TestPeopler")
+    @allure.story("test_peopler_profiles")
     def test_peopler_profiles(self):
         req = Peopler(sess, host)
         resp = req.peopler_profiles(auth_token)
@@ -651,6 +654,8 @@ class TestPeopler:
     # @testit.displayName("peopler_users_get")
     # @testit.externalID("peopler_users_get")
     # @testit.workItemID(1963)
+    @allure.feature("TestPeopler")
+    @allure.story("test_peopler_users_get")
     def test_peopler_users_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_get(auth_token)
@@ -659,6 +664,8 @@ class TestPeopler:
     # @testit.displayName("peopler_users_post")
     # @testit.externalID("peopler_users_post")
     # @testit.workItemID(1964)
+    @allure.feature("TestPeopler")
+    @allure.story("test_peopler_users_post")
     def test_peopler_users_post(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_post(auth_token)
@@ -667,6 +674,8 @@ class TestPeopler:
     # @testit.displayName("peopler_users_id_get")
     # @testit.externalID("peopler_users_id_get")
     # @testit.workItemID(1965)
+    @allure.feature("TestPeopler")
+    @allure.story("test_peopler_users_id_get")
     def test_peopler_users_id_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_id_get(auth_token)
@@ -676,6 +685,8 @@ class TestPeopler:
     # @testit.displayName("peopler_users_id_put")
     # @testit.externalID("peopler_users_id_put")
     # @testit.workItemID(1966)
+    @allure.feature("TestPeopler")
+    @allure.story("test_peopler_users_id_put")
     def test_peopler_users_id_put(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_id_put(auth_token)
@@ -685,6 +696,8 @@ class TestPeopler:
     # @testit.displayName("peopler_users_delete")
     # @testit.externalID("peopler_users_delete")
     # @testit.workItemID(1967)
+    @allure.feature("TestPeopler")
+    @allure.story("test_peopler_users_delete")
     def test_peopler_users_delete(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_delete(auth_token)

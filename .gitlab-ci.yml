@@ -32,7 +32,7 @@ history_job: # Название job
   image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
 
   script:
-    - 'curl --location --output artifacts.zip "https://gitlab.ngrsoftlab.ru/api/v4/projects/193/jobs/artifacts/master/download?job=pages&job_token=$CI_JOB_TOKEN"'  # С помощью api гитлаба скачиваем файлы из job, который будет указан ниже. 
+    - 'curl --location --output artifacts.zip "https://gitlab.ngrsoftlab.ru/api/v4/projects/193/jobs/artifacts/master/download?job=pages&job_token=$CI_JOB_TOKEN"'  # С помощью api гитлаба скачиваем файлы из job, который будет указан ниже.
     - apk add unzip # Образ, используемый в этом шаге по умолчанию не имеет утилиты unzip, по этой причине мы добавляем её в контейнер
     - unzip artifacts.zip # Распаковываем файлы
     - chmod -R 777 public # Даем права любые манипуляции с содержимым
