@@ -209,21 +209,21 @@ class Core(BaseReq):
         return resp
 
     # --------------------------------NODES LIST WHAT--------------------------------
-    def core_nodes_test_datastore_post(self, token):  # здесь нужны данные
-        body = {"active": 0,
-                "has_nodes": "0",
-                "what": "datastore",
-                "ssh_user": "dataplan",
-                "ssh_password": "R3U7zYiyxVFtUq8QvRAJ",
-                "store_user": "default",
-                "" "store_password": "1q2w3e4r5t",
-                "db": "",
-                "nodes": [
-                    {"XMLName": {"Space": "", "Local": "node"}, "param": "800000000000000000", "threads": "1",
-                     "ip_node": "127.0.0.1", "ssh_port": "22", "store_port": "8123", "keyIdForFront": "127.0.0.1"}]}
-        header = {'token': token, 'skey': "ANGARA"}
-        resp = self.sess.post(f"{self.host}/back/dp.core/nodes/test/datastore", headers=header, json=body, verify=False)
-        return resp
+    # def core_nodes_test_datastore_post(self, token):  # здесь нужны данные
+    #     body = {"active": 0,
+    #             "has_nodes": "0",
+    #             "what": "datastore",
+    #             "ssh_user": "dataplan",
+    #             "ssh_password": "R3U7zYiyxVFtUq8QvRAJ",
+    #             "store_user": "default",
+    #             "" "store_password": "1q2w3e4r5t",
+    #             "db": "",
+    #             "nodes": [
+    #                 {"XMLName": {"Space": "", "Local": "node"}, "param": "800000000000000000", "threads": "1",
+    #                  "ip_node": "127.0.0.1", "ssh_port": "22", "store_port": "8123", "keyIdForFront": "127.0.0.1"}]}
+    #     header = {'token': token, 'skey': "ANGARA"}
+    #     resp = self.sess.post(f"{self.host}/back/dp.core/nodes/test/datastore", headers=header, json=body, verify=False)
+    #     return resp
 
     # --------------------------------NODES WHAT--------------------------------
 

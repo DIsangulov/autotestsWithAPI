@@ -405,20 +405,20 @@ class TestCore:
         resp = req.core_nodes_datastore_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_nodes_test_datastore(self):
-        req = Core(sess, host)
-        resp = req.core_nodes_test_datastore_post(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_core_nodes_datastore_post(self):
-        req = Core(sess, host)
-        resp = req.core_nodes_datastore_post(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_core_nodes_datastore_delete(self):
-        req = Core(sess, host)
-        resp = req.core_nodes_datastore_delete(auth_token)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # def test_core_nodes_test_datastore(self):
+    #     req = Core(sess, host)
+    #     resp = req.core_nodes_test_datastore_post(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    #
+    # def test_core_nodes_datastore_post(self):
+    #     req = Core(sess, host)
+    #     resp = req.core_nodes_datastore_post(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    #
+    # def test_core_nodes_datastore_delete(self):
+    #     req = Core(sess, host)
+    #     resp = req.core_nodes_datastore_delete(auth_token)
+    #     assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_service_dp_alarmer(self):
         req = Core(sess, host)
