@@ -20,12 +20,12 @@ class Alarmer(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/read/admin", headers=header, verify=False)
         return resp
 
-    def alarmer_notification_read_type_user(self, token):
+    def alarmer_notification_read_type_admin(self, token):
         body = {
-            "id": 83479
+            "id": 5590483
         }
         header = {'token': token}
-        resp = self.sess.post(f"{self.host}/back/dp.alarmer/notification/read/user", headers=header, json=body,
+        resp = self.sess.post(f"{self.host}/back/dp.alarmer/notification/read/admin", headers=header, json=body,
                               verify=False)
         return resp
 

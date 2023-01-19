@@ -1,5 +1,9 @@
 from req.Helpers.base_req import BaseReq
 
+act_dir_pass = "d8hELYed9L809RB9FkSO!"
+ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"
+mail_pass = "8327kHLHsfohn;hksjkfou!"
+
 
 class Core(BaseReq):
 
@@ -13,7 +17,7 @@ class Core(BaseReq):
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
             "open_ldap": False,
-            "password": "dfXjtp2uNI",
+            "password": act_dir_pass,
             "port": 636,
             "tls": True,
             "user": "dataplan@ngrsoftlab.ru"
@@ -27,7 +31,7 @@ class Core(BaseReq):
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
             "open_ldap": False,
-            "password": "dfXjtp2uNI",
+            "password": act_dir_pass,
             "port": 636,
             "tls": True,
             "user": "dataplan@ngrsoftlab.ru"
@@ -42,7 +46,7 @@ class Core(BaseReq):
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
             "open_ldap": False,
-            "password": "dfXjtp2uNI",
+            "password": act_dir_pass,
             "port": 636,
             "tls": True,
             "user": "dataplan@ngrsoftlab.ru"
@@ -70,7 +74,7 @@ class Core(BaseReq):
                 "diagram": "",
                 "report": "",
                 "admin_ssh_user": "dataplan",
-                "admin_ssh_password": "R3U7zYiyxVFtUq8QvRAJ",
+                "admin_ssh_password": ssh_pass,
                 "msg_language": ""}
         header = {'token': token, 'skey': "ANGARA"}
         resp = self.sess.post(f"{self.host}/back/dp.core/common", headers=header, json=body, verify=False)
@@ -84,7 +88,7 @@ class Core(BaseReq):
                 "diagram": "",
                 "report": "",
                 "admin_ssh_user": "dataplan",
-                "admin_ssh_password": "R3U7zYiyxVFtUq8QvRAJ",
+                "admin_ssh_password": ssh_pass,
                 "msg_language": ""}
         header = {'token': token, 'skey': "ANGARA"}
         resp = self.sess.post(f"{self.host}/back/dp.core/common/test", headers=header, json=body, verify=False)
@@ -126,7 +130,7 @@ class Core(BaseReq):
             "name": "TestAPI",
             "port": 587,
             "protocol": "smtp",
-            "psw": "Fs5PUWnxTW",
+            "psw": mail_pass,
             "send_user": "svc_ngr_mail@ngrsoftlab.ru",
             "user": "svc_ngr_mail@ngrsoftlab.ru"
         }
@@ -152,7 +156,7 @@ class Core(BaseReq):
             "name": "TestAPI",
             "port": 587,
             "protocol": "smtp",
-            "psw": "Fs5PUWnxTW",
+            "psw": mail_pass,
             "send_user": "svc_ngr_mail@ngrsoftlab.ru",
             "user": "svc_ngr_mail@ngrsoftlab.ru"
         }
@@ -168,7 +172,7 @@ class Core(BaseReq):
             "name": "TestAPI",
             "port": 587,
             "protocol": "smtp",
-            "psw": "Fs5PUWnxTW",
+            "psw": mail_pass,
             "send_user": "svc_ngr_mail@ngrsoftlab.ru",
             "user": "svc_ngr_mail@ngrsoftlab.ru"
         }
@@ -252,7 +256,7 @@ class Core(BaseReq):
                 "has_nodes": "0",
                 "what": "datastore",
                 "ssh_user": "dataplan",
-                "ssh_password": "R3U7zYiyxVFtUq8QvRAJ",
+                "ssh_password": ssh_pass,
                 "store_user": "default",
                 "" "store_password": "1q2w3e4r5t",
                 "db": "",

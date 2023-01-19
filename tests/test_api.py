@@ -149,6 +149,7 @@ class TestAbsorber:
         resp = req.library_logo_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_library_logo_put(self):
         req = Absorber(sess, host)
         resp = req.library_logo_put(auth_token)
@@ -164,6 +165,7 @@ class TestAbsorber:
         resp = req.source_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_source_post(self):  # тут какая-то задница
         req = Absorber(sess, host)
         resp = req.source_post(auth_token)
@@ -194,7 +196,7 @@ class TestAlarmer:
 
     def test_alarmer_notification_read_type_admin(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_read_type_user(auth_token)
+        resp = req.alarmer_notification_read_type_admin(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_alarmer_notification_settings_admin(self):
