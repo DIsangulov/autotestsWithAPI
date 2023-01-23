@@ -731,7 +731,6 @@ class TestPermitter:
         req = Permitter(sess, host)
         resp = req.permitter_db_watcher_all_tables(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
 
     def test_permitter_db_watcher_db_tables(self):
         req = Permitter(sess, host)
@@ -756,4 +755,177 @@ class TestPermitter:
     def test_permitter_db_watcher_get_tab_name_id(self):
         req = Permitter(sess, host)
         resp = req.permitter_db_watcher_get_tab_name_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_query_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_query_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_visualisation_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_visualisation_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_report_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_report_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_mailing_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_report_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_script_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_script_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_script_sequence_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_sscript_sequence_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_flags_query_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_query_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+
+    def test_permitter_element_flags_visualisation_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_visualisation_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+
+    def test_permitter_element_flags_report_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_report_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+
+    def test_permitter_element_flags_mailing_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_report_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+
+    def test_permitter_element_flags_script_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_script_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+
+    def test_permitter_element_flags_script_sequence_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_flags_sscript_sequence_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+
+    def test_permitter_element_rules_all_flags_query_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_all_flags_query_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_all_flags_visualisation_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_all_flags_visualisation_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_all_flags_report_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_all_flags_report_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_all_flags_mailing_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_all_flags_mailing_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_all_flags_script_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_all_flags_script_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_all_flags_script_sequence_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_all_flags_script_sequence_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_query_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_query_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_visualisation_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_visualisation_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_report_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_report_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_mailing_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_mailing_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_script_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_script_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_script_sequence_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_script_sequence_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_query_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_query_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_visualisation_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_visualisation_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_report_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_report_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_mailing_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_mailing_post(auth_token)
+        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_script_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_script_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_flags_script_sequence_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_flags_script_sequence_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_roles_editor_roles_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_roles_editor_roles_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_roles_editor_roles_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_roles_editor_roles_post(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_roles_editor_roles_id_put(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_roles_editor_roles_id_put(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_roles_editor_roles_id_delete(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_roles_editor_roles_id_delete(auth_token)
+        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
