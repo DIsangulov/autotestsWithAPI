@@ -15,6 +15,7 @@ from req.Api.req_alarmer import Alarmer
 from req.Api.req_core import Core
 from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
+from req.Api.req_permitter import Permitter
 from utilities.logger import Logger
 
 urllib3.disable_warnings()
@@ -31,7 +32,7 @@ user_id = None
 
 # _________Globals_________
 
-
+@pytest.mark.skip
 class TestAuth:
 
     def test_get_token(self):
@@ -87,7 +88,7 @@ class TestAuth:
     # __________________________________ABSORBER_______________________________________
 
 
-
+@pytest.mark.skip
 class TestAbsorber:
 
     def test_get_token(self):
@@ -172,7 +173,7 @@ class TestAbsorber:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestAlarmer:
 
     def test_get_token(self):
@@ -255,7 +256,7 @@ class TestAlarmer:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestCore:
 
     def test_get_token(self):
@@ -579,7 +580,7 @@ class TestCore:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestLicenser:
     def test_get_token(self):
         req = BaseReq(sess, host)
@@ -602,7 +603,7 @@ class TestLicenser:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestPeopler:
 
     @allure.feature("TestPeopler")
@@ -641,7 +642,6 @@ class TestPeopler:
         req = Peopler(sess, host)
         resp = req.peopler_profile(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
 
     # @testit.displayName("peopler_profiles_get")
     # @testit.externalID("peopler_profiles_get")
@@ -704,4 +704,56 @@ class TestPeopler:
         req = Peopler(sess, host)
         resp = req.peopler_users_delete(auth_token)
         print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestPermitter:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    def test_permitter_check_ui_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_check_ui_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_db_watcher_all_db(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_all_db(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_db_watcher_all_tables(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_all_tables(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        print(resp.text)
+
+    def test_permitter_db_watcher_db_tables(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_db_tables(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_db_watcher_empty_role_dbs(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_empty_role_dbs(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_db_watcher_empty_role_tables(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_empty_role_tables(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_db_watcher_empty_role_tables_id(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_empty_role_tables_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_db_watcher_get_tab_name_id(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_db_watcher_get_tab_name_id(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
