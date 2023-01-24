@@ -307,7 +307,7 @@ class Permitter(BaseReq):
             {"id": 3, "name": "Аналитика", "ui_part": "analytics", "read": False, "write": False, "disabled": []},
             {"id": 4, "name": "xBA", "ui_part": "xba", "read": False, "write": False, "disabled": []},
             {"id": 5, "name": "Role Mining", "ui_part": "rm", "read": False, "write": False, "disabled": []}]}
-        resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles" + str(role_id), headers=header,
+        resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/" + str(role_id), headers=header,
                              json=data,
                              verify=False)
         return resp
