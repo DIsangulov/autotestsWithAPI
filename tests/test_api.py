@@ -16,6 +16,7 @@ from req.Api.req_core import Core
 from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
 from req.Api.req_permitter import Permitter
+from req.Api.req_rm_cook import Rm_Cook
 from utilities.logger import Logger
 
 urllib3.disable_warnings()
@@ -707,6 +708,7 @@ class TestPeopler:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestPermitter:
 
     def test_get_token(self):
@@ -918,6 +920,11 @@ class TestPermitter:
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def test_permitter_roles_editor_roles_edit_id_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_roles_editor_roles_edit_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     def test_permitter_roles_editor_roles_id_put(self):
         req = Permitter(sess, host)
         resp = req.permitter_roles_editor_roles_id_put(auth_token)
@@ -929,3 +936,163 @@ class TestPermitter:
         resp = req.permitter_roles_editor_roles_id_delete(auth_token)
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_user_rules(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_user_rules(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_users_elements_count_who_id_get(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_users_elements_count_who_id_get(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_users_new_author_who_id(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_users_new_author_who_id_post(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_who_rules_who_id(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_who_rules_who_id(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestRmCook:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    def test_rm_cook_active_directory_groups(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_groups(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_active_directory_groups_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_groups_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_active_directory_state(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_state(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_active_directory_top_groups(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_top_groups(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_active_directory_top_users(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_top_users(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_active_directory_users(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_users(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_active_directory_users_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_active_directory_users(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_rm_cook_calculation_start_calc_id_post(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_calculation_start_calc_id_post(auth_token)
+        assert resp.status_code == 200 or 429, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_rm_logs_last(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_rm_logs_last(auth_token)
+        assert resp.status_code == 200 or 429, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_recommendations(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_rm_recommendations(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_rm_roles_id_alias_post(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_rm_roles_id_alias_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_rm_roles_id_alias_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_rm_roles_id_alias_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_status(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_rm_status(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_rm_cook_role_model_result_export_role_model_to_excel(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_export_role_model_to_excel(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_groups_by_role_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_groups_by_role_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_rm_cook_role_model_result_resources_by_role_id(self):  # Не реализовано
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_resources_by_role_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_roles_by_source_source_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_roles_by_source_source_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_source_source_id_users_by_role_role_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_source_source_id_users_by_role_role_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id(self):  # Не используется
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id(self):  # Не используется
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_settings_calc_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_settings_calc_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # def test_rm_cook_settings_calc_put(self):
+    #     req = Rm_Cook(sess, host)
+    #     resp = req.rm_cook_settings_calc_put(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

@@ -298,6 +298,12 @@ class Permitter(BaseReq):
         print(resp.text)
         return resp
 
+    def permitter_roles_editor_roles_edit_id_get(self, token):
+        header = {'token': token, 'ui': str(2)}
+        resp = self.sess.get(f"{self.host}/back/dp.permitter/roles_editor/roles/edit/" + str(role_id), headers=header,
+                             verify=False)
+        return resp
+
     def permitter_roles_editor_roles_id_put(self, token):
         header = {'token': token, 'ui': str(2)}
         data = {"name": "6", "views": [
@@ -316,4 +322,29 @@ class Permitter(BaseReq):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.delete(f"{self.host}/back/dp.permitter/roles_editor/roles/" + str(role_id), headers=header,
                                 verify=False)
+        return resp
+
+    def permitter_user_rules(self, token):
+        header = {'token': token, 'ui': str(2)}
+        resp = self.sess.get(f"{self.host}/back/dp.permitter/user_rules", headers=header, verify=False)
+        return resp
+
+    def permitter_users_elements_count_who_id_get(self, token):
+        header = {'token': token, 'ui': str(2)}
+        resp = self.sess.get(f"{self.host}/back/dp.permitter/users/elements_count/123", headers=header, verify=False)
+        return resp
+
+    def permitter_users_new_author_who_id_post(self, token):
+        header = {'token': token, 'ui': str(2)}
+        data = {
+            "delete": True,
+            "new_author": "TestAPI"
+        }
+        resp = self.sess.post(f"{self.host}/back/dp.permitter/users/new_author/123", headers=header, json=data,
+                              verify=False)
+        return resp
+
+    def permitter_who_rules_who_id(self, token):
+        header = {'token': token, 'ui': str(2)}
+        resp = self.sess.get(f"{self.host}/back/dp.permitter/role_rules/123", headers=header, verify=False)
         return resp
