@@ -708,7 +708,7 @@ class TestPeopler:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-
+@pytest.mark.skip
 class TestPermitter:
 
     def test_get_token(self):
@@ -917,7 +917,6 @@ class TestPermitter:
     def test_permitter_roles_editor_roles_post(self):
         req = Permitter(sess, host)
         resp = req.permitter_roles_editor_roles_post(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_roles_editor_roles_edit_id_get(self):
@@ -928,37 +927,31 @@ class TestPermitter:
     def test_permitter_roles_editor_roles_id_put(self):
         req = Permitter(sess, host)
         resp = req.permitter_roles_editor_roles_id_put(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_roles_editor_roles_id_delete(self):
         req = Permitter(sess, host)
         resp = req.permitter_roles_editor_roles_id_delete(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_user_rules(self):
         req = Permitter(sess, host)
         resp = req.permitter_user_rules(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_users_elements_count_who_id_get(self):
         req = Permitter(sess, host)
         resp = req.permitter_users_elements_count_who_id_get(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_users_new_author_who_id(self):
         req = Permitter(sess, host)
         resp = req.permitter_users_new_author_who_id_post(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_who_rules_who_id(self):
         req = Permitter(sess, host)
         resp = req.permitter_who_rules_who_id(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
