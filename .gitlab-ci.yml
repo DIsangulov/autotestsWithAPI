@@ -61,8 +61,8 @@ allure_job: # Название job
       - ./allure-results # Примонтируем две этих директории для получения результатов тестирования и генерации отчетов соответственно
       - ./allure-report
      expire_in: 1 day
-   rules:
-     - when: always
+  rules:
+    - when: always
 
 pages: # Названием этой job говорим гитлабу, чтобы захостил результат у себя в pages
     stage: deploy # третий stage, который будет выполнен
