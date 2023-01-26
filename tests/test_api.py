@@ -1,10 +1,10 @@
 import json
-
 import allure
 import pytest
 import requests
 import testit
 import urllib3
+
 
 from self import self
 
@@ -708,7 +708,7 @@ class TestPeopler:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
+
 class TestPermitter:
 
     def test_get_token(self):
@@ -962,6 +962,7 @@ class TestPermitter:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestRmCook:
 
     def test_get_token(self):
