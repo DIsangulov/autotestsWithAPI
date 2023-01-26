@@ -26,26 +26,26 @@ run_tests:
       expire_in: 1 day # Да, он будет удален через день. Нет смысла хранить его в течение длительного срока.
 
 
-#history_job: # Название job
-#  stage: history_copy # Это второй stage, который нужно выполнить
-#
-#  image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
-#
-#  script:
-#    - 'curl --location --output artifacts.zip "https://gitlab.ngrsoftlab.ru/api/v4/projects/193/jobs/artifacts/master/download?job=pages&job_token=$CI_JOB_TOKEN"'  # С помощью api гитлаба скачиваем файлы из job, который будет указан ниже.
-#    - apk add unzip # Образ, используемый в этом шаге по умолчанию не имеет утилиты unzip, по этой причине мы добавляем её в контейнер
-#    - unzip artifacts.zip # Распаковываем файлы
-#    - chmod -R 777 public # Даем права любые манипуляции с содержимым
-#    - cp -r ./public/history ./allure-results # Копируем историю в папку с результатами теста
-#
-#  allow_failure: true # Так как при первом запуске пайплайна истории нет, это позволит нам избежать падения пайплайна. В дальнейшем эту строчку можно спокойно удалить.
-#
-#  artifacts:
-#    paths:
-#      - ./allure-results # Сохраняем данные
-#    expire_in: 1 day
-#  rules:
-#    - when: always # Сохранять всегда
+history_job: # Название job
+  stage: history_copy # Это второй stage, который нужно выполнить
+
+  image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
+
+  script:
+    - 'curl --location --output artifacts.zip "https://gitlab.ngrsoftlab.ru/api/v4/projects/193/jobs/artifacts/master/download?job=pages&job_token=$CI_JOB_TOKEN"'  # С помощью api гитлаба скачиваем файлы из job, который будет указан ниже.
+    - apk add unzip # Образ, используемый в этом шаге по умолчанию не имеет утилиты unzip, по этой причине мы добавляем её в контейнер
+    - unzip artifacts.zip # Распаковываем файлы
+    - chmod -R 777 public # Даем права любые манипуляции с содержимым
+    - cp -r ./public/history ./allure-results # Копируем историю в папку с результатами теста
+
+  allow_failure: true # Так как при первом запуске пайплайна истории нет, это позволит нам избежать падения пайплайна. В дальнейшем эту строчку можно спокойно удалить.
+
+  artifacts:
+    paths:
+      - ./allure-results # Сохраняем данные
+    expire_in: 1 day
+  rules:
+    - when: always # Сохранять всегда
 
 
 allure_job: # Название job
