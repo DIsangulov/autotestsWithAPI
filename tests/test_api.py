@@ -1038,7 +1038,6 @@ class TestRmCook:
         resp = req.rm_cook_rm_status(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_rm_cook_role_model_result_export_role_model_to_excel(self):
         req = Rm_Cook(sess, host)
         resp = req.rm_cook_role_model_result_export_role_model_to_excel(auth_token)
@@ -1077,11 +1076,13 @@ class TestRmCook:
         resp = req.rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(self):
         req = Rm_Cook(sess, host)
         resp = req.rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(self):
         req = Rm_Cook(sess, host)
         resp = req.rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(auth_token)
@@ -1092,7 +1093,28 @@ class TestRmCook:
         resp = req.rm_cook_settings_calc_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # def test_rm_cook_settings_calc_put(self):
-    #     req = Rm_Cook(sess, host)
-    #     resp = req.rm_cook_settings_calc_put(auth_token)
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    @pytest.mark.skip
+    def test_rm_cook_settings_calc_put(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_settings_calc_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_settings_mailings_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_settings_mailings_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_settings_mailings_post(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_settings_mailings_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_settings_sources_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_settings_sources_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_settings_sources_post(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_settings_sources_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
