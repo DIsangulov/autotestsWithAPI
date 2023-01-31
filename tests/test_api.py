@@ -5,7 +5,6 @@ import requests
 import testit
 import urllib3
 
-
 from self import self
 
 from req.Api.req_auth import AuthApi
@@ -17,6 +16,7 @@ from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
 from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import Rm_Cook
+from req.Api.req_storage_worker import StorageWorker
 from utilities.logger import Logger
 
 urllib3.disable_warnings()
@@ -1111,4 +1111,85 @@ class TestRmCook:
     def test_rm_cook_settings_sources_post(self):
         req = Rm_Cook(sess, host)
         resp = req.rm_cook_settings_sources_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestStorageWorker:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    def test_storage_worker_ask_one_sql_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_ask_one_sql_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_ask_plain_sql_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_ask_plain_sql_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_import_rules_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_import_rules_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_psevdo_namer_regs_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_psevdo_namer_regs_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_psevdo_namer_regs_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_psevdo_namer_regs_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_psevdo_namer_regs_pid_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_psevdo_namer_regs_pid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_psevdo_namer_regs_pid_delete(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_psevdo_namer_regs_pid_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_show_base_db_name_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_show_base_db_name_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_event_stats_db_name_flag_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_search_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_db_search_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_status_dbname_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_db_status_dbname_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_storage_search_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_storage_search_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
