@@ -294,8 +294,6 @@ class Permitter(BaseReq):
         dct = json.loads(resp.text)
         global role_id
         role_id = dct['res']  # получили id роли
-        print(role_id)
-        print(resp.text)
         return resp
 
     def permitter_roles_editor_roles_edit_id_get(self, token):

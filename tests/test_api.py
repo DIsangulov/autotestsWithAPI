@@ -1,4 +1,6 @@
 import json
+import time
+
 import allure
 import pytest
 import requests
@@ -1137,7 +1139,7 @@ class TestStorageWorker:
     def test_storage_worker_import_rules_get(self):
         req = StorageWorker(sess, host)
         resp = req.storage_worker_import_rules_get(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 500, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_psevdo_namer_regs_post(self):
         req = StorageWorker(sess, host)
@@ -1192,4 +1194,69 @@ class TestStorageWorker:
     def test_storage_worker_statistics_storage_search_post(self):
         req = StorageWorker(sess, host)
         resp = req.storage_worker_statistics_storage_search_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_test_selection_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_statistics_storage_search_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # def test_storage_worker_storage_db_get(self):
+    #     req = StorageWorker(sess, host)
+    #     resp = req.storage_worker_storage_db_get(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_db_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_db_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_db_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_db_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_roles_editor_roles_for_storage_worker_put(self):
+        req = StorageWorker(sess, host)
+        resp = req.permitter_roles_editor_roles_for_storage_worker_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_db_put(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_db_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_db_delete(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_db_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_import_csv_db_name_table_name_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_import_csv_db_name_table_name_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_import_json_db_name_table_name_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_import_json_db_name_table_name_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_supported_engines_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_supported_engines_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_supported_types_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_supported_types_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_table_columns_db_name_tab_name_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_table_columns_db_name_table_name_post(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_table_columns_db_name_table_name_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

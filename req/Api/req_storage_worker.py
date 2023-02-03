@@ -5,6 +5,7 @@ from req.Helpers.base_req import BaseReq
 
 reg_pid = None
 rand = None
+db_id = None
 
 
 class StorageWorker(BaseReq):
@@ -136,4 +137,149 @@ class StorageWorker(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/statistics/storage_search", headers=header,
                               json=data,
                               verify=False)
+        return resp
+
+    def storage_worker_statistics_test_selection_post(self, token):
+        global rand
+        rand = random.randint(1200, 12500)
+        header = {'token': token}
+        data = {"database_name": "picker_tables", "table_name": "ad_groups_ngr_fresh", "name": "name"}
+        resp = self.sess.post(f"{self.host}/back/dp.storage_worker/statistics/test_selection", headers=header,
+                              json=data,
+                              verify=False)
+        return resp
+
+    def storage_worker_storage_db_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
+                             headers=header, verify=False)
+        dct = json.loads(resp.text)
+        global db_id
+        db_id = dct['res'][2]['id']  # получили id базы данных
+        return resp
+
+    def storage_worker_storage_db_post(self, token):
+        global rand
+        rand = random.randint(1200, 12500)
+        header = {'token': token}
+        data = {"base_name": "Name_Test_API", "description": "Name_Test_API"}
+        resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
+        return resp
+
+    def permitter_roles_editor_roles_for_storage_worker_put(self,
+                                                            token):  # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
+        header = {'token': token, 'ui': str(2)}
+        data = {
+            "id": 5,
+            "name": "sysop",
+            "rolename": "sysop",
+            "views": [{
+                "id": 1,
+                "name": "Администрирование",
+                "ui_part": "administration",
+                "read": True,
+                "write": True,
+                "disabled": ["read"]
+            }, {
+                "id": 2,
+                "name": "Данные",
+                "ui_part": "data",
+                "read": True,
+                "write": True,
+                "disabled": ["read"]
+            }, {
+                "id": 3,
+                "name": "Аналитика",
+                "ui_part": "analytics",
+                "read": True,
+                "write": True,
+                "disabled": ["read"]
+            }, {
+                "id": 4,
+                "name": "xBA",
+                "ui_part": "xba",
+                "read": True,
+                "write": True,
+                "disabled": ["read"]
+            }, {
+                "id": 5,
+                "name": "Role Mining",
+                "ui_part": "rm",
+                "read": True,
+                "write": True,
+                "disabled": ["read"]
+            }],
+            "dbs": [{
+                "id": db_id,
+                "name": "Name_Test_API",
+                "db_id": 0,
+                "select": True,
+                "update": True
+            }],
+            "report_id": None
+        }
+        resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/5", headers=header, json=data,
+                             verify=False)
+        return resp
+
+    def storage_worker_storage_db_put(self, token):
+        header = {'token': token}
+        data = {"base_name": "Name_Test_API", "description": "Name_Test_API"}
+        resp = self.sess.put(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
+        return resp
+
+    def storage_worker_storage_db_delete(self, token):
+        header = {'token': token}
+        resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/db/Name_Test_API", headers=header,
+                                verify=False)
+        return resp
+
+    def storage_worker_storage_import_csv_db_name_table_name_post(self, token):
+        header = {'token': token}
+        data = {"data": None}
+        resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/import_csv/picker_tables/ad_groups_ngr",
+                              headers=header, json=data, verify=False)
+        return resp
+
+    def storage_worker_storage_import_json_db_name_table_name_post(self, token):
+        header = {'token': token}
+        data = {"data": None}
+        resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/import_json/picker_tables/ad_groups_ngr",
+                              headers=header, json=data, verify=False)
+        return resp
+
+    def storage_worker_storage_supported_engines_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/supported_engines", headers=header,
+                             verify=False)
+        return resp
+
+    def storage_worker_storage_supported_types_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/supported_types", headers=header,
+                             verify=False)
+        return resp
+
+    def storage_worker_storage_table_columns_db_name_tab_name_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/columns/picker_tables/ad_groups_ngr",
+                             headers=header, verify=False)
+        return resp
+
+    def storage_worker_storage_table_columns_db_name_table_name_post(self, token):
+        header = {'token': token}
+        data = [{"name": "Nopt", "dtype": "DateTime", "alias": "псевдоним", "mask_it": False},
+                {"name": "Npqroduct", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                 "dtype": "String", "mask_it": False},
+                {"name": "Ntype", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                 "dtype": "String", "mask_it": False},
+                {"name": "opt", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                 "dtype": "DateTime", "mask_it": False},
+                {"name": "pqroduct", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                 "dtype": "String", "mask_it": False},
+                {"name": "type", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                 "dtype": "UInt32", "mask_it": False}]
+        resp = self.sess.post(
+            f"{self.host}/back/dp.storage_worker/storage/table/columns/picker_tables/TYPE_SYSNOST_2005",
+            headers=header, json=data, verify=False)
         return resp
