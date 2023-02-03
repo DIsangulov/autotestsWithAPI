@@ -29,7 +29,8 @@ run_tests:
 history_job: # Название job
   stage: history_copy # Это второй stage, который нужно выполнить
 
-  image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
+  #image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
+  image: registry:ngrsoftlab:ru:8888/storytel
 
   script:
     - curl --location --output artifacts.zip "https://gitlab.ngrsoftlab.ru/api/v4/projects/193/jobs/artifacts/master/download?job=pages&job_token=$CI_JOB_TOKEN"  # С помощью api гитлаба скачиваем файлы из job, который будет указан ниже.
@@ -51,16 +52,17 @@ history_job: # Название job
 allure_job: # Название job
   stage: reports
 
-  image: frankescobar/allure-docker-service # Указываем раннеру использовать образ с allure. В нем мы будем генерировать отчет.
+  #image: frankescobar/allure-docker-service # Указываем раннеру использовать образ с allure. В нем мы будем генерировать отчет.
+  image: registry.ngrsoftlab.ru:8888/frankescobar
 
   script:
     - allure generate -c ./allure-results -o ./allure-report # Генерируем отчет из ./allure-results внутрь папки ./allure-report
 
   artifacts:
-     paths:
+    paths:
       - ./allure-results # Примонтируем две этих директории для получения результатов тестирования и генерации отчетов соответственно
       - ./allure-report
-     expire_in: 1 day
+    expire_in: 1 day
   rules:
     - when: always
 

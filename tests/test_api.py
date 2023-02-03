@@ -1139,7 +1139,7 @@ class TestStorageWorker:
     def test_storage_worker_import_rules_get(self):
         req = StorageWorker(sess, host)
         resp = req.storage_worker_import_rules_get(auth_token)
-        assert resp.status_code == 500, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 500, f"Ошибка, код {resp.status_code}, {resp.text}"  # Поменять на 200!!!!
 
     def test_storage_worker_psevdo_namer_regs_post(self):
         req = StorageWorker(sess, host)
