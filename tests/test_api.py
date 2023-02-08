@@ -1116,7 +1116,6 @@ class TestRmCook:
         resp = req.rm_cook_settings_sources_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-
 @pytest.mark.skip
 class TestStorageWorker:
 
