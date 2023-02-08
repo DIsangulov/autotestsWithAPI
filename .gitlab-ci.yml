@@ -7,7 +7,7 @@ stages:          # List of stages for jobs, and their order of execution
 run_tests:
     #image: python:3.11.0
   services:
-    - selenium/standalone-chrome  # добавлено
+    - docker run --rm -it -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:dev  # добавлено
 
   image: registry.ngrsoftlab.ru:8888/python:3.10.5
   stage: test
