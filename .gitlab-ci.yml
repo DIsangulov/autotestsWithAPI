@@ -14,14 +14,14 @@ run_tests:
     - curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
     - chmod +x /usr/local/bin/docker-compose
     - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-    - docker-compose -fd docker-compose.yml up # поднимаем хром
+    - docker-compose -f docker-compose.yml up # поднимаем хром
 
   script:
     #- pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
     - pytest -v -s --alluredir=./allure-results tests/test_ui.py
-
-  after_script:
-    - docker-compose -f docker-compose.yml down # тушим хром
+  #
+  #  after_script:
+  #    - docker-compose -f docker-compose.yml down # тушим хром
 
   allow_failure: true
 
