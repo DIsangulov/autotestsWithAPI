@@ -3,8 +3,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-#from resources.locators import MainLocators
+# from resources.locators import MainLocators
 from sys import platform
+
+from resourses.locators import MainLocators
 
 
 class BasePage:

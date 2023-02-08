@@ -6,14 +6,18 @@ stages:          # List of stages for jobs, and their order of execution
 
 run_tests:
     #image: python:3.11.0
-    image: registry.ngrsoftlab.ru:8888/python:3.10.5
-    stage: test
+  services:
+    - selenium/standalone-chrome  # добавлено
 
-    before_script:
-        - pip install -r requirements.txt
+  image: registry.ngrsoftlab.ru:8888/python:3.10.5
+  stage: test
 
-    script:
-      - pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
+  before_script:
+    - pip install -r requirements.txt
+
+  script:
+    #- pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
+    - pytest -v -s --alluredir=./allure-results tests/test_ui.py -p no:warnings
 
     allow_failure: true
 

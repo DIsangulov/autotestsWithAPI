@@ -9,4 +9,3 @@ urllib3
 datetime
 allure-pytest
 jsonschema
-

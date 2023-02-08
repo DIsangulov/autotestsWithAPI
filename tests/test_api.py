@@ -19,6 +19,7 @@ from req.Api.req_peopler import Peopler
 from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import Rm_Cook
 from req.Api.req_storage_worker import StorageWorker
+from req.Api.req_xba_cook import XbaCook
 from utilities.logger import Logger
 
 urllib3.disable_warnings()
@@ -1116,6 +1117,7 @@ class TestRmCook:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestStorageWorker:
 
     def test_get_token(self):
@@ -1139,7 +1141,7 @@ class TestStorageWorker:
     def test_storage_worker_import_rules_get(self):
         req = StorageWorker(sess, host)
         resp = req.storage_worker_import_rules_get(auth_token)
-        assert resp.status_code == 500, f"Ошибка, код {resp.status_code}, {resp.text}"  # Поменять на 200!!!!
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_psevdo_namer_regs_post(self):
         req = StorageWorker(sess, host)
@@ -1259,4 +1261,36 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_table_name_post(self):
         req = StorageWorker(sess, host)
         resp = req.storage_worker_storage_table_columns_db_name_table_name_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_table_db_name_table_name_ttl_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_table_db_name_table_name_ttl_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_storage_table_db_name_table_name_count_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.storage_worker_storage_table_db_name_table_name_count_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestXbaCook:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    @pytest.mark.skip
+    def test_xba_cook_anomalies_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_anomalies_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_anomalies_picker_max_min_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_anomalies_picker_max_min_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

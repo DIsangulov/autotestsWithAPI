@@ -155,14 +155,12 @@ class StorageWorker(BaseReq):
                              headers=header, verify=False)
         dct = json.loads(resp.text)
         global db_id
-        db_id = dct['res'][2]['id']  # получили id базы данных
+        db_id = dct['res'][0]['id']  # получили id базы данных
         return resp
 
     def storage_worker_storage_db_post(self, token):
-        global rand
-        rand = random.randint(1200, 12500)
         header = {'token': token}
-        data = {"base_name": "Name_Test_API", "description": "Name_Test_API"}
+        data = {"base_name": "API_TEST_DB1", "description": "API_TEST_DB1"}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
@@ -211,7 +209,7 @@ class StorageWorker(BaseReq):
             }],
             "dbs": [{
                 "id": db_id,
-                "name": "Name_Test_API",
+                "name": "API_TEST_DB1",
                 "db_id": 0,
                 "select": True,
                 "update": True
@@ -224,13 +222,13 @@ class StorageWorker(BaseReq):
 
     def storage_worker_storage_db_put(self, token):
         header = {'token': token}
-        data = {"base_name": "Name_Test_API", "description": "Name_Test_API"}
+        data = {"base_name": "API_TEST_DB1", "description": "API_TEST_DB11"}
         resp = self.sess.put(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
     def storage_worker_storage_db_delete(self, token):
         header = {'token': token}
-        resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/db/Name_Test_API", headers=header,
+        resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/db/API_TEST_DB1", headers=header,
                                 verify=False)
         return resp
 
@@ -282,4 +280,36 @@ class StorageWorker(BaseReq):
         resp = self.sess.post(
             f"{self.host}/back/dp.storage_worker/storage/table/columns/picker_tables/TYPE_SYSNOST_2005",
             headers=header, json=data, verify=False)
+        return resp
+
+    # def storage_worker_storage_table_db_name_post(self, token):
+    #     header = {'token': token}
+    #     data = {"auto_read": True, "columns":
+    #         [{"name": "one", "type": "DateTime"},
+    #          {"name": "two", "type": "UInt64"},
+    #          {"name": "three", "type": "String"}],
+    #             "engine": "MergeTree", "order_by":
+    #                 "one", "partition_by": "tuple()",
+    #             "tab_name": "API_TEST_DB1", "ttl": 0, "ttl_base": ""}
+    #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1",
+    #                           headers=header, json=data, verify=False)
+    #     return resp
+    #
+    # def storage_worker_storage_table_table_db_name_table_name(self, token):
+    #     header = {'token': token}
+    #     data = {"name": "five", "type": "Int8"}
+    #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1/API_TEST_TABLE",
+    #                           headers=header, json=data, verify=False)
+    #     return resp
+
+    def storage_worker_storage_table_db_name_table_name_ttl_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/picker_tables/ad_groups_ngr/ttl",
+                             headers=header, verify=False)
+        return resp
+
+    def storage_worker_storage_table_db_name_table_name_count_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/picker_tables/ad_groups_ngr/2",
+                             headers=header, verify=False)
         return resp
