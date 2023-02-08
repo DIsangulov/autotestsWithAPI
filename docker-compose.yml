@@ -1,7 +1,7 @@
 version: '2'
 services:
   chrome:
-    image: selenium/node-chrome-debug
+    image: selenium/node-chrome:3.14.0-arsenic
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
