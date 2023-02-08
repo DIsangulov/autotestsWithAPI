@@ -11,14 +11,14 @@ run_tests:
 
   before_script:
     - pip install -r requirements.txt
-    - docker-compose -f docker-compose-v3-dev-channel.yml up # поднимаем хром
+    - docker-compose -f ./docker-compose-v3-dev-channel.yml up # поднимаем хром
 
   script:
     #- pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
     - pytest -v -s --alluredir=./allure-results tests/test_ui.py -p no:warnings
 
   after_script:
-    - docker-compose -f docker-compose-v3-dev-channel.yml down # тушим хром
+    - docker-compose -f ./docker-compose-v3-dev-channel.yml down # тушим хром
 
   allow_failure: true
 
