@@ -6,18 +6,19 @@ stages:          # List of stages for jobs, and their order of execution
 
 run_tests:
     #image: python:3.11.0
-  services:
-    - docker run --rm -it -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:dev  # добавлено
-
   image: registry.ngrsoftlab.ru:8888/python:3.10.5
   stage: test
 
   before_script:
     - pip install -r requirements.txt
+    - docker-compose -f docker-compose-v3-dev-channel.yml up # поднимаем хром
 
   script:
     #- pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
     - pytest -v -s --alluredir=./allure-results tests/test_ui.py -p no:warnings
+
+  after_script:
+    - docker-compose -f docker-compose-v3-dev-channel.yml down # тушим хром
 
   allow_failure: true
 
