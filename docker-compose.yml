@@ -1,15 +1,19 @@
-version: '2'
 services:
   chrome:
-    image: selenium/node-chrome:3.14.0-arsenic
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - hub
-    environment:
-      HUB_HOST: hub
+    image: docker run -it -p:4444:4444 retreatguru/headless-chromedriver
 
-  hub:
-    image: selenium/hub:3.14.0-arsenic
-    ports:
-      - "4444:4444"
+#version: '2'
+#services:
+#  chrome:
+#    image: selenium/node-chrome:3.14.0-arsenic
+#    volumes:
+#      - /dev/shm:/dev/shm
+#    depends_on:
+#      - hub
+#    environment:
+#      HUB_HOST: hub
+#
+#  hub:
+#    image: selenium/hub:3.14.0-arsenic
+#    ports:
+#      - "4444:4444"
