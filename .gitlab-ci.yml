@@ -7,7 +7,7 @@ stages:          # List of stages for jobs, and their order of execution
 run_tests:
     #image: python:3.11.0
   #image: registry.ngrsoftlab.ru:8888/python:3.10.5
-  image: joyzoursky/python-chromedriver
+  image: joyzoursky/python-chromedriver:3.9-selenium
   stage: test
 
   before_script:
