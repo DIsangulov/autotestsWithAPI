@@ -8,8 +8,7 @@ run_tests:
     #image: python:3.11.0
   #image: registry.ngrsoftlab.ru:8888/python:3.10.5
   #image: joyzoursky/python-chromedriver:3.9-alpine-selenium
-  image: infologistix/docker-selenium-python
-
+  image: rapidfort/python-chromedriver:latest
   stage: test
 
   before_script:
