@@ -5,8 +5,8 @@
 version: '2'
 services:
   chrome:
-    #    image: selenium/node-chrome:3.14.0-arsenic
-    image: retreatguru/headless-chromedriver
+    image: selenium/node-chrome:3.14.0-arsenic
+    #image: retreatguru/headless-chromedriver
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
