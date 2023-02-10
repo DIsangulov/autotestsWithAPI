@@ -5,9 +5,10 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 run_tests:
-    #image: python:3.11.0
+  #image: python:3.11.0
   #image: registry.ngrsoftlab.ru:8888/python:3.10.5
-  image: joyzoursky/python-chromedriver:3.9-alpine-selenium
+  #image: joyzoursky/python-chromedriver:3.9-alpine-selenium
+  image: registry.ngrsoftlab.ru:8888/ngr-chrome
   #image: rapidfort/python-chromedriver:latest
   stage: test
 

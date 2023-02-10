@@ -1,6 +1,7 @@
-#services:
-#  chrome:
-#    image: docker run -it -p:4444:4444 retreatguru/headless-chromedriver
+#selenium:
+#  image: selenium/standalone-firefox
+#  ports:
+#  - 4444:4444  попробовать это, но поменять образ
 
 version: '2'
 services:
