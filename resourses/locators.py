@@ -6,12 +6,12 @@ class MainLocators:
     VISIBLE_PASS = By.XPATH, "//input[@type='password']"
 
 
-
 class AuthLocators:
     LOGIN_INPUT = By.XPATH, "//input[@type='email']"
     PAS_INPUT = By.XPATH, "//input[@type='password']"
     ENTER_BUT = By.XPATH, "//*[contains(text(),'Войти')]"
     PASS_VISIBLE = By.XPATH, "//span[@class='icon is-right has-text-primary is-clickable']"
+
 
 class AdminLocators:
     ADMINISTRATION = By.XPATH, "//*[contains(text(),'Администрирование')]"
@@ -23,11 +23,13 @@ class AdminLocators:
     NOTIFICATION_LOG = By.XPATH, "//*[contains(text(),'Журнал уведомлений')]"
     SETTINGS = By.XPATH, "//*[contains(text(),'Настройки')]"
 
+
 class DataLocators:
     SOURCES = By.XPATH, "//*[contains(text(),'Источники')]"
     REGEX = By.XPATH, "//*[contains(text(),'Регулярные выражения')]"
     SCRIPTS = By.XPATH, "//*[contains(text(),'Скрипты')]"
     STORAGE = By.XPATH, "//*[contains(text(),'Хранилище')]"
+
 
 class AnalyticsLocators:
     NEWSLETTERS = By.XPATH, "//*[contains(text(),'Рассылки')]"
@@ -35,15 +37,14 @@ class AnalyticsLocators:
     VISUALIZATIONS = By.XPATH, "//*[contains(text(),'Визуализации')]"
     REQUESTS = By.XPATH, "//*[contains(text(),'Запросы')]"
 
-class  XbaLocators:
+
+class XbaLocators:
     PROFILES = By.XPATH, "//*[contains(text(),'Профили')]"
     XBA_STATISTIC = By.XPATH, "//*[contains(text(),'Статистика xBA')]"
+
 
 class RoleMiningLocators:
     SETTINGS = By.XPATH, "//*[contains(text(),'Настройки')]"
     ADSTATUS = By.XPATH, "//*[contains(text(),'Состояние AD')]"
     GROPE_AND_USERS = By.XPATH, "//*[contains(text(),'Группы и пользователи')]"
     ROLE_MODEL = By.XPATH, "//*[contains(text(),'Ролевая модель')]"
-
-
-
