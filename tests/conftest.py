@@ -11,8 +11,10 @@ def browser():
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--start-maximized')
+    binary_yandex_driver_file = 'yandexdriver.exe'  # path to YandexDriver
     # browser = webdriver.Remote(command_executor="http://172.17.0.2:4444/wd/hub", options=options)
-    browser = webdriver.Chrome(executable_path='chromedriver', options=options)
+    # browser = webdriver.Chrome(executable_path='chromedriver', options=options)
+    browser = webdriver.Chrome(binary_yandex_driver_file, options=options)
     # browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
     yield browser
