@@ -5,7 +5,9 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 run_tests_api:
-  image: registry.ngrsoftlab.ru:8888/ngr-chrome
+  #image: registry.ngrsoftlab.ru:8888/ngr-chrome
+  image: registry.ngrsoftlab.ru:8888/ngr-yandex
+
 
   stage: test
 
