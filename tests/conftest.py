@@ -15,7 +15,7 @@ def browser():
     # browser = webdriver.Chrome(executable_path='chromedriver', options=options)
     # options.binary_location = '/Applications/Yandex.app/Contents/MacOS/Yandex'
     options.binary_location = 'Yandex'
-    browser = webdriver.Chrome(chrome_options=options, executable_path=r'chromedriver')
+    browser = webdriver.Chrome(chrome_options=options, executable_path='chromedriver')
     # browser = webdriver.Chrome(executable_path='yandexdriver', options=options)
     # browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
