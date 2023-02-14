@@ -2,7 +2,6 @@ pytest
 requests
 testit-pytest
 testit-api-client
-chromedriver-autoinstaller
 selenium-wire
 selenium==4.7.2
 self
