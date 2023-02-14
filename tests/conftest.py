@@ -11,7 +11,6 @@ def browser():
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--start-maximized')
-    # browser = webdriver.Remote(command_executor="http://172.17.0.2:4444/wd/hub", options=options)
     # browser = webdriver.Chrome(executable_path='chromedriver', options=options)
     # options.binary_location = '/Applications/Yandex.app/Contents/MacOS/Yandex'  # для локального запуска яндекс браузера
     options.binary_location = '/usr/bin/yandex-browser'  # для запуска яндекс браузера из Gitlab
