@@ -1282,6 +1282,7 @@ class TestXbaCook:
         dct = json.loads(resp.text)
         global auth_token
         auth_token = dct['token']
+        print(auth_token)
 
     @pytest.mark.skip
     def test_xba_cook_anomalies_get(self):
@@ -1292,4 +1293,209 @@ class TestXbaCook:
     def test_xba_cook_anomalies_picker_max_min_get(self):
         req = XbaCook(sess, host)
         resp = req.xba_cook_anomalies_picker_max_min_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_check_entity_type_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_check_entity_type_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_dashboard_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_dashboard_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_details_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_details_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_info_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_info_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_info_settings_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_info_settings_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_info_settings_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_info_settings_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа {resp.text}"
+
+    def test_xba_cook_entity_info_settings_entity_type_delete(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_info_settings_entity_type_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_picker_min_max_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_picker_min_max_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_entity_risks_description_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_entity_risks_description_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_max_min_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_max_min_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_categories_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_categories_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_export_profiles_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_export_profiles_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_functions_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_functions_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_graph_drilldown_statement_id_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_graph_drilldown_statement_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_xba_cook_profiles_graph_drilldown_id_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_graph_drilldown_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_max_min_id_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_max_min_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_graph_personal_id_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_graph_personal_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_graph_id_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_graph_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_groups_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_groups_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_groups_put(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_groups_info_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_info_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_groups_id_delete(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_groups_group_id_profile_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_group_id_profile_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_xba_cook_profiles_groups_id_max_min_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_id_max_min_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_groups_profile_id_group_id_weight_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_import_profiles_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_import_profiles_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_start_id_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_start_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_stop_id_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_stop_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_id_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_xba_cook_profiles_id_delete(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_id_log_last_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_id_log_last_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_id_whitelist_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_id_whitelist_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_id_string_whitelist_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_id_string_whitelist_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_id_list_whitelist_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_profiles_id_list_whitelist_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_xba_get(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_xba_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_xba_post(self):
+        req = XbaCook(sess, host)
+        resp = req.xba_cook_xba_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

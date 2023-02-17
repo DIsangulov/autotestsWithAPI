@@ -53,8 +53,6 @@ class StorageWorker(BaseReq):
         dct = json.loads(resp.text)
         global reg_pid
         reg_pid = dct['res'][-1]['id']  # получили id регулярного выражения
-        print(resp.text)
-        print(reg_pid)
         return resp
 
     def storage_worker_psevdo_namer_regs_pid_get(self, token):
