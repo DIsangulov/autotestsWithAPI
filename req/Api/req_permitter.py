@@ -13,12 +13,12 @@ class Permitter(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.permitter/check_ui", headers=header, verify=False)
         return resp
 
-    def permitter_db_watcher_all_db(self, token):
+    def permitter_db_watcher_all_db_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/all_db", headers=header, verify=False)
         return resp
 
-    def permitter_db_watcher_all_tables(self, token):
+    def permitter_db_watcher_all_tables_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/all_tables", headers=header, verify=False)
         dct = json.loads(resp.text)
@@ -27,29 +27,29 @@ class Permitter(BaseReq):
         print(tab_id)
         return resp
 
-    def permitter_db_watcher_db_tables(self, token):
+    def permitter_db_watcher_db_tables_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/db_tables/1", headers=header, verify=False)
         return resp
 
-    def permitter_db_watcher_empty_role_dbs(self, token):
+    def permitter_db_watcher_empty_role_dbs_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/empty_role_dbs", headers=header, verify=False)
         return resp
 
-    def permitter_db_watcher_empty_role_tables(self, token):
+    def permitter_db_watcher_empty_role_tables_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/empty_role_tables", headers=header,
                              verify=False)
         return resp
 
-    def permitter_db_watcher_empty_role_tables_id(self, token):
+    def permitter_db_watcher_empty_role_tables_id_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/empty_role_tables/1", headers=header,
                              verify=False)
         return resp
 
-    def permitter_db_watcher_get_tab_name_id(self, token):
+    def permitter_db_watcher_get_tab_name_id_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/get_tab_name/" + str(tab_id), headers=header,
                              verify=False)
@@ -322,7 +322,7 @@ class Permitter(BaseReq):
                                 verify=False)
         return resp
 
-    def permitter_user_rules(self, token):
+    def permitter_user_rules_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/user_rules", headers=header, verify=False)
         return resp
@@ -342,7 +342,7 @@ class Permitter(BaseReq):
                               verify=False)
         return resp
 
-    def permitter_who_rules_who_id(self, token):
+    def permitter_who_rules_who_id_get(self, token):
         header = {'token': token, 'ui': str(2)}
         resp = self.sess.get(f"{self.host}/back/dp.permitter/role_rules/123", headers=header, verify=False)
         return resp

@@ -14,22 +14,22 @@ rand_logo_id = None
 
 class Absorber(BaseReq):
 
-    def library_columns(self, token):
+    def library_columns_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/columns", headers=header, verify=False)
         return resp
 
-    def library_conn_type(self, token):
+    def library_conn_type_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type", headers=header, verify=False)
         return resp
 
-    def library_conn_type_id(self, token):
+    def library_conn_type_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type/1", headers=header, verify=False)
         return resp
 
-    def library_connector(self, token):
+    def library_connector_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector", headers=header, verify=False)
         dct = json.loads(resp.text)
@@ -131,7 +131,7 @@ class Absorber(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.absorber/library/connector", headers=header, json=data, verify=False)
         return resp
 
-    def library_connector_get(self, token):
+    def library_connector_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector/" + str(con_id), headers=header,
                              verify=False)

@@ -56,7 +56,7 @@ class Core(BaseReq):
                               verify=False)
         return resp
 
-    def core_check(self, token):
+    def core_check_backups_get(self, token):
         header = {'token': token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/check", headers=header, verify=False)
         return resp
@@ -95,34 +95,34 @@ class Core(BaseReq):
         return resp
 
     # --------------------------------COMPONENT START-------------------------------
-    def core_component_ml_restart(self, token):
+    def core_component_ml_restart_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/component/ml/restart/0", headers=header, verify=False)
         return resp
 
-    def core_component_picker_restart(self, token):
+    def core_component_picker_restart_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/component/picker/restart/0", headers=header, verify=False)
         return resp
 
-    def core_component_servicedb_restart(self, token):
+    def core_component_servicedb_restart_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/component/servicedb/restart/0", headers=header, verify=False)
         return resp
 
-    def core_component_datastore_restart(self, token):
+    def core_component_datastore_restart_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/component/datastore/restart/0", headers=header, verify=False)
         return resp
 
     # --------------------------------COMPONENT END-------------------------------
 
-    def core_download_settings(self, token):
+    def core_download_settings_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/download_settings", headers=header, verify=False)
         return resp
 
-    def core_send_test(self, token):
+    def core_send_test_post(self, token):
         body = {
             "description": "TestAPICore",
             "disable_tls": False,
@@ -180,12 +180,12 @@ class Core(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.core/email/out", headers=header, json=body, verify=False)
         return resp
 
-    def core_flag(self, token):
+    def core_flag_get(self, token):
         header = {'token': token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/flag", headers=header, verify=False)
         return resp
 
-    def core_ip(self, token):
+    def core_ip_get(self, token):
         header = {'token': token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/ip", headers=header, verify=False)
         return resp
@@ -276,153 +276,153 @@ class Core(BaseReq):
 
     # --------------------------------SERVICE WHAT ACTION--------------------------------
 
-    def core_service_dp_alarmer(self, token):
+    def core_service_dp_alarmer_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_alarmer/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_auth(self, token):
+    def core_service_dp_auth_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_auth/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_core(self, token):
+    def core_service_dp_core_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_core/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_licenser(self, token):
+    def core_service_dp_licenser_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_licenser/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_log_eater(self, token):
+    def core_service_dp_log_eater_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_log_eater/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_monitor(self, token):
+    def core_service_dp_monitor_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_monitor/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_peopler(self, token):
+    def core_service_dp_peopler_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_peopler/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_permitter(self, token):
+    def core_service_dp_permitter_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_permitter/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_postgres_single(self, token):
+    def core_service_dp_postgres_single_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_postgres_single/restart", headers=header,
                              verify=False)
         return resp
 
-    def core_service_dp_taskplan(self, token):
+    def core_service_dp_taskplan_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_taskplan/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_updater(self, token):
+    def core_service_dp_updater_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_updater/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_absorber(self, token):
+    def core_service_dp_absorber_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_absorber/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_picker(self, token):
+    def core_service_dp_picker_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_picker/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_storage_single(self, token):
+    def core_service_dp_storage_single_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_storage_single/restart", headers=header,
                              verify=False)
         return resp
 
-    def core_service_dp_storage_worker(self, token):
+    def core_service_dp_storage_worker_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_storage_worker/restart", headers=header,
                              verify=False)
         return resp
 
-    def core_service_dp_ml(self, token):
+    def core_service_dp_ml_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_ml/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_scripter(self, token):
+    def core_service_dp_scripter_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_scripter/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_datapie_baker(self, token):
+    def core_service_dp_datapie_baker_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_datapie_baker/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_elements_eater(self, token):
+    def core_service_dp_elements_eater_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_elements_eater/restart", headers=header,
                              verify=False)
         return resp
 
-    def core_service_dp_frontend(self, token):
+    def core_service_dp_frontend_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_frontend/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_reporter(self, token):
+    def core_service_dp_reporter_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_reporter/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_rm_cook(self, token):
+    def core_service_dp_rm_cook_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_rm_cook/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_rm_ml(self, token):
+    def core_service_dp_rm_ml_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_rm_ml/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_screener(self, token):
+    def core_service_dp_screener_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_screener/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_visualisation(self, token):
+    def core_service_dp_visualisation_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_visualisation/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_xba_cook(self, token):
+    def core_service_dp_xba_cook_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_xba_cook/restart", headers=header, verify=False)
         return resp
 
-    def core_service_dp_xba_py(self, token):
+    def core_service_dp_xba_py_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_xba_py/restart", headers=header, verify=False)
         return resp
 
     # --------------------------------SERVICE WHAT ACTION--------------------------------
 
-    def core_service_all_restart(self, token):  # стенд не тянет этот метод
+    def core_service_all_restart_get(self, token):  # стенд не тянет этот метод
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.core/services/all/restart", headers=header, verify=False)
         return resp
 
-    def core_sid(self, token):
+    def core_sid_get(self, token):
         header = {'token': token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/sid", headers=header, verify=False)
         return resp

@@ -47,25 +47,25 @@ class TestAuth:
         global auth_token
         auth_token = dct['token']
 
-    def test_ad_struct(self):
+    def test_ad_struct_get(self):
         req = AuthApi(sess, host)
-        resp = req.ad_struct(auth_token)
+        resp = req.ad_struct_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_ou_users(self):
+    def test_ou_users_post(self):
         req = AuthApi(sess, host)
-        resp = req.ou_users(auth_token)
+        resp = req.ou_users_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions(self):
+    def test_sessions_get(self):
         req = AuthApi(sess, host)
-        resp = req.sessions(auth_token)
+        resp = req.sessions_get(auth_token)
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions_uid(self):
+    def test_sessions_uid_get(self):
         req = AuthApi(sess, host)
-        resp = req.sessions_uid(auth_token)
+        resp = req.sessions_uid_get(auth_token)
 
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -83,10 +83,10 @@ class TestAuth:
 
     # __________________________________LOGOUT_______________________________________
 
-    def test_logout(self):
+    def test_logout_get(self):
         self.test_get_token()
         req = AuthApi(sess, host)
-        resp = req.sessions(auth_token)
+        resp = req.sessions_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # __________________________________ABSORBER_______________________________________
@@ -104,24 +104,24 @@ class TestAbsorber:
         auth_token = dct['token']
         print(auth_token)
 
-    def test_library_columns(self):
+    def test_library_columns_get(self):
         req = Absorber(sess, host)
-        resp = req.library_columns(auth_token)
+        resp = req.library_columns_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_conn_type(self):
+    def test_library_conn_type_get(self):
         req = Absorber(sess, host)
-        resp = req.library_conn_type(auth_token)
+        resp = req.library_conn_type_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_conn_type_id(self):
+    def test_library_conn_type_id_get(self):
         req = Absorber(sess, host)
-        resp = req.library_conn_type_id(auth_token)
+        resp = req.library_conn_type_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector(self):  # получаем список всех коннекторов
+    def test_library_connector_get(self):  # получаем список всех коннекторов
         req = Absorber(sess, host)
-        resp = req.library_connector(auth_token)
+        resp = req.library_connector_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_library_connector_post(self):
@@ -134,9 +134,9 @@ class TestAbsorber:
         resp = req.library_connector_put(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector_get(self):
+    def test_library_connector_id_get(self):
         req = Absorber(sess, host)
-        resp = req.library_connector_get(auth_token)
+        resp = req.library_connector_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_library_connector_delete(self):
@@ -189,24 +189,24 @@ class TestAlarmer:
         auth_token = dct['token']
         print(auth_token)
 
-    def test_alarmer_notification_admin_all(self):
+    def test_alarmer_notification_admin_all_get(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_admin_all(auth_token)
+        resp = req.alarmer_notification_admin_all_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_notification_read_admin(self):
+    def test_alarmer_notification_read_admin_get(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_admin_all(auth_token)
+        resp = req.alarmer_notification_read_admin_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_notification_read_type_admin(self):
+    def test_alarmer_notification_read_type_admin_post(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_read_type_admin(auth_token)
+        resp = req.alarmer_notification_read_type_admin_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_notification_settings_admin(self):
+    def test_alarmer_notification_settings_admin_get(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_settings_admin(auth_token)
+        resp = req.alarmer_notification_settings_admin_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_alarmer_notification_settings_common_get(self):
@@ -234,29 +234,29 @@ class TestAlarmer:
         resp = req.alarmer_notification_settings_type_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_notification_user_all(self):
+    def test_alarmer_notification_user_all_get(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_settings_user_all(auth_token)
+        resp = req.alarmer_notification_settings_user_all_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_notification_user(self):
+    def test_alarmer_notification_user_get(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_notification_user(auth_token)
+        resp = req.alarmer_notification_user_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_send_invitation(self):
+    def test_alarmer_send_invitation_post(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_send_invitation(auth_token)
+        resp = req.alarmer_send_invitation_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_send_invitations(self):
+    def test_alarmer_send_invitations_post(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_send_invitations(auth_token)
+        resp = req.alarmer_send_invitations_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_alarmer_send_msg(self):
+    def test_alarmer_send_msg_post(self):
         req = Alarmer(sess, host)
-        resp = req.alarmer_send_msg(auth_token)
+        resp = req.alarmer_send_msg_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
@@ -292,9 +292,9 @@ class TestCore:
         resp = req.core_active_directory_test_settings_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_backups(self):
+    def test_core_backups_get(self):
         req = Core(sess, host)
-        resp = req.core_check(auth_token)
+        resp = req.core_check_backups_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_common_get(self):
@@ -312,34 +312,34 @@ class TestCore:
         resp = req.core_common_test_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_component_ml_restart(self):
+    def test_core_component_ml_restart_get(self):
         req = Core(sess, host)
-        resp = req.core_component_ml_restart(auth_token)
+        resp = req.core_component_ml_restart_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_component_picker_restart(self):
+    def test_core_component_picker_restart_get(self):
         req = Core(sess, host)
-        resp = req.core_component_picker_restart(auth_token)
+        resp = req.core_component_picker_restart_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_component_servicedb_restart(self):  # считаем 400 ответ правильным, система не даст перезапустить
+    def test_core_component_servicedb_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
         req = Core(sess, host)
-        resp = req.core_component_servicedb_restart(auth_token)
+        resp = req.core_component_servicedb_restart_get(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_component_datastore_restart(self):  # считаем 400 ответ правильным, система не даст перезапустить
+    def test_core_component_datastore_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
         req = Core(sess, host)
-        resp = req.core_component_datastore_restart(auth_token)
+        resp = req.core_component_datastore_restart_get(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_download_settings(self):
+    def test_core_download_settings_get(self):
         req = Core(sess, host)
-        resp = req.core_download_settings(auth_token)
+        resp = req.core_download_settings_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_send_test(self):
+    def test_core_send_test_post(self):
         req = Core(sess, host)
-        resp = req.core_send_test(auth_token)
+        resp = req.core_send_test_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_email_in_get(self):
@@ -362,14 +362,14 @@ class TestCore:
         resp = req.core_email_in_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_flag(self):
+    def test_core_flag_get(self):
         req = Core(sess, host)
-        resp = req.core_flag(auth_token)
+        resp = req.core_flag_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_ip(self):
+    def test_core_ip_get(self):
         req = Core(sess, host)
-        resp = req.core_flag(auth_token)
+        resp = req.core_flag_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_nodes_list_ml_get(self):
@@ -427,150 +427,150 @@ class TestCore:
     #     resp = req.core_nodes_datastore_delete(auth_token)
     #     assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_alarmer(self):
+    def test_core_service_dp_alarmer_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_alarmer(auth_token)
+        resp = req.core_service_dp_alarmer_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_auth(self):
+    def test_core_service_dp_auth_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_auth(auth_token)
+        resp = req.core_service_dp_auth_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_core(self):
+    def test_core_service_dp_core_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_core(auth_token)
+        resp = req.core_service_dp_core_get(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_licenser(self):
+    def test_core_service_dp_licenser_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_licenser(auth_token)
+        resp = req.core_service_dp_licenser_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_log_eater(self):
+    def test_core_service_dp_log_eater_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_log_eater(auth_token)
+        resp = req.core_service_dp_log_eater_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_monitor(self):
+    def test_core_service_dp_monitor_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_monitor(auth_token)
+        resp = req.core_service_dp_monitor_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_peopler(self):
+    def test_core_service_dp_peopler_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_peopler(auth_token)
+        resp = req.core_service_dp_peopler_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_permitter(self):
+    def test_core_service_dp_permitter_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_permitter(auth_token)
+        resp = req.core_service_dp_permitter_get(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_postgres_single(self):
+    def test_core_service_dp_postgres_single_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_postgres_single(auth_token)
+        resp = req.core_service_dp_postgres_single_get(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_taskplan(self):
+    def test_core_service_dp_taskplan_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_taskplan(auth_token)
+        resp = req.core_service_dp_taskplan_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_updater(self):
+    def test_core_service_dp_updater_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_updater(auth_token)
+        resp = req.core_service_dp_updater_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_absorber(self):
+    def test_core_service_dp_absorber_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_absorber(auth_token)
+        resp = req.core_service_dp_absorber_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_picker(self):
+    def test_core_service_dp_picker_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_picker(auth_token)
+        resp = req.core_service_dp_picker_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_storage_single(self):
+    def test_core_service_dp_storage_single_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_storage_single(auth_token)
+        resp = req.core_service_dp_storage_single_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_storage_worker(self):
+    def test_core_service_dp_storage_worker_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_storage_worker(auth_token)
+        resp = req.core_service_dp_storage_worker_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_ml(self):
+    def test_core_service_dp_ml_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_ml(auth_token)
+        resp = req.core_service_dp_ml_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_scripter(self):
+    def test_core_service_dp_scripter_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_scripter(auth_token)
+        resp = req.core_service_dp_scripter_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_datapie_baker(self):
+    def test_core_service_dp_datapie_baker_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_datapie_baker(auth_token)
+        resp = req.core_service_dp_datapie_baker_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_elements_eater(self):
+    def test_core_service_dp_elements_eater_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_elements_eater(auth_token)
+        resp = req.core_service_dp_elements_eater_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_frontend(self):
+    def test_core_service_dp_frontend_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_frontend(auth_token)
+        resp = req.core_service_dp_frontend_get(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_reporter(self):
+    def test_core_service_dp_reporter_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_reporter(auth_token)
+        resp = req.core_service_dp_reporter_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_rm_cook(self):
+    def test_core_service_dp_rm_cook_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_rm_cook(auth_token)
+        resp = req.core_service_dp_rm_cook_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_rm_ml(self):
+    def test_core_service_dp_rm_ml_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_rm_ml(auth_token)
+        resp = req.core_service_dp_rm_ml_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_screener(self):
+    def test_core_service_dp_screener_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_screener(auth_token)
+        resp = req.core_service_dp_screener_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_visualisation(self):
+    def test_core_service_dp_visualisation_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_visualisation(auth_token)
+        resp = req.core_service_dp_visualisation_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_xba_cook(self):
+    def test_core_service_dp_xba_cook_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_xba_cook(auth_token)
+        resp = req.core_service_dp_xba_cook_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_service_dp_xba_py(self):
+    def test_core_service_dp_xba_py_get(self):
         req = Core(sess, host)
-        resp = req.core_service_dp_xba_py(auth_token)
+        resp = req.core_service_dp_xba_py_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_core_service_all_restart(self):  # стенд не тянет этот метод!
+    def test_core_service_all_restart_get(self):  # стенд не тянет этот метод!
         req = Core(sess, host)
-        resp = req.core_service_all_restart(auth_token)
+        resp = req.core_service_all_restart_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_sid(self):
+    def test_core_sid_get(self):
         req = Core(sess, host)
-        resp = req.core_sid(auth_token)
+        resp = req.core_sid_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_syslog_get(self):
@@ -594,14 +594,14 @@ class TestLicenser:
         global auth_token
         auth_token = dct['token']
 
-    def test_licenser_activate(self):
+    def test_licenser_activate_post(self):
         req = Licenser(sess, host)
-        resp = req.licenser_activate(auth_token)
+        resp = req.licenser_activate_post(auth_token)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_licenser_license_info(self):
+    def test_licenser_license_info_get(self):
         req = Licenser(sess, host)
-        resp = req.licenser_license_info(auth_token)
+        resp = req.licenser_license_info_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
@@ -634,17 +634,17 @@ class TestPeopler:
     # @testit.displayName("peopler_profile_get")
     # @testit.externalID("peopler_profile_get")
     # @testit.workItemID(1961)
-    def test_peopler_profile(self):
+    def test_peopler_profile_get(self):
         req = Peopler(sess, host)
-        resp = req.peopler_profile(auth_token)
+        resp = req.peopler_profile_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # @testit.displayName("peopler_profiles_get")
     # @testit.externalID("peopler_profiles_get")
     # @testit.workItemID(1962)
-    def test_peopler_profiles(self):
+    def test_peopler_profiles_get(self):
         req = Peopler(sess, host)
-        resp = req.peopler_profiles(auth_token)
+        resp = req.peopler_profiles_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # @testit.displayName("peopler_users_get")
@@ -708,39 +708,39 @@ class TestPermitter:
         resp = req.permitter_check_ui_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_all_db(self):
+    def test_permitter_db_watcher_all_db_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_all_db(auth_token)
+        resp = req.permitter_db_watcher_all_db_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_all_tables(self):
+    def test_permitter_db_watcher_all_tables_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_all_tables(auth_token)
+        resp = req.permitter_db_watcher_all_tables_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_db_tables(self):
+    def test_permitter_db_watcher_db_tables_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_db_tables(auth_token)
+        resp = req.permitter_db_watcher_db_tables_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_empty_role_dbs(self):
+    def test_permitter_db_watcher_empty_role_dbs_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_empty_role_dbs(auth_token)
+        resp = req.permitter_db_watcher_empty_role_dbs_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_empty_role_tables(self):
+    def test_permitter_db_watcher_empty_role_tables_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_empty_role_tables(auth_token)
+        resp = req.permitter_db_watcher_empty_role_tables_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_empty_role_tables_id(self):
+    def test_permitter_db_watcher_empty_role_tables_id_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_empty_role_tables_id(auth_token)
+        resp = req.permitter_db_watcher_empty_role_tables_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_get_tab_name_id(self):
+    def test_permitter_db_watcher_get_tab_name_id_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_db_watcher_get_tab_name_id(auth_token)
+        resp = req.permitter_db_watcher_get_tab_name_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_element_flags_query_get(self):
@@ -918,9 +918,9 @@ class TestPermitter:
         resp = req.permitter_roles_editor_roles_id_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_user_rules(self):
+    def test_permitter_user_rules_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_user_rules(auth_token)
+        resp = req.permitter_user_rules_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_users_elements_count_who_id_get(self):
@@ -933,9 +933,9 @@ class TestPermitter:
         resp = req.permitter_users_new_author_who_id_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_who_rules_who_id(self):
+    def test_permitter_who_rules_who_id_get(self):
         req = Permitter(sess, host)
-        resp = req.permitter_who_rules_who_id(auth_token)
+        resp = req.permitter_who_rules_who_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
@@ -950,39 +950,39 @@ class TestRmCook:
         global auth_token
         auth_token = dct['token']
 
-    def test_rm_cook_active_directory_groups(self):
+    def test_rm_cook_active_directory_groups_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_groups(auth_token)
+        resp = req.rm_cook_active_directory_groups_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_active_directory_groups_id(self):
+    def test_rm_cook_active_directory_groups_id_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_groups_id(auth_token)
+        resp = req.rm_cook_active_directory_groups_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_active_directory_state(self):
+    def test_rm_cook_active_directory_state_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_state(auth_token)
+        resp = req.rm_cook_active_directory_state_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_active_directory_top_groups(self):
+    def test_rm_cook_active_directory_top_groups_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_top_groups(auth_token)
+        resp = req.rm_cook_active_directory_top_groups_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_active_directory_top_users(self):
+    def test_rm_cook_active_directory_top_users_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_top_users(auth_token)
+        resp = req.rm_cook_active_directory_top_users_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_active_directory_users(self):
+    def test_rm_cook_active_directory_users_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_users(auth_token)
+        resp = req.rm_cook_active_directory_users_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_active_directory_users_id(self):
+    def test_rm_cook_active_directory_users_id_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_active_directory_users(auth_token)
+        resp = req.rm_cook_active_directory_users_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
@@ -991,14 +991,14 @@ class TestRmCook:
         resp = req.rm_cook_calculation_start_calc_id_post(auth_token)
         assert resp.status_code == 200 or 429, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_rm_logs_last(self):
+    def test_rm_cook_rm_logs_last_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_rm_logs_last(auth_token)
+        resp = req.rm_cook_rm_logs_last_get(auth_token)
         assert resp.status_code == 200 or 429, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_recommendations(self):
+    def test_rm_recommendations_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_rm_recommendations(auth_token)
+        resp = req.rm_cook_rm_recommendations_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_rm_cook_rm_roles_id_alias_post(self):
@@ -1011,59 +1011,59 @@ class TestRmCook:
         resp = req.rm_cook_rm_roles_id_alias_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_status(self):
+    def test_rm_status_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_rm_status(auth_token)
+        resp = req.rm_cook_rm_status_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_role_model_result_export_role_model_to_excel(self):
+    def test_rm_cook_role_model_result_export_role_model_to_excel_post(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_export_role_model_to_excel(auth_token)
+        resp = req.rm_cook_role_model_result_export_role_model_to_excel_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_rm_cook_role_model_result_groups_by_role_id(self):
+    def test_rm_cook_role_model_result_groups_by_role_id_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_groups_by_role_id(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    @pytest.mark.skip
-    def test_rm_cook_role_model_result_resources_by_role_id(self):  # Не реализовано
-        req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_resources_by_role_id(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_rm_cook_role_model_result_roles_by_source_source_id(self):
-        req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_roles_by_source_source_id(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_rm_cook_role_model_result_source_source_id_users_by_role_role_id(self):
-        req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_source_source_id_users_by_role_role_id(auth_token)
+        resp = req.rm_cook_role_model_result_groups_by_role_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id(self):  # Не используется
+    def test_rm_cook_role_model_result_resources_by_role_id_get(self):  # Не реализовано
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id(auth_token)
+        resp = req.rm_cook_role_model_result_resources_by_role_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_roles_by_source_source_id_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_roles_by_source_source_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id(self):  # Не используется
+    def test_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self):  # Не используется
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id(auth_token)
+        resp = req.rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(self):
+    def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):  # Не используется
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(auth_token)
+        resp = req.rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(self):
+    def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
         req = Rm_Cook(sess, host)
-        resp = req.rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(auth_token)
+        resp = req.rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_rm_cook_settings_calc_get(self):

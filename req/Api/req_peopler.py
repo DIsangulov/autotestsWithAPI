@@ -53,12 +53,12 @@ class Peopler(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
-    def peopler_profile(self, token):
+    def peopler_profile_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         return resp
 
-    def peopler_profiles(self, token):
+    def peopler_profiles_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profiles", headers=header, verify=False)
         return resp

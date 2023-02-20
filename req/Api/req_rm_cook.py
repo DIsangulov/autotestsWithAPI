@@ -9,7 +9,7 @@ syslog_host = "107.130.0.22"
 
 class Rm_Cook(BaseReq):
 
-    def rm_cook_active_directory_groups(self, token):
+    def rm_cook_active_directory_groups_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/groups", headers=header, verify=False)
         dct = json.loads(resp.text)
@@ -17,28 +17,28 @@ class Rm_Cook(BaseReq):
         group_id = dct['res']['groups'][1]['id']  # получили id группы
         return resp
 
-    def rm_cook_active_directory_groups_id(self, token):
+    def rm_cook_active_directory_groups_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/groups/" + str(group_id), headers=header,
                              verify=False)
         return resp
 
-    def rm_cook_active_directory_state(self, token):
+    def rm_cook_active_directory_state_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/state", headers=header, verify=False)
         return resp
 
-    def rm_cook_active_directory_top_groups(self, token):
+    def rm_cook_active_directory_top_groups_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/top_groups", headers=header, verify=False)
         return resp
 
-    def rm_cook_active_directory_top_users(self, token):
+    def rm_cook_active_directory_top_users_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/top_users", headers=header, verify=False)
         return resp
 
-    def rm_cook_active_directory_users(self, token):
+    def rm_cook_active_directory_users_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/users", headers=header, verify=False)
         dct = json.loads(resp.text)
@@ -46,7 +46,7 @@ class Rm_Cook(BaseReq):
         user_id = dct['res']['users'][1]['id']  # получили id пользователя
         return resp
 
-    def rm_cook_active_directory_users_id(self, token):
+    def rm_cook_active_directory_users_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/users/" + str(user_id), headers=header,
                              verify=False)
@@ -57,12 +57,12 @@ class Rm_Cook(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.rm_cook/calculation/start/1", headers=header, verify=False)
         return resp
 
-    def rm_cook_rm_logs_last(self, token):
+    def rm_cook_rm_logs_last_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/rm/logs/last", headers=header, verify=False)
         return resp
 
-    def rm_cook_rm_recommendations(self, token):
+    def rm_cook_rm_recommendations_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/rm/recommendations", headers=header, verify=False)
         return resp
@@ -78,12 +78,12 @@ class Rm_Cook(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/rm/roles/0/alias", headers=header, verify=False)
         return resp
 
-    def rm_cook_rm_status(self, token):
+    def rm_cook_rm_status_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/rm/status", headers=header, verify=False)
         return resp
 
-    def rm_cook_role_model_result_export_role_model_to_excel(self, token):
+    def rm_cook_role_model_result_export_role_model_to_excel_post(self, token):
         body = {
             "groups_db": "picker_tables",
             "groups_table": "ad_groups_ngr_2",
@@ -96,51 +96,51 @@ class Rm_Cook(BaseReq):
                               headers=header, json=body, verify=False)
         return resp
 
-    def rm_cook_role_model_result_groups_by_role_id(self, token):
+    def rm_cook_role_model_result_groups_by_role_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/groups_by_role/0", headers=header,
                              verify=False)
         return resp
 
-    def rm_cook_role_model_result_resources_by_role_id(self, token):
+    def rm_cook_role_model_result_resources_by_role_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/resources_by_role/0", headers=header,
                              verify=False)
         return resp
 
-    def rm_cook_role_model_result_roles_by_source_source_id(self, token):
+    def rm_cook_role_model_result_roles_by_source_source_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/roles_by_source/0", headers=header,
                              verify=False)
         return resp
 
-    def rm_cook_role_model_result_source_source_id_users_by_role_role_id(self, token):
+    def rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/source/0/users_by_role/0", headers=header,
                              verify=False)
         return resp
 
-    def rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id(self, token):
+    def rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(
             f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/resources_by_user/" + str(user_id),
             headers=header, verify=False)
         return resp
 
-    def rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id(self, token):
+    def rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/users_by_resource/0",
                              headers=header, verify=False)
         return resp
 
-    def rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id(self, token):
+    def rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(
             f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/users_by_group/3909688664",
             headers=header, verify=False)
         return resp
 
-    def rm_cook_role_model_result_form_role_role_id_users_by_group_user_id(self, token):
+    def rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self, token):
         header = {'token': token}
         resp = self.sess.get(
             f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/groups_by_user/1996248437",

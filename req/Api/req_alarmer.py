@@ -10,17 +10,17 @@ rand_id = None
 
 class Alarmer(BaseReq):
 
-    def alarmer_notification_admin_all(self, token):
+    def alarmer_notification_admin_all_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/admin/all", headers=header, verify=False)
         return resp
 
-    def alarmer_notification_read_admin(self, token):
+    def alarmer_notification_read_admin_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/read/admin", headers=header, verify=False)
         return resp
 
-    def alarmer_notification_read_type_admin(self, token):
+    def alarmer_notification_read_type_admin_post(self, token):
         body = {
             "id": 5590483
         }
@@ -29,7 +29,7 @@ class Alarmer(BaseReq):
                               verify=False)
         return resp
 
-    def alarmer_notification_settings_admin(self, token):
+    def alarmer_notification_settings_admin_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/settings/admin", headers=header, verify=False)
         return resp
@@ -74,19 +74,19 @@ class Alarmer(BaseReq):
                               verify=False)
         return resp
 
-    def alarmer_notification_settings_user_all(self, token):
+    def alarmer_notification_settings_user_all_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/user/all", headers=header,
                              verify=False)
         return resp
 
-    def alarmer_notification_user(self, token):
+    def alarmer_notification_user_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/user", headers=header,
                              verify=False)
         return resp
 
-    def alarmer_send_invitation(self, token):
+    def alarmer_send_invitation_post(self, token):
         body = {
             "link": "https://10.130.0.22/",
             "msg": "TestAPI",
@@ -98,7 +98,7 @@ class Alarmer(BaseReq):
                               verify=False)
         return resp
 
-    def alarmer_send_invitations(self, token):
+    def alarmer_send_invitations_post(self, token):
         body = {
             "link": "https://10.130.0.22/",
             "msg": "TestAPI",
@@ -112,7 +112,7 @@ class Alarmer(BaseReq):
                               verify=False)
         return resp
 
-    def alarmer_send_msg(self, token):
+    def alarmer_send_msg_post(self, token):
         body = {
             "description": "TestApiAlarmer",
             "disable_tls": False,

@@ -9,23 +9,24 @@ sess_id = None
 
 class AuthApi(BaseReq):
 
-    def ad_struct(self, token):
+    def ad_struct_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/ad_struct", headers=header, verify=False)
         return resp
 
-    def ou_users(self, token):
+    def ou_users_post(self, token):
         header = {'token': token}
-        body = {"ou": "OU=Отдел внедрения и сервиса,OU=Центр профессиональных сервисов,OU=NGR,OU=Employees,DC=angaratech,DC=ru"}
+        body = {
+            "ou": "OU=Отдел внедрения и сервиса,OU=Центр профессиональных сервисов,OU=NGR,OU=Employees,DC=angaratech,DC=ru"}
         resp = self.sess.post(f"{self.host}/back/dp.auth/ou_users", headers=header, json=body, verify=False)
         return resp
 
-    def sessions(self, token):
+    def sessions_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/sessions", headers=header, verify=False)
         return resp
 
-    def sessions_uid(self, token):  # здесь можем взять sid
+    def sessions_uid_get(self, token):  # здесь можем взять sid
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/1238", headers=header, verify=False)
         dct = json.loads(resp.text)
@@ -44,7 +45,7 @@ class AuthApi(BaseReq):
         resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/all/1238", headers=header, verify=False)
         return resp
 
-    def logout(self, token):
+    def logout_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/logout", headers=header, verify=False)
         return resp
