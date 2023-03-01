@@ -20,6 +20,10 @@ from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import Rm_Cook
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
+from req.Api.req_elements_eater import ElementsEater
+from req.Api.req_log_eater import LogEater
+from req.Api.req_monitor import Monitor
+
 from utilities.logger import Logger
 
 urllib3.disable_warnings()
@@ -1097,6 +1101,7 @@ class TestRmCook:
         resp = req.rm_cook_settings_sources_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+
 @pytest.mark.skip
 class TestStorageWorker:
 
@@ -1480,4 +1485,265 @@ class TestXbaCook:
     def test_xba_cook_xba_post(self):
         req = XbaCook(sess, host)
         resp = req.xba_cook_xba_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+@pytest.mark.skip
+class TestElementsEater:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    def test_elements_eater_reports_export_post(self):
+        req = ElementsEater(sess, host)
+        resp = req.elements_eater_reports_export_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_elements_eater_reports_import_post(self):
+        req = ElementsEater(sess, host)
+        resp = req.elements_eater_reports_import_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+@pytest.mark.skip
+class TestLogEater:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    def test_log_eater_audit_users_days_get(self):
+        req = LogEater(sess, host)
+        resp = req.log_eater_audit_users_days_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestMonitor:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+
+    def test_monitor_anomals_flag_0_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_anomals_flag_0_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_anomals_flag_1_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_anomals_flag_1_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_anomals_flag_2_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_anomals_flag_2_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_anomals_flag_3_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_anomals_flag_3_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_anomals_flag_4_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_anomals_flag_4_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_monitor_dump_server_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_dump_server_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_monitor_dump_nodes_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_dump_nodes_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # -----------------------------------------------------------
+
+    def test_monitor_nodes_graphs_ml_ram_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_ml_ram_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_ml_cpu_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_ml_cpu_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_ml_iops_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_ml_iops_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_ml_network_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_ml_network_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_ml_picked_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_ml_picked_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_picker_ram_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_picker_ram_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_picker_cpu_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_picker_cpu_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_picker_iops_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_picker_iops_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_picker_network_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_picker_network_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_picker_picked_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_picker_picked_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_servicedb_ram_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_servicedb_ram_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_servicedb_cpu_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_servicedb_cpu_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_servicedb_iops_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_servicedb_iops_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_servicedb_network_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_servicedb_network_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_servicedb_picked_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_servicedb_picked_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_datastore_ram_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_datastore_ram_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_datastore_cpu_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_datastore_cpu_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_datastore_iops_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_datastore_iops_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_datastore_network_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_datastore_network_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_graphs_datastore_picked_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_graphs_datastore_picked_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # -----------------------------------------------------------
+
+    def test_monitor_nodes_stats_ml_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_stats_ml_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_stats_picker_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_stats_picker_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_stats_servicedb_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_stats_servicedb_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_nodes_stats_datastore_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_nodes_stats_datastore_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_graphs_ram_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_graphs_ram_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_graphs_cpu_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_graphs_cpu_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_graphs_iops_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_graphs_iops_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_graphs_network_post(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_graphs_network_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_groups_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_groups_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_stats_sys_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_stats_sys_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_stats_visual_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_stats_visual_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_stats_analytics_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_stats_analytics_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_stats_datastore_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_stats_datastore_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_monitor_webserver_stats_dataproc_get(self):
+        req = Monitor(sess, host)
+        resp = req.monitor_webserver_stats_dataproc_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

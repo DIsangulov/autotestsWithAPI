@@ -24,29 +24,27 @@ class BasePage:
         # self.browser.find_element(*SecurLocators.DOP_BUT).click()
         # self.browser.find_element(*SecurLocators.GO_BUT).click()
 
-    def open_new_tab(self, link):  #открытие новой вклдадки
+    def open_new_tab(self, link):  # открытие новой вклдадки
         self.browser.switch_to.new_window('tab')
         self.browser.get(link)
 
-    def is_element_present(self, how, what):  #дефолтная проверка что элемент есть на странице
+    def is_element_present(self, how, what):  # дефолтная проверка что элемент есть на странице
         try:
             self.browser.find_element(how, what)
         except:
             return False
         return True
 
-    def go_to_page(self, how, what):  #переход на новую вкладку
+    def go_to_page(self, how, what):  # переход на новую вкладку
         self.wait_until_elem_be_clickable(how, what)
         link = self.browser.find_element(how, what)
         link.click()
         time.sleep(0.7)  # time for animation
 
-
-
     def scroll_down(self):  # скролл вниз до конца
         self.browser.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
 
-    def switch(self, handle_number):  #переключение между вкладками
+    def switch(self, handle_number):  # переключение между вкладками
         handles = self.browser.window_handles
         self.browser.switch_to.window(handles[handle_number])
         time.sleep(1)
@@ -63,12 +61,12 @@ class BasePage:
             else:
                 time.sleep(0.5)  # time for waiting
 
-
-    def close_handle(self, handle_num):  #закрыть вкладку
+    def close_handle(self, handle_num):  # закрыть вкладку
         self.switch(handle_num)
         self.browser.close()
 
-    def find_request_in_network(self, part_of_request, expected_status_code):  #искать запрос в network и проверять его статускод
+    def find_request_in_network(self, part_of_request,
+                                expected_status_code):  # искать запрос в network и проверять его статускод
         flag = False
         for request in self.browser.requests:
             if request.response:
@@ -86,7 +84,3 @@ class BasePage:
         wait = WebDriverWait(self.browser, 10)
         wait.until(EC.element_to_be_clickable((how, what)))
         time.sleep(0.2)
-
-
-
-

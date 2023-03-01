@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 class MainLocators:
     SUCCESS_ENTER = By.XPATH, "//*[contains(text(),'Общая сводка по состоянию системы')]"
     VISIBLE_PASS = By.XPATH, "//input[@type='password']"
+    SIDE_BAR = By.XPATH, "//div[@class='n-app-navigation__button']"
 
 
 class AuthLocators:
@@ -44,7 +45,8 @@ class XbaLocators:
 
 
 class RoleMiningLocators:
-    SETTINGS = By.XPATH, "//*[contains(text(),'Настройки')]"
+    ROLE_MINING = By.XPATH, "//*[contains(text(),'Role mining')]"
+    SETTINGS = By.XPATH, "//a[@href='/role-mining/settings']"
     ADSTATUS = By.XPATH, "//*[contains(text(),'Состояние AD')]"
     GROPE_AND_USERS = By.XPATH, "//*[contains(text(),'Группы и пользователи')]"
     ROLE_MODEL = By.XPATH, "//*[contains(text(),'Ролевая модель')]"
