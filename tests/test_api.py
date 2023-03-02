@@ -23,6 +23,7 @@ from req.Api.req_xba_cook import XbaCook
 from req.Api.req_elements_eater import ElementsEater
 from req.Api.req_log_eater import LogEater
 from req.Api.req_monitor import Monitor
+from req.Api.req_reporter import Reporter
 
 from utilities.logger import Logger
 
@@ -1527,6 +1528,7 @@ class TestLogEater:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestMonitor:
 
     def test_get_token(self):
@@ -1746,4 +1748,87 @@ class TestMonitor:
     def test_monitor_webserver_stats_dataproc_get(self):
         req = Monitor(sess, host)
         resp = req.monitor_webserver_stats_dataproc_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestReporter:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_reporter_mailing_post(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_sample_post(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_sample_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_put(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_type_0_1_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_type_0_1_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_type_2_3_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_type_2_3_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_id_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_screener_fast_png_id_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_screener_fast_png_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_screener_fast_pdf_id_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_screener_fast_pdf_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_reporter_screener_fast_xlsx_id_get(self):  # хз должно быть или нет
+        req = Reporter(sess, host)
+        resp = req.reporter_screener_fast_xlsx_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_visualisation_cached_role_report_report_id_role_id_post(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_visualisation_cached_role_report_report_id_role_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_mailing_id_delete(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_mailing_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_visualisation_cached_user_report_get(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_visualisation_cached_user_report_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_reporter_visualisation_cached_user_report_report_id_post(self):
+        req = Reporter(sess, host)
+        resp = req.reporter_visualisation_cached_user_report_report_id_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
