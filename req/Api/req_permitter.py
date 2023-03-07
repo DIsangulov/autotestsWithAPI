@@ -272,6 +272,14 @@ class Permitter(BaseReq):
                               verify=False)
         return resp
 
+    def permitter_element_rules_delete_element_type_query_element_id_post(self, token):
+        header = {'token': token, 'ui': str(2)}
+        data = {"access": True, "exec": True, "id": 56, "is_user": True, "read": True, "who_id": 5, "write": True}
+        resp = self.sess.post(f"{self.host}/back/dp.permitter/element_rules/delete/query/56", headers=header,
+                              json=data,
+                              verify=False)
+        return resp
+
     # ______________/back/dp.permitter/element_rules/{element_type}/{element_id}_____________
 
     def permitter_roles_editor_roles_get(self, token):

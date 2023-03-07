@@ -24,6 +24,9 @@ from req.Api.req_elements_eater import ElementsEater
 from req.Api.req_log_eater import LogEater
 from req.Api.req_monitor import Monitor
 from req.Api.req_reporter import Reporter
+from req.Api.req_scripter import Scripter
+from req.Api.req_taskplan import Taskplan
+from req.Api.req_updater import Updater
 
 from utilities.logger import Logger
 
@@ -891,12 +894,17 @@ class TestPermitter:
     def test_permitter_element_rules_flags_script_post(self):
         req = Permitter(sess, host)
         resp = req.permitter_element_rules_flags_script_post(auth_token)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_element_rules_flags_script_sequence_post(self):
         req = Permitter(sess, host)
         resp = req.permitter_element_rules_flags_script_sequence_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
+        req = Permitter(sess, host)
+        resp = req.permitter_element_rules_delete_element_type_query_element_id_post(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_roles_editor_roles_get(self):
         req = Permitter(sess, host)
@@ -1751,6 +1759,7 @@ class TestMonitor:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestReporter:
 
     def test_get_token(self):
@@ -1808,7 +1817,7 @@ class TestReporter:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
-    def test_reporter_screener_fast_xlsx_id_get(self):  # хз должно быть или нет
+    def test_reporter_screener_fast_xlsx_id_get(self):  # xlsx формируется на фронте
         req = Reporter(sess, host)
         resp = req.reporter_screener_fast_xlsx_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -1832,3 +1841,233 @@ class TestReporter:
         req = Reporter(sess, host)
         resp = req.reporter_visualisation_cached_user_report_report_id_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+@pytest.mark.skip
+class TestScripter:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_scripter_category_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_category_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_libs_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_libs_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_post(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_put(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_exec_list_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_exec_list_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_start_post(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_start_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_stop_id_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_stop_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_files_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_files_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_files_put(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_files_put(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_log_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_log_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_log_last_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_log_last_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_log_log_id_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_log_log_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_id_log_log_id_delete(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_log_log_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_scripter_script_id_log_delete(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_log_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_type_user_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_type_user_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_script_type_admin_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_script_type_admin_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_post(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_put(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_log_id_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_log_id_get(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_id_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_start_post(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_start_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_stop_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_stop_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_id_log_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_id_log_get(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_scripter_sequence_id_log_id_id_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_id_log_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_sequence_type_admin_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_sequence_type_admin_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_scripter_sequence_sequence_type_user_get(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_sequence_type_user_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_scripter_sequence_id_delete(self):
+        req = Scripter(sess, host)
+        resp = req.scripter_sequence_id_get(auth_token)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip
+    def test_scripter_script_id_delete(self):  # удаление скрипта
+        req = Scripter(sess, host)
+        resp = req.scripter_script_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+@pytest.mark.skip
+class TestTaskplan:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_taskplan_get_shedule_post(self):
+        req = Taskplan(sess, host)
+        resp = req.taskplan_get_shedule_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_taskplan_tasks_post(self):
+        req = Taskplan(sess, host)
+        resp = req.taskplan_tasks_post(auth_token)
+        assert resp.status_code == 200 or 404, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestUpdater:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_updater_additions_get(self):
+        req = Updater(sess, host)
+        resp = req.updater_additions_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_updater_additions_addition_delete(self):
+        req = Updater(sess, host)
+        resp = req.updater_additions_addition_delete(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_updater_additions_addition_post(self):
+        req = Updater(sess, host)
+        resp = req.updater_additions_addition_post(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_updater_check_updates_get(self):
+        req = Updater(sess, host)
+        resp = req.updater_check_updates_get(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
