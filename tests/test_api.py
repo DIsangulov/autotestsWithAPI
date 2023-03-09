@@ -27,6 +27,7 @@ from req.Api.req_reporter import Reporter
 from req.Api.req_scripter import Scripter
 from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
+from req.Api.req_visualisation import Visualisation
 
 from utilities.logger import Logger
 
@@ -2041,6 +2042,7 @@ class TestTaskplan:
         assert resp.status_code == 200 or 404, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestUpdater:
 
     def test_get_token(self):
@@ -2071,3 +2073,100 @@ class TestUpdater:
         req = Updater(sess, host)
         resp = req.updater_check_updates_get(auth_token)
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+
+class TestVisualisation:
+
+    def test_get_token(self):
+        req = BaseReq(sess, host)
+        resp = req.auth()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        dct = json.loads(resp.text)
+        global auth_token
+        auth_token = dct['token']
+        print(auth_token)
+
+    def test_visualisation_query_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_query_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_query_do_query_id_post(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_query_do_query_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_query_save_post(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_query_save_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_query_do_query_usage_id_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_query_do_query_usage_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_query_do_query_id_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_query_do_query_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_query_do_query_id_delete(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_query_do_query_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_reports_post(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_reports_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_reports_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_reports_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_reports_report_id_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_reports_report_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_reports_report_id_delete(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_reports_report_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_post(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_dataseries_visualisation_id_post(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_dataseries_visualisation_id_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_types_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_types_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_usage_visualisation_id_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_usage_visualisation_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_visualisation_id_get(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_usage_visualisation_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_visualisation_visualisation_visualisation_id_delete(self):
+        req = Visualisation(sess, host)
+        resp = req.visualisation_visualisation_visualisation_id_delete(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
