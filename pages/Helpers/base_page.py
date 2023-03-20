@@ -6,6 +6,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 # from resources.locators import MainLocators
 from sys import platform
 
+from seleniumwire import webdriver
+
 from resourses.locators import MainLocators
 
 
@@ -80,7 +82,11 @@ class BasePage:
         time.sleep(0.2)  # time for stable work
 
     # TODO: it's work unstable... we must try to ise stupid servers:)
+
     def wait_until_elem_be_clickable(self, how, what):  # expends to send_keys method with inputs too
         wait = WebDriverWait(self.browser, 10)
         wait.until(EC.element_to_be_clickable((how, what)))
         time.sleep(0.2)
+
+    def browser_close(self):
+        self.browser.close()

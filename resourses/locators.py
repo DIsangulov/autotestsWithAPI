@@ -2,7 +2,9 @@ from selenium.webdriver.common.by import By
 
 
 class MainLocators:
-    SUCCESS_ENTER = By.XPATH, "//*[contains(text(),'Общая сводка по состоянию системы')]"
+    PRE_ENTER = By.XPATH, "//*[contains(text(),'Дополнительные')]"
+    PRE_ENTER_AGREE = By.XPATH, "//*[contains(text(),'Перейти на сайт')]"
+    SUCCESS_ENTER = By.XPATH, "//a[@class='n-app-navigation__logo router-link-exact-active router-link-active']"
     VISIBLE_PASS = By.XPATH, "//input[@type='password']"
     SIDE_BAR = By.XPATH, "//div[@class='n-app-navigation__button']"
 
@@ -48,5 +50,5 @@ class RoleMiningLocators:
     ROLE_MINING = By.XPATH, "//*[contains(text(),'Role mining')]"
     SETTINGS = By.XPATH, "//a[@href='/role-mining/settings']"
     ADSTATUS = By.XPATH, "//*[contains(text(),'Состояние AD')]"
-    GROPE_AND_USERS = By.XPATH, "//*[contains(text(),'Группы и пользователи')]"
+    GROPES_AND_USERS = By.XPATH, "//*[contains(text(),'Группы и пользователи')]"
     ROLE_MODEL = By.XPATH, "//*[contains(text(),'Ролевая модель')]"

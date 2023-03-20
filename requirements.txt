@@ -10,6 +10,4 @@ datetime~=4.9
 allure-pytest
 jsonschema
 docker
-
-
 behave~=1.2.6
