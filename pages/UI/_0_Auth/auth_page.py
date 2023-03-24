@@ -5,6 +5,9 @@ import pytest
 from pages.Helpers.base_page import BasePage
 from resourses.locators import AuthLocators, MainLocators, RoleMiningLocators
 
+login = 'dataplan_qaa@ngrsoftlab.ru'
+password = 'fHNHQBc7jEKfaO0kywZz!!'
+
 
 class AuthPage(BasePage):
 
@@ -14,8 +17,8 @@ class AuthPage(BasePage):
         # self.wait_until_elem_be_clickable(*MainLocators.PRE_ENTER_AGREE)
         # self.browser.find_element(*MainLocators.PRE_ENTER_AGREE).click()
         self.wait_until_elem_be_clickable(*AuthLocators.LOGIN_INPUT)
-        self.browser.find_element(*AuthLocators.LOGIN_INPUT).send_keys("dataplan_qaa@ngrsoftlab.ru")
-        self.browser.find_element(*AuthLocators.PAS_INPUT).send_keys("fHNHQBc7jEKfaO0kywZz!!")
+        self.browser.find_element(*AuthLocators.LOGIN_INPUT).send_keys(login)
+        self.browser.find_element(*AuthLocators.PAS_INPUT).send_keys(password)
         self.browser.find_element(*AuthLocators.PASS_VISIBLE).click()
         self.browser.find_element(*AuthLocators.ENTER_BUT).click()
 

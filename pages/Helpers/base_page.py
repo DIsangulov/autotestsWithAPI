@@ -84,8 +84,9 @@ class BasePage:
     # TODO: it's work unstable... we must try to ise stupid servers:)
 
     def wait_until_elem_be_clickable(self, how, what):  # expends to send_keys method with inputs too
-        wait = WebDriverWait(self.browser, 10)
+        wait = WebDriverWait(self.browser, 30)
         wait.until(EC.element_to_be_clickable((how, what)))
+        # wait.until(EC.visibility_of_element_located((how, what)))
         time.sleep(0.2)
 
     def browser_close(self):

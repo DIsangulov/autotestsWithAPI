@@ -35,14 +35,16 @@ class DataLocators:
 
 
 class AnalyticsLocators:
-    NEWSLETTERS = By.XPATH, "//*[contains(text(),'Рассылки')]"
+    MAILING_LISTS = By.XPATH, "//*[contains(text(),'Рассылки')]"
     REPORTS = By.XPATH, "//*[contains(text(),'Отчеты')]"
     VISUALIZATIONS = By.XPATH, "//*[contains(text(),'Визуализации')]"
     REQUESTS = By.XPATH, "//*[contains(text(),'Запросы')]"
 
 
 class XbaLocators:
+    XBA = By.XPATH, "//*[contains(text(),'xBA')][1]"
     PROFILES = By.XPATH, "//*[contains(text(),'Профили')]"
+    METAPROFILES = By.XPATH, "//*[contains(text(),'Метапрофили')]"
     XBA_STATISTIC = By.XPATH, "//*[contains(text(),'Статистика xBA')]"
 
 
@@ -52,3 +54,26 @@ class RoleMiningLocators:
     ADSTATUS = By.XPATH, "//*[contains(text(),'Состояние AD')]"
     GROPES_AND_USERS = By.XPATH, "//*[contains(text(),'Группы и пользователи')]"
     ROLE_MODEL = By.XPATH, "//*[contains(text(),'Ролевая модель')]"
+    CLEAR_BUTTON = By.XPATH, "//*[contains(text(),'Очистить')]"
+    CLEAR_BUTTON_YES = By.XPATH, "//button[@class ='ngr-button ngr-promt__btn ngr-button_primary']"
+    CLEAR_BUTTON_NO = By.XPATH, "//*[contains(text(),'Отмена')]"
+    SELECT_DB = By.XPATH, "//input[@placeholder ='Выберите базу данных']"
+    SELECT_DB_CHOISE = By.XPATH, "//div[@class ='options visible']/ul/li[1]"
+    SELECT_TABLE = By.XPATH, "//input[@placeholder ='Выберите таблицу']"
+    SAVE_BUTTON = By.XPATH, "//*[contains(text(),'Сохранить')]"
+    SAVE_DROPDOWN_BUTTON = By.XPATH, "//div[@class ='ngr-button-dropdown__arrow']"
+    RECALCULATE_BUTTON = By.XPATH, "//*[contains(text(),'Пересчитать')]"
+    RERUN_BUTTON = By.XPATH, "//*[contains(text(),'Запустить')]"
+    CALCULATION_SETTINGS = By.XPATH, "//*[contains(text(),'Настройка расчета')]"
+    GEAR_BUTTON = By.XPATH, "//span[@class='ngr-icon icon-menu-setting']"
+    CHECKBOX_SYSLOG = By.XPATH, "(//input[@class='ngr-checkbox__input'])[1]"
+    CHECKBOX_EMAIL = By.XPATH, "(//input[@class='ngr-checkbox__input'])[2]"
+    INPUT_EMAIL = By.XPATH, "//textarea[@placeholder='Введите E-mail получателей через «;»']"
+    SERVER_ADDERESS = By.XPATH, "//input[@placeholder='Введите адрес сервера']"
+    PORT = By.XPATH, "//input[@placeholder='Введите порт']"
+    DROPDOWN_EXCHANGE_PROTOCOL = By.XPATH, "//*[contains(text(),'Выберите протокол обмена')]"
+    TCP_PROTOCOL = By.XPATH, "//div[@class='options visible']/ul/li[1]"
+    UDP_PROTOCOL = By.XPATH, "//div[@class='options visible']/ul/li[2]"
+    ADD_BUTTON = By.XPATH, "//*[contains(text(),'Добавить')]"
+    TRASH_ICON = By.XPATH, "(//span[@class='ngr-icon icon-trash-can'])[1]"
+    DELETE_BUTTON = By.XPATH, "//button[@class='ngr-button ngr-promt__btn ngr-button_primary']"
