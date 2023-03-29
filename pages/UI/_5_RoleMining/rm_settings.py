@@ -60,11 +60,11 @@ class Settings(BasePage):
 
     def select_tcp_exchange_protocol(self):
         self.browser.find_element(*RoleMiningLocators.DROPDOWN_EXCHANGE_PROTOCOL).click()
-        self.browser.find_element(*RoleMiningLocators.TCP_PROTOCOL).click()
+        self.browser.find_element(*MainLocators.DROPDOWN1).click()
 
     def select_udp_exchange_protocol(self):
         self.browser.find_element(*RoleMiningLocators.DROPDOWN_EXCHANGE_PROTOCOL).click()
-        self.browser.find_element(*RoleMiningLocators.UDP_PROTOCOL).click()
+        self.browser.find_element(*MainLocators.DROPDOWN1).click()
 
     def click_add_button(self):
         self.browser.find_element(*RoleMiningLocators.ADD_BUTTON).click()

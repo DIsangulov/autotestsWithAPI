@@ -7,6 +7,8 @@ class MainLocators:
     SUCCESS_ENTER = By.XPATH, "//a[@class='n-app-navigation__logo router-link-exact-active router-link-active']"
     VISIBLE_PASS = By.XPATH, "//input[@type='password']"
     SIDE_BAR = By.XPATH, "//div[@class='n-app-navigation__button']"
+    DROPDOWN1 = By.XPATH, "//div[@class='options visible']/ul/li[1]"
+    DROPDOWN2 = By.XPATH, "//div[@class='options visible']/ul/li[2]"
 
 
 class AuthLocators:
@@ -39,6 +41,10 @@ class AnalyticsLocators:
     REPORTS = By.XPATH, "//*[contains(text(),'Отчеты')]"
     VISUALIZATIONS = By.XPATH, "//*[contains(text(),'Визуализации')]"
     REQUESTS = By.XPATH, "//*[contains(text(),'Запросы')]"
+    CREATE_MAILING_LIST = By.XPATH, "//*[contains(text(),'Создать рассылку')]"
+    INPUT_MAILING_NAME = By.XPATH, "//input[@placeholder='Введите название рассылки']"
+    DROPDOWN_MAILING_TYPE = By.XPATH, "//span[@class='ngr-dropdown__input-selected']"
+    NEXT_BUTTON = By.XPATH, "//*[contains(text(),'Далее')]"
 
 
 class XbaLocators:
@@ -72,8 +78,6 @@ class RoleMiningLocators:
     SERVER_ADDERESS = By.XPATH, "//input[@placeholder='Введите адрес сервера']"
     PORT = By.XPATH, "//input[@placeholder='Введите порт']"
     DROPDOWN_EXCHANGE_PROTOCOL = By.XPATH, "//*[contains(text(),'Выберите протокол обмена')]"
-    TCP_PROTOCOL = By.XPATH, "//div[@class='options visible']/ul/li[1]"
-    UDP_PROTOCOL = By.XPATH, "//div[@class='options visible']/ul/li[2]"
     ADD_BUTTON = By.XPATH, "//*[contains(text(),'Добавить')]"
     TRASH_ICON = By.XPATH, "(//span[@class='ngr-icon icon-trash-can'])[1]"
     DELETE_BUTTON = By.XPATH, "//button[@class='ngr-button ngr-promt__btn ngr-button_primary']"
