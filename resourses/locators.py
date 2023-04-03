@@ -22,11 +22,14 @@ class AdminLocators:
     ADMINISTRATION = By.XPATH, "//*[contains(text(),'Администрирование')]"
     ROLES = By.XPATH, "//*[contains(text(),'Роли')]"
     USERS = By.XPATH, "//*[contains(text(),'Пользователи')]"
+    SESSIONS = By.XPATH, "//*[contains(text(),'Сессии')]"
     MONITORING = By.XPATH, "//*[contains(text(),'Мониторинг')]"
     LICENSES = By.XPATH, "//*[contains(text(),'Лицензии')]"
     UPDATE = By.XPATH, "//*[contains(text(),'Обновление')]"
     NOTIFICATION_LOG = By.XPATH, "//*[contains(text(),'Журнал уведомлений')]"
     SETTINGS = By.XPATH, "//*[contains(text(),'Настройки')]"
+    TITLE_MSG_OLD = By.XPATH, "//div[@class='title-main']"
+    TITLE_MSG_NEW = By.XPATH, "//div[@class='main-toolbar-left__text-title']"
 
 
 class DataLocators:
@@ -52,6 +55,7 @@ class XbaLocators:
     PROFILES = By.XPATH, "//*[contains(text(),'Профили')]"
     METAPROFILES = By.XPATH, "//*[contains(text(),'Метапрофили')]"
     XBA_STATISTIC = By.XPATH, "//*[contains(text(),'Статистика xBA')]"
+    PUK = By.XPATH, "//button[@class='n-app-profile__ny n-app-button']"
 
 
 class RoleMiningLocators:

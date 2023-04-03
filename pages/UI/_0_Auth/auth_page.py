@@ -21,6 +21,7 @@ class AuthPage(BasePage):
         self.browser.find_element(*AuthLocators.PAS_INPUT).send_keys(password)
         self.browser.find_element(*AuthLocators.PASS_VISIBLE).click()
         self.browser.find_element(*AuthLocators.ENTER_BUT).click()
+        self.browser.find_element(*MainLocators.SIDE_BAR).click()
 
     def should_enter_be_successful(self):
         # self.wait_until_elem_be_clickable(*MainLocators.SUCCESS_ENTER)

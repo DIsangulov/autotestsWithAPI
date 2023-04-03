@@ -44,3 +44,15 @@ def step_impl(context):
 def step_impl(context):
     context.page = Statistic(context.browser, host)
     context.page.should_enter_xba_statistic_be_successful()
+
+
+@then('Сохранить изображение')
+def step_impl(context):
+    context.page = Statistic(context.browser, host)
+    context.page.save_xba_diagram_image()
+
+
+@when('Сравнить изображения')
+def step_impl(context):
+    context.page = Statistic(context.browser, host)
+    context.page.compare_images()

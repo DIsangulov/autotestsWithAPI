@@ -11,3 +11,4 @@ allure-pytest
 jsonschema
 docker
 behave~=1.2.6
+pillow

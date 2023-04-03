@@ -1,4 +1,6 @@
 import time
+import urllib
+
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
@@ -31,11 +33,8 @@ class BasePage:
         self.browser.get(link)
 
     def is_element_present(self, how, what):  # дефолтная проверка что элемент есть на странице
-        try:
-            self.browser.find_element(how, what)
-        except:
-            return False
-        return True
+        # self.browser.find_element(how, what)
+        return self.browser.find_element(how, what)
 
     def go_to_page(self, how, what):  # переход на новую вкладку
         self.wait_until_elem_be_clickable(how, what)
@@ -91,3 +90,7 @@ class BasePage:
 
     def browser_close(self):
         self.browser.close()
+
+    def save_image(self, how, what):
+        image = self.browser.find_element(how, what)
+        image.screenshot('features/images/screenshot.png')
