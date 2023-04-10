@@ -5,7 +5,7 @@ from pages.Helpers.base_page import BasePage
 from resourses.locators import RoleMiningLocators, MainLocators
 
 
-class Settings(BasePage):
+class RmSettings(BasePage):
     def open_rm_settings(self):
         self.browser.find_element(*MainLocators.SIDE_BAR).click()
         self.wait_until_elem_be_clickable(*RoleMiningLocators.ROLE_MINING)

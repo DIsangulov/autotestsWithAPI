@@ -27,17 +27,35 @@ class AdminLocators:
     LICENSES = By.XPATH, "//*[contains(text(),'Лицензии')]"
     UPDATE = By.XPATH, "//*[contains(text(),'Обновление')]"
     NOTIFICATION_LOG = By.XPATH, "//*[contains(text(),'Журнал уведомлений')]"
+    NOTIFICATION_LOG_USER = By.XPATH, "//*[contains(text(),'Пользовательские')]"
+    NOTIFICATION_LOG_ADMIN = By.XPATH, "//*[contains(text(),'Административные')]"
     SETTINGS = By.XPATH, "//*[contains(text(),'Настройки')]"
     TITLE_MSG_OLD = By.XPATH, "//div[@class='title-main']"
     TITLE_MSG_NEW = By.XPATH, "//div[@class='main-toolbar-left__text-title']"
+    TITLE_MSG_NEW2 = By.XPATH, "//div[@class='main-toolbar-left__text-title']"
+    ADMIN_NODE = By.XPATH, "//*[contains(text(),'Административный узел')]"
+    DOMAIN_CONTROLLER = By.XPATH, "//*[contains(text(),'Контроллер домена')]"
+    SERVICE_DB = By.XPATH, "//*[contains(text(),'Служебная БД')]"
+    STORAGE = By.XPATH, "(//li[@class='ngr-tabs__item'])[3]"
+    DATA_COLLECTION = By.XPATH, "(//li[@class='ngr-tabs__item'])[4]"
+    DATA_ANALYSIS = By.XPATH, "(//li[@class='ngr-tabs__item'])[5]"
+    POST = By.XPATH, "(//li[@class='ngr-tabs__item'])[6]"
+    SYSLOG = By.XPATH, "(//li[@class='ngr-tabs__item'])[7]"
+    SECRETS = By.XPATH, "(//li[@class='ngr-tabs__item'])[8]"
 
 
 class DataLocators:
+    DATAS = By.XPATH, "//*[contains(text(),'Данные')]"
     SOURCES = By.XPATH, "//*[contains(text(),'Источники')]"
     REGEX = By.XPATH, "//*[contains(text(),'Регулярные выражения')]"
     SCRIPTS = By.XPATH, "//*[contains(text(),'Скрипты')]"
     STORAGE = By.XPATH, "//*[contains(text(),'Хранилище')]"
-
+    STRUCTURE = By.XPATH, "(//*[contains(text(),'Структура')])[2]"
+    STATISTICS = By.XPATH, "(//li[@class='ngr-tabs__item'])[1]"
+    STORAGE_SEARCH = By.XPATH, "(//li[@class='ngr-tabs__item'])[2]"
+    STORAGE_SEARCH_CONTENT = By.XPATH, "//*[contains(text(),'По содержимому')]"
+    STORAGE_SEARCH_COLUMN = By.XPATH, "//*[contains(text(),'По столбцам')]"
+    IMPORT_RULES = By.XPATH, "(//li[@class='ngr-tabs__item'])[3]"
 
 class AnalyticsLocators:
     MAILING_LISTS = By.XPATH, "//*[contains(text(),'Рассылки')]"
