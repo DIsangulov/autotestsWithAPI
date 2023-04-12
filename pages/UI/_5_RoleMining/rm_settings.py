@@ -1,20 +1,33 @@
+import time
+
 from selenium.webdriver.common.by import By
 
-
 from pages.Helpers.base_page import BasePage
-from resourses.locators import RoleMiningLocators, MainLocators
+from resourses.locators import RoleMiningLocators, MainLocators, AdminLocators
 
 
 class RmSettings(BasePage):
-    def open_rm_settings(self):
-        self.browser.find_element(*MainLocators.SIDE_BAR).click()
-        self.wait_until_elem_be_clickable(*RoleMiningLocators.ROLE_MINING)
+    def open_rm_settings_sources(self):
         self.browser.find_element(*RoleMiningLocators.ROLE_MINING).click()
         self.browser.find_element(*RoleMiningLocators.SETTINGS).click()
 
-    def should_enter_rm_settings_be_successful(self):
-        assert (self.browser.find_element(By.XPATH, "//*[contains(text(),'Настройки Role mining')]")), \
+    def should_enter_rm_settings_sources_be_successful(self):
+        self.is_element_present(*AdminLocators.TITLE_MSG_NEW)
+        assert self.is_element_present(*AdminLocators.TITLE_MSG_NEW).text == "Настройки Role mining", \
             "Найдено несовпадение ожидаемого результата с фактическим"
+        assert self.browser.current_url == self.url + "/role-mining/settings/source", \
+            "URL не совпадают"
+
+    def open_rm_settings_calculation_settings(self):
+        self.browser.find_element(*RoleMiningLocators.CALCULATION_SETTINGS).click()
+        time.sleep(1)
+
+    def should_enter_rm_settings_calculation_settings_be_successful(self):
+        self.is_element_present(*AdminLocators.TITLE_MSG_NEW)
+        assert self.is_element_present(*AdminLocators.TITLE_MSG_NEW).text == "Настройки Role mining", \
+            "Найдено несовпадение ожидаемого результата с фактическим"
+        assert self.browser.current_url == self.url + "/role-mining/settings/calc", \
+            "URL не совпадают"
 
     def clear_sources_rm_settings(self):
         self.browser.find_element(*RoleMiningLocators.CLEAR_BUTTON).click()

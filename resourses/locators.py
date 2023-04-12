@@ -32,7 +32,6 @@ class AdminLocators:
     SETTINGS = By.XPATH, "//*[contains(text(),'Настройки')]"
     TITLE_MSG_OLD = By.XPATH, "//div[@class='title-main']"
     TITLE_MSG_NEW = By.XPATH, "//div[@class='main-toolbar-left__text-title']"
-    TITLE_MSG_NEW2 = By.XPATH, "//div[@class='main-toolbar-left__text-title']"
     ADMIN_NODE = By.XPATH, "//*[contains(text(),'Административный узел')]"
     DOMAIN_CONTROLLER = By.XPATH, "//*[contains(text(),'Контроллер домена')]"
     SERVICE_DB = By.XPATH, "//*[contains(text(),'Служебная БД')]"
@@ -57,8 +56,12 @@ class DataLocators:
     STORAGE_SEARCH_COLUMN = By.XPATH, "//*[contains(text(),'По столбцам')]"
     IMPORT_RULES = By.XPATH, "(//li[@class='ngr-tabs__item'])[3]"
 
+
 class AnalyticsLocators:
+    ANALYTICS = By.XPATH, "//*[contains(text(),'Аналитика')]"
     MAILING_LISTS = By.XPATH, "//*[contains(text(),'Рассылки')]"
+    MAILING_LISTS_REPORTS = By.XPATH, "//*[contains(text(),'Отчетов')]"
+    MAILING_LISTS_NEW_DATA = By.XPATH, "//*[contains(text(),'Новых данных')]"
     REPORTS = By.XPATH, "//*[contains(text(),'Отчеты')]"
     VISUALIZATIONS = By.XPATH, "//*[contains(text(),'Визуализации')]"
     REQUESTS = By.XPATH, "//*[contains(text(),'Запросы')]"
@@ -79,7 +82,9 @@ class XbaLocators:
 class RoleMiningLocators:
     ROLE_MINING = By.XPATH, "//*[contains(text(),'Role mining')]"
     SETTINGS = By.XPATH, "//a[@href='/role-mining/settings']"
+    CALCULATION_SETTINGS = By.XPATH, "//*[contains(text(),'Настройка расчета')]"
     ADSTATUS = By.XPATH, "//*[contains(text(),'Состояние AD')]"
+    RECOMMENDATION = By.XPATH, "//*[contains(text(),'Рекомендации')]"
     GROPES_AND_USERS = By.XPATH, "//*[contains(text(),'Группы и пользователи')]"
     ROLE_MODEL = By.XPATH, "//*[contains(text(),'Ролевая модель')]"
     CLEAR_BUTTON = By.XPATH, "//*[contains(text(),'Очистить')]"

@@ -13,6 +13,10 @@ from pages.UI._1_Administration.adm_users import Users
 from pages.UI._2_Data.data_scripts import Scripts
 from pages.UI._2_Data.data_sources import Sources
 from pages.UI._2_Data.data_storage import Storage
+from pages.UI._3_Analytics.an_mailing_lists import MailingLists
+from pages.UI._3_Analytics.an_reports import Reports
+from pages.UI._3_Analytics.an_requests import Requests
+from pages.UI._3_Analytics.an_visualization import Visualisation
 from pages.UI._4_xBA.xba_profiles import Profiles
 from pages.UI._4_xBA.xba_statistic import Statistic
 from pages.UI._5_RoleMining.rm_settings import RmSettings
@@ -27,7 +31,7 @@ link = "https://10.130.0.22"
 
 # endregion
 # ________ constants __________
-
+@pytest.mark.skip
 class TestAdministration:  # Администрирование
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -236,32 +240,43 @@ class TestData:  # Данные
 
 
 @pytest.mark.skip
-class TestRoleMining:
+class TestAnalytics:  # Аналитика
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
         page.open()
         page.enter_as_user()
-        # page.should_enter_be_successful()
 
-    def test_open_role_mining_settings(self, browser):
-        page = RmSettings(browser, link)
-        page.open()
-        page.open_rm_settings()
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
 
-    def test_open_role_mining_ad_status(self, browser):
-        page = AdStatus(browser, link)
-        page.open()
-        page.open_rm_ad_status()
+    def test_should_enter_an_mailing_lists_reports_be_successful(self, browser):
+        page = MailingLists(browser, link)
+        page.should_enter_an_mailing_lists_reports_be_successful()
 
-    def test_open_role_mining_groups_and_users(self, browser):
-        page = GroupsAndUsers(browser, link)
-        page.open()
-        page.open_rm_groups_and_users()
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
 
-    def test_open_role_mining_role_model(self, browser):
-        page = RoleModel(browser, link)
-        page.open()
-        page.open_rm_role_model()
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_open_an_visualisation(self, browser):
+        page = Visualisation(browser, link)
+        page.open_an_visualisation()
+
+    def test_should_enter_an_visualisation_be_successful(self, browser):
+        page = Visualisation(browser, link)
+        page.should_enter_an_visualisation_be_successful()
+
+    def test_open_an_requests(self, browser):
+        page = Requests(browser, link)
+        page.open_an_requests()
+
+    def test_should_enter_an_requests_be_successful(self, browser):
+        page = Requests(browser, link)
+        page.should_enter_an_requests_be_successful()
 
 
 @pytest.mark.skip
@@ -283,3 +298,43 @@ class TestStatistic:
     def test_compare_images(self, browser):
         page = Statistic(browser, link)
         page.compare_images()
+
+
+class TestRoleMining:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+        # page.should_enter_be_successful()
+
+    def test_open_role_mining_settings_sources(self, browser):
+        page = RmSettings(browser, link)
+        page.open_rm_settings_sources()
+
+    def test_should_enter_rm_settings_sources_be_successful(self, browser):
+        page = RmSettings(browser, link)
+        page.should_enter_rm_settings_sources_be_successful()
+
+    def test_open_rm_settings_calculation_settings(self, browser):
+        page = RmSettings(browser, link)
+        page.open_rm_settings_calculation_settings()
+
+    def test_should_enter_rm_settings_calculation_settings_be_successful(self, browser):
+        page = RmSettings(browser, link)
+        page.should_enter_rm_settings_calculation_settings_be_successful()
+
+    def test_open_rm_ad_status_statistic(self, browser):
+        page = AdStatus(browser, link)
+        page.open_rm_ad_status_statistic()
+
+    def test_should_enter_rm_ad_status_statistic_be_successful(self, browser):
+        page = AdStatus(browser, link)
+        page.should_enter_rm_ad_status_statistic_be_successful()
+
+    def test_open_rm_ad_status_recommendation(self, browser):
+        page = AdStatus(browser, link)
+        page.open_rm_ad_status_recommendation()
+
+    def test_should_enter_rm_ad_status_recommendation_be_successful(self, browser):
+        page = AdStatus(browser, link)
+        page.should_enter_rm_ad_status_recommendation_be_successful()

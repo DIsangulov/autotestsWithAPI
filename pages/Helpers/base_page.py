@@ -94,3 +94,7 @@ class BasePage:
     def save_image(self, how, what):
         image = self.browser.find_element(how, what)
         image.screenshot('features/images/screenshot.png')
+
+    def wait_for_page_load(self, how, what):  # ожидание загрузки страницы
+        wait = WebDriverWait(self.browser, 10)
+        wait.until(EC.presence_of_element_located((how, what)))
