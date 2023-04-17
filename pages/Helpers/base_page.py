@@ -1,100 +1,73 @@
 import time
-import urllib
 
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-# from resources.locators import MainLocators
-from sys import platform
-
-from seleniumwire import webdriver
-
-from resourses.locators import MainLocators
+from playwright.sync_api import Playwright, Page
 
 
 class BasePage:
-    def __init__(self, browser, url, timeout=2):
-        self.browser = browser
+    def __init__(self, page: Page, url: str, timeout: int = 10):
+        self.page = page
         self.url = url
-        self.browser.implicitly_wait(timeout)
-        # if platform == "darwin":
-        #     self.cmd_or_ctrl = Keys.COMMAND
-        # else:
-        #     self.cmd_or_ctrl = Keys.CONTROL
+        self.page.set_default_timeout(timeout * 1000)
 
-    def open(self):  # открывает страницу по url который мы задали
-        self.browser.get(self.url)
-        # self.browser.find_element(*SecurLocators.DOP_BUT).click()
-        # self.browser.find_element(*SecurLocators.GO_BUT).click()
+    def open(self):
+        self.page.goto(self.url)
 
-    def open_new_tab(self, link):  # открытие новой вклдадки
-        self.browser.switch_to.new_window('tab')
-        self.browser.get(link)
+    def open_new_tab(self, link):
+        self.page.click(f'text={link}')
+        self.page.wait_for_selector(f'//a[@href="{link}"]', timeout=3000)
+        self.page.click(f'xpath=//a[@href="{link}"]')
+        self.page.wait_for_selector(f':not([href="{link}"])')
 
-    def is_element_present(self, how, what):  # дефолтная проверка что элемент есть на странице
-        # self.browser.find_element(how, what)
-        return self.browser.find_element(how, what)
+    def is_element_present(self, selector: str):
+        return self.page.query_selector(selector)
 
-    def go_to_page(self, how, what):  # переход на новую вкладку
-        self.wait_until_elem_be_clickable(how, what)
-        link = self.browser.find_element(how, what)
+    def go_to_page(self, selector: str):
+        self.wait_until_elem_be_clickable(selector)
+        link = self.page.query_selector(selector)
         link.click()
-        time.sleep(0.7)  # time for animation
+        self.page.wait_for_load_state()
 
-    def scroll_down(self):  # скролл вниз до конца
-        self.browser.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
+    def scroll_down(self):
+        self.page.scroll_by(0, 1000)
 
-    def switch(self, handle_number):  # переключение между вкладками
-        handles = self.browser.window_handles
-        self.browser.switch_to.window(handles[handle_number])
-        time.sleep(1)
+    def switch(self, handle_number: int):
+        handles = self.page.context.pages
+        self.page = handles[handle_number]
 
-    def exit(self):  # log out
-        self.wait_until_elem_be_clickable(*MainLocators.EXIT_BUT)
-        self.browser.find_element(*MainLocators.EXIT_BUT).click()
+    def exit(self):
+        self.wait_until_elem_be_clickable('text=Log out')
+        self.page.click('text=Log out')
+        self.page.wait_for_selector('#login')
 
-    def wait_until(self, how, what):  # бесконечное ожидание события
-        flag = True
-        while flag:
-            if self.is_element_present(how, what):
-                flag = False
-            else:
-                time.sleep(0.5)  # time for waiting
+    def wait_until(self, selector: str):
+        self.page.wait_for_selector(selector)
 
-    def close_handle(self, handle_num):  # закрыть вкладку
+    def close_handle(self, handle_num: int):
         self.switch(handle_num)
-        self.browser.close()
+        self.page.close()
 
-    def find_request_in_network(self, part_of_request,
-                                expected_status_code):  # искать запрос в network и проверять его статускод
-        flag = False
-        for request in self.browser.requests:
+    def find_request_in_network(self, part_of_request: str, expected_status_code: int):
+        for request in self.page.context.network.requests:
             if request.response:
-                if request.url.find(part_of_request) != -1 and request.response.status_code == expected_status_code:
-                    flag = True
-        return flag
+                if part_of_request in request.url and request.response.status == expected_status_code:
+                    return True
+        return False
 
-    def clear_input(self, how, what):  # clean field
-        time.sleep(0.2)  # time for stable work
-        self.browser.find_element(how, what).send_keys(self.cmd_or_ctrl + "a" + Keys.DELETE)
-        time.sleep(0.2)  # time for stable work
+    def clear_input(self, selector: str):
+        input_field = self.page.query_selector(selector)
+        input_field.fill('')
+        self.page.keyboard.press('Tab')
 
-    # TODO: it's work unstable... we must try to ise stupid servers:)
-
-    def wait_until_elem_be_clickable(self, how, what):  # expends to send_keys method with inputs too
-        wait = WebDriverWait(self.browser, 30)
-        wait.until(EC.element_to_be_clickable((how, what)))
-        # wait.until(EC.visibility_of_element_located((how, what)))
-        time.sleep(0.2)
+    def wait_until_elem_be_clickable(self, selector: str):
+        self.page.wait_for_selector(selector)
 
     def browser_close(self):
-        self.browser.close()
+        self.page.close()
 
-    def save_image(self, how, what):
-        image = self.browser.find_element(how, what)
-        image.screenshot('features/images/screenshot.png')
+    def save_image(self, selector: str):
+        image = self.page.query_selector(selector)
+        image.screenshot(path='features/images/screenshot.png')
 
-    def wait_for_page_load(self, how, what):  # ожидание загрузки страницы
-        wait = WebDriverWait(self.browser, 10)
-        wait.until(EC.presence_of_element_located((how, what)))
+    def wait_for_page_load(self, selector: str):
+        time.sleep(1)
+        self.page.wait_for_selector(selector)

@@ -1,18 +1,18 @@
 import time
 
+from playwright.sync_api import Playwright, Page
+
 from pages.Helpers.base_page import BasePage
 from resourses.locators import AdminLocators
 
 
 class Roles(BasePage):
     def open_adm_roles(self):
-        self.browser.find_element(*AdminLocators.ADMINISTRATION).click()
-        self.browser.find_element(*AdminLocators.ROLES).click()
-        time.sleep(1)
+        self.page.click(AdminLocators.ADMINISTRATION)
+        self.page.click(AdminLocators.ROLES)
 
     def should_enter_adm_roles_be_successful(self):
-        self.is_element_present(*AdminLocators.TITLE_MSG_OLD)
-        assert self.is_element_present(*AdminLocators.TITLE_MSG_OLD).text == "Роли", \
+        self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
+        assert "Роли" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.browser.current_url == self.url + "/roles", \
-            "URL не совпадают"
+        assert self.page.url == self.url + "/roles", "URL's do not match"
