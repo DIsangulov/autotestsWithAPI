@@ -41,7 +41,7 @@ class StorageWorker(BaseReq):
         rand = random.randint(1200, 12500)
         header = {'token': token}
         data = {"rus": "TestApi_1" + str(rand), "reg": "1", "stages": "1", "postfix": "1", "state": False,
-                "is_on": False, "author": 1238}
+                "is_on": False, "author": 44}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs", headers=header, json=data,
                               verify=False)
 

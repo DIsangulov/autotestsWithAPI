@@ -171,7 +171,7 @@ class Absorber(BaseReq):
         header = {'token': token}
         data = {"data": None,
                 "edited": "2022-12-07T14:30:46.313631Z",
-                "editor_id": 1238,
+                "editor_id": 44,
                 "editor_name": "Трыков Никита",
                 "id": 1110,
                 "is_system": False,
@@ -194,12 +194,12 @@ class Absorber(BaseReq):
 
     def source_post(self, token):
         header = {'token': token}
-        data = {"author_id": 1238,
+        data = {"author_id": 44,
                 "conn_type_id": 6,
                 "data": None,
                 "db_id": 108,
                 "description": "TestAPI",
-                "editor_id": 1238,
+                "editor_id": 44,
                 "is_on": False,
                 "logo": None,
                 "mapping": None,

@@ -28,7 +28,7 @@ class AuthApi(BaseReq):
 
     def sessions_uid_get(self, token):  # здесь можем взять sid
         header = {'token': token}
-        resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/1238", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/44", headers=header, verify=False)
         dct = json.loads(resp.text)
         global sess_id
         sess_id = dct['res'][-1]['id']  # получили id сессии
@@ -42,7 +42,7 @@ class AuthApi(BaseReq):
 
     def sessions_all_uid_del(self, token):
         header = {'token': token}
-        resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/all/1238", headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/all/44", headers=header, verify=False)
         return resp
 
     def logout_get(self, token):

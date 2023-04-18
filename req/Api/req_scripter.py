@@ -45,7 +45,7 @@ class Scripter(BaseReq):
                 "file_name": "testScripter.py"
             },
             "additional_files": [],
-            "author_id": 1238
+            "author_id": 44
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
@@ -62,7 +62,7 @@ class Scripter(BaseReq):
     def scripter_script_put(self, token):
         data = {
             "type": True,
-            "editor_id": 1238,
+            "editor_id": 44,
             "id": str(script_id),
             "name": "TestAPIscripter1",
             "description": "TestAPIscripter",
@@ -215,7 +215,7 @@ class Scripter(BaseReq):
                 }
             ],
             "node": 0,
-            "author_id": 1238
+            "author_id": 44
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
@@ -244,7 +244,7 @@ class Scripter(BaseReq):
             ],
             "node": 0,
             "id": str(seq_id),
-            "author_id": 1238
+            "author_id": 44
         }
         header = {'token': token}
         resp = self.sess.put(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)

@@ -91,7 +91,7 @@ class Alarmer(BaseReq):
             "link": "https://10.130.0.22/",
             "msg": "TestAPI",
             "to": "d.isangulov@ngrsoftlab.ru",
-            "user_id": 1238
+            "user_id": 44
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_invitation", headers=header, json=body,
@@ -105,7 +105,7 @@ class Alarmer(BaseReq):
             "to": [
                 "d.isangulov@ngrsoftlab.ru"
             ],
-            "user_id": 1238
+            "user_id": 44
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_invitations", headers=header, json=body,

@@ -16,7 +16,7 @@ class Reporter(BaseReq):
             "name": "TestAPIReport" + str(rand),
             "description": "",
             "type": 0,
-            "author_id": 1238,
+            "author_id": 44,
             "status": False,
             "report_id": 158,
             "email": True,
@@ -54,7 +54,7 @@ class Reporter(BaseReq):
             "elements": [
                 282
             ],
-            "editor_id": 1238
+            "editor_id": 44
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing/sample", headers=header, json=data, verify=False)
@@ -78,9 +78,9 @@ class Reporter(BaseReq):
             "description": "",
             "published": False,
             "opened": False,
-            "author_id": 1238,
+            "author_id": 44,
             "author_name": "dataplan_qaa@ngrsoftlab.ru",
-            "editor_id": 1238,
+            "editor_id": 44,
             "editor_name": "dataplan_qaa@ngrsoftlab.ru",
             "created": "2023-03-02T12:10:19.252188Z",
             "edited": "2023-03-02T12:10:19.252188Z",
