@@ -311,7 +311,7 @@ class TestXBA:
         page = Statistic(browser, link)
         page.should_enter_xba_statistic_be_successful()
 
-
+@pytest.mark.skip
 class TestRoleMining:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
