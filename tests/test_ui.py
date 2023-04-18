@@ -1,3 +1,5 @@
+import time
+
 import allure
 import pytest
 
@@ -27,12 +29,11 @@ from pages.UI._5_RoleMining.rm_role_model import RoleModel
 
 # ________ constants __________
 # region
-link = "https://10.130.0.22"
-
-
+link = "https://10.130.0.16"
 # endregion
 # ________ constants __________
-@pytest.mark.skip
+
+
 class TestAdministration:  # Администрирование
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -176,7 +177,7 @@ class TestAdministration:  # Администрирование
         page.should_enter_adm_settings_secrets_be_successful()
 
 
-@pytest.mark.skip
+
 class TestData:  # Данные
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -239,7 +240,7 @@ class TestData:  # Данные
         page = Storage(browser, link)
         page.should_enter_data_storage_import_rules_be_successful()
 
-@pytest.mark.skip
+
 class TestAnalytics:  # Аналитика
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -279,7 +280,7 @@ class TestAnalytics:  # Аналитика
         page.should_enter_an_requests_be_successful()
 
 
-@pytest.mark.skip
+
 class TestXBA:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -311,7 +312,7 @@ class TestXBA:
         page = Statistic(browser, link)
         page.should_enter_xba_statistic_be_successful()
 
-@pytest.mark.skip
+
 class TestRoleMining:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -335,12 +336,18 @@ class TestRoleMining:
         page = AdStatus(browser, link)
         page.should_enter_rm_ad_status_recommendation_be_successful()
 
+
+class TestRoleMiningSettingsSources:
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+        page.should_enter_be_successful()
+
     def test_role_mining_settings_page(self, browser):
         page = RmSettings(browser, link)
         page.open_rm_settings_sources()
-        # page.should_enter_rm_settings_sources_be_successful()
-        # page.open_rm_settings_calculation_settings()
-        # page.should_enter_rm_settings_calculation_settings_be_successful()
         page.clear_sources_rm_settings()
         page.not_confirm_cleaning_rm_settings()
         page.clear_sources_rm_settings()
@@ -348,3 +355,37 @@ class TestRoleMining:
         page.selecting_values_from_dropdown_list()
         page.should_sources_saved()
         page.should_sources_recalculated()
+        page.calculation_settings()
+
+
+class TestRoleMiningActiveDirectory:
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+        page.should_enter_be_successful()
+
+    def test_mailing_anomaly_rm_tcp(self, browser):
+        page = AdStatus(browser, link)
+        page.open_rm_ad_status_statistic()
+        page.should_enter_rm_ad_status_statistic_be_successful()
+        page.open_rm_ad_status_recommendation()
+        page.should_enter_rm_ad_status_recommendation_be_successful()
+        page.configuring_anomaly_distribution()
+        page.input_server_address_and_port()
+        page.select_tcp_exchange_protocol()
+        page.click_add_button()
+        page.should_tcp_distribution_protocol_save_sucsess()
+        page.delete_last_entry()
+        page.close_window()
+
+    def test_mailing_anomaly_rm_udp(self, browser):
+        page = AdStatus(browser, link)
+        page.configuring_anomaly_distribution()
+        page.input_server_address_and_port()
+        page.select_udp_exchange_protocol()
+        page.click_add_button()
+        page.should_udp_distribution_protocol_save_sucsess()
+        page.delete_last_entry()
+        page.close_window()

@@ -8,6 +8,8 @@ class MainLocators:
     SIDE_BAR = "//div[@class='n-app-navigation__button']"
     DROPDOWN1 = "//div[@class='options visible']/ul/li[1]"
     DROPDOWN2 = "//div[@class='options visible']/ul/li[2]"
+    X_BUTTON = "//span[@class='ngr-icon icon-close ngr-icon_none']"
+    CLOSE_BUTTON = "//*[contains(text(),'Закрыть')]"
 
 
 class AuthLocators:

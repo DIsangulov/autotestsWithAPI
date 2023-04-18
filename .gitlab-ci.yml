@@ -39,7 +39,7 @@ run_tests_ui:
 
   script:
     #- pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
-    - pytest -v -s --alluredir=./allure-results tests/test_ui.py
+    - pytest --alluredir=./allure-results tests/test_ui.py
 
   allow_failure: true
 

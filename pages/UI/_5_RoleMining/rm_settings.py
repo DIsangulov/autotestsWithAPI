@@ -8,6 +8,7 @@ from resourses.locators import RoleMiningLocators, MainLocators, AdminLocators
 
 class RmSettings(BasePage):
     def open_rm_settings_sources(self):
+        self.page.click(RoleMiningLocators.ROLE_MINING)
         self.page.click(RoleMiningLocators.SETTINGS)
 
     def should_enter_rm_settings_sources_be_successful(self):
@@ -59,47 +60,4 @@ class RmSettings(BasePage):
             "Найдено несовпадение ожидаемого результата с фактическим"
 
     def calculation_settings(self):
-        self.browser.find_element(*RoleMiningLocators.CALCULATION_SETTINGS).click()
-
-    def configuring_anomaly_distribution(self):
-        self.browser.find_element(*RoleMiningLocators.GEAR_BUTTON).click()
-
-    def input_server_address_and_port(self):
-        self.browser.find_element(*RoleMiningLocators.SERVER_ADDERESS).send_keys('100.123.0.11')
-        self.browser.find_element(*RoleMiningLocators.PORT).send_keys('333')
-
-    def select_tcp_exchange_protocol(self):
-        self.browser.find_element(*RoleMiningLocators.DROPDOWN_EXCHANGE_PROTOCOL).click()
-        self.browser.find_element(*MainLocators.DROPDOWN1).click()
-
-    def select_udp_exchange_protocol(self):
-        self.browser.find_element(*RoleMiningLocators.DROPDOWN_EXCHANGE_PROTOCOL).click()
-        self.browser.find_element(*MainLocators.DROPDOWN1).click()
-
-    def click_add_button(self):
-        self.browser.find_element(*RoleMiningLocators.ADD_BUTTON).click()
-
-    def should_tcp_distribution_protocol_save_sucsess(self):
-        assert (self.browser.find_element(By.XPATH, "//*[contains(text(),'100.123.0.11;333;TCP')]")), \
-            "Найдено несовпадение ожидаемого результата с фактическим"
-
-    def should_udp_distribution_protocol_save_sucsess(self):
-        assert (self.browser.find_element(By.XPATH, "//*[contains(text(),'100.123.0.11;333;UDP')]")), \
-            "Найдено несовпадение ожидаемого результата с фактическим"
-
-    def enter_email(self):
-        self.browser.find_element(*RoleMiningLocators.CHECKBOX_SYSLOG).click()
-        self.browser.find_element(*RoleMiningLocators.CHECKBOX_EMAIL).click()
-        self.browser.find_element(*RoleMiningLocators.INPUT_EMAIL).send_keys('dataplan_qaa@ngrsoftlab.ru')
-
-    def should_email_save_sucsess(self):
-        assert (self.browser.find_element(By.XPATH, "//*[contains(text(),'dataplan_qaa@ngrsoftlab.ru')]")), \
-            "Найдено несовпадение ожидаемого результата с фактическим"
-
-    def delete_last_entry(self):
-        self.browser.find_element(*RoleMiningLocators.TRASH_ICON).click()
-        self.browser.find_element(*RoleMiningLocators.DELETE_BUTTON).click()
-
-    def should_last_entry_deleted(self):
-        assert (self.browser.find_element(By.XPATH, "//*[contains(text(),'Настройка рассылки успешно удалена')]")), \
-            "Найдено несовпадение ожидаемого результата с фактическим"
+        self.page.click(RoleMiningLocators.CALCULATION_SETTINGS)

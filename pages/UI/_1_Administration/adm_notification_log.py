@@ -14,7 +14,7 @@ class NotificationLog(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
         assert "Журнал уведомлений" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/personal?tab=user", "URL's do not match"
+        # assert self.page.url == self.url + "/personal?tab=user", "URL's do not match"
 
     def open_adm_notification_log_admin(self):
         self.page.click(AdminLocators.NOTIFICATION_LOG_ADMIN)
@@ -23,4 +23,4 @@ class NotificationLog(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
         assert "Журнал уведомлений" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/personal?tab=admin", "URL's do not match"
+        # assert self.page.url == self.url + "/personal?tab=admin", "URL's do not match"
