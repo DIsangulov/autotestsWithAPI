@@ -40,7 +40,7 @@ uid = None
 user_id = None
 # _________Globals_________
 
-@pytest.mark.skip
+
 class TestAuth:
 
     def test_get_token(self):
@@ -96,7 +96,6 @@ class TestAuth:
     # __________________________________ABSORBER_______________________________________
 
 
-@pytest.mark.skip
 class TestAbsorber:
 
     def test_get_token(self):
@@ -181,7 +180,6 @@ class TestAbsorber:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestAlarmer:
 
     def test_get_token(self):
@@ -264,7 +262,6 @@ class TestAlarmer:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestCore:
 
     def test_get_token(self):
@@ -588,7 +585,6 @@ class TestCore:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestLicenser:
     def test_get_token(self):
         req = BaseReq(sess, host)
@@ -609,7 +605,6 @@ class TestLicenser:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestPeopler:
 
     def test_get_token(self):
@@ -669,7 +664,6 @@ class TestPeopler:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestPermitter:
 
     def test_get_token(self):
@@ -921,7 +915,6 @@ class TestPermitter:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestRmCook:
 
     def test_get_token(self):
@@ -1080,7 +1073,6 @@ class TestRmCook:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestStorageWorker:
 
     def test_get_token(self):
@@ -1237,7 +1229,6 @@ class TestStorageWorker:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestXbaCook:
 
     def test_get_token(self):
@@ -1466,7 +1457,6 @@ class TestXbaCook:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestElementsEater:
 
     def test_get_token(self):
@@ -1488,7 +1478,6 @@ class TestElementsEater:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestLogEater:
 
     def test_get_token(self):
@@ -1505,7 +1494,6 @@ class TestLogEater:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestMonitor:
 
     def test_get_token(self):
@@ -1728,7 +1716,6 @@ class TestMonitor:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestReporter:
 
     def test_get_token(self):
@@ -1986,7 +1973,6 @@ class TestScripter:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestTaskplan:
 
     def test_get_token(self):
@@ -2009,7 +1995,6 @@ class TestTaskplan:
         assert resp.status_code == 200 or 404, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestUpdater:
 
     def test_get_token(self):
@@ -2042,7 +2027,6 @@ class TestUpdater:
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestVisualisation:
 
     def test_get_token(self):
