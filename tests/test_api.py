@@ -31,7 +31,7 @@ from req.Api.req_visualisation import Visualisation
 urllib3.disable_warnings()
 # ________Constants________
 sess = requests.Session()
-host = os.environ.get('TARGET_URL', "https://10.130.0.16")
+host = os.environ.get('TARGET_URL', "https://10.130.0.18")
 # ________Constants________
 
 # _________Globals_________
