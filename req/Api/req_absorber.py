@@ -75,8 +75,8 @@ class Absorber(BaseReq):
                     "type": "String"
                 }
             ],
-            "author_id": 28,
-            "editor_id": 28,
+            "author_id": 11,
+            "editor_id": 11,
             "created": "2022-01-13T12:13:46.668Z",
             "modified": "2022-01-13T12:13:46.668Z"
         }
@@ -94,7 +94,7 @@ class Absorber(BaseReq):
             "opened": False,
             "author_id": None,
             "author_name": "",
-            "editor_id": 28,
+            "editor_id": 11,
             "editor_name": "Снытко Татьяна",
             "created": "0001-01-01T00:00:00Z",
             "edited": "2022-02-07T15:17:11.612497Z",
@@ -158,7 +158,7 @@ class Absorber(BaseReq):
         header = {'token': token}
         data = {
             "name": str(rand_logo_id),
-            "editor_id": 28,
+            "editor_id": 11,
             "id": rand_logo_id,
             "is_system": False,
             "data": None
@@ -171,7 +171,7 @@ class Absorber(BaseReq):
         header = {'token': token}
         data = {"data": None,
                 "edited": "2022-12-07T14:30:46.313631Z",
-                "editor_id": 44,
+                "editor_id": 11,
                 "editor_name": "Трыков Никита",
                 "id": 1110,
                 "is_system": False,
@@ -194,12 +194,12 @@ class Absorber(BaseReq):
 
     def source_post(self, token):
         header = {'token': token}
-        data = {"author_id": 44,
+        data = {"author_id": 11,
                 "conn_type_id": 6,
                 "data": None,
                 "db_id": 108,
                 "description": "TestAPI",
-                "editor_id": 44,
+                "editor_id": 11,
                 "is_on": False,
                 "logo": None,
                 "mapping": None,

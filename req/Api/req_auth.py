@@ -28,7 +28,7 @@ class AuthApi(BaseReq):
 
     def sessions_uid_get(self, token):  # здесь можем взять sid
         header = {'token': token}
-        resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/44", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/11", headers=header, verify=False)
         dct = json.loads(resp.text)
         global sess_id
         sess_id = dct['res'][-1]['id']  # получили id сессии

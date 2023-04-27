@@ -1,8 +1,3 @@
-import time
-
-import allure
-import pytest
-
 from pages.UI._0_Auth.auth_page import AuthPage
 from pages.UI._1_Administration.adm_licenses import Licenses
 from pages.UI._1_Administration.adm_monitoring import Monitoring
@@ -29,10 +24,11 @@ from pages.UI._5_RoleMining.rm_role_model import RoleModel
 
 # ________ constants __________
 # region
-link = "https://10.130.0.16"
+link = "https://10.130.0.22"
+
+
 # endregion
 # ________ constants __________
-
 
 class TestAdministration:  # Администрирование
     def test_valid_auth(self, browser):
@@ -177,7 +173,6 @@ class TestAdministration:  # Администрирование
         page.should_enter_adm_settings_secrets_be_successful()
 
 
-
 class TestData:  # Данные
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -278,7 +273,6 @@ class TestAnalytics:  # Аналитика
     def test_should_enter_an_requests_be_successful(self, browser):
         page = Requests(browser, link)
         page.should_enter_an_requests_be_successful()
-
 
 
 class TestXBA:

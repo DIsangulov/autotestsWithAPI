@@ -49,11 +49,11 @@ class Visualisation(BaseReq):
             "db_name": "picker_tables",
             "query": "",
             "auto": True,
-            "editor_id": 44,
+            "editor_id": 11,
             "editor": "dataplan_qaa@ngrsoftlab.ru",
             "created": "2023-03-09T06:37:20Z",
             "modified": "2023-03-09T06:37:20Z",
-            "author_id": 44,
+            "author_id": 11,
             "author": "dataplan_qaa@ngrsoftlab.ru"
         }
         resp = self.sess.post(f"{self.host}/back/dp.visualisation/query/save", headers=header,
@@ -85,9 +85,9 @@ class Visualisation(BaseReq):
             "description": "TestApiReport",
             "created": "2023-03-09T07:20:34.318Z",
             "modified": "2023-03-09T07:20:34.318Z",
-            "author_id": 44,
+            "author_id": 11,
             "editor": "dataplan_qaa@ngrsoftlab.ru",
-            "editor_id": 44,
+            "editor_id": 11,
             "published": False
         }
         resp = self.sess.post(f"{self.host}/back/dp.visualisation/reports", headers=header,
@@ -120,8 +120,8 @@ class Visualisation(BaseReq):
             "description": "TestApiVis",
             "published": False,
             "opened": False,
-            "author_id": 44,
-            "editor_id": 44,
+            "author_id": 11,
+            "editor_id": 11,
             "author": "dataplan_qaa@ngrsoftlab.ru",
             "editor": "dataplan_qaa@ngrsoftlab.ru",
             "created": "2023-03-09T07:42:21.722Z",

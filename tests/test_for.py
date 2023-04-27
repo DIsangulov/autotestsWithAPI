@@ -33,23 +33,35 @@ link = "https://10.130.0.22"
 # ________ constants __________
 
 class TestAdministration:  # Администрирование
+    @pytest.mark.skip
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
         page.open()
         page.enter_as_user()
 
+    @pytest.mark.skip
     def test_open_adm_roles(self, browser):
         page = Roles(browser, link)
         page.open_adm_roles()
 
+    @pytest.mark.skip
     def test_should_enter_adm_roles_be_successful(self, browser):
         page = Roles(browser, link)
         page.should_enter_adm_roles_be_successful()
 
-    def test_open_adm_users(self, browser):
-        page = Users(browser, link)
-        page.open_adm_users()
+    @pytest.mark.skip
+    def test_try_to_ui_fonts_and_styles(self, browser):
+        page = Roles(browser, link)
+        page.try_to_ui_fonts_and_styles()
 
-    def test_should_enter_adm_users_be_successful(self, browser):
-        page = Users(browser, link)
-        page.should_enter_adm_users_be_successful()
+    # def test_try_to_figma_fonts_and_styles(self, browser):
+    #     page = Roles(browser, link)
+    #     page.try_to_figma_fonts_and_styles()
+
+    # def test_try_to_figma_fonts_and_styles_by_pwr(self, browser):
+    #     page = Roles(browser, link)
+    #     page.try_to_figma_fonts_and_styles_by_pwr()
+
+    def test_try_to_figma_fonts_and_styles_parse_json(self, browser):
+        page = Roles(browser, link)
+        page.try_to_get_figma_fonts_and_styles_parse_json()

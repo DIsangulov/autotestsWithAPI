@@ -10,6 +10,7 @@ class MainLocators:
     DROPDOWN2 = "//div[@class='options visible']/ul/li[2]"
     X_BUTTON = "//span[@class='ngr-icon icon-close ngr-icon_none']"
     CLOSE_BUTTON = "//*[contains(text(),'Закрыть')]"
+    ZOPA = "//button[@class='n-app-profile__ny n-app-button']"
 
 
 class AuthLocators:
