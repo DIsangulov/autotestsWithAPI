@@ -10,9 +10,20 @@ script_id = None
 log_id = None
 seq_id = None
 log_seq_id = None
+at_uid = None
 
 
 class Scripter(BaseReq):
+
+    def peopler_users_at_uid_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        name = 'dataplan_qaa@ngrsoftlab.ru'
+        users = json.loads(resp.text)['res']
+        uid = next((user for user in users if user['name'] == name), None)
+        global at_uid
+        at_uid = uid['id']
+        return resp
 
     def scripter_category_get(self, token):
         header = {'token': token}
@@ -28,24 +39,21 @@ class Scripter(BaseReq):
         global rand
         rand = random.randint(1200, 12500)
         data = {
-            "name": "TestAPIscripter" + str(rand),
-            "description": "TestAPIscripter",
+            "author": "dataplan_qaa@ngrsoftlab.ru",
+            "name": "API TEST " + str(rand),
+            "description": "API TEST",
             "type": True,
             "category": 1,
-            "keys": [
-                {
-                    "1": "2"
-                }
-            ],
+            "keys": [],
             "node": 0,
             "encrypt": False,
             "encapsulate": False,
             "main_file": {
-                "file_data": "print('Test Scripter')",
-                "file_name": "testScripter.py"
+                "file_data": "print ('Test')",
+                "file_name": "script.py"
             },
             "additional_files": [],
-            "author_id": 11
+            "author_id": at_uid
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
@@ -62,7 +70,7 @@ class Scripter(BaseReq):
     def scripter_script_put(self, token):
         data = {
             "type": True,
-            "editor_id": 11,
+            "editor_id": at_uid,
             "id": str(script_id),
             "name": "TestAPIscripter1",
             "description": "TestAPIscripter",
@@ -215,7 +223,7 @@ class Scripter(BaseReq):
                 }
             ],
             "node": 0,
-            "author_id": 11
+            "author_id": at_uid
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
@@ -244,7 +252,7 @@ class Scripter(BaseReq):
             ],
             "node": 0,
             "id": str(seq_id),
-            "author_id": 11
+            "author_id": at_uid
         }
         header = {'token': token}
         resp = self.sess.put(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)

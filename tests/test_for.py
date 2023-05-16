@@ -33,13 +33,11 @@ link = "https://10.130.0.22"
 # ________ constants __________
 
 class TestAdministration:  # Администрирование
-    @pytest.mark.skip
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
         page.open()
         page.enter_as_user()
 
-    @pytest.mark.skip
     def test_open_adm_roles(self, browser):
         page = Roles(browser, link)
         page.open_adm_roles()
@@ -49,7 +47,6 @@ class TestAdministration:  # Администрирование
         page = Roles(browser, link)
         page.should_enter_adm_roles_be_successful()
 
-    @pytest.mark.skip
     def test_try_to_ui_fonts_and_styles(self, browser):
         page = Roles(browser, link)
         page.try_to_ui_fonts_and_styles()

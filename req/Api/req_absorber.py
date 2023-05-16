@@ -10,9 +10,20 @@ rand = None
 con_id = None
 logo_id = None
 rand_logo_id = None
+at_uid = None
 
 
 class Absorber(BaseReq):
+
+    def peopler_users_at_uid_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        name = 'dataplan_qaa@ngrsoftlab.ru'
+        users = json.loads(resp.text)['res']
+        uid = next((user for user in users if user['name'] == name), None)
+        global at_uid
+        at_uid = uid['id']
+        return resp
 
     def library_columns_get(self, token):
         header = {'token': token}
@@ -75,8 +86,8 @@ class Absorber(BaseReq):
                     "type": "String"
                 }
             ],
-            "author_id": 11,
-            "editor_id": 11,
+            "author_id": at_uid,
+            "editor_id": at_uid,
             "created": "2022-01-13T12:13:46.668Z",
             "modified": "2022-01-13T12:13:46.668Z"
         }
@@ -94,8 +105,8 @@ class Absorber(BaseReq):
             "opened": False,
             "author_id": None,
             "author_name": "",
-            "editor_id": 11,
-            "editor_name": "Снытко Татьяна",
+            "editor_id": at_uid,
+            "editor_name": "Датаплан Тестов",
             "created": "0001-01-01T00:00:00Z",
             "edited": "2022-02-07T15:17:11.612497Z",
             "params": None,
@@ -158,7 +169,7 @@ class Absorber(BaseReq):
         header = {'token': token}
         data = {
             "name": str(rand_logo_id),
-            "editor_id": 11,
+            "editor_id": at_uid,
             "id": rand_logo_id,
             "is_system": False,
             "data": None
@@ -171,8 +182,8 @@ class Absorber(BaseReq):
         header = {'token': token}
         data = {"data": None,
                 "edited": "2022-12-07T14:30:46.313631Z",
-                "editor_id": 11,
-                "editor_name": "Трыков Никита",
+                "editor_id": at_uid,
+                "editor_name": "Тестов Датаплан",
                 "id": 1110,
                 "is_system": False,
                 "name": "630244"
@@ -194,7 +205,7 @@ class Absorber(BaseReq):
 
     def source_post(self, token):
         header = {'token': token}
-        data = {"author_id": 11,
+        data = {"author_id": at_uid,
                 "conn_type_id": 6,
                 "data": None,
                 "db_id": 108,

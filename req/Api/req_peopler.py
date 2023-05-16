@@ -5,6 +5,7 @@ import random
 
 rand = None
 user_id = None
+at_uid = None
 
 
 class Peopler(BaseReq):
@@ -66,6 +67,16 @@ class Peopler(BaseReq):
     def peopler_users_get(self, token):
         header = {'token': token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        return resp
+
+    def peopler_users_at_uid_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        name = 'dataplan_qaa@ngrsoftlab.ru'
+        users = json.loads(resp.text)['res']
+        global at_uid
+        at_uid = next((user for user in users if user['name'] == name), None)
+        print(at_uid['id'])
         return resp
 
     def peopler_users_post(self, token):
