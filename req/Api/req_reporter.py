@@ -5,9 +5,20 @@ from req.Helpers.base_req import BaseReq
 
 rand = None
 rep_id = None
+at_uid = None
 
 
 class Reporter(BaseReq):
+
+    def peopler_users_at_uid_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        name = 'dataplan_qaa@ngrsoftlab.ru'
+        users = json.loads(resp.text)['res']
+        uid = next((user for user in users if user['name'] == name), None)
+        global at_uid
+        at_uid = uid['id']
+        return resp
 
     def reporter_mailing_post(self, token):
         global rand
@@ -16,7 +27,7 @@ class Reporter(BaseReq):
             "name": "TestAPIReport" + str(rand),
             "description": "",
             "type": 0,
-            "author_id": 11,
+            "author_id": at_uid,
             "status": False,
             "report_id": 158,
             "email": True,
@@ -54,7 +65,7 @@ class Reporter(BaseReq):
             "elements": [
                 282
             ],
-            "editor_id": 11
+            "editor_id": at_uid
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing/sample", headers=header, json=data, verify=False)
@@ -78,9 +89,9 @@ class Reporter(BaseReq):
             "description": "",
             "published": False,
             "opened": False,
-            "author_id": 11,
+            "author_id": at_uid,
             "author_name": "dataplan_qaa@ngrsoftlab.ru",
-            "editor_id": 11,
+            "editor_id": at_uid,
             "editor_name": "dataplan_qaa@ngrsoftlab.ru",
             "created": "2023-03-02T12:10:19.252188Z",
             "edited": "2023-03-02T12:10:19.252188Z",
