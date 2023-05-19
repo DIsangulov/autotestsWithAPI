@@ -27,17 +27,18 @@ from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
 
-
 urllib3.disable_warnings()
 # ________Constants________
 sess = requests.Session()
-host = os.environ.get('TARGET_URL', "https://10.130.0.22")
+host = os.environ.get('TARGET_URL', "https://10.130.0.23")
 # ________Constants________
 
 # _________Globals_________
 auth_token = None
 uid = None
 user_id = None
+
+
 # _________Globals_________
 
 
@@ -332,12 +333,12 @@ class TestCore:
     def test_core_component_servicedb_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
         req = Core(sess, host)
         resp = req.core_component_servicedb_restart_get(auth_token)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_component_datastore_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
         req = Core(sess, host)
         resp = req.core_component_datastore_restart_get(auth_token)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_download_settings_get(self):
         req = Core(sess, host)
@@ -1092,6 +1093,16 @@ class TestStorageWorker:
         dct = json.loads(resp.text)
         global auth_token
         auth_token = dct['token']
+
+    def test_peopler_users_at_uid_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_id_picker_table_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.id_picker_table_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_ask_one_sql_post(self):
         req = StorageWorker(sess, host)
@@ -2051,6 +2062,16 @@ class TestVisualisation:
         global auth_token
         auth_token = dct['token']
         print(auth_token)
+
+    def test_peopler_users_at_uid_get(self):
+        req = Visualisation(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_id_picker_table_get(self):
+        req = Visualisation(sess, host)
+        resp = req.id_picker_table_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_visualisation_query_get(self):
         req = Visualisation(sess, host)

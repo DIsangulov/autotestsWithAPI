@@ -1,8 +1,8 @@
 from req.Helpers.base_req import BaseReq
 
 act_dir_pass = "d8hELYed9L809RB9FkSO!"
-# ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
-ssh_pass = "nCNmqNT<)>Bsr3c]"  # 16
+ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
+# ssh_pass = "nCNmqNT<)>Bsr3c]"  # 16
 mail_pass = "8327kHLHsfohn;hksjkfou!"
 
 
