@@ -4,7 +4,7 @@ from req.Helpers.base_req import BaseReq
 
 group_id = None
 user_id = None
-syslog_host = "107.130.0.22"
+syslog_host = "107.130.0.16"
 
 
 class Rm_Cook(BaseReq):

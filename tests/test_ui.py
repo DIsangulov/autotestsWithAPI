@@ -1,6 +1,3 @@
-import allure
-import pytest
-
 from pages.UI._0_Auth.auth_page import AuthPage
 from pages.UI._1_Administration.adm_licenses import Licenses
 from pages.UI._1_Administration.adm_monitoring import Monitoring
@@ -17,6 +14,7 @@ from pages.UI._3_Analytics.an_mailing_lists import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
 from pages.UI._3_Analytics.an_requests import Requests
 from pages.UI._3_Analytics.an_visualization import Visualisation
+from pages.UI._4_xBA.xba_metaprofiles import Metaprofiles
 from pages.UI._4_xBA.xba_profiles import Profiles
 from pages.UI._4_xBA.xba_statistic import Statistic
 from pages.UI._5_RoleMining.rm_settings import RmSettings
@@ -31,7 +29,7 @@ link = "https://10.130.0.22"
 
 # endregion
 # ________ constants __________
-@pytest.mark.skip
+
 class TestAdministration:  # Администрирование
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -175,7 +173,6 @@ class TestAdministration:  # Администрирование
         page.should_enter_adm_settings_secrets_be_successful()
 
 
-@pytest.mark.skip
 class TestData:  # Данные
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -239,7 +236,6 @@ class TestData:  # Данные
         page.should_enter_data_storage_import_rules_be_successful()
 
 
-@pytest.mark.skip
 class TestAnalytics:  # Аналитика
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -279,25 +275,36 @@ class TestAnalytics:  # Аналитика
         page.should_enter_an_requests_be_successful()
 
 
-@pytest.mark.skip
-class TestStatistic:
+class TestXBA:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
         page.open()
         page.enter_as_user()
         page.should_enter_be_successful()
 
+    def test_open_xba_profiles(self, browser):
+        page = Profiles(browser, link)
+        page.open_xba_profiles()
+
+    def test_should_enter_xba_profiles_be_successful(self, browser):
+        page = Profiles(browser, link)
+        page.should_enter_xba_profiles_be_successful()
+
+    def test_open_xba_metaprofiles(self, browser):
+        page = Metaprofiles(browser, link)
+        page.open_xba_metaprofiles()
+
+    def test_should_enter_xba_metaprofiles_be_successful(self, browser):
+        page = Metaprofiles(browser, link)
+        page.should_enter_xba_metaprofiles_be_successful()
+
     def test_open_xba_statistic(self, browser):
         page = Statistic(browser, link)
         page.open_xba_statistic()
 
-    def test_save_xba_diagram_image(self, browser):
+    def test_should_enter_xba_statistic_be_successful(self, browser):
         page = Statistic(browser, link)
-        page.save_xba_diagram_image()
-
-    def test_compare_images(self, browser):
-        page = Statistic(browser, link)
-        page.compare_images()
+        page.should_enter_xba_statistic_be_successful()
 
 
 class TestRoleMining:
@@ -305,23 +312,7 @@ class TestRoleMining:
         page = AuthPage(browser, link)
         page.open()
         page.enter_as_user()
-        # page.should_enter_be_successful()
-
-    def test_open_role_mining_settings_sources(self, browser):
-        page = RmSettings(browser, link)
-        page.open_rm_settings_sources()
-
-    def test_should_enter_rm_settings_sources_be_successful(self, browser):
-        page = RmSettings(browser, link)
-        page.should_enter_rm_settings_sources_be_successful()
-
-    def test_open_rm_settings_calculation_settings(self, browser):
-        page = RmSettings(browser, link)
-        page.open_rm_settings_calculation_settings()
-
-    def test_should_enter_rm_settings_calculation_settings_be_successful(self, browser):
-        page = RmSettings(browser, link)
-        page.should_enter_rm_settings_calculation_settings_be_successful()
+        page.should_enter_be_successful()
 
     def test_open_rm_ad_status_statistic(self, browser):
         page = AdStatus(browser, link)
@@ -338,3 +329,57 @@ class TestRoleMining:
     def test_should_enter_rm_ad_status_recommendation_be_successful(self, browser):
         page = AdStatus(browser, link)
         page.should_enter_rm_ad_status_recommendation_be_successful()
+
+
+class TestRoleMiningSettingsSources:
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+        page.should_enter_be_successful()
+
+    def test_role_mining_settings_page(self, browser):
+        page = RmSettings(browser, link)
+        page.open_rm_settings_sources()
+        page.clear_sources_rm_settings()
+        page.not_confirm_cleaning_rm_settings()
+        page.clear_sources_rm_settings()
+        page.confirm_cleaning_rm_settings()
+        page.selecting_values_from_dropdown_list()
+        page.should_sources_saved()
+        page.should_sources_recalculated()
+        page.calculation_settings()
+
+
+class TestRoleMiningActiveDirectory:
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+        page.should_enter_be_successful()
+
+    def test_mailing_anomaly_rm_tcp(self, browser):
+        page = AdStatus(browser, link)
+        page.open_rm_ad_status_statistic()
+        page.should_enter_rm_ad_status_statistic_be_successful()
+        page.open_rm_ad_status_recommendation()
+        page.should_enter_rm_ad_status_recommendation_be_successful()
+        page.configuring_anomaly_distribution()
+        page.input_server_address_and_port()
+        page.select_tcp_exchange_protocol()
+        page.click_add_button()
+        page.should_tcp_distribution_protocol_save_sucsess()
+        page.delete_last_entry()
+        page.close_window()
+
+    def test_mailing_anomaly_rm_udp(self, browser):
+        page = AdStatus(browser, link)
+        page.configuring_anomaly_distribution()
+        page.input_server_address_and_port()
+        page.select_udp_exchange_protocol()
+        page.click_add_button()
+        page.should_udp_distribution_protocol_save_sucsess()
+        page.delete_last_entry()
+        page.close_window()

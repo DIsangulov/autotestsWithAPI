@@ -7,12 +7,10 @@ from resourses.locators import AdminLocators
 class Monitoring(BasePage):
     def open_adm_monitoring(self):
         # self.browser.find_element(*AdminLocators.ADMINISTRATION).click()
-        self.browser.find_element(*AdminLocators.MONITORING).click()
-        time.sleep(1)
+        self.page.click(AdminLocators.MONITORING)
 
     def should_enter_adm_monitoring_be_successful(self):
-        self.is_element_present(*AdminLocators.TITLE_MSG_OLD)
-        assert self.is_element_present(*AdminLocators.TITLE_MSG_OLD).text == "Общее состояние системы", \
+        self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
+        assert "Общее состояние системы" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.browser.current_url == self.url + "/system-state/system-state/webserver", \
-            "URL не совпадают"
+        assert self.page.url == self.url + "/system-state/system-state/webserver", "URL's do not match"

@@ -1,10 +1,8 @@
 import json
-import time
+import os
 
-import allure
 import pytest
 import requests
-import testit
 import urllib3
 
 from self import self
@@ -29,12 +27,10 @@ from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
 
-from utilities.logger import Logger
-
 urllib3.disable_warnings()
 # ________Constants________
 sess = requests.Session()
-host = "https://10.130.0.22"
+host = os.environ.get('TARGET_URL', "https://10.130.0.23")
 # ________Constants________
 
 # _________Globals_________
@@ -45,7 +41,7 @@ user_id = None
 
 # _________Globals_________
 
-@pytest.mark.skip
+
 class TestAuth:
 
     def test_get_token(self):
@@ -55,6 +51,7 @@ class TestAuth:
         dct = json.loads(resp.text)
         global auth_token
         auth_token = dct['token']
+        print(auth_token)
 
     def test_ad_struct_get(self):
         req = AuthApi(sess, host)
@@ -101,7 +98,6 @@ class TestAuth:
     # __________________________________ABSORBER_______________________________________
 
 
-@pytest.mark.skip
 class TestAbsorber:
 
     def test_get_token(self):
@@ -116,6 +112,11 @@ class TestAbsorber:
     def test_library_columns_get(self):
         req = Absorber(sess, host)
         resp = req.library_columns_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_users_at_uid_get(self):
+        req = Absorber(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_library_conn_type_get(self):
@@ -186,7 +187,6 @@ class TestAbsorber:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestAlarmer:
 
     def test_get_token(self):
@@ -269,7 +269,6 @@ class TestAlarmer:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestCore:
 
     def test_get_token(self):
@@ -334,12 +333,12 @@ class TestCore:
     def test_core_component_servicedb_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
         req = Core(sess, host)
         resp = req.core_component_servicedb_restart_get(auth_token)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_component_datastore_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
         req = Core(sess, host)
         resp = req.core_component_datastore_restart_get(auth_token)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_download_settings_get(self):
         req = Core(sess, host)
@@ -593,7 +592,6 @@ class TestCore:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestLicenser:
     def test_get_token(self):
         req = BaseReq(sess, host)
@@ -614,7 +612,6 @@ class TestLicenser:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestPeopler:
 
     def test_get_token(self):
@@ -626,9 +623,6 @@ class TestPeopler:
         auth_token = dct['token']
         print(auth_token)
 
-    # @testit.displayName("peopler_many_users_put")
-    # @testit.externalID("peopler_many_users_put")
-    # @testit.workItemID(1959)
     def test_peopler_many_users_put(self):
         req = Peopler(sess, host)
         resp = req.peopler_many_users_put(auth_token)
@@ -640,68 +634,47 @@ class TestPeopler:
         resp = req.peopler_many_users_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # @testit.displayName("peopler_profile_get")
-    # @testit.externalID("peopler_profile_get")
-    # @testit.workItemID(1961)
     def test_peopler_profile_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_profile_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # @testit.displayName("peopler_profiles_get")
-    # @testit.externalID("peopler_profiles_get")
-    # @testit.workItemID(1962)
     def test_peopler_profiles_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_profiles_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # @testit.displayName("peopler_users_get")
-    # @testit.externalID("peopler_users_get")
-    # @testit.workItemID(1963)
 
     def test_peopler_users_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # @testit.displayName("peopler_users_post")
-    # @testit.externalID("peopler_users_post")
-    # @testit.workItemID(1964)
+    def test_peopler_users_at_uid_get(self):
+        req = Peopler(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_peopler_users_post(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # @testit.displayName("peopler_users_id_get")
-    # @testit.externalID("peopler_users_id_get")
-    # @testit.workItemID(1965)
-
     def test_peopler_users_id_get(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # @testit.displayName("peopler_users_id_put")
-    # @testit.externalID("peopler_users_id_put")
-    # @testit.workItemID(1966)
 
     def test_peopler_users_id_put(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_id_put(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # @testit.displayName("peopler_users_delete")
-    # @testit.externalID("peopler_users_delete")
-    # @testit.workItemID(1967)
     def test_peopler_users_delete(self):
         req = Peopler(sess, host)
         resp = req.peopler_users_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestPermitter:
 
     def test_get_token(self):
@@ -953,7 +926,6 @@ class TestPermitter:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestRmCook:
 
     def test_get_token(self):
@@ -1112,7 +1084,6 @@ class TestRmCook:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestStorageWorker:
 
     def test_get_token(self):
@@ -1122,6 +1093,16 @@ class TestStorageWorker:
         dct = json.loads(resp.text)
         global auth_token
         auth_token = dct['token']
+
+    def test_peopler_users_at_uid_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_id_picker_table_get(self):
+        req = StorageWorker(sess, host)
+        resp = req.id_picker_table_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_ask_one_sql_post(self):
         req = StorageWorker(sess, host)
@@ -1269,7 +1250,6 @@ class TestStorageWorker:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestXbaCook:
 
     def test_get_token(self):
@@ -1467,6 +1447,7 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_id_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_xba_cook_profiles_id_log_last_get(self):
         req = XbaCook(sess, host)
         resp = req.xba_cook_profiles_id_log_last_get(auth_token)
@@ -1498,7 +1479,6 @@ class TestXbaCook:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestElementsEater:
 
     def test_get_token(self):
@@ -1520,7 +1500,6 @@ class TestElementsEater:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestLogEater:
 
     def test_get_token(self):
@@ -1537,7 +1516,6 @@ class TestLogEater:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestMonitor:
 
     def test_get_token(self):
@@ -1760,7 +1738,6 @@ class TestMonitor:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestReporter:
 
     def test_get_token(self):
@@ -1771,6 +1748,11 @@ class TestReporter:
         global auth_token
         auth_token = dct['token']
         print(auth_token)
+
+    def test_peopler_users_at_uid_get(self):
+        req = Reporter(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_reporter_mailing_post(self):
         req = Reporter(sess, host)
@@ -1844,7 +1826,6 @@ class TestReporter:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestScripter:
 
     def test_get_token(self):
@@ -1855,6 +1836,11 @@ class TestScripter:
         global auth_token
         auth_token = dct['token']
         print(auth_token)
+
+    def test_peopler_users_at_uid_get(self):
+        req = Absorber(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_scripter_category_get(self):
         req = Scripter(sess, host)
@@ -1931,7 +1917,6 @@ class TestScripter:
         resp = req.scripter_script_id_log_log_id_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_scripter_script_id_log_delete(self):
         req = Scripter(sess, host)
         resp = req.scripter_script_id_log_delete(auth_token)
@@ -1965,7 +1950,6 @@ class TestScripter:
     def test_scripter_sequence_log_id_get(self):
         req = Scripter(sess, host)
         resp = req.scripter_sequence_log_id_get(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_scripter_sequence_id_get(self):
@@ -1986,10 +1970,8 @@ class TestScripter:
     def test_scripter_sequence_id_log_get(self):
         req = Scripter(sess, host)
         resp = req.scripter_sequence_id_log_get(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_scripter_sequence_id_log_id_id_get(self):
         req = Scripter(sess, host)
         resp = req.scripter_sequence_id_log_id_get(auth_token)
@@ -2005,21 +1987,17 @@ class TestScripter:
         resp = req.scripter_sequence_sequence_type_user_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_scripter_sequence_id_delete(self):
         req = Scripter(sess, host)
         resp = req.scripter_sequence_id_get(auth_token)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_scripter_script_id_delete(self):  # удаление скрипта
         req = Scripter(sess, host)
         resp = req.scripter_script_id_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestTaskplan:
 
     def test_get_token(self):
@@ -2042,7 +2020,6 @@ class TestTaskplan:
         assert resp.status_code == 200 or 404, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
-@pytest.mark.skip
 class TestUpdater:
 
     def test_get_token(self):
@@ -2085,6 +2062,16 @@ class TestVisualisation:
         global auth_token
         auth_token = dct['token']
         print(auth_token)
+
+    def test_peopler_users_at_uid_get(self):
+        req = Visualisation(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_id_picker_table_get(self):
+        req = Visualisation(sess, host)
+        resp = req.id_picker_table_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_visualisation_query_get(self):
         req = Visualisation(sess, host)

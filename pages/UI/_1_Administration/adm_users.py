@@ -6,11 +6,11 @@ from resourses.locators import AdminLocators
 
 class Users(BasePage):
     def open_adm_users(self):
-        # self.browser.find_element(*AdminLocators.ADMINISTRATION).click()
-        self.browser.find_element(*AdminLocators.USERS).click()
-        time.sleep(1)
+        # self.page.click(AdminLocators.ADMINISTRATION)
+        self.page.click(AdminLocators.USERS)
 
     def should_enter_adm_users_be_successful(self):
-        self.is_element_present(*AdminLocators.TITLE_MSG_OLD)
-        assert self.browser.current_url == self.url + "/users", \
-            "URL не совпадают"
+        self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
+        assert "Пользователи" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
+            "Найдено несовпадение ожидаемого результата с фактическим"
+        assert self.page.url == self.url + "/users", "URL's do not match"

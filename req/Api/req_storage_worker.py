@@ -6,14 +6,38 @@ from req.Helpers.base_req import BaseReq
 reg_pid = None
 rand = None
 db_id = None
+at_uid = None
+pt_id = None  # id picker_table
 
 
 class StorageWorker(BaseReq):
 
+    def peopler_users_at_uid_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        name = 'dataplan_qaa@ngrsoftlab.ru'
+        users = json.loads(resp.text)['res']
+        uid = next((user for user in users if user['name'] == name), None)
+        global at_uid
+        at_uid = uid['id']
+        return resp
+
+    def id_picker_table_get(self, token):  # забираем id таблицы picker_table
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
+                             headers=header, verify=False)
+        json_data = json.loads(resp.text)
+        global pt_id
+        for item in json_data['res']:
+            if item['name'] == 'picker_tables':
+                pt_id = item['id']
+        print(pt_id)
+        return resp
+
     def storage_worker_ask_one_sql_post(self, token):
         header = {'token': token}
-        data = {"base_id": 108, "base_name": "picker_tables",
-                "statements": "SELECT access_point_name FROM polina2     LIMIT 50;",
+        data = {"base_id": pt_id, "base_name": "picker_tables",
+                "statements": "SELECT * FROM ad_users_ngr LIMIT 50;",
                 "regs": False,
                 ""
                 "params": []}
@@ -23,8 +47,8 @@ class StorageWorker(BaseReq):
 
     def storage_worker_ask_plain_sql_post(self, token):
         header = {'token': token}
-        data = {"base_id": 108, "tab_name": "polina2", "columns":
-            [{"name": "access_point_name", "type": "LowCardinality(String)"}],
+        data = {"base_id": pt_id, "tab_name": "ad_users_ngr", "columns":
+            [{"name": "*", "type": "LowCardinality(String)"}],
                 "groupby": [], "filters": [], "agregators": [],
                 "limit": 50, "base_name": "picker_tables", "regs": False}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/ask_plain_sql", headers=header, json=data,
@@ -41,7 +65,7 @@ class StorageWorker(BaseReq):
         rand = random.randint(1200, 12500)
         header = {'token': token}
         data = {"rus": "TestApi_1" + str(rand), "reg": "1", "stages": "1", "postfix": "1", "state": False,
-                "is_on": False, "author": 1238}
+                "is_on": False, "author": at_uid}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs", headers=header, json=data,
                               verify=False)
 
@@ -123,11 +147,9 @@ class StorageWorker(BaseReq):
         return resp
 
     def storage_worker_statistics_storage_search_post(self, token):
-        global rand
-        rand = random.randint(1200, 12500)
         header = {'token': token}
         data = {"database_name": "picker_tables",
-                "table": "ad_groups_ngr_fresh",
+                "table": "ad_users_ngr",
                 "filter_columns": ["mail"],
                 "select_columns": ["mail"],
                 "pattern": "",
@@ -138,10 +160,8 @@ class StorageWorker(BaseReq):
         return resp
 
     def storage_worker_statistics_test_selection_post(self, token):
-        global rand
-        rand = random.randint(1200, 12500)
         header = {'token': token}
-        data = {"database_name": "picker_tables", "table_name": "ad_groups_ngr_fresh", "name": "name"}
+        data = {"database_name": "picker_tables", "table_name": "ad_users_ngr", "name": "name"}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/statistics/test_selection", headers=header,
                               json=data,
                               verify=False)
@@ -162,8 +182,8 @@ class StorageWorker(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
-    def permitter_roles_editor_roles_for_storage_worker_put(self,
-                                                            token):  # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
+    def permitter_roles_editor_roles_for_storage_worker_put(self, token):
+        # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
         header = {'token': token, 'ui': str(2)}
         data = {
             "id": 5,
@@ -265,18 +285,18 @@ class StorageWorker(BaseReq):
     def storage_worker_storage_table_columns_db_name_table_name_post(self, token):
         header = {'token': token}
         data = [{"name": "Nopt", "dtype": "DateTime", "alias": "псевдоним", "mask_it": False},
-                {"name": "Npqroduct", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                {"name": "Npqroduct", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables",
                  "dtype": "String", "mask_it": False},
-                {"name": "Ntype", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                {"name": "Ntype", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables",
                  "dtype": "String", "mask_it": False},
-                {"name": "opt", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                {"name": "opt", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables",
                  "dtype": "DateTime", "mask_it": False},
-                {"name": "pqroduct", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                {"name": "pqroduct", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables",
                  "dtype": "String", "mask_it": False},
-                {"name": "type", "alias": "", "table_name": "TYPE_SYSNOST_2005", "database_name": "picker_tables",
+                {"name": "type", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables",
                  "dtype": "UInt32", "mask_it": False}]
         resp = self.sess.post(
-            f"{self.host}/back/dp.storage_worker/storage/table/columns/picker_tables/TYPE_SYSNOST_2005",
+            f"{self.host}/back/dp.storage_worker/storage/table/columns/picker_tables/ad_groups_ngr",
             headers=header, json=data, verify=False)
         return resp
 
