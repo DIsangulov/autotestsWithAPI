@@ -9,7 +9,7 @@ class Taskplan(BaseReq):
             "sched_type": "script_exec",
             "timezone": "Europe/Moscow",
             "data": {
-                "object_id": 25
+                "object_id": 1902
             }
         }
         resp = self.sess.post(f"{self.host}/back/dp.taskplan/get_schedule", headers=header, json=data, verify=False)
