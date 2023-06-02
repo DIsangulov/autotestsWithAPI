@@ -142,17 +142,35 @@ class Reporter(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/" + str(rep_id), headers=header, verify=False)
         return resp
 
-    def reporter_screener_fast_png_id_get(self, token):
+    def reporter_screener_fast_png_post(self, token):
+        data = {
+            "format": "png",
+            "need_page": "/report/" + str(rep_id)
+        }
         header = {'token': token}
-        resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/png/158", headers=header,
-                             verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.reporter/screener/fast", headers=header, json=data, verify=False)
         return resp
 
-    def reporter_screener_fast_pdf_id_get(self, token):
+    def reporter_screener_fast_pdf_post(self, token):
+        data = {
+            "format": "pdf",
+            "need_page": "/report/" + str(rep_id)
+        }
         header = {'token': token}
-        resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/pdf/158", headers=header,
-                             verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.reporter/screener/fast", headers=header, json=data, verify=False)
         return resp
+
+    # def reporter_screener_fast_png_id_get(self, token): # ---- не используется ----
+    #     header = {'token': token}
+    #     resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/png/158", headers=header,
+    #                          verify=False)
+    #     return resp
+    #
+    # def reporter_screener_fast_pdf_id_get(self, token):
+    #     header = {'token': token}
+    #     resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/pdf/158", headers=header,
+    #                          verify=False)
+    #     return resp
 
     def reporter_screener_fast_xlsx_id_get(self, token):
         header = {'token': token}

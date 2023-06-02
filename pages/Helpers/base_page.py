@@ -27,17 +27,9 @@ class BasePage:
         link.click()
         self.page.wait_for_load_state()
 
-    def scroll_down(self):
-        self.page.scroll_by(0, 1000)
-
     def switch(self, handle_number: int):
         handles = self.page.context.pages
         self.page = handles[handle_number]
-
-    def exit(self):
-        self.wait_until_elem_be_clickable('text=Log out')
-        self.page.click('text=Log out')
-        self.page.wait_for_selector('#login')
 
     def wait_until(self, selector: str):
         self.page.wait_for_selector(selector)
@@ -45,13 +37,6 @@ class BasePage:
     def close_handle(self, handle_num: int):
         self.switch(handle_num)
         self.page.close()
-
-    def find_request_in_network(self, part_of_request: str, expected_status_code: int):
-        for request in self.page.context.network.requests:
-            if request.response:
-                if part_of_request in request.url and request.response.status == expected_status_code:
-                    return True
-        return False
 
     def clear_input(self, selector: str):
         input_field = self.page.query_selector(selector)

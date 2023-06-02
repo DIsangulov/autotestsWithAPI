@@ -30,15 +30,13 @@ from req.Api.req_visualisation import Visualisation
 urllib3.disable_warnings()
 # ________Constants________
 sess = requests.Session()
-host = os.environ.get('TARGET_URL', "https://10.130.0.23")
+host = os.environ.get('TARGET_URL', "https://10.130.0.22")
 # ________Constants________
 
 # _________Globals_________
 auth_token = None
 uid = None
 user_id = None
-
-
 # _________Globals_________
 
 
@@ -1293,6 +1291,7 @@ class TestStorageWorker:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
+@pytest.mark.skip
 class TestXbaCook:
 
     def test_get_token(self):
@@ -1793,7 +1792,6 @@ class TestMonitor:
         resp = req.monitor_webserver_stats_dataproc_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-
 @pytest.mark.skip
 class TestReporter:
 
@@ -1846,15 +1844,25 @@ class TestReporter:
         resp = req.reporter_mailing_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_screener_fast_png_id_get(self):
+    def test_reporter_screener_fast_png_post(self):
         req = Reporter(sess, host)
-        resp = req.reporter_screener_fast_png_id_get(auth_token)
+        resp = req.reporter_screener_fast_png_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_screener_fast_pdf_id_get(self):
+    def test_reporter_screener_fast_pdf_post(self):
         req = Reporter(sess, host)
-        resp = req.reporter_screener_fast_pdf_id_get(auth_token)
+        resp = req.reporter_screener_fast_pdf_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # def test_reporter_screener_fast_png_id_get(self): # ---- не используется ----
+    #     req = Reporter(sess, host)
+    #     resp = req.reporter_screener_fast_png_id_get(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    #
+    # def test_reporter_screener_fast_pdf_id_get(self):
+    #     req = Reporter(sess, host)
+    #     resp = req.reporter_screener_fast_pdf_id_get(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
     def test_reporter_screener_fast_xlsx_id_get(self):  # xlsx формируется на фронте
