@@ -7,6 +7,7 @@ from faker import Faker
 fake = Faker()
 name = fake.sentence(nb_words=3)  # генерация случайного названия из 2 слов
 description = fake.sentence(nb_words=20)  # генерация случайного описания из 20 слов
+saved_report_name = None
 
 
 class Reports(BasePage):
@@ -26,6 +27,9 @@ class Reports(BasePage):
         self.page.click(MainLocators.SAVE_BUTTON)
         self.page.click(AnalyticsLocators.ADD_REPORT_BUTTON)
 
+    def open_access_settings(self):
+        self.page.click(AnalyticsLocators.ACCESS_SETTINGS)
+
     def do_report_public(self):
         self.page.click(AnalyticsLocators.ACCESS_SETTINGS)
         self.page.click(AnalyticsLocators.PUBLESHED_TOGLER_ON)
@@ -35,6 +39,17 @@ class Reports(BasePage):
         self.page.click(AnalyticsLocators.ACCESS_SETTINGS)
         self.page.click(AnalyticsLocators.REPORT_CLOSED_TOGLER)
         self.page.click(MainLocators.X_BUTTON)
+
+    def save_last_report_name(self):
+        time.sleep(2)
+        global saved_report_name
+        saved_report_name = self.page.locator("(//td[@data-label='Отчет']/a)[1]").inner_text()
+
+    def should_report_not_visible_by_name(self):
+        assert not self.is_element_present("//*[contains(text(),'" + name + "')]")
+
+    def should_report_not_visible_by_saved_name(self):
+        assert not self.is_element_present("//*[contains(text(),'" + str(saved_report_name) + "')]")
 
     def open_last_report(self):
         time.sleep(2)
@@ -195,4 +210,10 @@ class Reports(BasePage):
         self.page.click(AnalyticsLocators.ACCESS)
         self.page.click(AnalyticsLocators.ACCESS_ACCESS_SETTINGS)
         self.page.click(MainLocators.ADD_BUTTON)
+        self.page.click(MainLocators.X_BUTTON)
+
+    def uncheck_checkboxes_r_w_e(self):
+        self.page.click(AnalyticsLocators.CHECKBOX_EXECUTE_FOR_USERS_TAB)
+        self.page.click(AnalyticsLocators.CHECKBOX_WRITE_FOR_USERS_TAB)
+        self.page.click(AnalyticsLocators.CHECKBOX_READ_FOR_USERS_TAB)
         self.page.click(MainLocators.X_BUTTON)

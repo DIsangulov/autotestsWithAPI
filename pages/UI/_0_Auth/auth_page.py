@@ -25,6 +25,7 @@ class AuthPage(BasePage):
         assert self.is_element_present(MainLocators.SUCCESS_ENTER), "Unsuccessful enter"
 
     def log_out(self):
+        self.page.mouse.click(0, 0)
         self.page.click(MainLocators.HUMAN_ICON)
         self.page.click(MainLocators.SIGN_OUT)
 
@@ -34,4 +35,6 @@ class AuthPage(BasePage):
         self.page.click(AuthLocators.PASS_VISIBLE)
         self.page.click(MainLocators.LOCAL_CHECK_BOX)
         self.page.click(AuthLocators.ENTER_BUT)
-        # self.page.click(MainLocators.SIDE_BAR)
+
+    def open_side_bar(self):  # открытие бокового меню
+        self.page.click(MainLocators.SIDE_BAR)
