@@ -765,6 +765,7 @@ class TestSettingReportAccessForRoleToExecute:
         page = Reports(browser, link)
         page.should_checkbox_execute_enable()
 
+
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для роли на "Настройка доступа"')
 class TestSettingReportAccessForRoleToAccessSettings:
@@ -899,7 +900,6 @@ class TestSettingReportAccessForUserToRead:
         page.should_checkbox_read_enable_for_users_tab()
 
 
-
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Запись"')
 class TestSettingReportAccessForUserToWrite:
     def test_valid_auth(self, browser):
@@ -966,7 +966,6 @@ class TestSettingReportAccessForUserToWrite:
     def test_should_checkbox_write_enable_for_users_tab(self, browser):
         page = Reports(browser, link)
         page.should_checkbox_write_enable_for_users_tab()
-
 
 
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Выполнение"')
@@ -1103,6 +1102,7 @@ class TestSettingReportAccessForUserToAccessSettings:
     def test_should_checkbox_access_settings_enable_for_users_tab(self, browser):
         page = Reports(browser, link)
         page.should_checkbox_access_settings_enable_for_users_tab()
+
 
 @pytest.mark.skip
 @allure.title('Отчеты - удаление доступа к отчету для пользователя, роль которого имеет доступ на "Выполнение"')

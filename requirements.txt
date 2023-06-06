@@ -13,3 +13,4 @@ docker
 behave~=1.2.6
 pillow~=9.4.0
 playwright~=1.32.1
+faker
