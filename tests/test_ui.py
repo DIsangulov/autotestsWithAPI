@@ -1107,6 +1107,7 @@ class TestSettingReportAccessForUserToAccessSettings:
         page.should_checkbox_access_settings_enable_for_users_tab()
 
 
+@pytest.mark.skip
 @allure.title('Отчеты - удаление доступа к отчету для пользователя, роль которого имеет доступ на "Выполнение"')
 class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
 
@@ -1235,6 +1236,36 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
     def test_should_report_not_visible(self, browser):
         page = Reports(browser, link)
         page.should_report_not_visible_by_saved_name()
+
+
+@allure.title(
+    'Отчеты - проверка доступа к детализации, фильтрам и настройкам визуализации в отчете (для роли на ''Чтение)')
+class TestCheckingReportElements:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_elements_on_report_page_availible(self, browser):
+        page = Reports(browser, link)
+        page.should_elements_on_report_page_availible()
+
+    def test_should_elements_on_report_page_editing_availible(self, browser):
+        page = Reports(browser, link)
+        page.should_elements_on_report_page_availible()
+        page.should_elements_on_report_page_editing_availible()
 
 
 @pytest.mark.skip

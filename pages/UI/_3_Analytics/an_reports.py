@@ -1,5 +1,7 @@
 import time
 
+from playwright.async_api import expect
+
 from pages.Helpers.base_page import BasePage
 from resourses.locators import AnalyticsLocators, MainLocators, AdminLocators
 from faker import Faker
@@ -15,7 +17,7 @@ class Reports(BasePage):
         self.page.click(AnalyticsLocators.REPORTS)
 
     def should_enter_an_reports_be_successful(self):
-        self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
+        self.page.wait_for_selector(AdminLocators.TITLE_MSG_OLD)
         assert "Отчеты" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
         assert self.page.url == self.url + "/report", "URL's do not match"
@@ -52,8 +54,8 @@ class Reports(BasePage):
         assert not self.is_element_present("//*[contains(text(),'" + str(saved_report_name) + "')]")
 
     def open_last_report(self):
-        time.sleep(2)
         self.page.click(AnalyticsLocators.LAST_REPORT_IN_LIST)
+        self.page.wait_for_selector("//div[@class='grid-layout__wrapper']", state='visible')
 
     def should_edit_button_not_available(self):
         assert self.is_element_present(AnalyticsLocators.ADD_REPORT_BUTTON).is_disabled()
@@ -217,3 +219,23 @@ class Reports(BasePage):
         self.page.click(AnalyticsLocators.CHECKBOX_WRITE_FOR_USERS_TAB)
         self.page.click(AnalyticsLocators.CHECKBOX_READ_FOR_USERS_TAB)
         self.page.click(MainLocators.X_BUTTON)
+
+    def should_elements_on_report_page_availible(self):
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[1]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[2]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[3]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[4]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[5]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[6]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[7]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[8]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[9]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[10]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[11]").is_enabled()
+
+    def should_elements_on_report_page_editing_availible(self):
+        self.page.click("(//span[@class='icon btn-icon'])[2]")
+        self.page.wait_for_selector("(//span[@class='icon btn-icon'])[12]", state='attached')
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[12]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[13]").is_enabled()
+        assert self.page.wait_for_selector("(//span[@class='icon btn-icon'])[14]").is_enabled()
