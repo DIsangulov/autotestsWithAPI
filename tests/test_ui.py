@@ -684,9 +684,9 @@ class TestSettingReportAccessForRoleToWrite:
         page = Reports(browser, link)
         page.open_last_report()
 
-    def test_should_edit_button_not_available(self, browser):
+    def test_should_edit_button_available(self, browser):
         page = Reports(browser, link)
-        page.should_edit_button_not_available()
+        page.should_edit_button_available()
 
     def test_should_access_settings_not_available(self, browser):
         page = Reports(browser, link)
@@ -751,7 +751,7 @@ class TestSettingReportAccessForRoleToExecute:
 
     def test_should_edit_button_not_available(self, browser):
         page = Reports(browser, link)
-        page.should_edit_button_not_available()
+        page.should_edit_button_available()
 
     def test_should_access_settings_not_available(self, browser):
         page = Reports(browser, link)
@@ -764,7 +764,6 @@ class TestSettingReportAccessForRoleToExecute:
     def test_should_checkbox_execute_enable(self, browser):
         page = Reports(browser, link)
         page.should_checkbox_execute_enable()
-
 
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для роли на "Настройка доступа"')
@@ -814,9 +813,9 @@ class TestSettingReportAccessForRoleToAccessSettings:
         page = Reports(browser, link)
         page.open_last_report()
 
-    def test_should_edit_button_not_available(self, browser):
+    def test_should_edit_button_available(self, browser):
         page = Reports(browser, link)
-        page.should_edit_button_not_available()
+        page.should_edit_button_available()
 
     def test_should_access_settings_not_available(self, browser):
         page = Reports(browser, link)
@@ -900,7 +899,7 @@ class TestSettingReportAccessForUserToRead:
         page.should_checkbox_read_enable_for_users_tab()
 
 
-@pytest.mark.skip
+
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Запись"')
 class TestSettingReportAccessForUserToWrite:
     def test_valid_auth(self, browser):
@@ -952,9 +951,9 @@ class TestSettingReportAccessForUserToWrite:
         page = Reports(browser, link)
         page.open_last_report()
 
-    def test_should_edit_button_not_available(self, browser):
+    def test_should_edit_button_available(self, browser):
         page = Reports(browser, link)
-        page.should_edit_button_not_available()
+        page.should_edit_button_available()
 
     def test_should_access_settings_not_available(self, browser):
         page = Reports(browser, link)
@@ -969,7 +968,7 @@ class TestSettingReportAccessForUserToWrite:
         page.should_checkbox_write_enable_for_users_tab()
 
 
-@pytest.mark.skip
+
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Выполнение"')
 class TestSettingReportAccessForUserToExecute:
     def test_valid_auth(self, browser):
@@ -1021,9 +1020,9 @@ class TestSettingReportAccessForUserToExecute:
         page = Reports(browser, link)
         page.open_last_report()
 
-    def test_should_edit_button_not_available(self, browser):
+    def test_should_edit_button_available(self, browser):
         page = Reports(browser, link)
-        page.should_edit_button_not_available()
+        page.should_edit_button_available()
 
     def test_should_access_settings_not_available(self, browser):
         page = Reports(browser, link)
@@ -1038,7 +1037,6 @@ class TestSettingReportAccessForUserToExecute:
         page.should_checkbox_execute_enable_for_users_tab()
 
 
-@pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Настройку доступа"')
 class TestSettingReportAccessForUserToAccessSettings:
     def test_valid_auth(self, browser):
@@ -1090,9 +1088,9 @@ class TestSettingReportAccessForUserToAccessSettings:
         page = Reports(browser, link)
         page.open_last_report()
 
-    def test_should_edit_button_not_available(self, browser):
+    def test_should_edit_button_available(self, browser):
         page = Reports(browser, link)
-        page.should_edit_button_not_available()
+        page.should_edit_button_available()
 
     def test_should_access_settings_not_available(self, browser):
         page = Reports(browser, link)
@@ -1105,7 +1103,6 @@ class TestSettingReportAccessForUserToAccessSettings:
     def test_should_checkbox_access_settings_enable_for_users_tab(self, browser):
         page = Reports(browser, link)
         page.should_checkbox_access_settings_enable_for_users_tab()
-
 
 @pytest.mark.skip
 @allure.title('Отчеты - удаление доступа к отчету для пользователя, роль которого имеет доступ на "Выполнение"')
@@ -1238,6 +1235,7 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
         page.should_report_not_visible_by_saved_name()
 
 
+@pytest.mark.skip
 @allure.title(
     'Отчеты - проверка доступа к детализации, фильтрам и настройкам визуализации в отчете (для роли на ''Чтение)')
 class TestCheckingReportElements:
