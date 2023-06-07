@@ -3,14 +3,14 @@ import os
 
 
 class BaseReq:
-    username = os.environ.get('TARGET_API_USER', "dataplan_qaa@ngrsoftlab.ru")
-    password = os.environ.get('TARGET_API_PASSWORD', "fHNHQBc7jEKfaO0kywZz!!")
 
     def __init__(self, sess, host):
         self.sess = sess
         self.host = host
 
-    def auth(self, username, password):
+    def auth(self):
+        username = os.environ.get('TARGET_API_USER', "dataplan_qaa@ngrsoftlab.ru")
+        password = os.environ.get('TARGET_API_PASSWORD', "fHNHQBc7jEKfaO0kywZz!!")
         data = {
             "username": username,
             "password": password
