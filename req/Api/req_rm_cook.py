@@ -5,9 +5,22 @@ from req.Helpers.base_req import BaseReq
 group_id = None
 user_id = None
 syslog_host = "107.130.0.16"
+pt_id = None
 
 
 class Rm_Cook(BaseReq):
+
+    def id_picker_table_get(self, token):  # забираем id таблицы picker_table
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
+                             headers=header, verify=False)
+        json_data = json.loads(resp.text)
+        global pt_id
+        for item in json_data['res']:
+            if item['name'] == 'picker_tables':
+                pt_id = item['id']
+        print(pt_id)
+        return resp
 
     def rm_cook_active_directory_groups_get(self, token):
         header = {'token': token}
@@ -188,8 +201,8 @@ class Rm_Cook(BaseReq):
         return resp
 
     def rm_cook_settings_sources_post(self, token):
-        body = [{"db_name": "picker_tables", "db_id": 108, "source_type": 1, "table_name": "ad_groups_ngr"},
-                {"db_name": "picker_tables", "db_id": 108, "source_type": 2, "table_name": "ad_users_ngr"}]
+        body = [{"db_name": "picker_tables", "db_id": pt_id, "source_type": 1, "table_name": "ad_groups_ngr"},
+                {"db_name": "picker_tables", "db_id": pt_id, "source_type": 2, "table_name": "ad_users_ngr"}]
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.rm_cook/settings/sources", headers=header, json=body, verify=False)
         return resp

@@ -40,6 +40,11 @@ class Roles(BasePage):
                     for font in unique_fonts:
                         f.write(font + '\n')
 
+    def try_to_ui_css_roles(self):
+        css = self.page.content()
+        with open('test-datas/ui_styles/ui_css.css', 'w') as f:
+            f.write(css + '\n')
+
     # @staticmethod
     # def try_to_figma_fonts_and_styles_by_pwr():
     #     access_token = "figd_4q5Ya2IGbIFZ5l5whAjuRbCVRIQX0Gj5ob-0mofE"

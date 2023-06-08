@@ -8,9 +8,33 @@ from req.Helpers.base_req import BaseReq
 prof_id = None
 rand = None
 group_id = None
+pt_id = None
+at_uid = None
 
 
 class XbaCook(BaseReq):
+
+    def id_picker_table_get(self, token):  # забираем id таблицы picker_table
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
+                             headers=header, verify=False)
+        json_data = json.loads(resp.text)
+        global pt_id
+        for item in json_data['res']:
+            if item['name'] == 'picker_tables':
+                pt_id = item['id']
+        print(pt_id)
+        return resp
+
+    def peopler_users_at_uid_get(self, token):
+        header = {'token': token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
+        name = 'dataplan_qaa@ngrsoftlab.ru'
+        users = json.loads(resp.text)['res']
+        uid = next((user for user in users if user['name'] == name), None)
+        global at_uid
+        at_uid = uid['id']
+        return resp
 
     def xba_cook_anomalies_get(self, token):
         header = {'token': token}
@@ -25,8 +49,8 @@ class XbaCook(BaseReq):
     def xba_cook_check_entity_type_post(self, token):
         data = {
             "column": "1",
-            "db_id": 108,
-            "table": "polina2"
+            "db_id": pt_id,
+            "table": "ad_users_ngr"
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/check_entity_type", headers=header, json=data,
@@ -80,7 +104,7 @@ class XbaCook(BaseReq):
 
     def xba_cook_entity_info_settings_post(self, token):
         data = {"user_settings":
-                    {"db_id": 108, "db_name": "picker_tables", "table_id": 3579234, "table_name": "ad_users_ngr_fresh",
+                    {"db_id": pt_id, "db_name": "picker_tables", "table_name": "ad_users_ngr",
                      "fields_mapping":
                          {"mapping_key_field": "sAMAccountName", "full_name": "name", "position": "description",
                           "department": "department", "phone": "mobile", "email": "mail", "manager": "sn"}}}
@@ -117,8 +141,8 @@ class XbaCook(BaseReq):
     def xba_cook_max_min_post(self, token):
         data = {
             "column": "1",
-            "db_id": 108,
-            "table": "polina2"
+            "db_id": pt_id,
+            "table": "ad_users_ngr"
         }
         header = {'token': token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/max_min", headers=header, json=data,
@@ -135,9 +159,9 @@ class XbaCook(BaseReq):
 
     def xba_cook_profiles_post(self, token):
         data = {"id": str(prof_id) + str(1), "name": "123", "description": None, "published": False, "opened": False,
-                "author_id": 402,
-                "author": "Тест Апи", "editor_id": 402, "editor": "Тест Апи",
-                "created": "2023-02-15T07:55:02.631066Z", "modified": "2023-02-15T07:55:02.631066Z", "db_id": 108,
+                "author_id": at_uid,
+                "author": "Тест Апи", "editor_id": at_uid, "editor": "Тест Апи",
+                "created": "2023-02-15T07:55:02.631066Z", "modified": "2023-02-15T07:55:02.631066Z", "db_id": pt_id,
                 "db_name": "picker_tables", "table_name": "ad_users_ngr", "status": 3, "profile_type": "median",
                 "id_function": 6, "id_category": 1,
                 "time_settings": {"time_column": "badPasswordTime", "time_start": "1971-01-01T00:00:00Z",
@@ -178,7 +202,7 @@ class XbaCook(BaseReq):
             "time": "2022-12-06T08:36:09Z"
         }
         header = {'token': token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/statement/1725",
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/statement/" + str(prof_id),
                               headers=header,
                               json=data, verify=False)
         return resp
@@ -307,8 +331,8 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_import_profiles_post(self, token):
         data = {
             "profile_list": [{"id": rand, "name": str(rand), "description": None, "published": False, "opened": False,
-                              "author_id": 402,
-                              "author": "Ванин Юрий", "editor_id": 402, "editor": "Ванин Юрий",
+                              "author_id": at_uid,
+                              "author": "Ванин Юрий", "editor_id": at_uid, "editor": "Ванин Юрий",
                               "created": "2023-02-15T07:55:02.631066Z", "modified": "2023-02-15T07:55:02.631066Z",
                               "db_id": None,
                               "db_name": "picker_tables", "table_name": "ad_users_ngr", "status": 3,

@@ -30,7 +30,7 @@ from req.Api.req_visualisation import Visualisation
 urllib3.disable_warnings()
 # ________Constants________
 sess = requests.Session()
-host = os.environ.get('TARGET_URL', "https://10.130.0.23")
+host = os.environ.get('TARGET_URL', "https://10.130.0.22")
 # ________Constants________
 
 # _________Globals_________
@@ -109,9 +109,9 @@ class TestAbsorber:
         auth_token = dct['token']
         print(auth_token)
 
-    def test_library_columns_get(self):
+    def test_absorber_library_columns_get(self):
         req = Absorber(sess, host)
-        resp = req.library_columns_get(auth_token)
+        resp = req.absorber_library_columns_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_peopler_users_at_uid_get(self):
@@ -119,72 +119,96 @@ class TestAbsorber:
         resp = req.peopler_users_at_uid_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_conn_type_get(self):
+    def test_id_picker_table_get(self):
         req = Absorber(sess, host)
-        resp = req.library_conn_type_get(auth_token)
+        resp = req.id_picker_table_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_conn_type_id_get(self):
+    def test_absorber_library_conn_type_get(self):
         req = Absorber(sess, host)
-        resp = req.library_conn_type_id_get(auth_token)
+        resp = req.absorber_library_conn_type_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector_get(self):  # получаем список всех коннекторов
+    def test_absorber_library_conn_type_id_get(self):
         req = Absorber(sess, host)
-        resp = req.library_connector_get(auth_token)
+        resp = req.absorber_library_conn_type_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector_post(self):
+    def test_absorber_library_connector_get(self):  # получаем список всех коннекторов
         req = Absorber(sess, host)
-        resp = req.library_connector_post(auth_token)
+        resp = req.absorber_library_connector_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector_put(self):
+    def test_absorber_library_connector_post(self):
         req = Absorber(sess, host)
-        resp = req.library_connector_put(auth_token)
+        resp = req.absorber_library_connector_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector_id_get(self):
+    def test_absorber_library_connector_put(self):
         req = Absorber(sess, host)
-        resp = req.library_connector_id_get(auth_token)
+        resp = req.absorber_library_connector_put(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_connector_delete(self):
+    def test_absorber_library_connector_id_get(self):
         req = Absorber(sess, host)
-        resp = req.library_connector_delete(auth_token)
+        resp = req.absorber_library_connector_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_logo_get(self):
+    def test_absorber_library_connector_delete(self):
         req = Absorber(sess, host)
-        resp = req.library_logo_get(auth_token)
+        resp = req.absorber_library_connector_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_logo_post(self):
+    def test_absorber_library_logo_get(self):
         req = Absorber(sess, host)
-        resp = req.library_logo_post(auth_token)
+        resp = req.absorber_library_logo_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_absorber_library_logo_post(self):
+        req = Absorber(sess, host)
+        resp = req.absorber_library_logo_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
     def test_library_logo_put(self):
         req = Absorber(sess, host)
-        resp = req.library_logo_put(auth_token)
+        resp = req.absorber_library_logo_put(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_library_logo_delete(self):
+    def test_absorber_library_logo_delete(self):
         req = Absorber(sess, host)
-        resp = req.library_logo_delete(auth_token)
+        resp = req.absorber_library_logo_delete(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_source_get(self):
+    def test_absorber_source_get(self):
         req = Absorber(sess, host)
-        resp = req.source_get(auth_token)
+        resp = req.absorber_source_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
-    def test_source_post(self):  # тут какая-то задница
+    def test_absorber_source_post(self):  # тут какая-то задница
         req = Absorber(sess, host)
-        resp = req.source_post(auth_token)
+        resp = req.absorber_source_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_absorber_source_put(self):  # тут какая-то задница
+        req = Absorber(sess, host)
+        resp = req.absorber_source_put(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_absorber_source_id_get(self):
+        req = Absorber(sess, host)
+        resp = req.absorber_source_id_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_absorber_source_id_debug_get(self):
+        req = Absorber(sess, host)
+        resp = req.absorber_source_id_debug_get(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_absorber_source_id_delete(self):
+        req = Absorber(sess, host)
+        resp = req.absorber_source_id_delete(auth_token)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
 class TestAlarmer:
@@ -345,9 +369,14 @@ class TestCore:
         resp = req.core_download_settings_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_send_test_post(self):
+    def test_core_email_import_cert_post(self):
         req = Core(sess, host)
-        resp = req.core_send_test_post(auth_token)
+        resp = req.core_email_import_cert_post(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_core_email_send_test_post(self):
+        req = Core(sess, host)
+        resp = req.core_email_send_test_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_email_in_get(self):
@@ -936,6 +965,11 @@ class TestRmCook:
         global auth_token
         auth_token = dct['token']
 
+    def test_id_picker_table_get(self):
+        req = Rm_Cook(sess, host)
+        resp = req.id_picker_table_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     def test_rm_cook_active_directory_groups_get(self):
         req = Rm_Cook(sess, host)
         resp = req.rm_cook_active_directory_groups_get(auth_token)
@@ -1260,6 +1294,16 @@ class TestXbaCook:
         global auth_token
         auth_token = dct['token']
         print(auth_token)
+
+    def test_id_picker_table_get(self):
+        req = XbaCook(sess, host)
+        resp = req.id_picker_table_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_users_at_uid_get(self):
+        req = XbaCook(sess, host)
+        resp = req.peopler_users_at_uid_get(auth_token)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
     def test_xba_cook_anomalies_get(self):
@@ -1789,15 +1833,25 @@ class TestReporter:
         resp = req.reporter_mailing_id_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_screener_fast_png_id_get(self):
+    def test_reporter_screener_fast_png_post(self):
         req = Reporter(sess, host)
-        resp = req.reporter_screener_fast_png_id_get(auth_token)
+        resp = req.reporter_screener_fast_png_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_screener_fast_pdf_id_get(self):
+    def test_reporter_screener_fast_pdf_post(self):
         req = Reporter(sess, host)
-        resp = req.reporter_screener_fast_pdf_id_get(auth_token)
+        resp = req.reporter_screener_fast_pdf_post(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # def test_reporter_screener_fast_png_id_get(self): # ---- не используется ----
+    #     req = Reporter(sess, host)
+    #     resp = req.reporter_screener_fast_png_id_get(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    #
+    # def test_reporter_screener_fast_pdf_id_get(self):
+    #     req = Reporter(sess, host)
+    #     resp = req.reporter_screener_fast_pdf_id_get(auth_token)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
     def test_reporter_screener_fast_xlsx_id_get(self):  # xlsx формируется на фронте
