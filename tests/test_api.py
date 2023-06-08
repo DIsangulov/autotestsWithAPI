@@ -5,8 +5,6 @@ import pytest
 import requests
 import urllib3
 
-from self import self
-
 from req.Api.req_auth import AuthApi
 from req.Helpers.base_req import BaseReq
 from req.Api.req_absorber import Absorber
@@ -38,20 +36,20 @@ auth_token = None
 uid = None
 user_id = None
 
-
 # _________Globals_________
+
+@pytest.fixture(autouse=True, scope="class")
+def get_token():
+    req = BaseReq(sess, host)
+    resp = req.auth()
+    assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    dct = json.loads(resp.text)
+    global auth_token
+    auth_token = dct['token']
+    # print(auth_token)
 
 
 class TestAuth:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_ad_struct_get(self):
         req = AuthApi(sess, host)
@@ -95,19 +93,8 @@ class TestAuth:
         resp = req.sessions_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # __________________________________ABSORBER_______________________________________
-
 
 class TestAbsorber:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_absorber_library_columns_get(self):
         req = Absorber(sess, host)
@@ -213,15 +200,6 @@ class TestAbsorber:
 
 class TestAlarmer:
 
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
-
     def test_alarmer_notification_admin_all_get(self):
         req = Alarmer(sess, host)
         resp = req.alarmer_notification_admin_all_get(auth_token)
@@ -294,15 +272,6 @@ class TestAlarmer:
 
 
 class TestCore:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_core_active_directory_get(self):
         req = Core(sess, host)
@@ -622,13 +591,6 @@ class TestCore:
 
 
 class TestLicenser:
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
 
     def test_licenser_activate_post(self):
         req = Licenser(sess, host)
@@ -642,15 +604,6 @@ class TestLicenser:
 
 
 class TestPeopler:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_peopler_many_users_put(self):
         req = Peopler(sess, host)
@@ -705,14 +658,6 @@ class TestPeopler:
 
 
 class TestPermitter:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
 
     def test_permitter_check_ui_get(self):
         req = Permitter(sess, host)
@@ -957,14 +902,6 @@ class TestPermitter:
 
 class TestRmCook:
 
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-
     def test_id_picker_table_get(self):
         req = Rm_Cook(sess, host)
         resp = req.id_picker_table_get(auth_token)
@@ -1119,14 +1056,6 @@ class TestRmCook:
 
 
 class TestStorageWorker:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
 
     def test_peopler_users_at_uid_get(self):
         req = StorageWorker(sess, host)
@@ -1285,15 +1214,6 @@ class TestStorageWorker:
 
 
 class TestXbaCook:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_id_picker_table_get(self):
         req = XbaCook(sess, host)
@@ -1525,14 +1445,6 @@ class TestXbaCook:
 
 class TestElementsEater:
 
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-
     def test_elements_eater_reports_export_post(self):
         req = ElementsEater(sess, host)
         resp = req.elements_eater_reports_export_post(auth_token)
@@ -1546,14 +1458,6 @@ class TestElementsEater:
 
 class TestLogEater:
 
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-
     def test_log_eater_audit_users_days_get(self):
         req = LogEater(sess, host)
         resp = req.log_eater_audit_users_days_get(auth_token)
@@ -1561,14 +1465,6 @@ class TestLogEater:
 
 
 class TestMonitor:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
 
     def test_monitor_anomals_flag_0_post(self):
         req = Monitor(sess, host)
@@ -1784,15 +1680,6 @@ class TestMonitor:
 
 class TestReporter:
 
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
-
     def test_peopler_users_at_uid_get(self):
         req = Reporter(sess, host)
         resp = req.peopler_users_at_uid_get(auth_token)
@@ -1881,15 +1768,6 @@ class TestReporter:
 
 
 class TestScripter:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_peopler_users_at_uid_get(self):
         req = Absorber(sess, host)
@@ -2054,15 +1932,6 @@ class TestScripter:
 
 class TestTaskplan:
 
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
-
     def test_taskplan_get_shedule_post(self):
         req = Taskplan(sess, host)
         resp = req.taskplan_get_shedule_post(auth_token)
@@ -2075,15 +1944,6 @@ class TestTaskplan:
 
 
 class TestUpdater:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_updater_additions_get(self):
         req = Updater(sess, host)
@@ -2107,15 +1967,6 @@ class TestUpdater:
 
 
 class TestVisualisation:
-
-    def test_get_token(self):
-        req = BaseReq(sess, host)
-        resp = req.auth()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        dct = json.loads(resp.text)
-        global auth_token
-        auth_token = dct['token']
-        print(auth_token)
 
     def test_peopler_users_at_uid_get(self):
         req = Visualisation(sess, host)
