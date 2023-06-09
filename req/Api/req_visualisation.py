@@ -11,8 +11,8 @@ pt_id = None
 
 class Visualisation(BaseReq):
 
-    def peopler_users_at_uid_get(self, token):
-        header = {'token': token}
+    def peopler_users_at_uid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
@@ -21,8 +21,8 @@ class Visualisation(BaseReq):
         at_uid = uid['id']
         return resp
 
-    def id_picker_table_get(self, token):  # забираем id таблицы picker_table
-        header = {'token': token}
+    def id_picker_table_get(self):  # забираем id таблицы picker_table
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
                              headers=header, verify=False)
         json_data = json.loads(resp.text)
@@ -33,23 +33,23 @@ class Visualisation(BaseReq):
         print(pt_id)
         return resp
 
-    def visualisation_query_get(self, token):
-        header = {'token': token}
+    def visualisation_query_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/query", headers=header, verify=False)
         dct = json.loads(resp.text)
         global query_id
         query_id = dct['res'][0]['id']  # получили id sql запроса
         return resp
 
-    def visualisation_query_do_query_id_post(self, token):
-        header = {'token': token}
+    def visualisation_query_do_query_id_post(self):
+        header = {'token': self.token}
         data = {"data": None}
         resp = self.sess.post(f"{self.host}/back/dp.visualisation/query/do/" + str(query_id), headers=header,
                               json=data, verify=False)
         return resp
 
-    def visualisation_query_save_post(self, token):
-        header = {'token': token}
+    def visualisation_query_save_post(self):
+        header = {'token': self.token}
         data = {
             "db_id": pt_id,
             "name": "TestApi",
@@ -84,26 +84,26 @@ class Visualisation(BaseReq):
                               json=data, verify=False)
         return resp
 
-    def visualisation_query_do_query_usage_id_get(self, token):
-        header = {'token': token}
+    def visualisation_query_do_query_usage_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/query/usage/" + str(query_id), headers=header,
                              verify=False)
         return resp
 
-    def visualisation_query_do_query_id_get(self, token):
-        header = {'token': token}
+    def visualisation_query_do_query_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/query/" + str(query_id), headers=header,
                              verify=False)
         return resp
 
-    def visualisation_query_do_query_id_delete(self, token):
-        header = {'token': token}
+    def visualisation_query_do_query_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.visualisation/query/" + str(query_id), headers=header,
                                 verify=False)
         return resp
 
-    def visualisation_reports_post(self, token):
-        header = {'token': token}
+    def visualisation_reports_post(self):
+        header = {'token': self.token}
         data = {
             "name": "TestApiReport",
             "description": "TestApiReport",
@@ -118,27 +118,27 @@ class Visualisation(BaseReq):
                               json=data, verify=False)
         return resp
 
-    def visualisation_reports_get(self, token):
-        header = {'token': token}
+    def visualisation_reports_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/reports", headers=header, verify=False)
         dct = json.loads(resp.text)
         global rep_id
         rep_id = dct['res'][0]['id']  # получили id отчета
         return resp
 
-    def visualisation_reports_report_id_get(self, token):
-        header = {'token': token}
+    def visualisation_reports_report_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/reports/" + str(rep_id), headers=header, verify=False)
         return resp
 
-    def visualisation_reports_report_id_delete(self, token):
-        header = {'token': token}
+    def visualisation_reports_report_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.visualisation/reports/" + str(rep_id), headers=header,
                                 verify=False)
         return resp
 
-    def visualisation_visualisation_post(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_post(self):
+        header = {'token': self.token}
         data = {
             "name": "TestApiVis",
             "description": "TestApiVis",
@@ -159,16 +159,16 @@ class Visualisation(BaseReq):
                               json=data, verify=False)
         return resp
 
-    def visualisation_visualisation_get(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation", headers=header, verify=False)
         dct = json.loads(resp.text)
         global vis_id
         vis_id = dct['res'][0]['id']  # получили id визуализации
         return resp
 
-    def visualisation_visualisation_dataseries_visualisation_id_post(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_dataseries_visualisation_id_post(self):
+        header = {'token': self.token}
         data = {
             "name": "DataSerTestApi",
             "description": "DataSerTestApi",
@@ -209,25 +209,25 @@ class Visualisation(BaseReq):
                               headers=header, json=data, verify=False)
         return resp
 
-    def visualisation_visualisation_types_get(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_types_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/types", headers=header, verify=False)
         return resp
 
-    def visualisation_visualisation_usage_visualisation_id_get(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_usage_visualisation_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/usage/" + str(vis_id), headers=header,
                              verify=False)
         return resp
 
-    def visualisation_visualisation_visualisation_id_get(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_visualisation_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/" + str(vis_id), headers=header,
                              verify=False)
         return resp
 
-    def visualisation_visualisation_visualisation_id_delete(self, token):
-        header = {'token': token}
+    def visualisation_visualisation_visualisation_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.visualisation/visualisation/" + str(vis_id), headers=header,
                                 verify=False)
         return resp

@@ -10,8 +10,8 @@ at_uid = None
 
 class Reporter(BaseReq):
 
-    def peopler_users_at_uid_get(self, token):
-        header = {'token': token}
+    def peopler_users_at_uid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
@@ -20,7 +20,7 @@ class Reporter(BaseReq):
         at_uid = uid['id']
         return resp
 
-    def reporter_mailing_post(self, token):
+    def reporter_mailing_post(self):
         global rand
         rand = random.randint(1200, 12500)
         data = {
@@ -46,11 +46,11 @@ class Reporter(BaseReq):
                 "criterion": []
             }
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing", headers=header, json=data, verify=False)
         return resp
 
-    def reporter_mailing_sample_post(self, token):
+    def reporter_mailing_sample_post(self):
         data = {
             "settings": {
                 "report_settings": {
@@ -67,12 +67,12 @@ class Reporter(BaseReq):
             ],
             "editor_id": at_uid
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing/sample", headers=header, json=data, verify=False)
         return resp
 
-    def reporter_mailing_get(self, token):
-        header = {'token': token}
+    def reporter_mailing_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing", headers=header, verify=False)
         dct = json.loads(resp.text)
         global rep_id
@@ -80,7 +80,7 @@ class Reporter(BaseReq):
         print(rep_id)
         return resp
 
-    def reporter_mailing_put(self, token):
+    def reporter_mailing_put(self):
         global rand
         rand = random.randint(1200, 12500)
         data = {
@@ -123,80 +123,80 @@ class Reporter(BaseReq):
                 1212
             ]
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.reporter/mailing", headers=header, json=data, verify=False)
         return resp
 
-    def reporter_mailing_type_0_1_get(self, token):
-        header = {'token': token}
+    def reporter_mailing_type_0_1_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/typed/0_1", headers=header, verify=False)
         return resp
 
-    def reporter_mailing_type_2_3_get(self, token):
-        header = {'token': token}
+    def reporter_mailing_type_2_3_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/typed/2_3", headers=header, verify=False)
         return resp
 
-    def reporter_mailing_id_get(self, token):
-        header = {'token': token}
+    def reporter_mailing_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/" + str(rep_id), headers=header, verify=False)
         return resp
 
-    def reporter_screener_fast_png_post(self, token):
+    def reporter_screener_fast_png_post(self):
         data = {
             "format": "png",
             "need_page": "/report/" + str(rep_id)
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/screener/fast", headers=header, json=data, verify=False)
         return resp
 
-    def reporter_screener_fast_pdf_post(self, token):
+    def reporter_screener_fast_pdf_post(self):
         data = {
             "format": "pdf",
             "need_page": "/report/" + str(rep_id)
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/screener/fast", headers=header, json=data, verify=False)
         return resp
 
-    # def reporter_screener_fast_png_id_get(self, token): # ---- не используется ----
-    #     header = {'token': token}
+    # def reporter_screener_fast_png_id_get(self): # ---- не используется ----
+    #     header = {'token': self.token}
     #     resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/png/158", headers=header,
     #                          verify=False)
     #     return resp
     #
-    # def reporter_screener_fast_pdf_id_get(self, token):
-    #     header = {'token': token}
+    # def reporter_screener_fast_pdf_id_get(self):
+    #     header = {'token': self.token}
     #     resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/pdf/158", headers=header,
     #                          verify=False)
     #     return resp
 
-    def reporter_screener_fast_xlsx_id_get(self, token):
-        header = {'token': token}
+    def reporter_screener_fast_xlsx_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/xlsx/158", headers=header,
                              verify=False)
         return resp
 
-    def reporter_visualisation_cached_role_report_report_id_role_id_post(self, token):
-        header = {'token': token}
+    def reporter_visualisation_cached_role_report_report_id_role_id_post(self):
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/role_report/158/1",
                               headers=header, verify=False)
         return resp
 
-    def reporter_mailing_id_delete(self, token):
-        header = {'token': token}
+    def reporter_mailing_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.reporter/mailing/" + str(rep_id), headers=header, verify=False)
         return resp
 
-    def reporter_visualisation_cached_user_report_get(self, token):
-        header = {'token': token}
+    def reporter_visualisation_cached_user_report_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/visualisation_cached/user_report", headers=header,
                              verify=False)
         return resp
 
-    def reporter_visualisation_cached_user_report_report_id_post(self, token):
-        header = {'token': token}
+    def reporter_visualisation_cached_user_report_report_id_post(self):
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/user_report/158", headers=header,
                               verify=False)
         return resp

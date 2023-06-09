@@ -1,7 +1,6 @@
 import json
 import random
 
-import pytest
 
 from req.Helpers.base_req import BaseReq
 
@@ -15,8 +14,8 @@ at_uid = None
 
 class Scripter(BaseReq):
 
-    def peopler_users_at_uid_get(self, token):
-        header = {'token': token}
+    def peopler_users_at_uid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
@@ -25,17 +24,17 @@ class Scripter(BaseReq):
         at_uid = uid['id']
         return resp
 
-    def scripter_category_get(self, token):
-        header = {'token': token}
+    def scripter_category_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/category", headers=header, verify=False)
         return resp
 
-    def scripter_libs_get(self, token):
-        header = {'token': token}
+    def scripter_libs_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/libs", headers=header, verify=False)
         return resp
 
-    def scripter_script_post(self, token):
+    def scripter_script_post(self):
         global rand
         rand = random.randint(1200, 12500)
         data = {
@@ -55,19 +54,19 @@ class Scripter(BaseReq):
             "additional_files": [],
             "author_id": at_uid
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
         return resp
 
-    def scripter_script_get(self, token):
-        header = {'token': token}
+    def scripter_script_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script", headers=header, verify=False)
         dct = json.loads(resp.text)
         global script_id
         script_id = dct['res'][0]['id']  # получили id скрипта
         return resp
 
-    def scripter_script_put(self, token):
+    def scripter_script_put(self):
         data = {
             "type": True,
             "editor_id": at_uid,
@@ -84,22 +83,22 @@ class Scripter(BaseReq):
             "encrypt": False,
             "encapsulate": False
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
         return resp
 
-    def scripter_script_exec_list_get(self, token):
-        header = {'token': token}
+    def scripter_script_exec_list_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/exec_list", headers=header, verify=False)
         return resp
 
-    def scripter_script_id_get(self, token):
-        header = {'token': token}
+    def scripter_script_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(script_id), headers=header, verify=False)
         print(resp.text)
         return resp
 
-    def scripter_script_start_post(self, token):
+    def scripter_script_start_post(self):
         data = {
             "id": str(script_id),
             "node": 0,
@@ -109,23 +108,23 @@ class Scripter(BaseReq):
                 }
             ]
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/script/start", headers=header, json=data, verify=False)
         return resp
 
-    def scripter_script_stop_id_get(self, token):
-        header = {'token': token}
+    def scripter_script_stop_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/stop/" + str(script_id), headers=header,
                              verify=False)
         return resp
 
-    def scripter_script_id_files_get(self, token):
-        header = {'token': token}
+    def scripter_script_id_files_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/files", headers=header,
                              verify=False)
         return resp
 
-    def scripter_script_id_files_put(self, token):
+    def scripter_script_id_files_put(self):
         data = {
             "additional_files": [
                 {
@@ -138,13 +137,13 @@ class Scripter(BaseReq):
                 "file_name": "testScripter.py"
             }
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/files", headers=header,
                              json=data, verify=False)
         return resp
 
-    def scripter_script_id_log_get(self, token):
-        header = {'token': token}
+    def scripter_script_id_log_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/log", headers=header,
                              verify=False)
         dct = json.loads(resp.text)
@@ -152,56 +151,56 @@ class Scripter(BaseReq):
         log_id = dct['res'][0]['id']  # получили id лога
         return resp
 
-    def scripter_script_id_log_delete(self, token):
-        header = {'token': token}
+    def scripter_script_id_log_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/log", headers=header,
                                 verify=False)
         return resp
 
-    def scripter_script_id_log_last_get(self, token):
-        header = {'token': token}
+    def scripter_script_id_log_last_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/log/last", headers=header,
                              verify=False)
         return resp
 
-    def scripter_script_id_log_log_id_get(self, token):
-        header = {'token': token}
+    def scripter_script_id_log_log_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/log/" + str(log_id),
                              headers=header,
                              verify=False)
         return resp
 
-    def scripter_script_id_log_log_id_delete(self, token):
-        header = {'token': token}
+    def scripter_script_id_log_log_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(script_id) + "/log/" + str(log_id),
                                 headers=header,
                                 verify=False)
         return resp
 
-    def scripter_script_id_delete(self, token):
-        header = {'token': token}
+    def scripter_script_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(script_id), headers=header, verify=False)
         return resp
 
-    def scripter_script_type_admin_get(self, token):
-        header = {'token': token}
+    def scripter_script_type_admin_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/admin", headers=header, verify=False)
         return resp
 
-    def scripter_script_type_user_get(self, token):
-        header = {'token': token}
+    def scripter_script_type_user_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/user", headers=header, verify=False)
         return resp
 
-    def scripter_sequence_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence", headers=header, verify=False)
         dct = json.loads(resp.text)
         global seq_id
         seq_id = dct['res'][0]['id']  # получили id последовательности
         return resp
 
-    def scripter_sequence_post(self, token):
+    def scripter_sequence_post(self):
         data = {
             "name": " TestSeqApi",
             "description": " TestSeqApi",
@@ -225,11 +224,11 @@ class Scripter(BaseReq):
             "node": 0,
             "author_id": at_uid
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
         return resp
 
-    def scripter_sequence_put(self, token):  # почему-то создает новую секвенцию, а не обновляет старую
+    def scripter_sequence_put(self):  # почему-то создает новую секвенцию, а не обновляет старую
         data = {
             "name": " TestSeqApi",
             "description": " TestSeqApi1",
@@ -254,21 +253,21 @@ class Scripter(BaseReq):
             "id": str(seq_id),
             "author_id": at_uid
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
         return resp
 
-    def scripter_sequence_log_id_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_log_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/log/" + str(seq_id), headers=header, verify=False)
         return resp
 
-    def scripter_sequence_id_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(seq_id), headers=header, verify=False)
         return resp
 
-    def scripter_sequence_start_post(self, token):
+    def scripter_sequence_start_post(self):
         data = {
             "id": str(seq_id),
             "node": 0,
@@ -278,17 +277,17 @@ class Scripter(BaseReq):
                 }
             ]
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence/start", headers=header, json=data, verify=False)
         return resp
 
-    def scripter_sequence_stop_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_stop_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/stop/" + str(seq_id), headers=header, verify=False)
         return resp
 
-    def scripter_sequence_id_log_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_id_log_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(seq_id) + "/log/last", headers=header,
                              verify=False)
         # dct = json.loads(resp.text)
@@ -297,18 +296,18 @@ class Scripter(BaseReq):
         # print(log_seq_id)
         return resp
 
-    def scripter_sequence_id_log_id_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_id_log_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(seq_id) + "/log/last/TestAPIscripter1",
                              headers=header, verify=False)
         return resp
 
-    def scripter_sequence_sequence_type_admin_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_sequence_type_admin_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/admin", headers=header, verify=False)
         return resp
 
-    def scripter_sequence_sequence_type_user_get(self, token):
-        header = {'token': token}
+    def scripter_sequence_sequence_type_user_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/user", headers=header, verify=False)
         return resp

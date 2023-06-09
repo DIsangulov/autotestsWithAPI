@@ -12,8 +12,8 @@ pt_id = None  # id picker_table
 
 class StorageWorker(BaseReq):
 
-    def peopler_users_at_uid_get(self, token):
-        header = {'token': token}
+    def peopler_users_at_uid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
@@ -22,8 +22,8 @@ class StorageWorker(BaseReq):
         at_uid = uid['id']
         return resp
 
-    def id_picker_table_get(self, token):  # забираем id таблицы picker_table
-        header = {'token': token}
+    def id_picker_table_get(self):  # забираем id таблицы picker_table
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
                              headers=header, verify=False)
         json_data = json.loads(resp.text)
@@ -34,8 +34,8 @@ class StorageWorker(BaseReq):
         print(pt_id)
         return resp
 
-    def storage_worker_ask_one_sql_post(self, token):
-        header = {'token': token}
+    def storage_worker_ask_one_sql_post(self):
+        header = {'token': self.token}
         data = {"base_id": pt_id, "base_name": "picker_tables",
                 "statements": "SELECT * FROM ad_users_ngr LIMIT 50;",
                 "regs": False,
@@ -45,8 +45,8 @@ class StorageWorker(BaseReq):
                               verify=False)
         return resp
 
-    def storage_worker_ask_plain_sql_post(self, token):
-        header = {'token': token}
+    def storage_worker_ask_plain_sql_post(self):
+        header = {'token': self.token}
         data = {"base_id": pt_id, "tab_name": "ad_users_ngr", "columns":
             [{"name": "*", "type": "LowCardinality(String)"}],
                 "groupby": [], "filters": [], "agregators": [],
@@ -55,15 +55,15 @@ class StorageWorker(BaseReq):
                               verify=False)
         return resp
 
-    def storage_worker_import_rules_get(self, token):
-        header = {'token': token}
+    def storage_worker_import_rules_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/import_rules", headers=header, verify=False)
         return resp
 
-    def storage_worker_psevdo_namer_regs_post(self, token):
+    def storage_worker_psevdo_namer_regs_post(self):
         global rand
         rand = random.randint(1200, 12500)
-        header = {'token': token}
+        header = {'token': self.token}
         data = {"rus": "TestApi_1" + str(rand), "reg": "1", "stages": "1", "postfix": "1", "state": False,
                 "is_on": False, "author": at_uid}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs", headers=header, json=data,
@@ -71,50 +71,50 @@ class StorageWorker(BaseReq):
 
         return resp
 
-    def storage_worker_psevdo_namer_regs_get(self, token):
-        header = {'token': token}
+    def storage_worker_psevdo_namer_regs_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs", headers=header, verify=False)
         dct = json.loads(resp.text)
         global reg_pid
         reg_pid = dct['res'][-1]['id']  # получили id регулярного выражения
         return resp
 
-    def storage_worker_psevdo_namer_regs_pid_get(self, token):
-        header = {'token': token}
+    def storage_worker_psevdo_namer_regs_pid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/" + str(reg_pid), headers=header,
                              verify=False)
         return resp
 
-    def storage_worker_psevdo_namer_regs_pid_delete(self, token):
-        header = {'token': token}
+    def storage_worker_psevdo_namer_regs_pid_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/" + str(reg_pid), headers=header,
                                 verify=False)
         return resp
 
-    def storage_worker_show_base_db_name_get(self, token):
-        header = {'token': token}
+    def storage_worker_show_base_db_name_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/show_base/picker_tables", headers=header,
                              verify=False)
         return resp
 
-    def storage_worker_statistics_db_event_stats_db_name_flag_post(self, token):
+    def storage_worker_statistics_db_event_stats_db_name_flag_post(self):
         global rand
         rand = random.randint(1200, 12500)
-        header = {'token': token}
+        header = {'token': self.token}
         data = {"timezone": "Europe/Moscow"}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/statistics/db_event_stats/picker_tables/0",
                               headers=header, json=data,
                               verify=False)
         return resp
 
-    def storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self, token):
-        header = {'token': token}
+    def storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/statistics/db_one_tab_stats/picker_tables"
                              f"/ad_groups_ngr", headers=header, verify=False)
         return resp
 
-    def storage_worker_statistics_db_search_post(self, token):
-        header = {'token': token}
+    def storage_worker_statistics_db_search_post(self):
+        header = {'token': self.token}
         data = {
             "database_name": "picker_tables",
             "use_regexps": True
@@ -123,16 +123,16 @@ class StorageWorker(BaseReq):
                               verify=False)
         return resp
 
-    def storage_worker_statistics_db_status_dbname_get(self, token):
-        header = {'token': token}
+    def storage_worker_statistics_db_status_dbname_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/statistics/db_stats/picker_tables", headers=header,
                              verify=False)
         return resp
 
-    def storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self, token):
+    def storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
         global rand
         rand = random.randint(1200, 12500)
-        header = {'token': token}
+        header = {'token': self.token}
         data = {"timezone": "Europe/Moscow"}
         resp = self.sess.post(
             f"{self.host}/back/dp.storage_worker/statistics/db_tabs_event_stats/picker_tables/ad_groups_ngr/0",
@@ -140,14 +140,14 @@ class StorageWorker(BaseReq):
             verify=False)
         return resp
 
-    def storage_worker_statistics_db_tabs_stats_dbname_get(self, token):
-        header = {'token': token}
+    def storage_worker_statistics_db_tabs_stats_dbname_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/statistics/db_tabs_stats/picker_tables",
                              headers=header, verify=False)
         return resp
 
-    def storage_worker_statistics_storage_search_post(self, token):
-        header = {'token': token}
+    def storage_worker_statistics_storage_search_post(self):
+        header = {'token': self.token}
         data = {"database_name": "picker_tables",
                 "table": "ad_users_ngr",
                 "filter_columns": ["mail"],
@@ -159,16 +159,16 @@ class StorageWorker(BaseReq):
                               verify=False)
         return resp
 
-    def storage_worker_statistics_test_selection_post(self, token):
-        header = {'token': token}
+    def storage_worker_statistics_test_selection_post(self):
+        header = {'token': self.token}
         data = {"database_name": "picker_tables", "table_name": "ad_users_ngr", "name": "name"}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/statistics/test_selection", headers=header,
                               json=data,
                               verify=False)
         return resp
 
-    def storage_worker_storage_db_get(self, token):
-        header = {'token': token}
+    def storage_worker_storage_db_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
                              headers=header, verify=False)
         dct = json.loads(resp.text)
@@ -176,15 +176,15 @@ class StorageWorker(BaseReq):
         db_id = dct['res'][0]['id']  # получили id базы данных
         return resp
 
-    def storage_worker_storage_db_post(self, token):
-        header = {'token': token}
+    def storage_worker_storage_db_post(self):
+        header = {'token': self.token}
         data = {"base_name": "API_TEST_DB1", "description": "API_TEST_DB1"}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
-    def permitter_roles_editor_roles_for_storage_worker_put(self, token):
+    def permitter_roles_editor_roles_for_storage_worker_put(self):
         # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
-        header = {'token': token, 'ui': str(2)}
+        header = {'token': self.token, 'ui': str(2)}
         data = {
             "id": 5,
             "name": "sysop",
@@ -238,52 +238,52 @@ class StorageWorker(BaseReq):
                              verify=False)
         return resp
 
-    def storage_worker_storage_db_put(self, token):
-        header = {'token': token}
+    def storage_worker_storage_db_put(self):
+        header = {'token': self.token}
         data = {"base_name": "API_TEST_DB1", "description": "API_TEST_DB11"}
         resp = self.sess.put(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
-    def storage_worker_storage_db_delete(self, token):
-        header = {'token': token}
+    def storage_worker_storage_db_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/db/API_TEST_DB1", headers=header,
                                 verify=False)
         return resp
 
-    def storage_worker_storage_import_csv_db_name_table_name_post(self, token):
-        header = {'token': token}
+    def storage_worker_storage_import_csv_db_name_table_name_post(self):
+        header = {'token': self.token}
         data = {"data": None}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/import_csv/picker_tables/ad_groups_ngr",
                               headers=header, json=data, verify=False)
         return resp
 
-    def storage_worker_storage_import_json_db_name_table_name_post(self, token):
-        header = {'token': token}
+    def storage_worker_storage_import_json_db_name_table_name_post(self):
+        header = {'token': self.token}
         data = {"data": None}
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/import_json/picker_tables/ad_groups_ngr",
                               headers=header, json=data, verify=False)
         return resp
 
-    def storage_worker_storage_supported_engines_get(self, token):
-        header = {'token': token}
+    def storage_worker_storage_supported_engines_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/supported_engines", headers=header,
                              verify=False)
         return resp
 
-    def storage_worker_storage_supported_types_get(self, token):
-        header = {'token': token}
+    def storage_worker_storage_supported_types_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/supported_types", headers=header,
                              verify=False)
         return resp
 
-    def storage_worker_storage_table_columns_db_name_tab_name_get(self, token):
-        header = {'token': token}
+    def storage_worker_storage_table_columns_db_name_tab_name_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/columns/picker_tables/ad_groups_ngr",
                              headers=header, verify=False)
         return resp
 
-    def storage_worker_storage_table_columns_db_name_table_name_post(self, token):
-        header = {'token': token}
+    def storage_worker_storage_table_columns_db_name_table_name_post(self):
+        header = {'token': self.token}
         data = [{"name": "Nopt", "dtype": "DateTime", "alias": "псевдоним", "mask_it": False},
                 {"name": "Npqroduct", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables",
                  "dtype": "String", "mask_it": False},
@@ -300,8 +300,8 @@ class StorageWorker(BaseReq):
             headers=header, json=data, verify=False)
         return resp
 
-    # def storage_worker_storage_table_db_name_post(self, token):
-    #     header = {'token': token}
+    # def storage_worker_storage_table_db_name_post(self):
+    #     header = {'token': self.token}
     #     data = {"auto_read": True, "columns":
     #         [{"name": "one", "type": "DateTime"},
     #          {"name": "two", "type": "UInt64"},
@@ -313,21 +313,21 @@ class StorageWorker(BaseReq):
     #                           headers=header, json=data, verify=False)
     #     return resp
     #
-    # def storage_worker_storage_table_table_db_name_table_name(self, token):
-    #     header = {'token': token}
+    # def storage_worker_storage_table_table_db_name_table_name(self):
+    #     header = {'token': self.token}
     #     data = {"name": "five", "type": "Int8"}
     #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1/API_TEST_TABLE",
     #                           headers=header, json=data, verify=False)
     #     return resp
 
-    def storage_worker_storage_table_db_name_table_name_ttl_get(self, token):
-        header = {'token': token}
+    def storage_worker_storage_table_db_name_table_name_ttl_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/picker_tables/ad_groups_ngr/ttl",
                              headers=header, verify=False)
         return resp
 
-    def storage_worker_storage_table_db_name_table_name_count_get(self, token):
-        header = {'token': token}
+    def storage_worker_storage_table_db_name_table_name_count_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/picker_tables/ad_groups_ngr/2",
                              headers=header, verify=False)
         return resp

@@ -1,6 +1,4 @@
 import json
-
-import pytest
 import random
 
 from req.Helpers.base_req import BaseReq
@@ -16,8 +14,8 @@ source_id = None
 
 class Absorber(BaseReq):
 
-    def peopler_users_at_uid_get(self, token):
-        header = {'token': token}
+    def peopler_users_at_uid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
@@ -26,8 +24,8 @@ class Absorber(BaseReq):
         at_uid = uid['id']
         return resp
 
-    def id_picker_table_get(self, token):  # забираем id таблицы picker_table
-        header = {'token': token}
+    def id_picker_table_get(self):  # забираем id таблицы picker_table
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
                              headers=header, verify=False)
         json_data = json.loads(resp.text)
@@ -38,23 +36,23 @@ class Absorber(BaseReq):
         print(pt_id)
         return resp
 
-    def absorber_library_columns_get(self, token):
-        header = {'token': token}
+    def absorber_library_columns_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/columns", headers=header, verify=False)
         return resp
 
-    def absorber_library_conn_type_get(self, token):
-        header = {'token': token}
+    def absorber_library_conn_type_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type", headers=header, verify=False)
         return resp
 
-    def absorber_library_conn_type_id_get(self, token):
-        header = {'token': token}
+    def absorber_library_conn_type_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type/1", headers=header, verify=False)
         return resp
 
-    def absorber_library_connector_get(self, token):
-        header = {'token': token}
+    def absorber_library_connector_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector", headers=header, verify=False)
         dct = json.loads(resp.text)
         global con_id
@@ -62,10 +60,10 @@ class Absorber(BaseReq):
         print(con_id)
         return resp
 
-    def absorber_library_connector_post(self, token):
+    def absorber_library_connector_post(self):
         global rand
         rand = random.randint(1200, 12500)
-        header = {'token': token}
+        header = {'token': self.token}
         data = {
             "name": str(rand),
             "description": "",
@@ -108,8 +106,8 @@ class Absorber(BaseReq):
                               verify=False)
         return resp
 
-    def absorber_library_connector_put(self, token):
-        header = {'token': token}
+    def absorber_library_connector_put(self):
+        header = {'token': self.token}
         data = {
             "id": str(con_id),
             "name": str(rand) + str(2),
@@ -155,20 +153,20 @@ class Absorber(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.absorber/library/connector", headers=header, json=data, verify=False)
         return resp
 
-    def absorber_library_connector_id_get(self, token):
-        header = {'token': token}
+    def absorber_library_connector_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector/" + str(con_id), headers=header,
                              verify=False)
         return resp
 
-    def absorber_library_connector_delete(self, token):
-        header = {'token': token}
+    def absorber_library_connector_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.absorber/library/connector/" + str(con_id), headers=header,
                                 verify=False)
         return resp
 
-    def absorber_library_logo_get(self, token):
-        header = {'token': token}
+    def absorber_library_logo_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/logo", headers=header, verify=False)
         dct = json.loads(resp.text)
         global logo_id
@@ -176,10 +174,11 @@ class Absorber(BaseReq):
         print(logo_id)
         return resp
 
-    def absorber_library_logo_post(self, token):  # тут начались косячки проверить на сваггере, возможен баг
+    def absorber_library_logo_post(self):  # тут начались косячки проверить на сваггере, возможен баг
         global rand_logo_id
+        # FIXME: 06091214 что насчет совпадения id лого
         rand_logo_id = random.randint(120000, 1250000)
-        header = {'token': token}
+        header = {'token': self.token}
         data = {
             "name": str(rand_logo_id),
             "editor_id": at_uid,
@@ -191,8 +190,8 @@ class Absorber(BaseReq):
         print(rand_logo_id)
         return resp
 
-    def absorber_library_logo_put(self, token):  # тут начались косячки проверить на сваггере, возможен баг
-        header = {'token': token}
+    def absorber_library_logo_put(self):  # тут начались косячки проверить на сваггере, возможен баг
+        header = {'token': self.token}
         data = {"data": None,
                 "edited": "2022-12-07T14:30:46.313631Z",
                 "editor_id": at_uid,
@@ -205,14 +204,14 @@ class Absorber(BaseReq):
         print(rand_logo_id)
         return resp
 
-    def absorber_library_logo_delete(self, token):
-        header = {'token': token}
+    def absorber_library_logo_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.absorber/library/logo/" + str(logo_id), headers=header,
                                 verify=False)
         return resp
 
-    def absorber_source_get(self, token):
-        header = {'token': token}
+    def absorber_source_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/source", headers=header, verify=False)
         dct = json.loads(resp.text)
         global source_id
@@ -220,8 +219,8 @@ class Absorber(BaseReq):
         print(source_id)
         return resp
 
-    def absorber_source_post(self, token):
-        header = {'token': token}
+    def absorber_source_post(self):
+        header = {'token': self.token}
         data = {
             "now": True,
             "name": "API_test" + str(rand),
@@ -262,8 +261,8 @@ class Absorber(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.absorber/source", headers=header, json=data, verify=False)
         return resp
 
-    def absorber_source_put(self, token):
-        header = {'token': token}
+    def absorber_source_put(self):
+        header = {'token': self.token}
         data = {
             "now": True,
             # "name": "API_test" + str(rand),
@@ -308,18 +307,18 @@ class Absorber(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.absorber/source", headers=header, json=data, verify=False)
         return resp
 
-    def absorber_source_id_get(self, token):
-        header = {'token': token}
+    def absorber_source_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/source/" + str(source_id), headers=header, verify=False)
         return resp
 
-    def absorber_source_id_debug_get(self, token):
-        header = {'token': token}
+    def absorber_source_id_debug_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/source/" + str(source_id) + "/debug", headers=header,
                              verify=False)
         return resp
 
-    def absorber_source_id_delete(self, token):
-        header = {'token': token}
+    def absorber_source_id_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.absorber/source/" + str(source_id), headers=header, verify=False)
         return resp

@@ -10,7 +10,7 @@ at_uid = None
 
 class Peopler(BaseReq):
 
-    def peopler_many_users_put(self, token):
+    def peopler_many_users_put(self):
         body = {"users":
             [
                 {"id": 1339,
@@ -28,11 +28,11 @@ class Peopler(BaseReq):
             ],
             "role_id": 58
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
-    def peopler_many_users_post(self, token):
+    def peopler_many_users_post(self):
         global rand
         rand = random.randint(1200, 12500)
         body = {
@@ -50,27 +50,27 @@ class Peopler(BaseReq):
                 }
             ]
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
-    def peopler_profile_get(self, token):
-        header = {'token': token}
+    def peopler_profile_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         return resp
 
-    def peopler_profiles_get(self, token):
-        header = {'token': token}
+    def peopler_profiles_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profiles", headers=header, verify=False)
         return resp
 
-    def peopler_users_get(self, token):
-        header = {'token': token}
+    def peopler_users_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         return resp
 
-    def peopler_users_at_uid_get(self, token):
-        header = {'token': token}
+    def peopler_users_at_uid_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
@@ -79,7 +79,7 @@ class Peopler(BaseReq):
         print(at_uid['id'])
         return resp
 
-    def peopler_users_post(self, token):
+    def peopler_users_post(self):
         body = {
             "department": "TestAPI1",
             "email": "testapi1@tesapi1.ru",
@@ -90,7 +90,7 @@ class Peopler(BaseReq):
             "title": "TestAPI1",
             "username": "testapi1"
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.peopler/users", headers=header, json=body, verify=False)
         dct = json.loads(resp.text)
         global user_id
@@ -98,12 +98,12 @@ class Peopler(BaseReq):
         print(user_id)
         return resp
 
-    def peopler_users_id_get(self, token):
-        header = {'token': token}
+    def peopler_users_id_get(self):
+        header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/"+str(user_id), headers=header, verify=False)
         return resp
 
-    def peopler_users_id_put(self, token):
+    def peopler_users_id_put(self):
         body = {
             "department": "TestAPI1",
             "email": "testapi1@tesapi1.ru",
@@ -114,11 +114,11 @@ class Peopler(BaseReq):
             "title": "TestAPI1",
             "username": "testapi1"
         }
-        header = {'token': token}
+        header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/users/"+str(user_id), headers=header, json=body, verify=False)
         return resp
 
-    def peopler_users_delete(self, token):
-        header = {'token': token}
+    def peopler_users_delete(self):
+        header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/"+str(user_id), headers=header, verify=False)
         return resp
