@@ -1,4 +1,5 @@
 import os
+import json
 
 import pytest
 import requests
@@ -45,33 +46,31 @@ class TestAuth:
     def test_sessions_get(self):
         req = AuthApi(SESS, HOST)
         resp = req.sessions_get()
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_uid_get(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_uid_get()
-
+        resp = req.sessions_uid_get(req.get_user_id())
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions_one_sid_del(self):  # sid вкорячен в req_auth в метод sessions_one_sid_del
+    def test_sessions_one_sid_del(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_one_sid_del()
+        resp = req.sessions_one_sid_del(req.get_sess_id())
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_all_uid_del(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_all_uid_del()
+        resp = req.sessions_all_uid_del(req.get_user_id())
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # __________________________________LOGOUT_______________________________________
 
     def test_logout_get(self):
         req = AuthApi(SESS, HOST)
-        # FIXME: разве не логаут гет?
-        resp = req.sessions_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        resp = req.logout_get()
+
+        assert resp.status_code == 401, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+        assert json.loads(resp.text)['res'] == "ok"
 
 
 class TestAbsorber:
