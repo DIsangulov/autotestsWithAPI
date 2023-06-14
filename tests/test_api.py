@@ -50,18 +50,17 @@ class TestAuth:
 
     def test_sessions_uid_get(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_uid_get(req.get_user_id())
+        resp = req.sessions_uid_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_one_sid_del(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_one_sid_del(req.get_sess_id())
-        print(resp.text)
+        resp = req.sessions_one_sid_del()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_all_uid_del(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_all_uid_del(req.get_user_id())
+        resp = req.sessions_all_uid_del()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_logout_get(self):
@@ -1194,11 +1193,17 @@ class TestStorageWorker:
 
 class TestXbaCook:
 
+    # FIXME: кейс почти полностью идентичен TestStorageWorker.test_id_picker_table_get
+    @pytest.mark.skip
     def test_id_picker_table_get(self):
         req = XbaCook(SESS, HOST)
         resp = req.id_picker_table_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+        print(resp.text)
+
+    # FIXME: кейс почти полностью идентичен TestPeopler.test_peopler_users_at_uid_get
+    @pytest.mark.skip
     def test_peopler_users_at_uid_get(self):
         req = XbaCook(SESS, HOST)
         resp = req.peopler_users_at_uid_get()
@@ -1301,11 +1306,21 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_graph_drilldown_statement_id_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_graph_drilldown_id_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_graph_drilldown_id_post_descriprion_key_check(self):
+        req = XbaCook(SESS, HOST)
+        resp = req.xba_cook_profiles_graph_drilldown_id_post()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+        try:
+            # отсутствие ключа на любом узле бросит ошибку "KeyError"
+            json.loads(resp.text)['res']['info']['description']
+        except KeyError:
+            assert False, f"Ошибка, отсутствует ключ res>info>description в ответе, {resp.text}"
 
     def test_xba_cook_profiles_max_min_id_get(self):
         req = XbaCook(SESS, HOST)

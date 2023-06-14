@@ -6,8 +6,8 @@ from req.Helpers.base_req import BaseReq
 prof_id = None
 rand = None
 group_id = None
-pt_id = None
-at_uid = None
+pt_id = None # dp.storage_worker/storage/db
+at_uid = None # dp.peopler/users
 
 
 class XbaCook(BaseReq):
@@ -21,7 +21,7 @@ class XbaCook(BaseReq):
         for item in json_data['res']:
             if item['name'] == 'picker_tables':
                 pt_id = item['id']
-        print(pt_id)
+        # print(f"pt_id = {pt_id}")
         return resp
 
     def peopler_users_at_uid_get(self):
@@ -205,14 +205,22 @@ class XbaCook(BaseReq):
                               json=data, verify=False)
         return resp
 
-    def xba_cook_profiles_graph_drilldown_id_post(self):
-        data = {
-            "columns": [
-                ""
-            ],
-            "name": "",
-            "time": "2022-12-06T08:36:09Z"
-        }
+    def xba_cook_profiles_graph_drilldown_id_post(self, prof_id=None, data=None):
+        """process POST to get profile raw data (deep-personal level)"""
+
+        if prof_id is None:
+            prof_id = 1888 # FIXME: выбирать ид профиля по запросу? data тоже связана с prof_id
+            data = {"name":"Кривошеин Сергей","time":"2023-05-23","columns":["calc_time","name","risk"]}
+
+        if data is None:
+            data = {
+                "columns": [
+                    ""
+                ],
+                "name": "",
+                "time": "2022-12-06T08:36:09Z"
+            }
+
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/" + str(prof_id), headers=header,
                               json=data, verify=False)

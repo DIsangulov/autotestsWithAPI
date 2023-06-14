@@ -1,26 +1,27 @@
 import json
 
 from req.Helpers.base_req import BaseReq
+from req.Api.req_peopler import Peopler
 
 
 class AuthApi(BaseReq):
 
-    def get_user_id(self):
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
+    # === Переехало --> Peopler.get_user_id() ===
+    # def get_user_id(self):
+    #     """Возвращает 'user_id' текущего пользователя"""
+    #     header = {'token': self.token}
+    #     resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
+    #     dct = json.loads(resp.text)
+    #     return dct['res']['user_id']
 
-    def get_sess_id(self):
-        """Возвращает 'id' текущей **сессии**"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/" + str(self.get_user_id()), headers=header, verify=False)
+    @staticmethod
+    def get_sess_id(req: BaseReq):
+        """Возвращает 'id' СЛУЧАЙНОЙ активной **сессии**"""
+        header = {'token': req.token}
+        resp = req.sess.get(f"{req.host}/back/dp.auth/sessions/" + str(Peopler.get_user_id(req)), headers=header, verify=False)
         dct = json.loads(resp.text)
 
-        # FIXME: получили id последней сессии?
-        # сессии в ответе не сортированы
-        # сейчас просто возвращает айдишник, который лежит ниже всего в ответе
+        # сессии в ответе не сортированы, сейчас просто возвращает айдишник, который лежит ниже всего в ответе
         return dct['res'][-1]['id']
 
     def ad_struct_get(self):
@@ -39,7 +40,8 @@ class AuthApi(BaseReq):
     def ou_users_post(self):
         header = {'token': self.token}
         body = {
-            "ou": "OU=Отдел внедрения и сервиса,OU=Центр профессиональных сервисов,OU=NGR,OU=Employees,DC=angaratech,DC=ru"}; resp = self.sess.post(f"{self.host}/back/dp.auth/ou_users", headers=header, json=body, verify=False)
+            "ou": "OU=Отдел внедрения и сервиса,OU=Центр профессиональных сервисов,OU=NGR,OU=Employees,DC=angaratech,DC=ru"}
+        resp = self.sess.post(f"{self.host}/back/dp.auth/ou_users", headers=header, json=body, verify=False)
         return resp
 
     def sessions_get(self):
@@ -48,20 +50,32 @@ class AuthApi(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.auth/sessions", headers=header, verify=False)
         return resp
 
-    def sessions_all_uid_del(self, user_id):
+    def sessions_all_uid_del(self, user_id=None):
         """Удалить ВСЕ сессии пользователя **user_id**"""
+
+        if user_id is None:
+            user_id = Peopler.get_user_id(self)
+
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/all/" + str(user_id), headers=header, verify=False)
         return resp
 
-    def sessions_one_sid_del(self, session_id):
+    def sessions_one_sid_del(self, session_id=None):
         """Удалить одну сессию"""
+
+        if session_id is None:
+            session_id = AuthApi.get_sess_id(self)
+
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/one/" + str(session_id), headers=header, verify=False)
         return resp
 
-    def sessions_uid_get(self, user_id):
+    def sessions_uid_get(self, user_id=None):
         """Получить список сессий пользователя **user_id**"""
+
+        if user_id is None:
+            user_id = Peopler.get_user_id(self)
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/" + str(user_id), headers=header, verify=False)
         return resp

@@ -10,6 +10,14 @@ at_uid = None
 
 class Peopler(BaseReq):
 
+    @staticmethod
+    def get_user_id(req: BaseReq):
+        """Возвращает 'user_id' текущего пользователя"""
+        header = {'token': req.token}
+        resp = req.sess.get(f"{req.host}/back/dp.peopler/profile", headers=header, verify=False)
+        dct = json.loads(resp.text)
+        return dct['res']['user_id']
+
     def peopler_many_users_put(self):
         body = {"users":
             [
@@ -100,7 +108,7 @@ class Peopler(BaseReq):
 
     def peopler_users_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/users/"+str(user_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp
 
     def peopler_users_id_put(self):
@@ -120,5 +128,5 @@ class Peopler(BaseReq):
 
     def peopler_users_delete(self):
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/"+str(user_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp
