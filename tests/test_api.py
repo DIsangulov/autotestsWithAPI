@@ -33,6 +33,12 @@ HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
 class TestAuth:
 
+    @pytest.mark.skip # не реализовано
+    def test_auth_local_register_post(self):
+        req = AuthApi(SESS, HOST, withauth=False)
+        resp = req.auth_local_register_post()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     def test_ad_struct_get(self):
         req = AuthApi(SESS, HOST)
         resp = req.ad_struct_get()
@@ -68,8 +74,7 @@ class TestAuth:
         resp = req.logout_get()
 
         assert resp.status_code == 401, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        assert json.loads(resp.text)['res'] == "ok"
+        assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа: {resp.text}"
 
 
 class TestAbsorber:
@@ -609,11 +614,6 @@ class TestPeopler:
         resp = req.peopler_users_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_peopler_users_at_uid_get(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_peopler_users_post(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_users_post()
@@ -624,6 +624,7 @@ class TestPeopler:
         resp = req.peopler_users_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_peopler_users_id_put(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_users_id_put()

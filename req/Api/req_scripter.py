@@ -95,7 +95,7 @@ class Scripter(BaseReq):
     def scripter_script_id_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(script_id), headers=header, verify=False)
-        print(resp.text)
+        # print(resp.text)
         return resp
 
     def scripter_script_start_post(self):

@@ -1,19 +1,24 @@
 import json
 import os
 
+from resourses.credentials import DpQaa
+
 
 class BaseReq:
 
-    def __init__(self, sess, host):
+    def __init__(self, sess, host, withauth: bool = True):
         self.sess = sess
         self.host = host
 
         self.token = None
-        self.auth()
+        if withauth:
+            self.auth()
 
     def auth(self):
-        username = os.environ.get('TARGET_API_USER', "dataplan_qaa@ngrsoftlab.ru")
-        password = os.environ.get('TARGET_API_PASSWORD', "fHNHQBc7jEKfaO0kywZz!!")
+        # username = os.environ.get('TARGET_API_USER', "dataplan_qaa@ngrsoftlab.ru")
+        # password = os.environ.get('TARGET_API_PASSWORD', "fHNHQBc7jEKfaO0kywZz!!")
+        username = os.environ.get('TARGET_API_USER', DpQaa.USER)
+        password = os.environ.get('TARGET_API_PASSWORD', DpQaa.PASS)
         data = {
             "username": username,
             "password": password

@@ -6,14 +6,6 @@ from req.Api.req_peopler import Peopler
 
 class AuthApi(BaseReq):
 
-    # === Переехало --> Peopler.get_user_id() ===
-    # def get_user_id(self):
-    #     """Возвращает 'user_id' текущего пользователя"""
-    #     header = {'token': self.token}
-    #     resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-    #     dct = json.loads(resp.text)
-    #     return dct['res']['user_id']
-
     @staticmethod
     def get_sess_id(req: BaseReq):
         """Возвращает 'id' СЛУЧАЙНОЙ активной **сессии**"""
@@ -29,9 +21,9 @@ class AuthApi(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.auth/ad_struct", headers=header, verify=False)
         return resp
 
-    #
-    # def register(self):
-    #     pass
+    def auth_local_register_post(self):
+        resp = None
+        return resp
 
     # Логин проводится в BaseReq
     # def login(self):

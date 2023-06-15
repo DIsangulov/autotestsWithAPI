@@ -1,11 +1,8 @@
 import json
-
-from req.Helpers.base_req import BaseReq
 import random
 
-rand = None
-user_id = None
-at_uid = None
+from req.Helpers.base_req import BaseReq
+from resourses.credentials import DpQaa
 
 
 class Peopler(BaseReq):
@@ -41,20 +38,19 @@ class Peopler(BaseReq):
         return resp
 
     def peopler_many_users_post(self):
-        global rand
         rand = random.randint(1200, 12500)
         body = {
             "role_id": rand,
             "users": [
                 {
                     "department": "123456789",
-                    "email": "dataplan_qaa@ngrsoftlab.ru",
+                    "email": DpQaa.USER,
                     "local": True,
                     "mobile": "123456789",
-                    "password": "fHNHQBc7jEKfaO0kywZz!",
+                    "password": DpQaa.PASS,
                     "rusname": "Тест",
                     "title": "123456789",
-                    "username": "dataplan_qaa@ngrsoftlab.ru"
+                    "username": DpQaa.USER
                 }
             ]
         }
@@ -73,18 +69,9 @@ class Peopler(BaseReq):
         return resp
 
     def peopler_users_get(self):
+        """Получить список пользователей"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
-        return resp
-
-    def peopler_users_at_uid_get(self):
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
-        name = 'dataplan_qaa@ngrsoftlab.ru'
-        users = json.loads(resp.text)['res']
-        global at_uid
-        at_uid = next((user for user in users if user['name'] == name), None)
-        print(at_uid['id'])
         return resp
 
     def peopler_users_post(self):
@@ -101,17 +88,25 @@ class Peopler(BaseReq):
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.peopler/users", headers=header, json=body, verify=False)
         dct = json.loads(resp.text)
-        global user_id
+
+        print(resp.text)
         user_id = dct['res']
         print(user_id)
         return resp
 
-    def peopler_users_id_get(self):
+    def peopler_users_id_get(self, user_id=None):
+        """Получить информацию пользователя по **ID**"""
+        if user_id is None:
+            user_id = self.get_user_id(self)
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp
 
+
     def peopler_users_id_put(self):
+        # FIXME: Сейчас еп ничего не меняет
+        user_id = 7741  # Dnaikk1
         body = {
             "department": "TestAPI1",
             "email": "testapi1@tesapi1.ru",
@@ -123,10 +118,16 @@ class Peopler(BaseReq):
             "username": "testapi1"
         }
         header = {'token': self.token}
-        resp = self.sess.put(f"{self.host}/back/dp.peopler/users/"+str(user_id), headers=header, json=body, verify=False)
+        resp = self.sess.put(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, json=body, verify=False)
         return resp
 
-    def peopler_users_delete(self):
+    # FIXME: Прежде, чем что-то удалять ОБЯЗАТЕЛЬНО, нужно создавать шаблонистый профиль
+    def peopler_users_delete(self, user_id=None):
+        """Удалить пользователя по **ID**"""
+        if user_id is None:
+            # Создание нового пользователя, затем удаление
+            assert False, f"Нечего удалять"
+
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp

@@ -278,8 +278,8 @@ class XbaCook(BaseReq):
         dct = json.loads(resp.text)
         global group_id
         group_id = dct['res'][-1]['id']  # получили id группы
-        print(resp.text)
-        print(group_id)
+        # print(resp.text)
+        # print(group_id)
         return resp
 
     def xba_cook_profiles_groups_put(self):
