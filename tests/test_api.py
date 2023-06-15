@@ -33,7 +33,6 @@ HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
 class TestAuth:
 
-    @pytest.mark.skip # не реализовано
     def test_auth_local_register_post(self):
         req = AuthApi(SESS, HOST, withauth=False)
         resp = req.auth_local_register_post()
@@ -41,37 +40,37 @@ class TestAuth:
 
     def test_ad_struct_get(self):
         req = AuthApi(SESS, HOST)
-        resp = req.ad_struct_get()
+        resp = req.auth_ad_struct_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_ou_users_post(self):
         req = AuthApi(SESS, HOST)
-        resp = req.ou_users_post()
+        resp = req.auth_ou_users_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_get(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_get()
+        resp = req.auth_sessions_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_uid_get(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_uid_get()
+        resp = req.auth_sessions_uid_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_one_sid_del(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_one_sid_del()
+        resp = req.auth_sessions_one_sid_del()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_sessions_all_uid_del(self):
         req = AuthApi(SESS, HOST)
-        resp = req.sessions_all_uid_del()
+        resp = req.auth_sessions_all_uid_del()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_logout_get(self):
         req = AuthApi(SESS, HOST)
-        resp = req.logout_get()
+        resp = req.auth_logout_get()
 
         assert resp.status_code == 401, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа: {resp.text}"
@@ -614,6 +613,7 @@ class TestPeopler:
         resp = req.peopler_users_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip # работает в связке с TestPeopler.test_peopler_users_delete
     def test_peopler_users_post(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_users_post()
