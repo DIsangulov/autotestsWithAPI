@@ -1,3 +1,8 @@
+import time
+
+import allure
+import pytest
+
 from pages.UI._0_Auth.auth_page import AuthPage
 from pages.UI._1_Administration.adm_licenses import Licenses
 from pages.UI._1_Administration.adm_monitoring import Monitoring
@@ -30,6 +35,7 @@ link = "https://10.130.0.22"
 # endregion
 # ________ constants __________
 
+@pytest.mark.skip
 class TestAdministration:  # Администрирование
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -173,6 +179,7 @@ class TestAdministration:  # Администрирование
         page.should_enter_adm_settings_secrets_be_successful()
 
 
+@pytest.mark.skip
 class TestData:  # Данные
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -236,6 +243,7 @@ class TestData:  # Данные
         page.should_enter_data_storage_import_rules_be_successful()
 
 
+@pytest.mark.skip
 class TestAnalytics:  # Аналитика
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -275,6 +283,7 @@ class TestAnalytics:  # Аналитика
         page.should_enter_an_requests_be_successful()
 
 
+@pytest.mark.skip
 class TestXBA:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -307,6 +316,7 @@ class TestXBA:
         page.should_enter_xba_statistic_be_successful()
 
 
+@pytest.mark.skip
 class TestRoleMining:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
@@ -331,6 +341,7 @@ class TestRoleMining:
         page.should_enter_rm_ad_status_recommendation_be_successful()
 
 
+@pytest.mark.skip
 class TestRoleMiningSettingsSources:
 
     def test_valid_auth(self, browser):
@@ -352,6 +363,7 @@ class TestRoleMiningSettingsSources:
         page.calculation_settings()
 
 
+@pytest.mark.skip
 class TestRoleMiningActiveDirectory:
 
     def test_valid_auth(self, browser):
@@ -383,3 +395,893 @@ class TestRoleMiningActiveDirectory:
         page.should_udp_distribution_protocol_save_sucsess()
         page.delete_last_entry()
         page.close_window()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - проверка отображения отчета со статусом "Не опубликован+Закрыт"')
+class TestAnalyticsReportsNotPublishedClosed:  # Отчеты - проверка отображения отчета со статусом "Не опубликован+Закрыт"
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_report_not_visible(self, browser):
+        page = Reports(browser, link)
+        page.should_report_not_visible()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - проверка отображения отчета со статусом "Опубликован+Закрыт"')
+class TestAnalyticsReportsPublishedClosed:  # Отчеты - проверка отображения отчета со статусом "Опубликован+Закрыт"
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_do_report_public(self, browser):
+        page = Reports(browser, link)
+        page.do_report_public()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_not_available()
+
+    def test_should_access_settings_not_available_for_public_report(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_public_report()
+
+    def test_should_role_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_role_added_not_available()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - проверка отображения отчета со статусом "Опубликован+Открыт"')
+class TestAnalyticsReportsPublishedOpen:  # Отчеты - проверка отображения отчета со статусом "Опубликован+Открыт"
+
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_do_report_public(self, browser):
+        page = Reports(browser, link)
+        page.do_report_public()
+
+    def test_do_report_open(self, browser):
+        page = Reports(browser, link)
+        page.do_report_open()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_not_available()
+
+    def test_should_access_settings_not_available_for_public_report(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_public_report()
+
+    def test_should_role_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_role_added_not_available()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - установка доступа к отчету для роли на "Чтение"')
+class TestSettingReportAccessForRoleToRead:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_role_add_read(self, browser):
+        page = Reports(browser, link)
+        page.role_add_read()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_not_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_role_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_role_added_not_available()
+
+    def test_should_checkbox_read_enable(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_read_enable()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - установка доступа к отчету для роли на "Запись"')
+class TestSettingReportAccessForRoleToWrite:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_role_add_write(self, browser):
+        page = Reports(browser, link)
+        page.role_add_write()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_role_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_role_added_not_available()
+
+    def test_should_checkbox_write_enable(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_write_enable()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - установка доступа к отчету для роли на "Выполнение"')
+class TestSettingReportAccessForRoleToExecute:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_role_add_execute(self, browser):
+        page = Reports(browser, link)
+        page.role_add_execute()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_role_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_role_added_not_available()
+
+    def test_should_checkbox_execute_enable(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_execute_enable()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - установка доступа к отчету для роли на "Настройка доступа"')
+class TestSettingReportAccessForRoleToAccessSettings:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_role_add_access_settings(self, browser):
+        page = Reports(browser, link)
+        page.role_add_access_settings()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_role_added_available(self, browser):
+        page = Reports(browser, link)
+        page.should_role_added_available()
+
+    def test_should_checkbox_access_settings_enable(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_access_settings_enable()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - установка доступа к отчету для пользователя на "Чтение"')
+class TestSettingReportAccessForUserToRead:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_switch_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.switch_users_tab()
+
+    def test_user_add_read(self, browser):
+        page = Reports(browser, link)
+        page.user_add_read()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_not_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_user_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_user_added_not_available()
+
+    def test_should_checkbox_read_enable_for_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_read_enable_for_users_tab()
+
+
+@allure.title('Отчеты - установка доступа к отчету для пользователя на "Запись"')
+class TestSettingReportAccessForUserToWrite:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_switch_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.switch_users_tab()
+
+    def test_user_add_write(self, browser):
+        page = Reports(browser, link)
+        page.user_add_write()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_user_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_user_added_not_available()
+
+    def test_should_checkbox_write_enable_for_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_write_enable_for_users_tab()
+
+
+@allure.title('Отчеты - установка доступа к отчету для пользователя на "Выполнение"')
+class TestSettingReportAccessForUserToExecute:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_switch_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.switch_users_tab()
+
+    def test_user_add_execute(self, browser):
+        page = Reports(browser, link)
+        page.user_add_execute()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_user_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_user_added_not_available()
+
+    def test_should_checkbox_execute_enable_for_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_execute_enable_for_users_tab()
+
+
+@allure.title('Отчеты - установка доступа к отчету для пользователя на "Настройку доступа"')
+class TestSettingReportAccessForUserToAccessSettings:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_switch_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.switch_users_tab()
+
+    def test_user_add_access_settings(self, browser):
+        page = Reports(browser, link)
+        page.user_add_access_settings()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_edit_button_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_user_added_available(self, browser):
+        page = Reports(browser, link)
+        page.should_user_added_available()
+
+    def test_should_checkbox_access_settings_enable_for_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_access_settings_enable_for_users_tab()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - удаление доступа к отчету для пользователя, роль которого имеет доступ на "Выполнение"')
+class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
+
+    def test_valid_auth_by_main_user(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_should_enter_an_reports_be_successful(self, browser):
+        page = Reports(browser, link)
+        page.should_enter_an_reports_be_successful()
+
+    def test_create_new_report(self, browser):
+        page = Reports(browser, link)
+        page.create_new_report()
+
+    def test_switch_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.switch_users_tab()
+
+    def test_user_add_execute(self, browser):
+        page = Reports(browser, link)
+        page.user_add_execute()
+
+    def test_log_out(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.save_last_report_name()
+        page.open_last_report()
+
+    def test_should_edit_button_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_edit_button_not_available()
+
+    def test_should_access_settings_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_access_settings_not_available_for_not_public_report()
+
+    def test_should_user_added_not_available(self, browser):
+        page = Reports(browser, link)
+        page.should_user_added_not_available()
+
+    def test_should_checkbox_execute_enable_for_users_tab(self, browser):
+        page = Reports(browser, link)
+        page.should_checkbox_execute_enable_for_users_tab()
+
+    def test_log_out_by_local_user(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+        time.sleep(3)
+
+    def test_valid_auth_second_iteration_by_main_user(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_side_bar(self, browser):
+        page = AuthPage(browser, link)
+        page.open_side_bar()
+
+    def test_open_an_mailing_lists_reports_second_iteration(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_second_iteration(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_save_last_report_name(self, browser):
+        page = Reports(browser, link)
+        page.save_last_report_name()
+
+    def test_open_last_report_second_iteration(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_open_access_settings_and_switch_to_user_tab(self, browser):
+        page = Reports(browser, link)
+        page.open_access_settings()
+        page.switch_users_tab()
+
+    def test_uncheck_checkboxes_r_w_e(self, browser):
+        page = Reports(browser, link)
+        page.uncheck_checkboxes_r_w_e()
+
+    def test_log_out_second_iteration(self, browser):
+        page = AuthPage(browser, link)
+        page.log_out()
+
+    def test_enter_as_local_user_second_iteration(self, browser):
+        page = AuthPage(browser, link)
+        page.enter_as_local_user()
+
+    def test_open_an_mailing_lists_reports_as_local_user_second_iteration(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports_as_local_user_second_iteration(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+        time.sleep(3)
+
+    def test_should_report_not_visible(self, browser):
+        page = Reports(browser, link)
+        page.should_report_not_visible_by_saved_name()
+
+
+@pytest.mark.skip
+@allure.title(
+    'Отчеты - проверка доступа к детализации, фильтрам и настройкам визуализации в отчете (для роли на ''Чтение)')
+class TestCheckingReportElements:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_open_last_report(self, browser):
+        page = Reports(browser, link)
+        page.open_last_report()
+
+    def test_should_elements_on_report_page_availible(self, browser):
+        page = Reports(browser, link)
+        page.should_elements_on_report_page_availible()
+
+    def test_should_elements_on_report_page_editing_availible(self, browser):
+        page = Reports(browser, link)
+        page.should_elements_on_report_page_availible()
+        page.should_elements_on_report_page_editing_availible()
+
+
+@pytest.mark.skip
+@allure.title('Отчеты - Удаление последнего отчета')
+class TestAnalyticsReportsDeleteLast:
+    def test_valid_auth(self, browser):
+        page = AuthPage(browser, link)
+        page.open()
+        page.enter_as_user()
+
+    def test_open_an_mailing_lists_reports(self, browser):
+        page = MailingLists(browser, link)
+        page.open_an_mailing_lists_reports()
+
+    def test_open_an_reports(self, browser):
+        page = Reports(browser, link)
+        page.open_an_reports()
+
+    def test_delete_last_report(self, browser):
+        page = Reports(browser, link)
+        page.delete_last_report()

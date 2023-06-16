@@ -51,14 +51,10 @@ class TestAdministration:  # Администрирование
         page = Roles(browser, link)
         page.try_to_ui_fonts_and_styles()
 
-    # def test_try_to_figma_fonts_and_styles(self, browser):
-    #     page = Roles(browser, link)
-    #     page.try_to_figma_fonts_and_styles()
-
-    # def test_try_to_figma_fonts_and_styles_by_pwr(self, browser):
-    #     page = Roles(browser, link)
-    #     page.try_to_figma_fonts_and_styles_by_pwr()
-
-    def test_try_to_figma_fonts_and_styles_parse_json(self, browser):
+    def test_try_to_ui_css_roles(self, browser):
         page = Roles(browser, link)
-        page.try_to_get_figma_fonts_and_styles_parse_json()
+        page.try_to_ui_css_roles()
+
+    # def test_try_to_figma_fonts_and_styles_parse_json(self, browser):
+    #     page = Roles(browser, link)
+    #     page.try_to_get_figma_fonts_and_styles_parse_json()

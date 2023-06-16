@@ -1,3 +1,5 @@
+import os
+
 from req.Helpers.base_req import BaseReq
 
 act_dir_pass = "d8hELYed9L809RB9FkSO!"
@@ -123,7 +125,15 @@ class Core(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.core/download_settings", headers=header, verify=False)
         return resp
 
-    def core_send_test_post(self, token):
+    def core_email_import_cert_post(self, token):
+        with open("req/Files/mailCert.crt", 'r') as f:
+            cert_text = f.read()
+        body = {"data": cert_text}
+        header = {'token': token}
+        resp = self.sess.post(f"{self.host}/back/dp.core/email/import_cert", headers=header, json=body, verify=False)
+        return resp
+
+    def core_email_send_test_post(self, token):
         body = {
             "description": "TestAPICore",
             "disable_tls": False,
