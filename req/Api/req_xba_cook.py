@@ -3,36 +3,38 @@ import random
 
 from req.Helpers.base_req import BaseReq
 
-prof_id = None
-rand = None
-group_id = None
-pt_id = None # dp.storage_worker/storage/db
-at_uid = None # dp.peopler/users
-
 
 class XbaCook(BaseReq):
 
-    def id_picker_table_get(self):  # забираем id таблицы picker_table
+    def _id_picker_table_get(self) -> int:  # забираем id таблицы picker_table
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
                              headers=header, verify=False)
         json_data = json.loads(resp.text)
-        global pt_id
+        pt_id = None
         for item in json_data['res']:
             if item['name'] == 'picker_tables':
                 pt_id = item['id']
         # print(f"pt_id = {pt_id}")
-        return resp
+        return pt_id
 
-    def peopler_users_at_uid_get(self):
+    # FIXME: id пользователя датаплан
+    def _at_uid_get(self) -> int:
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
         name = 'dataplan_qaa@ngrsoftlab.ru'
         users = json.loads(resp.text)['res']
         uid = next((user for user in users if user['name'] == name), None)
-        global at_uid
+
         at_uid = uid['id']
-        return resp
+        return at_uid
+
+    def _get_random_group_id(self) -> int:
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, verify=False)
+        dct = json.loads(resp.text)
+        group_id = dct['res'][-1]['id']  # получили id группы
+        return group_id
 
     def xba_cook_anomalies_get(self):
         header = {'token': self.token}
@@ -47,7 +49,8 @@ class XbaCook(BaseReq):
     def xba_cook_check_entity_type_post(self):
         data = {
             "column": "1",
-            "db_id": pt_id,
+            # "db_id": pt_id,
+            "db_id": self._id_picker_table_get(),
             "table": "ad_users_ngr"
         }
         header = {'token': self.token}
@@ -101,14 +104,27 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_info_settings_post(self):
-        data = {"user_settings":
-                    {"db_id": pt_id, "db_name": "picker_tables", "table_name": "ad_users_ngr",
-                     "fields_mapping":
-                         {"mapping_key_field": "sAMAccountName", "full_name": "name", "position": "description",
-                          "department": "department", "phone": "mobile", "email": "mail", "manager": "sn"}}}
+        data = {
+            "user_settings":
+            {
+                # "db_id": pt_id,
+                "db_id": self._id_picker_table_get(),
+                "db_name": "picker_tables",
+                "table_name": "ad_users_ngr",
+                "fields_mapping":
+                    {
+                        "mapping_key_field": "sAMAccountName",
+                        "full_name": "name",
+                        "position": "description",
+                        "department": "department",
+                        "phone": "mobile",
+                        "email": "mail",
+                        "manager": "sn"
+                    }
+            }
+        }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/entity/info/settings", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/entity/info/settings", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_entity_info_settings_entity_type_delete(self):
@@ -139,37 +155,78 @@ class XbaCook(BaseReq):
     def xba_cook_max_min_post(self):
         data = {
             "column": "1",
-            "db_id": pt_id,
+            # "db_id": pt_id,
+            "db_id": self._id_picker_table_get(),
             "table": "ad_users_ngr"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/max_min", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/max_min", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        global prof_id
-        prof_id = dct['res'][2]['id']  # получили id профаила
+
+        # dct = json.loads(resp.text)
+        # prof_id = dct['res'][2]['id']  # получили id профаила
+        # print(resp.text)
+        # print(f"prof_id is {prof_id}")
         return resp
 
     def xba_cook_profiles_post(self):
-        data = {"id": str(prof_id) + str(1), "name": "123", "description": None, "published": False, "opened": False,
-                "author_id": at_uid,
-                "author": "Тест Апи", "editor_id": at_uid, "editor": "Тест Апи",
-                "created": "2023-02-15T07:55:02.631066Z", "modified": "2023-02-15T07:55:02.631066Z", "db_id": pt_id,
-                "db_name": "picker_tables", "table_name": "ad_users_ngr", "status": 3, "profile_type": "median",
-                "id_function": 6, "id_category": 1,
-                "time_settings": {"time_column": "badPasswordTime", "time_start": "1971-01-01T00:00:00Z",
-                                  "time_end": "2022-12-06T08:36:09Z", "discretization_period": "minute",
-                                  "stat_period": ""},
-                "entity_settings": {"entity_column": "Enabled", "entity_column_name": "user", "entity_type": "Enabled",
-                                    "obj_column": "", "obj_column_name": "", "additional_column": "",
-                                    "levels": {"level1": 2, "level2": 4, "level3": 6, "level4": 8}},
-                "filter_settings": [], "time_last_executed": "2023-02-15T07:55:03.838988Z", "log_last_executed": "",
-                "group_info": None}
+        prof_id = 1931 # FIXME: ХАРДКОД
+        data = {
+            "id": str(prof_id) + str(1),
+            "name": "123",
+            "description": None,
+            "published": False,
+            "opened": False,
+            # "author_id": at_uid,
+            "author_id": self._at_uid_get(),
+            "author": "Тест Апи",
+            # "editor_id": at_uid,
+            "editor_id": self._at_uid_get(),
+            "editor": "Тест Апи",
+            "created": "2023-02-15T07:55:02.631066Z",
+            "modified": "2023-02-15T07:55:02.631066Z",
+            # "db_id": pt_id,
+            "db_id": self._id_picker_table_get(),
+            "db_name": "picker_tables",
+            "table_name": "ad_users_ngr",
+            "status": 3,
+            "profile_type": "median",
+            "id_function": 6,
+            "id_category": 1,
+            "time_settings":
+                {
+                    "time_column": "badPasswordTime",
+                    "time_start": "1971-01-01T00:00:00Z",
+                    "time_end": "2022-12-06T08:36:09Z",
+                    "discretization_period": "minute",
+                    "stat_period": ""
+                },
+            "entity_settings":
+                {
+                    "entity_column": "Enabled",
+                    "entity_column_name": "user",
+                    "entity_type": "Enabled",
+                    "obj_column": "",
+                    "obj_column_name": "",
+                    "additional_column": "",
+                    "levels":
+                        {
+                            "level1": 2,
+                            "level2": 4,
+                            "level3": 6,
+                            "level4": 8
+                        }
+                },
+            "filter_settings": [],
+            "time_last_executed": "2023-02-15T07:55:03.838988Z",
+            "log_last_executed": "",
+            "group_info": None
+        }
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, json=data, verify=False)
         return resp
@@ -180,6 +237,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_export_profiles_post(self):
+        prof_id = 1931 # FIXME: хардкод
         data = {"profile_ids": [str(prof_id)]}
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/export_profiles", headers=header, json=data,
@@ -192,6 +250,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_drilldown_statement_id_post(self):
+        prof_id = 1931 # ХАРДКОД
         data = {
             "columns": [
                 ""
@@ -251,12 +310,18 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_max_min_id_get(self):
+        # FIXME: хардкод
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/graph/max_min/" + str(prof_id), headers=header,
                              verify=False)
         return resp
 
     def xba_cook_profiles_graph_personal_id_post(self):
+        # FIXME: ХАРДКОД
+        prof_id = 1931
+
         data = {
             "end": "2023-02-14T00:00:00Z",
             "name": "",
@@ -270,6 +335,9 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_id_post(self):
+        # FIXME: хардкод
+        prof_id = 1931
+
         data = {
             "end": "2023-02-14T00:00:00Z",
             "name": "",
@@ -283,30 +351,28 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_groups_post(self):
-        global rand
-        rand = random.randint(1200, 12500)
+        """Создание метапрофиля"""
+        rand_num = random.randint(0, 9999)
         data = {
-            "id": rand,
-            "name": "Z_TestAPI" + str(rand),
+            "id": rand_num,
+            "name": "F_auto_group_" + str(rand_num),
             "weight": ""
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header,
-                              json=data, verify=False)
-        return resp
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, json=data, verify=False)
+        return resp # возвращает также ид новой группы
 
     def xba_cook_profiles_groups_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header,
-                             verify=False)
-        dct = json.loads(resp.text)
-        global group_id
-        group_id = dct['res'][-1]['id']  # получили id группы
-        # print(resp.text)
-        # print(group_id)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_put(self):
+        """process PUT req for updating group name"""
+        rand = random.randint(1200, 12500)
+
+        group_id = 1493 # FIXME: хардкод
+
         data = {
             "id": group_id,
             "name": "Z_TestAPI1" + str(rand),
@@ -322,18 +388,21 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_groups_id_delete(self):
+        group_id = None # FIXME: удаление после создания шаблонистой группы
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header,
                                 verify=False)
         return resp
 
-    def xba_cook_profiles_groups_group_id_profile_get(self):
+    def xba_cook_profiles_groups_group_id_profiles_get(self):
+        group_id = self._get_random_group_id()
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id) + "/profiles",
                              headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_post(self):
+        group_id = self._get_random_group_id()
         data = {
             "end": "2023-02-14T00:00:00Z",
             "name": "",
@@ -352,6 +421,11 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
+        """process GET req to update profile weight in group"""
+        # FIXME: хардкод
+        prof_id = 1931
+        group_id = 1493
+
         header = {'token': self.token}
         resp = self.sess.get(
             f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(prof_id) + "/" + str(group_id) + "/2",
@@ -359,58 +433,113 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_import_profiles_post(self):
+        rand = random.randint(1200, 12500)
         data = {
-            "profile_list": [{"id": rand, "name": str(rand), "description": None, "published": False, "opened": False,
-                              "author_id": at_uid,
-                              "author": "Ванин Юрий", "editor_id": at_uid, "editor": "Ванин Юрий",
-                              "created": "2023-02-15T07:55:02.631066Z", "modified": "2023-02-15T07:55:02.631066Z",
-                              "db_id": None,
-                              "db_name": "picker_tables", "table_name": "ad_users_ngr", "status": 3,
-                              "profile_type": "median",
-                              "id_function": 6, "id_category": 1,
-                              "time_settings": {"time_column": "badPasswordTime", "time_start": "1971-01-01T00:00:00Z",
-                                                "time_end": "2022-12-06T08:36:09Z", "discretization_period": "minute",
-                                                "stat_period": ""},
-                              "entity_settings": {"entity_column": "Enabled", "entity_column_name": "user",
-                                                  "entity_type": "Enabled",
-                                                  "obj_column": "", "obj_column_name": "", "additional_column": "",
-                                                  "levels": {"level1": 2, "level2": 4, "level3": 6, "level4": 8}},
-                              "filter_settings": [], "time_last_executed": None, "log_last_executed": "",
-                              "group_info": None}]}
+            "profile_list": [
+                {
+                    "id": rand,
+                    "name": str(rand),
+                    "description": None,
+                    "published": False,
+                    "opened": False,
+                    # "author_id": at_uid,
+                    "author_id": self._at_uid_get(),
+                    "author": "Ванин Юрий",
+                    # "editor_id": at_uid,
+                    "editor_id": self._at_uid_get(),
+                    "editor": "Ванин Юрий",
+                    "created": "2023-02-15T07:55:02.631066Z",
+                    "modified": "2023-02-15T07:55:02.631066Z",
+                    "db_id": None,
+                    "db_name": "picker_tables",
+                    "table_name": "ad_users_ngr",
+                    "status": 3,
+                    "profile_type": "median",
+                    "id_function": 6,
+                    "id_category": 1,
+                    "time_settings":
+                        {
+                            "time_column": "badPasswordTime",
+                            "time_start": "1971-01-01T00:00:00Z",
+                            "time_end": "2022-12-06T08:36:09Z",
+                            "discretization_period": "minute",
+                            "stat_period": ""
+                        },
+                    "entity_settings":
+                        {
+                            "entity_column": "Enabled",
+                            "entity_column_name": "user",
+                            "entity_type": "Enabled",
+                            "obj_column": "",
+                            "obj_column_name": "",
+                            "additional_column": "",
+                            "levels":
+                                {
+                                    "level1": 2,
+                                    "level2": 4,
+                                    "level3": 6,
+                                    "level4": 8
+                                }
+                        },
+                    "filter_settings": [],
+                    "time_last_executed": None,
+                    "log_last_executed": "",
+                    "group_info": None
+                }
+            ]
+        }
+
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/import_profiles", headers=header,
                               json=data, verify=False)
         return resp
 
     def xba_cook_profiles_start_id_get(self):
+        # FIXME: Хардкод
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/start/" + str(prof_id), headers=header,
                              verify=False)
         return resp
 
     def xba_cook_profiles_stop_id_get(self):
+        # FIXME: хардкод
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/stop/" + str(prof_id), headers=header,
                              verify=False)
         return resp
 
     def xba_cook_profiles_id_get(self):
+        # FIXME: хардкор
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_delete(self):
+        # FIXME: харкод
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_log_last_get(self):
+        # FIXME: харкод
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/log/last", headers=header,
                              verify=False)
         return resp
 
     def xba_cook_profiles_id_whitelist_post(self):
+        prof_id = 1931 # FIXME: хардкод
+
         data = {"data": [{"name": "ApiTest"}]}
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist", json=data,
@@ -419,6 +548,9 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_whitelist_element_post(self):
+        # FIXME: хардкод
+        prof_id = 1931
+
         data = {"data": "ApiTest"}
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist/element",
@@ -427,6 +559,9 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_string_whitelist_get(self):
+        # FIXME: хардкод
+        prof_id = 1931
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/string/whitelist",
                              headers=header,
@@ -434,6 +569,8 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_list_whitelist_get(self):
+        prof_id = 1931 # FIXME: хардкод
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/list/whitelist",
                              headers=header,
@@ -446,14 +583,44 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_xba_post(self):
-        data = {"res": {"XMLName": {"Space": "", "Local": "xba"}, "destinations": [
-            {"email": "y.vanin@ngrsoftlab.ru", "syslog_host": "127.0.0.1", "syslog_port": 514, "syslog_protocol": "udp",
-             "disable_syslog": False, "disable_email": False},
-            {"email": "", "syslog_host": "1.12.3.22", "syslog_port": 333, "syslog_protocol": "tcp",
-             "disable_syslog": False, "disable_email": True},
-            {"email": "", "syslog_host": "2.212.23.31", "syslog_port": 33, "syslog_protocol": "tcp",
-             "disable_syslog": False, "disable_email": True}]}}
+        data = {
+            "res":
+                {
+                    "XMLName":
+                        {
+                            "Space": "",
+                            "Local": "xba"
+                        },
+                    "destinations":
+                        [
+                            {
+                                "email": "y.vanin@ngrsoftlab.ru",
+                                "syslog_host": "127.0.0.1",
+                                "syslog_port": 514,
+                                "syslog_protocol": "udp",
+                                "disable_syslog": False,
+                                "disable_email": False
+                            },
+                            {
+                                "email": "",
+                                "syslog_host": "1.12.3.22",
+                                "syslog_port": 333,
+                                "syslog_protocol": "tcp",
+                                "disable_syslog": False,
+                                "disable_email": True
+                            },
+                            {
+                                "email": "",
+                                "syslog_host": "2.212.23.31",
+                                "syslog_port": 33,
+                                "syslog_protocol": "tcp",
+                                "disable_syslog": False,
+                                "disable_email": True
+                            }
+                        ]
+                }
+        }
+
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/xba", json=data, headers=header,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/xba", json=data, headers=header, verify=False)
         return resp

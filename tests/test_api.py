@@ -1214,22 +1214,6 @@ class TestStorageWorker:
 
 class TestXbaCook:
 
-    # FIXME: кейс почти полностью идентичен TestStorageWorker.test_id_picker_table_get
-    @pytest.mark.skip
-    def test_id_picker_table_get(self):
-        req = XbaCook(SESS, HOST)
-        resp = req.id_picker_table_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        print(resp.text)
-
-    # FIXME: кейс почти полностью идентичен TestPeopler.test_peopler_users_at_uid_get
-    @pytest.mark.skip
-    def test_peopler_users_at_uid_get(self):
-        req = XbaCook(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     @pytest.mark.skip
     def test_xba_cook_anomalies_get(self):
         req = XbaCook(SESS, HOST)
@@ -1373,14 +1357,21 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_groups_info_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip # FIXME: пока не удаляем
     def test_xba_cook_profiles_groups_id_delete(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_groups_id_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_xba_cook_profiles_groups_group_id_profile_get(self):
+    def test_xba_cook_profiles_groups_group_id_profiles_get(self):
         req = XbaCook(SESS, HOST)
-        resp = req.xba_cook_profiles_groups_group_id_profile_get()
+        resp = req.xba_cook_profiles_groups_group_id_profiles_get()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    @pytest.mark.skip # нужен group_id хотя бы с одним пользователем
+    def test_xba_cook_profiles_groups_id_post(self):
+        req = XbaCook(SESS, HOST)
+        resp = req.xba_cook_profiles_groups_id_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip
