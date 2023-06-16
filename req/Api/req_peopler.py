@@ -93,17 +93,7 @@ class Peopler(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp
 
-    def peopler_users_id_put(self):
-        # FIXME: Создавать нового пользователя?
-        user_id = 7741  # Dnaikk1
-
-        body = {
-            "role_id": 76,  # sys_api_test
-            # "name": "НеПоменяет",
-            "is_admin":     False,
-            "is_system":    False,
-            "is_tech":      False
-        }
+    def peopler_users_id_put(self, user_id=None, body=None):
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, json=body, verify=False)
         return resp

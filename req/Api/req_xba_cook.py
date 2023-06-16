@@ -208,30 +208,46 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_graph_drilldown_id_post(self, prof_id=None, data=None):
         """process POST to get profile raw data (deep-personal level)"""
 
-        if prof_id is None:
-            prof_id = 1888 # FIXME: выбирать ид профиля по запросу? data тоже связана с prof_id
-            data = {
-                "name":"Кривошеин Сергей",
-                "time":"2023-05-23",
-                "columns":
-                    [
-                        "calc_time",
-                        "name","risk"
-                    ]
-            }
-
-        if data is None:
-            data = {
-                "columns": [
-                    ""
-                ],
-                "name": "",
-                "time": "2022-12-06T08:36:09Z"
-            }
+        # if prof_id is None: pass
+        # if data is None:
+        #     data = {
+        #         "columns": [
+        #             ""
+        #         ],
+        #         "name": "",
+        #         "time": "2022-12-06T08:36:09Z"
+        #     }
 
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/" + str(prof_id), headers=header,
                               json=data, verify=False)
+
+        return resp
+
+    def xba_cook_profiles_graph_drilldown_id_post_xx_descriprion_key_check(self):
+        # Проверка наличия ключа "description" в ответе
+
+        # FIXME: хардкод
+        prof_id = 1888
+        data = {
+            "name": "Кривошеин Сергей",
+            "time": "2023-05-23",
+            "columns":
+                [
+                    "calc_time",
+                    "name",
+                    "risk"
+                ]
+        }
+
+        resp = self.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
+
+        try:
+            # отсутствие ключа на любом узле бросит ошибку "KeyError"
+            json.loads(resp.text)['res']['info']['description']
+        except KeyError:
+            assert False, f"Ошибка, отсутствует ключ res>info>description в ответе, {resp.text}"
+
         return resp
 
     def xba_cook_profiles_max_min_id_get(self):
