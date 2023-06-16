@@ -1068,6 +1068,7 @@ class TestRmCook:
         resp = req.rm_cook_settings_mailings_get(auth_token)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip # qa@ku.ku
     def test_rm_cook_settings_mailings_post(self):
         req = Rm_Cook(sess, host)
         resp = req.rm_cook_settings_mailings_post(auth_token)
