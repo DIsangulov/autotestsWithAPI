@@ -24,7 +24,7 @@ class AuthApi(BaseReq):
 
     def auth_local_register_post(self):
 
-        random_num = random.randint(0, 9999)
+        random_num = random.randint(0, 999)
         body = {
             "rusname":      "Авто Мобиль",
             "username":     f"auto_dp_{random_num}",

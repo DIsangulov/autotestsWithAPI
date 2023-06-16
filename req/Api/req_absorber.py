@@ -2,6 +2,7 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DpQaa
 
 rand = None
 con_id = None
@@ -17,7 +18,7 @@ class Absorber(BaseReq):
     def peopler_users_at_uid_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
-        name = 'dataplan_qaa@ngrsoftlab.ru'
+        name = DpQaa.USER
         users = json.loads(resp.text)['res']
         uid = next((user for user in users if user['name'] == name), None)
         global at_uid
@@ -176,7 +177,6 @@ class Absorber(BaseReq):
 
     def absorber_library_logo_post(self):  # тут начались косячки проверить на сваггере, возможен баг
         global rand_logo_id
-        # FIXME: 06091214 что насчет совпадения id лого
         rand_logo_id = random.randint(120000, 1250000)
         header = {'token': self.token}
         data = {

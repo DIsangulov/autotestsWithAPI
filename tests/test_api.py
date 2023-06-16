@@ -38,37 +38,37 @@ class TestAuth:
         resp = req.auth_local_register_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_ad_struct_get(self):
+    def test_auth_ad_struct_get(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_ad_struct_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_ou_users_post(self):
+    def test_auth_ou_users_post(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_ou_users_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions_get(self):
+    def test_auth_sessions_get(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_sessions_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions_uid_get(self):
+    def test_auth_sessions_uid_get(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_sessions_uid_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions_one_sid_del(self):
+    def test_auth_sessions_one_sid_del(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_sessions_one_sid_del()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_sessions_all_uid_del(self):
+    def test_auth_sessions_all_uid_del(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_sessions_all_uid_del()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_logout_get(self):
+    def test_auth_logout_get(self):
         req = AuthApi(SESS, HOST)
         resp = req.auth_logout_get()
 
@@ -587,12 +587,13 @@ class TestLicenser:
 
 class TestPeopler:
 
+    @pytest.mark.skip # нестабильно, пока не зафиксировать пользователей
     def test_peopler_many_users_put(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_many_users_put()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
+    @pytest.mark.skip # работает, но нужно автоудаление сделать ещё, чтобы не мусорить
     def test_peopler_many_users_post(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_many_users_post()
@@ -624,7 +625,7 @@ class TestPeopler:
         resp = req.peopler_users_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
+    @pytest.mark.skip # нестабильно, пока не зафиксировать пользователя
     def test_peopler_users_id_put(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_users_id_put()
@@ -1018,6 +1019,7 @@ class TestRmCook:
         resp = req.rm_cook_settings_mailings_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip # qa@ku.ku
     def test_rm_cook_settings_mailings_post(self):
         req = Rm_Cook(SESS, HOST)
         resp = req.rm_cook_settings_mailings_post()

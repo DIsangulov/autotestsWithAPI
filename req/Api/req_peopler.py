@@ -2,7 +2,6 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
-from resourses.credentials import DpQaa
 
 
 class Peopler(BaseReq):
@@ -15,45 +14,39 @@ class Peopler(BaseReq):
         dct = json.loads(resp.text)
         return dct['res']['user_id']
 
+    # FIXME: работа ключей email, name и .т.п. под вопросом ещё
+    # на фронте оно только меняет "роль" группе?
     def peopler_many_users_put(self):
         body = {"users":
             [
-                {"id": 1339,
-                 "name": "testapi2",
-                 "role_id": 61
-                 },
-                {"id": 1338,
-                 "name": "testusers@angaratech.ru",
-                 "role_id": 58
-                 },
-                {"id": 1337,
-                 "name": "testapi@angaratech.ru",
-                 "role_id": 61
-                 }
+                {"id": 7741},       # Dnaikk1
+                {"id": 8975}        # auto_dp_4421
             ],
-            "role_id": 58
+            "role_id": 76,  # sys_api_test
         }
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
     def peopler_many_users_post(self):
-        rand = random.randint(1200, 12500)
+        random_num = random.randint(1500, 1996)
         body = {
-            "role_id": rand,
+            # "role_id": 76,  # sys_api_test
             "users": [
                 {
-                    "department": "123456789",
-                    "email": DpQaa.USER,
-                    "local": True,
-                    "mobile": "123456789",
-                    "password": DpQaa.PASS,
-                    "rusname": "Тест",
-                    "title": "123456789",
-                    "username": DpQaa.USER
-                }
+                    "role_id": 76,  # sys_api_test
+                    "name": f"auto_dp_many_users_{random_num}",
+                    # "is_admin":     True,
+                    # "is_system":    True,
+                    # "is_tech":      True
+                },
+                {
+                    "role_id": 76,  # sys_api_test
+                    "name": f"auto_dp_many_users_{random_num+1}",
+                },
             ]
         }
+
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
@@ -76,10 +69,10 @@ class Peopler(BaseReq):
 
     def peopler_users_post(self):
         """Создание нового '@доменного' пользователя"""
-        random_1000 = random.randint(0, 999)
+        random_num = random.randint(1000, 1500)
 
         body = {
-            "name": f"auto_dp_{random_1000}",
+            "name": f"auto_dp_{random_num}",
             "role_id": 76,  # sys_api_test
             # "is_admin":     True,
             # "is_system":    True,
@@ -101,17 +94,15 @@ class Peopler(BaseReq):
         return resp
 
     def peopler_users_id_put(self):
-        # FIXME: Сейчас еп ничего не меняет?
+        # FIXME: Создавать нового пользователя?
         user_id = 7741  # Dnaikk1
+
         body = {
-            "department": "TestAPI1",
-            "email": "testapi1@tesapi1.ru",
-            "local": True,
-            "mobile": "89269876761",
-            "password": "89269876761",
-            "rusname": "ТестАПИ2",
-            "title": "TestAPI1",
-            "username": "testapi1"
+            "role_id": 76,  # sys_api_test
+            # "name": "НеПоменяет",
+            "is_admin":     False,
+            "is_system":    False,
+            "is_tech":      False
         }
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, json=body, verify=False)

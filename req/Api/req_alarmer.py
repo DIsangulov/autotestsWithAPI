@@ -1,6 +1,5 @@
 from req.Helpers.base_req import BaseReq
-
-rand_id = None
+from resourses.credentials import DpQaa
 
 
 class Alarmer(BaseReq):
@@ -117,10 +116,10 @@ class Alarmer(BaseReq):
             "port": 587,
             "protocol": "smpt",
             "psw": "fHNHQBc7jEKfaO0kywZz!",
-            "send_user": "dataplan_qaa@ngrsoftlab.ru",
+            "send_user": DpQaa.USER,
             "to": "d.isangulov@ngrsoftlab.ru",
             "topic": "TestAPI",
-            "user": "dataplan_qaa@ngrsoftlab.ru"
+            "user": DpQaa.USER
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_msg", headers=header, json=body,

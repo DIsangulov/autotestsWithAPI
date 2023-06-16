@@ -210,7 +210,15 @@ class XbaCook(BaseReq):
 
         if prof_id is None:
             prof_id = 1888 # FIXME: выбирать ид профиля по запросу? data тоже связана с prof_id
-            data = {"name":"Кривошеин Сергей","time":"2023-05-23","columns":["calc_time","name","risk"]}
+            data = {
+                "name":"Кривошеин Сергей",
+                "time":"2023-05-23",
+                "columns":
+                    [
+                        "calc_time",
+                        "name","risk"
+                    ]
+            }
 
         if data is None:
             data = {
