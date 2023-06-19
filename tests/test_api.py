@@ -1412,7 +1412,7 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_id_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
+    # @pytest.mark.skip
     def test_xba_cook_profiles_id_log_last_get(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_id_log_last_get()
@@ -1422,6 +1422,11 @@ class TestXbaCook:
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_id_whitelist_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_xba_cook_profiles_id_whitelist_element_post(self):
+            req = XbaCook(SESS, HOST)
+            resp = req.xba_cook_profiles_id_whitelist_element_post()
+            assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_xba_cook_profiles_id_string_whitelist_get(self):
         req = XbaCook(SESS, HOST)
