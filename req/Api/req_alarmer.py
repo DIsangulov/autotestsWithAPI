@@ -1,22 +1,26 @@
 from req.Helpers.base_req import BaseReq
 from resourses.credentials import DpQaa
 
+_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
+
 
 class Alarmer(BaseReq):
 
     def alarmer_notification_admin_all_get(self):
+        """process GET to get all system notifications journal for all users"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/admin/all", headers=header, verify=False)
         return resp
 
     def alarmer_notification_read_admin_get(self):
+        # исп: Перейти к Ленте уведомлений
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/read/admin", headers=header, verify=False)
         return resp
 
     def alarmer_notification_read_type_admin_post(self):
         body = {
-            "id": 5590483
+            "id": 5590483  # FIXME: magic?
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/notification/read/admin", headers=header, json=body,
@@ -24,6 +28,7 @@ class Alarmer(BaseReq):
         return resp
 
     def alarmer_notification_settings_admin_get(self):
+        # исп: Настройки уведомлений
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.alarmer/notification/settings/admin", headers=header, verify=False)
         return resp
@@ -64,6 +69,7 @@ class Alarmer(BaseReq):
             "data": None
         }
         header = {'token': self.token}
+        # FIXME: не тот EP
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/notification/settings/user", headers=header, json=body,
                               verify=False)
         return resp
@@ -82,10 +88,10 @@ class Alarmer(BaseReq):
 
     def alarmer_send_invitation_post(self):
         body = {
-            "link": "https://10.130.0.22/",
-            "msg": "TestAPI",
-            "to": "d.isangulov@ngrsoftlab.ru",
-            "user_id": 11
+            # "link": "https://10.130.0.22/",  # нужно?
+            # "msg": "TestAPI",                # нужно?
+            "to": _QA_SPAM_EMAIL,
+            "user_id": 7741  # FIXME: могу отправлять сообщения от другого имени?
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_invitation", headers=header, json=body,
@@ -94,12 +100,12 @@ class Alarmer(BaseReq):
 
     def alarmer_send_invitations_post(self):
         body = {
-            "link": "https://10.130.0.22/",
-            "msg": "TestAPI",
+            # "link": "https://10.130.0.22/",     # нужно?
+            # "msg": "TestAPI",                   # нужно?
             "to": [
-                "d.isangulov@ngrsoftlab.ru"
+                _QA_SPAM_EMAIL
             ],
-            "user_id": 11
+            "user_id": 7741
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_invitations", headers=header, json=body,
@@ -111,17 +117,17 @@ class Alarmer(BaseReq):
             "description": "TestApiAlarmer",
             "disable_tls": False,
             "host": "NGR-Exchange01.ngrsoftlab.ru",
-            "message": "TestTest",
-            "name": "TestAPI",
+            "message": "TestAPI_message",
+            "name": "TestAPI_name",
             "port": 587,
             "protocol": "smpt",
-            "psw": "fHNHQBc7jEKfaO0kywZz!",
             "send_user": DpQaa.USER,
-            "to": "d.isangulov@ngrsoftlab.ru",
-            "topic": "TestAPI",
+            "psw": DpQaa.PASS,
+            # "to": "d.isangulov@ngrsoftlab.ru",
+            "to": _QA_SPAM_EMAIL,
+            "topic": "TestAPI_topic",
             "user": DpQaa.USER
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_msg", headers=header, json=body,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.alarmer/send_msg", headers=header, json=body, verify=False)
         return resp

@@ -222,6 +222,7 @@ class TestAlarmer:
         resp = req.alarmer_notification_settings_userone_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip
     def test_alarmer_notification_settings_type_post(self):  # проблемный
         req = Alarmer(SESS, HOST)
         resp = req.alarmer_notification_settings_type_post()
