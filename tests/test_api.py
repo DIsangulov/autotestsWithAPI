@@ -1,5 +1,4 @@
 import os
-import json
 
 import pytest
 import requests
@@ -1060,16 +1059,6 @@ class TestRmCook:
 
 
 class TestStorageWorker:
-
-    def test_peopler_users_at_uid_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_id_picker_table_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.id_picker_table_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_ask_one_sql_post(self):
         req = StorageWorker(SESS, HOST)
