@@ -143,6 +143,7 @@ class Reporter(BaseReq):
         return resp
 
     def reporter_screener_fast_png_post(self):
+        # https://tasks.ngrsoftlab.ru/browse/DAT-4983
         data = {
             "format": "png",
             "need_page": "/report/" + str(rep_id)
@@ -152,6 +153,7 @@ class Reporter(BaseReq):
         return resp
 
     def reporter_screener_fast_pdf_post(self):
+        # https://tasks.ngrsoftlab.ru/browse/DAT-4983
         data = {
             "format": "pdf",
             "need_page": "/report/" + str(rep_id)
