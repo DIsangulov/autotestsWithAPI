@@ -19,7 +19,7 @@ class Rm_Cook(BaseReq):
         for item in json_data['res']:
             if item['name'] == 'picker_tables':
                 pt_id = item['id']
-        print(pt_id)
+        # print(pt_id)
         return resp
 
     def rm_cook_active_directory_groups_get(self):

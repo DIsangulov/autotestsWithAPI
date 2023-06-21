@@ -7,10 +7,9 @@ from resourses.credentials import DpQaa
 
 class XbaCook(BaseReq):
 
-    def _id_picker_table_get(self) -> int:  # забираем id таблицы picker_table
+    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
         json_data = json.loads(resp.text)
         pt_id = None
         for item in json_data['res']:
@@ -62,7 +61,7 @@ class XbaCook(BaseReq):
         data = {
             "column": "1",
             # "db_id": pt_id,
-            "db_id": self._id_picker_table_get(),
+            "db_id": self._id_picker_tables_get(),
             "table": "ad_users_ngr"
         }
         header = {'token': self.token}
@@ -120,7 +119,7 @@ class XbaCook(BaseReq):
             "user_settings":
             {
                 # "db_id": pt_id,
-                "db_id": self._id_picker_table_get(),
+                "db_id": self._id_picker_tables_get(),
                 "db_name": "picker_tables",
                 "table_name": "ad_users_ngr",
                 "fields_mapping":
@@ -168,7 +167,7 @@ class XbaCook(BaseReq):
         data = {
             "column": "1",
             # "db_id": pt_id,
-            "db_id": self._id_picker_table_get(),
+            "db_id": self._id_picker_tables_get(),
             "table": "ad_users_ngr"
         }
         header = {'token': self.token}
@@ -202,7 +201,7 @@ class XbaCook(BaseReq):
             "created": "2023-02-15T07:55:02.631066Z",
             "modified": "2023-02-15T07:55:02.631066Z",
             # "db_id": pt_id,
-            "db_id": self._id_picker_table_get(),
+            "db_id": self._id_picker_tables_get(),
             "db_name": "picker_tables",
             "table_name": "ad_users_ngr",
             "status": 3,
@@ -295,6 +294,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_drilldown_id_post_xx_descriprion_key_check(self):
+        # https://tasks.ngrsoftlab.ru/browse/DAT-5184
         # Проверка наличия ключа "description" в ответе
 
         # FIXME: хардкод

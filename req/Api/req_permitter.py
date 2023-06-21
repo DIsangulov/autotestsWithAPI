@@ -4,7 +4,7 @@ import random
 from req.Helpers.base_req import BaseReq
 
 
-def get_sample_data() -> dict:
+def _get_sample_data() -> dict:
     s_data = {"name": f"auto_role_{random.randint(0, 999)}", "views": [
         {"id": 1, "name": "Администрирование", "ui_part": "administration", "read": False, "write": False, "disabled": []},
         {"id": 2, "name": "Данные", "ui_part": "data", "read": False, "write": False, "disabled": []},
@@ -23,23 +23,11 @@ class Permitter(BaseReq):
     # def __del__(self):
     #     pass  # delete all temp_role_id ' s
 
-    def _get_temp_role_id(self):
-        # global role_id
-        if len(role_id) == 0:
-            role_id.append(self._create_new_role())
+    def _get_temp_role_id(self) -> int:
+        if len(role_id) == 0:   # global role_id
+            self.permitter_roles_editor_roles_post()
 
         return role_id[-1]
-
-    def _create_new_role(self) -> int:
-
-        data = get_sample_data()  # "name": f"auto_role_{random_num}}"
-
-        header = {'token': self.token, 'ui': str(2)}
-        resp = self.sess.post(f"{self.host}/back/dp.permitter/roles_editor/roles", headers=header, json=data, verify=False)
-
-        dct = json.loads(resp.text)
-        new_role_id = dct['res']  # получили id роли
-        return new_role_id
 
     def _get_random_tab_id(self) -> int:
         header = {'token': self.token, 'ui': str(2)}
@@ -302,33 +290,32 @@ class Permitter(BaseReq):
     def permitter_roles_editor_roles_post(self):
         """process POST req for creating new role"""
         header = {'token': self.token, 'ui': str(2)}
-        data = get_sample_data()  # "name": f"auto_role_{random_num}}"
+        data = _get_sample_data()  # "name": f"auto_role_{random_num}}"
         resp = self.sess.post(f"{self.host}/back/dp.permitter/roles_editor/roles", headers=header, json=data, verify=False)
 
         dct = json.loads(resp.text)
-        # global role_id
-        role_id.append(dct['res'])  # получили id роли
+        role_id.append(int(dct['res']))     # global role_id    # получили id роли
 
         return resp
 
     def permitter_roles_editor_roles_edit_id_get(self):
-        temp_role_id = self._get_temp_role_id()
+        _role_id = self._get_temp_role_id()
         header = {'token': self.token, 'ui': str(2)}
-        resp = self.sess.get(f"{self.host}/back/dp.permitter/roles_editor/roles/edit/" + str(temp_role_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.permitter/roles_editor/roles/edit/" + str(_role_id), headers=header, verify=False)
         return resp
 
     def permitter_roles_editor_roles_id_put(self):
-        temp_role_id = self._get_temp_role_id()
+        _role_id = self._get_temp_role_id()
         header = {'token': self.token, 'ui': str(2)}
-        data = get_sample_data()
-        resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/" + str(temp_role_id), headers=header, json=data, verify=False)
+        data = _get_sample_data()
+        resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/" + str(_role_id), headers=header, json=data, verify=False)
         return resp
 
     def permitter_roles_editor_roles_id_delete(self):
         # FIXME: удалять из глобального списка (role_id) роль .pop()
-        temp_role_id = self._get_temp_role_id()
+        _role_id = self._get_temp_role_id()
         header = {'token': self.token, 'ui': str(2)}
-        resp = self.sess.delete(f"{self.host}/back/dp.permitter/roles_editor/roles/" + str(temp_role_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.permitter/roles_editor/roles/" + str(_role_id), headers=header, verify=False)
         return resp
 
     def permitter_user_rules_get(self):
