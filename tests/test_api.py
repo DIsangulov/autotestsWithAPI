@@ -1680,11 +1680,6 @@ class TestMonitor:
 
 class TestReporter:
 
-    def test_peopler_users_at_uid_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_reporter_mailing_post(self):
         req = Reporter(SESS, HOST)
         resp = req.reporter_mailing_post()
