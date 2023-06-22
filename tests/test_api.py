@@ -1764,12 +1764,6 @@ class TestReporter:
 
 class TestScripter:
 
-    # FIXME: replace in right class
-    def test_peopler_users_at_uid_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_scripter_category_get(self):
         req = Scripter(SESS, HOST)
         resp = req.scripter_category_get()
@@ -1900,6 +1894,7 @@ class TestScripter:
         resp = req.scripter_sequence_id_log_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # FIXME: почему 2x id в имени метода
     def test_scripter_sequence_id_log_id_id_get(self):
         req = Scripter(SESS, HOST)
         resp = req.scripter_sequence_id_log_id_get()
