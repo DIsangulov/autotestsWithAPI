@@ -208,21 +208,32 @@ class Scripter(BaseReq):
         # print(resp.text)    # если скрипт '_script_id' не запускался >> {"res":null}
         return resp
 
-    # FIXME: упал локально # короче, если логов нет, то оно упадет 100%
     def scripter_script_id_log_delete(self):
         """process DELETE to delete all script logs from now"""
         _script_id = self._get_script_id()
+
+        # {"error":{"code":400,"description":"sql: no rows in result set","msg":"Ошибка выборки из бд"}}
+        # При отсутствии логов; запускаю скрипт '_script_id', чтобы появилась строка логов
+        self.scripter_script_start_post(_script_id)     # запрос на старт исполнения скрипта '_script_id'
+        # FIXME: ждать, пока скрипт исполнится?
+
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log", headers=header, verify=False)
         return resp
 
     def scripter_script_id_log_last_get(self):
         _script_id = self._get_script_id()
+
+        # {"error":{"code":400,"description":"sql: no rows in result set","msg":"Ошибка выборки из бд"}}
+        # При отсутствии логов; запускаю скрипт '_script_id', чтобы появилась строка логов
+        self.scripter_script_start_post(_script_id)     # запрос на старт исполнения скрипта '_script_id'
+        # FIXME: ждать, пока скрипт исполнится?
+
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log/last", headers=header, verify=False)
         return resp
 
-    def scripter_script_id_log_log_id_get(self):
+    def scripter_script_script_id_log_log_id_get(self):
         _script_id = self._get_script_id()
         _log_id = self._get_log_id(_script_id)
 
@@ -230,7 +241,7 @@ class Scripter(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log/" + str(_log_id), headers=header, verify=False)
         return resp
 
-    def scripter_script_id_log_log_id_delete(self):
+    def scripter_script_script_id_log_log_id_delete(self):
         _script_id = self._get_script_id()
         _log_id = self._get_log_id(_script_id)
 
@@ -364,23 +375,19 @@ class Scripter(BaseReq):
         return resp
 
     # FIXME: {"error":{"code":400,"msg":"Задание не было запущено"}}
-    def scripter_sequence_stop_get(self):
+    def scripter_sequence_stop_id_get(self):
         _seq_id = self._get_sequence_id()
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/stop/" + str(_seq_id), headers=header, verify=False)
         return resp
 
-    def scripter_sequence_id_log_get(self):
+    def scripter_sequence_sequence_id_log_last_get(self):
         _seq_id = self._get_sequence_id()
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(_seq_id) + "/log/last", headers=header, verify=False)
-        # dct = json.loads(resp.text)
-        # global log_seq_id
-        # log_seq_id = dct['res'][0]['id']  # получили id лога последовательности
-        # print(log_seq_id)
         return resp
 
-    # FIXME: хардкод в EP
+    # FIXME: хардкод в EP # >> sequence_id_log_log_id ??
     def scripter_sequence_id_log_id_get(self):
         _seq_id = self._get_sequence_id()
         header = {'token': self.token}

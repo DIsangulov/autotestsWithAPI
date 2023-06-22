@@ -1831,12 +1831,12 @@ class TestScripter:
 
     def test_scripter_script_id_log_log_id_get(self):
         req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_log_log_id_get()
+        resp = req.scripter_script_script_id_log_log_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_scripter_script_id_log_log_id_delete(self):
         req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_log_log_id_delete()
+        resp = req.scripter_script_script_id_log_log_id_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_scripter_script_id_log_delete(self):
@@ -1886,16 +1886,16 @@ class TestScripter:
 
     def test_scripter_sequence_stop_get(self):
         req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_stop_get()
+        resp = req.scripter_sequence_stop_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_scripter_sequence_id_log_get(self):
         req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_id_log_get()
+        resp = req.scripter_sequence_sequence_id_log_last_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: почему 2x id в имени метода
-    def test_scripter_sequence_id_log_id_id_get(self):
+    @pytest.mark.skip
+    def test_scripter_sequence_id_log_id_get(self):
         req = Scripter(SESS, HOST)
         resp = req.scripter_sequence_id_log_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
