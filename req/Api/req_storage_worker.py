@@ -4,8 +4,12 @@ import random
 from req.Helpers.base_req import BaseReq
 
 reg_pid = []        # список, содержащий id новосозданных регулярных выражений
-API_TEST_DB1 = "API_TEST_DB1"
-API_TEST_DB2 = "API_TEST_DB2"
+
+
+class DbName:
+    picker_tables = "picker_tables"
+    API_TEST_DB1 = "API_TEST_DB1"
+    API_TEST_DB2 = "API_TEST_DB2"
 
 
 class StorageWorker(BaseReq):
@@ -35,21 +39,9 @@ class StorageWorker(BaseReq):
 
         return db_id
 
-    # FIXME: прокинуть в _get_db_id_by_name ?
-    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        json_data = json.loads(resp.text)
-        pt_id = None
-        for item in json_data['res']:
-            if item['name'] == 'picker_tables':
-                pt_id = item['id']
-        # print(f"pt_id = {pt_id}")
-        return pt_id
-
     def storage_worker_ask_one_sql_post(self):
 
-        picker_tables_id = self._id_picker_tables_get()
+        picker_tables_id = self._get_db_id_by_name(DbName.picker_tables)
         header = {'token': self.token}
 
         # FIXME: прям инъекцию подцепить можно суда?
@@ -63,7 +55,7 @@ class StorageWorker(BaseReq):
 
     def storage_worker_ask_plain_sql_post(self):
 
-        picker_tables_id = self._id_picker_tables_get()
+        picker_tables_id = self._get_db_id_by_name(DbName.picker_tables)
         header = {'token': self.token}
 
         data = {"base_id": picker_tables_id, "tab_name": "ad_users_ngr", "columns":
@@ -195,14 +187,17 @@ class StorageWorker(BaseReq):
     def storage_worker_storage_db_post(self):
         """process POST to create new storage DB"""
         header = {'token': self.token}
-        data = {"base_name": API_TEST_DB1, "description": f"{API_TEST_DB1} auto cr"}
+        data = {
+            "base_name": DbName.API_TEST_DB1,
+            "description": f"{DbName.API_TEST_DB1} auto created"
+        }
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
     def permitter_roles_editor_roles_for_storage_worker_put(self):
         # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
 
-        db_id = self._get_db_id_by_name(API_TEST_DB1)
+        db_id = self._get_db_id_by_name(DbName.API_TEST_DB1)
 
         header = {'token': self.token, 'ui': str(2)}
         data = {
@@ -247,7 +242,7 @@ class StorageWorker(BaseReq):
             }],
             "dbs": [{
                 "id": db_id,
-                "name": API_TEST_DB1,
+                "name": DbName.API_TEST_DB1,
                 "db_id": 0,
                 "select": True,
                 "update": True
@@ -259,13 +254,16 @@ class StorageWorker(BaseReq):
 
     def storage_worker_storage_db_put(self):
         header = {'token': self.token}
-        data = {"base_name": API_TEST_DB1, "description": f"{API_TEST_DB1} +put"}
+        data = {
+            "base_name": DbName.API_TEST_DB1,
+            "description": f"{DbName.API_TEST_DB1} +put"
+        }
         resp = self.sess.put(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, json=data, verify=False)
         return resp
 
     def storage_worker_storage_db_delete(self):
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/db/{API_TEST_DB1}", headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/db/{DbName.API_TEST_DB1}", headers=header, verify=False)
         return resp
 
     def storage_worker_storage_import_csv_db_name_table_name_post(self):
