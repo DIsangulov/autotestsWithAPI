@@ -82,16 +82,6 @@ class TestAbsorber:
         resp = req.absorber_library_columns_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_peopler_users_at_uid_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_id_picker_table_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.id_picker_table_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_absorber_library_conn_type_get(self):
         req = Absorber(SESS, HOST)
         resp = req.absorber_library_conn_type_get()
@@ -137,7 +127,6 @@ class TestAbsorber:
         resp = req.absorber_library_logo_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
     def test_library_logo_put(self):
         req = Absorber(SESS, HOST)
         resp = req.absorber_library_logo_put()

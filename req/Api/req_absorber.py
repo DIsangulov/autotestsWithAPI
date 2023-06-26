@@ -2,40 +2,54 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
-from resourses.credentials import DpQaa
 
-rand = None
-con_id = None
-logo_id = None
-rand_logo_id = None
-at_uid = None
-pt_id = None
-source_id = None
+API_AUTO_TEST_ = "API_AUTO_TEST_"
+
+logo_id = []
+source_id = []      # 'id' источника данных
+connector_id = []   # 'id' коннектора
 
 
 class Absorber(BaseReq):
 
-    def peopler_users_at_uid_get(self):
+    def _get_user_id(self) -> int:
+        """Возвращает 'user_id' текущего пользователя"""
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
-        name = DpQaa.USER
-        users = json.loads(resp.text)['res']
-        uid = next((user for user in users if user['name'] == name), None)
-        global at_uid
-        at_uid = uid['id']
-        return resp
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
+        dct = json.loads(resp.text)
+        return dct['res']['user_id']
 
-    def id_picker_table_get(self):  # забираем id таблицы picker_table
+    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
         json_data = json.loads(resp.text)
-        global pt_id
+        pt_id = None
         for item in json_data['res']:
             if item['name'] == 'picker_tables':
                 pt_id = item['id']
-        print(pt_id)
-        return resp
+        # print(f"pt_id = {pt_id}")
+        return pt_id
+
+    def _get_source_id(self) -> int:
+        self.absorber_source_get()
+        if len(source_id) == 0:             # global source_id
+            self.absorber_source_post()     # если нет источника - создай новый
+            # FIXME: после создания добавлять его в список source_id
+        return source_id[-1]
+
+    def _get_connector_id(self) -> int:
+        self.absorber_library_connector_get()
+        if len(connector_id) == 0:                  # global connector_id
+            self.absorber_library_connector_post()  # если нет - создай новый
+            # FIXME: после создания добавлять его в список connector_id
+        return connector_id[-1]
+
+    def _get_logo_id(self) -> int:
+        self.absorber_library_logo_get()
+        if len(logo_id) == 0:                  # global logo_id
+            self.absorber_library_logo_post()  # если нет - создай новый
+            # FIXME: после создания добавлять его в список logo_id
+        return logo_id[-1]
 
     def absorber_library_columns_get(self):
         header = {'token': self.token}
@@ -53,26 +67,33 @@ class Absorber(BaseReq):
         return resp
 
     def absorber_library_connector_get(self):
+        # front: перейти в библиотеку шаблонов (/library/connectors)
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        global con_id
-        con_id = dct['res'][1]['id']  # получили id коннекта
-        print(con_id)
+
+        connector_info_rows = json.loads(resp.text)['res']
+        for _row in connector_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                # print(_row)
+                connector_id.append(_row['id'])
+
         return resp
 
     def absorber_library_connector_post(self):
-        global rand
-        rand = random.randint(1200, 12500)
+        """process POST req for adding new сonnector"""
+        rand_num = random.randint(1000, 9999)
+
+        self_user_id = self._get_user_id()      # получить свой 'user_id'
+
         header = {'token': self.token}
         data = {
-            "name": str(rand),
-            "description": "",
+            "name": API_AUTO_TEST_ + str(rand_num),
+            "description": API_AUTO_TEST_ + "description",
             "published": True,
             "opened": True,
             "params": None,
             "conn_type_id": 2,
-            "data": "test",
+            "data": "test",                                     # FIXME: <<<<
             "order_column": "src",
             "is_system": False,
             "logo_id": None,
@@ -98,27 +119,29 @@ class Absorber(BaseReq):
                     "type": "String"
                 }
             ],
-            "author_id": at_uid,
-            "editor_id": at_uid,
+            "author_id": self_user_id,
+            "editor_id": self_user_id,
             "created": "2022-01-13T12:13:46.668Z",
             "modified": "2022-01-13T12:13:46.668Z"
         }
-        resp = self.sess.post(f"{self.host}/back/dp.absorber/library/connector", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.absorber/library/connector", headers=header, json=data, verify=False)
         return resp
 
     def absorber_library_connector_put(self):
+        _con_id = self._get_connector_id()
+        self_user_id = self._get_user_id()      # получить свой 'user_id'
         header = {'token': self.token}
+
         data = {
-            "id": str(con_id),
-            "name": str(rand) + str(2),
-            "description": "",
+            "id": str(_con_id),
+            "name": API_AUTO_TEST_ + "changed",
+            "description": API_AUTO_TEST_ + "changed desc",
             "published": False,
             "opened": False,
             "author_id": None,
             "author_name": "",
-            "editor_id": at_uid,
-            "editor_name": "Датаплан Тестов",
+            "editor_id": self_user_id,
+            "editor_name": self.username,
             "created": "0001-01-01T00:00:00Z",
             "edited": "2022-02-07T15:17:11.612497Z",
             "params": None,
@@ -149,84 +172,99 @@ class Absorber(BaseReq):
                     "type": "String"
                 }
             ],
-            "modified": "2022-02-08T16:36:29.335Z"
+            "modified": "2022-02-08T16:36:29.335Z"  # FIXME: ?
         }
         resp = self.sess.put(f"{self.host}/back/dp.absorber/library/connector", headers=header, json=data, verify=False)
         return resp
 
     def absorber_library_connector_id_get(self):
+        _con_id = self._get_connector_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector/" + str(con_id), headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.absorber/library/connector/" + str(_con_id), headers=header, verify=False)
         return resp
 
     def absorber_library_connector_delete(self):
+        _con_id = self._get_connector_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.absorber/library/connector/" + str(con_id), headers=header,
-                                verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.absorber/library/connector/" + str(_con_id), headers=header, verify=False)
         return resp
 
     def absorber_library_logo_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/library/logo", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        global logo_id
-        logo_id = dct['res'][1]['id']  # получили id лого
-        print(logo_id)
+
+        logo_info_rows = json.loads(resp.text)['res']
+        for _row in logo_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                # print(_row)
+                logo_id.append(_row['id'])
+
         return resp
 
-    def absorber_library_logo_post(self):  # тут начались косячки проверить на сваггере, возможен баг
-        global rand_logo_id
-        rand_logo_id = random.randint(120000, 1250000)
+    def absorber_library_logo_post(self):
+        rand_num = random.randint(1000, 9999)
+        self_user_id = self._get_user_id()
+
         header = {'token': self.token}
         data = {
-            "name": str(rand_logo_id),
-            "editor_id": at_uid,
-            "id": rand_logo_id,
-            "is_system": False,
+            "name": API_AUTO_TEST_ + str(rand_num),
+            "editor_id": self_user_id,
+            # "id": rand_logo_id,
+            # "is_system": False,
             "data": None
         }
         resp = self.sess.post(f"{self.host}/back/dp.absorber/library/logo", headers=header, json=data, verify=False)
-        print(rand_logo_id)
         return resp
 
-    def absorber_library_logo_put(self):  # тут начались косячки проверить на сваггере, возможен баг
+    def absorber_library_logo_put(self):
+        _logo_id = self._get_logo_id()
+        self_user_id = self._get_user_id()
+
         header = {'token': self.token}
-        data = {"data": None,
-                "edited": "2022-12-07T14:30:46.313631Z",
-                "editor_id": at_uid,
-                "editor_name": "Тестов Датаплан",
-                "id": 1110,
-                "is_system": False,
-                "name": "630244"
-                }
+        data = {
+            "name": API_AUTO_TEST_ + "name_changed",
+            "id": _logo_id,  # 'logo_id'
+            "data": None,
+            "editor_id": self_user_id,
+            # "editor_name": "Тестов Датаплан",
+            # "is_system": False,
+            # "edited": "2022-12-07T14:30:46.313631Z",
+        }
         resp = self.sess.put(f"{self.host}/back/dp.absorber/library/logo", headers=header, json=data, verify=False)
-        print(rand_logo_id)
         return resp
 
     def absorber_library_logo_delete(self):
+        _logo_id = self._get_logo_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.absorber/library/logo/" + str(logo_id), headers=header,
-                                verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.absorber/library/logo/" + str(_logo_id), headers=header, verify=False)
         return resp
 
     def absorber_source_get(self):
+        """process GET req for getting all sources from library"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.absorber/source", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        global source_id
-        source_id = dct['res'][0]['id']  # получили id лого
-        print(source_id)
+
+        source_info_rows = json.loads(resp.text)['res']
+
+        for _row in source_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                # print(_row['name'])
+                source_id.append(_row['id'])
+
         return resp
 
     def absorber_source_post(self):
+        rand_num = random.randint(0, 999)
+        self_user_id = self._get_user_id()                  # получить свой 'user_id'
+        db_picker_tables = self._id_picker_tables_get()     # получение 'id' хранилища 'picker_tables'
+
         header = {'token': self.token}
         data = {
             "now": True,
-            "name": "API_test" + str(rand),
+            "name": f"{API_AUTO_TEST_}" + str(rand_num),
             "description": "",
-            "editor_id": at_uid,
-            "author_id": at_uid,
+            "editor_id": self_user_id,
+            "author_id": self_user_id,
             "node": 0,
             "conn_type_id": 7,
             "workers_count": 2,
@@ -251,24 +289,29 @@ class Absorber(BaseReq):
                         }
                     ],
                     "order_column": "TimeStamp",
-                    "db_id": pt_id,
+                    "db_id": db_picker_tables,
                     "table_name": "ad_users_ngr",
                     "table_create_flag": 1,
                     "tag": "tag1"
                 }
             ]
         }
+        # test_file = open("my_file.txt", "rb")
+        # .post(files = {"form_field_name": test_file}))    # FIXME: попробовать этот способ
         resp = self.sess.post(f"{self.host}/back/dp.absorber/source", headers=header, json=data, verify=False)
         return resp
 
     def absorber_source_put(self):
+        _source_id = self._get_source_id()
+        self_user_id = self._get_user_id()                  # получить свой 'user_id'
+        db_picker_tables = self._id_picker_tables_get()     # получение 'id' таблицы 'picker_tables'
         header = {'token': self.token}
         data = {
             "now": True,
-            # "name": "API_test" + str(rand),
+            "name": f"{API_AUTO_TEST_}changed",
             "description": "new description",
-            "editor_id": at_uid,
-            "author_id": at_uid,
+            "editor_id": self_user_id,
+            "author_id": self_user_id,
             "node": 0,
             "conn_type_id": 7,
             "workers_count": 2,
@@ -297,28 +340,30 @@ class Absorber(BaseReq):
                             "type": "DateTime"
                         }
                     ],
-                    "db_id": pt_id,
+                    "db_id": db_picker_tables,
                     "table_name": "ad_users_ngr",
                     "table_create_flag": 3
                 }
             ],
-            "id": source_id
+            "id": _source_id
         }
         resp = self.sess.put(f"{self.host}/back/dp.absorber/source", headers=header, json=data, verify=False)
         return resp
 
     def absorber_source_id_get(self):
+        _source_id = self._get_source_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.absorber/source/" + str(source_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.absorber/source/" + str(_source_id), headers=header, verify=False)
         return resp
 
     def absorber_source_id_debug_get(self):
+        _source_id = self._get_source_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.absorber/source/" + str(source_id) + "/debug", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.absorber/source/" + str(_source_id) + "/debug", headers=header, verify=False)
         return resp
 
     def absorber_source_id_delete(self):
+        _source_id = self._get_source_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.absorber/source/" + str(source_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.absorber/source/" + str(_source_id), headers=header, verify=False)
         return resp
