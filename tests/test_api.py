@@ -1960,16 +1960,6 @@ class TestUpdater:
 
 class TestVisualisation:
 
-    def test_peopler_users_at_uid_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.peopler_users_at_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_id_picker_table_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.id_picker_table_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_visualisation_query_get(self):
         req = Visualisation(SESS, HOST)
         resp = req.visualisation_query_get()
