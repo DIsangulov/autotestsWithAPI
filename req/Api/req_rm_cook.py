@@ -1,39 +1,46 @@
 import json
+import random
 
 from req.Helpers.base_req import BaseReq
 
-group_id = None
-user_id = None
-syslog_host = "107.130.0.16"
-pt_id = None
+SYSLOG_HOST = "107.130.0.16"
+SYSLOG_PORT = 514
 
 
-class Rm_Cook(BaseReq):
+class RmCook(BaseReq):
 
-    def id_picker_table_get(self):  # забираем id таблицы picker_table
+    def _get_random_rm_user_id(self) -> int:
+        _resp = self.rm_cook_active_directory_users_get()               # получить запрос со списком пользователей
+        _rm_users_info_rows = json.loads(_resp.text)['res']['users']    # получить из запроса список пользователей
+        _rm_user_info = random.choice(_rm_users_info_rows)              # получить случайную строку из списка
+        return int(_rm_user_info['id'])
+
+    def _get_random_rm_group_id(self) -> int:
+        _resp = self.rm_cook_active_directory_groups_get()              # получить запрос со списком групп
+        _rm_groups_info_rows = json.loads(_resp.text)['res']['groups']  # получить из запроса список групп
+        _rm_group_info = random.choice(_rm_groups_info_rows)            # получить случайную строку из списка
+        return int(_rm_group_info['id'])
+
+    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
         json_data = json.loads(resp.text)
-        global pt_id
+        pt_id = None
         for item in json_data['res']:
             if item['name'] == 'picker_tables':
                 pt_id = item['id']
-        # print(pt_id)
-        return resp
+        # print(f"pt_id = {pt_id}")
+        return pt_id
 
     def rm_cook_active_directory_groups_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/groups", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        global group_id
-        group_id = dct['res']['groups'][1]['id']  # получили id группы
         return resp
 
     def rm_cook_active_directory_groups_id_get(self):
+        _rm_group_id = self._get_random_rm_group_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/groups/" + str(group_id), headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/groups/" + str(_rm_group_id), headers=header, verify=False)
         return resp
 
     def rm_cook_active_directory_state_get(self):
@@ -52,17 +59,16 @@ class Rm_Cook(BaseReq):
         return resp
 
     def rm_cook_active_directory_users_get(self):
+        """process GET req to get AD users list"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/users", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        global user_id
-        user_id = dct['res']['users'][1]['id']  # получили id пользователя
         return resp
 
     def rm_cook_active_directory_users_id_get(self):
+        """process GET req to get AD user by ID"""
+        _rm_user_id = self._get_random_rm_user_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/users/" + str(user_id), headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/active_directory/users/" + str(_rm_user_id), headers=header, verify=False)
         return resp
 
     def rm_cook_calculation_start_calc_id_post(self):
@@ -105,59 +111,55 @@ class Rm_Cook(BaseReq):
             "users_table": "ad_users_ngr_2"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.rm_cook/role_model/result/export_role_model_to_excel",
-                              headers=header, json=body, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.rm_cook/role_model/result/export_role_model_to_excel", headers=header, json=body, verify=False)
         return resp
 
+    # FIXME: role_id == 0; кейс проходит
     def rm_cook_role_model_result_groups_by_role_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/groups_by_role/0", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/groups_by_role/0", headers=header, verify=False)
         return resp
 
+    # FIXME: role_id == 0;
     def rm_cook_role_model_result_resources_by_role_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/resources_by_role/0", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/resources_by_role/0", headers=header, verify=False)
         return resp
 
     def rm_cook_role_model_result_roles_by_source_source_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/roles_by_source/0", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/roles_by_source/0", headers=header, verify=False)
         return resp
 
+    # FIXME: role_id == 0; кейс проходит
     def rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/source/0/users_by_role/0", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/source/0/users_by_role/0", headers=header, verify=False)
         return resp
 
+    # FIXME: role_id == 0
     def rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self):
+        _rm_user_id = self._get_random_rm_user_id()
         header = {'token': self.token}
-        resp = self.sess.get(
-            f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/resources_by_user/" + str(user_id),
-            headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/resources_by_user/" + str(_rm_user_id), headers=header, verify=False)
         return resp
 
+    # FIXME: role_id == 0
     def rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/users_by_resource/0",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/users_by_resource/0", headers=header, verify=False)
         return resp
 
+    # FIXME: role_id == 0
     def rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(
-            f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/users_by_group/3909688664",
-            headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/users_by_group/3909688664", headers=header, verify=False)
         return resp
 
+    # FIXME: role_id == 0
     def rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(
-            f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/groups_by_user/1996248437",
-            headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/0/groups_by_user/1996248437", headers=header, verify=False)
         return resp
 
     def rm_cook_settings_calc_get(self):
@@ -179,8 +181,8 @@ class Rm_Cook(BaseReq):
     def rm_cook_settings_mailings_post(self):
         body = {"destinations": [
             {"email": "",
-             "syslog_host": syslog_host,
-             "syslog_port": 514,
+             "syslog_host": SYSLOG_HOST,
+             "syslog_port": SYSLOG_PORT,
              "syslog_protocol": "tcp",
              "disable_syslog": False,
              "disable_email": True, "id": 1},
@@ -201,8 +203,9 @@ class Rm_Cook(BaseReq):
         return resp
 
     def rm_cook_settings_sources_post(self):
-        body = [{"db_name": "picker_tables", "db_id": pt_id, "source_type": 1, "table_name": "ad_groups_ngr"},
-                {"db_name": "picker_tables", "db_id": pt_id, "source_type": 2, "table_name": "ad_users_ngr"}]
+        db_picker_tables = self._id_picker_tables_get()
+        body = [{"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 1, "table_name": "ad_groups_ngr"},
+                {"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 2, "table_name": "ad_users_ngr"}]
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.rm_cook/settings/sources", headers=header, json=body, verify=False)
         return resp
