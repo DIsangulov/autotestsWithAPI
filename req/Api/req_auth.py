@@ -3,6 +3,8 @@ import random
 
 from req.Helpers.base_req import BaseReq
 
+API_AUTO_TEST_ = "API_AUTO_TEST_"
+
 session_id = []     # 'id' сессий текущего пользователя
 
 
@@ -29,10 +31,10 @@ class AuthApi(BaseReq):
 
     def auth_local_register_post(self):
 
-        random_num = random.randint(0, 999)
+        str_random_num = str(random.randint(100, 999))
         body = {
             "rusname":      "Авто Мобиль",
-            "username":     f"auto_dp_{random_num}",
+            "username":     API_AUTO_TEST_ + str_random_num,
             "password":     "12345678",
             "email":        "auto_mail@mail.ru",
             "mobile":       "+7 999 999 99 99",
@@ -105,4 +107,4 @@ class AuthApi(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.auth/logout", headers=header, verify=False)
         return resp
 
-    # def auth_delete удалять пользователей
+    # Удаление пользователей возможно через Peopler.peopler_users_delete()
