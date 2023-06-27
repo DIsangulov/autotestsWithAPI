@@ -576,6 +576,11 @@ class TestLicenser:
 
 class TestPeopler:
 
+    def test_peopler_mainpage_get(self):
+        req = Peopler(SESS, HOST)
+        resp = req.peopler_mainpage_get()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     @pytest.mark.skip # нестабильно, пока не зафиксировать пользователей
     def test_peopler_many_users_put(self):
         req = Peopler(SESS, HOST)

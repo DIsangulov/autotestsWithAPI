@@ -38,7 +38,10 @@ class Peopler(BaseReq):
 
         return auto_user_id[-1]
 
-    # def peopler_mainpage_get(self):
+    def peopler_mainpage_get(self):
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/mainpage", headers=header, verify=False)
+        return resp
 
     # FIXME: Хардкод >> _get_auto_user_id
     # FIXME: работа ключей email, name и .т.п. под вопросом ещё (c) Swagger
@@ -55,6 +58,7 @@ class Peopler(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
+    # FIXME: разлочить скип
     def peopler_many_users_post(self):
         """process POST req for creating many users"""
         random_num = random.randint(1500, 1996)
@@ -63,14 +67,14 @@ class Peopler(BaseReq):
             "users": [
                 {
                     "role_id": 76,  # sys_api_test
-                    "name": f"auto_dp_many_users_{random_num}",
+                    "name": f"auto_dp_many_users_{random_num}",     # FIXME:
                     # "is_admin":     True,
                     # "is_system":    True,
                     # "is_tech":      True
                 },
                 {
                     "role_id": 76,  # sys_api_test
-                    "name": f"auto_dp_many_users_{random_num+1}",
+                    "name": f"auto_dp_many_users_{random_num+1}",   # FIXME:
                 },
             ]
         }
@@ -130,10 +134,6 @@ class Peopler(BaseReq):
 
         if user_id is None:
             user_id = self._get_auto_user_id()
-            # resp_new_user = self.peopler_users_post()           # Создание нового пользователя
-            # assert resp_new_user.status_code == 200, \
-            #     f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
-            # user_id = json.loads(resp_new_user.text)['res']     # Получение user_id нового пользователя
 
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
