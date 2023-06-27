@@ -6,15 +6,16 @@ from req.Helpers.base_req import BaseReq
 
 class Peopler(BaseReq):
 
-    @staticmethod
-    def get_user_id(req: BaseReq):
+    def _get_user_id(self) -> int:
         """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': req.token}
-        resp = req.sess.get(f"{req.host}/back/dp.peopler/profile", headers=header, verify=False)
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         dct = json.loads(resp.text)
         return dct['res']['user_id']
 
-    # FIXME: работа ключей email, name и .т.п. под вопросом ещё
+    # def peopler_mainpage_get(self):
+
+    # FIXME: работа ключей email, name и .т.п. под вопросом ещё (c) Swagger
     # на фронте оно только меняет "роль" группе?
     def peopler_many_users_put(self):
         body = {"users":
@@ -87,7 +88,7 @@ class Peopler(BaseReq):
     def peopler_users_id_get(self, user_id=None):
         """Получить информацию пользователя по **ID**"""
         if user_id is None:
-            user_id = self.get_user_id(self)
+            user_id = self._get_user_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
