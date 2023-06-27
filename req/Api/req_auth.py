@@ -2,20 +2,25 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
-from req.Api.req_peopler import Peopler
+
+session_id = []     # 'id' сессий текущего пользователя
 
 
 class AuthApi(BaseReq):
 
-    @staticmethod
-    def get_sess_id(req: BaseReq):
-        """Возвращает 'id' СЛУЧАЙНОЙ активной **сессии**"""
-        header = {'token': req.token}
-        resp = req.sess.get(f"{req.host}/back/dp.auth/sessions/" + str(Peopler.get_user_id(req)), headers=header, verify=False)
+    def _get_user_id(self) -> int:
+        """Возвращает 'user_id' текущего пользователя"""
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         dct = json.loads(resp.text)
+        return dct['res']['user_id']
 
-        # сессии в ответе не сортированы, сейчас просто возвращает айдишник, который лежит ниже всего в ответе
-        return dct['res'][-1]['id']
+    def _get_session_id(self) -> int:
+        self.auth_sessions_uid_get()                # получение всех session_id для текущего пользователя
+        if len(session_id) == 0:
+            # у self. пользователя не может быть число активных сессий == 0
+            assert False, f"Число активных сессий у запрашивающего пользователя == 0"
+        return session_id[-1]
 
     def auth_ad_struct_get(self):
         header = {'token': self.token}
@@ -60,30 +65,38 @@ class AuthApi(BaseReq):
         """Удалить ВСЕ сессии пользователя **user_id**"""
 
         if user_id is None:
-            user_id = Peopler.get_user_id(self)
+            user_id = self._get_user_id()
 
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/all/" + str(user_id), headers=header, verify=False)
         return resp
 
-    def auth_sessions_one_sid_del(self, session_id=None):
+    def auth_sessions_one_sid_del(self, _session_id=None):
         """Удалить одну сессию"""
 
-        if session_id is None:
-            session_id = AuthApi.get_sess_id(self)
+        if _session_id is None:
+            # _session_id = AuthApi.get_sess_id(self)
+            _session_id = self._get_session_id()
 
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/one/" + str(session_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/one/" + str(_session_id), headers=header, verify=False)
         return resp
 
     def auth_sessions_uid_get(self, user_id=None):
         """Получить список сессий пользователя **user_id**"""
 
         if user_id is None:
-            user_id = Peopler.get_user_id(self)
+            user_id = self._get_user_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/" + str(user_id), headers=header, verify=False)
+
+        session_id_info_rows = json.loads(resp.text)['res']
+
+        for _row in session_id_info_rows:
+            session_id.append(int(_row['id']))
+        # print(f"session_id[] is: {session_id}")
+
         return resp
 
     def auth_logout_get(self):
@@ -91,3 +104,5 @@ class AuthApi(BaseReq):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/logout", headers=header, verify=False)
         return resp
+
+    # def auth_delete удалять пользователей
