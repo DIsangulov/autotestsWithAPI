@@ -2,11 +2,20 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
-from resourses.credentials import DpQaa
+
+API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 
 class XbaCook(BaseReq):
 
+    def _get_user_id(self) -> int:
+        """Возвращает 'user_id' текущего пользователя"""
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
+        dct = json.loads(resp.text)
+        return dct['res']['user_id']
+
+    # FIXME: >> _get_db_id_by_name
     def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
@@ -18,18 +27,7 @@ class XbaCook(BaseReq):
         # print(f"pt_id = {pt_id}")
         return pt_id
 
-    def _at_uid_get(self) -> int:
-        """Получить id пользователя датаплан"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/users", headers=header, verify=False)
-        # name = 'dataplan_qaa@ngrsoftlab.ru'
-        name = DpQaa.USER
-        users = json.loads(resp.text)['res']
-        uid = next((user for user in users if user['name'] == name), None)
-
-        at_uid = uid['id']
-        return at_uid
-
+    # FIXME: получать рандом а не псевдорандом?
     def _get_random_group_id(self) -> int:
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, verify=False)
@@ -37,6 +35,7 @@ class XbaCook(BaseReq):
         group_id = dct['res'][-1]['id']  # получили id группы
         return group_id
 
+    # FIXME: получать рандом а не псевдорандом?
     def _get_random_profile_id(self) -> int:
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, verify=False)
@@ -185,24 +184,25 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_post(self):
-        prof_id = self._get_random_profile_id()
+        # FIXME: редактировать заполнение
+        str_random_num = str(random.randint(1000, 9999))
         data = {
-            "id": str(prof_id) + str(1),
-            "name": "123",
+            # "id": ???
+            "name": API_AUTO_TEST_ + str_random_num,
             "description": None,
             "published": False,
             "opened": False,
             # "author_id": at_uid,
-            "author_id": self._at_uid_get(),
+            "author_id": self._get_user_id(),
             "author": "Тест Апи",
             # "editor_id": at_uid,
-            "editor_id": self._at_uid_get(),
+            "editor_id": self._get_user_id(),
             "editor": "Тест Апи",
             "created": "2023-02-15T07:55:02.631066Z",
             "modified": "2023-02-15T07:55:02.631066Z",
             # "db_id": pt_id,
             "db_id": self._id_picker_tables_get(),
-            "db_name": "picker_tables",
+            "db_name": "picker_tables",     # FIXME: возможно, стоит использовать другую таблицу
             "table_name": "ad_users_ngr",
             "status": 3,
             "profile_type": "median",
@@ -239,7 +239,7 @@ class XbaCook(BaseReq):
         }
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_categories_get(self):
@@ -288,8 +288,7 @@ class XbaCook(BaseReq):
         #     }
 
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/" + str(prof_id), headers=header,
-                              json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/" + str(prof_id), headers=header, json=data, verify=False)
 
         return resp
 
@@ -325,8 +324,7 @@ class XbaCook(BaseReq):
         prof_id = self._get_random_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/graph/max_min/" + str(prof_id), headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/graph/max_min/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_graph_personal_id_post(self):
@@ -340,8 +338,7 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/personal/" + str(prof_id), headers=header,
-                              json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/personal/" + str(prof_id), headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_graph_id_post(self):
@@ -355,8 +352,7 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/" + str(prof_id), headers=header,
-                              json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/" + str(prof_id), headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_groups_post(self):
@@ -364,7 +360,7 @@ class XbaCook(BaseReq):
         rand_num = random.randint(0, 9999)
         data = {
             "id": rand_num,
-            "name": "F_auto_group_" + str(rand_num),
+            "name": "F_auto_group_" + str(rand_num),    # FIXME:
             "weight": ""
         }
         header = {'token': self.token}
@@ -384,7 +380,7 @@ class XbaCook(BaseReq):
 
         data = {
             "id": group_id,
-            "name": "F_auto_name_changed_" + str(rand),
+            "name": "F_auto_name_changed_" + str(rand), # FIXME:
             "weight": ""
         }
         header = {'token': self.token}
@@ -399,15 +395,13 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_groups_id_delete(self):
         group_id = None  # FIXME: удаление после создания шаблонистой группы
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header,
-                                verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_group_id_profiles_get(self):
         group_id = self._get_random_group_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id) + "/profiles",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id) + "/profiles", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_post(self):
@@ -420,8 +414,7 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header,
-                              json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_max_min_get(self):
@@ -437,30 +430,27 @@ class XbaCook(BaseReq):
 
         header = {'token': self.token}
         resp = self.sess.get(
-            f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(prof_id) + "/" + str(group_id) + "/2",
-            headers=header, verify=False)
+            f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(prof_id) + "/" + str(group_id) + "/2", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_import_profiles_post(self):
-        rand = random.randint(1200, 12500)
+        str_rand_num = str(random.randint(1200, 12500))
         data = {
             "profile_list": [
                 {
-                    "id": rand,
-                    "name": str(rand),
+                    # "id": str_rand_num,         # FIXME: ??
+                    "name": API_AUTO_TEST_ + str_rand_num,
                     "description": None,
                     "published": False,
                     "opened": False,
-                    # "author_id": at_uid,
-                    "author_id": self._at_uid_get(),
-                    "author": "Ванин Юрий",
-                    # "editor_id": at_uid,
-                    "editor_id": self._at_uid_get(),
-                    "editor": "Ванин Юрий",
+                    "author_id": self._get_user_id(),
+                    # "author": "Ванин Юрий",
+                    "editor_id": self._get_user_id(),
+                    # "editor": "Ванин Юрий",
                     "created": "2023-02-15T07:55:02.631066Z",
                     "modified": "2023-02-15T07:55:02.631066Z",
                     "db_id": None,
-                    "db_name": "picker_tables",
+                    "db_name": "picker_tables",     # FIXME: использовать другую таблицу?
                     "table_name": "ad_users_ngr",
                     "status": 3,
                     "profile_type": "median",
@@ -499,24 +489,21 @@ class XbaCook(BaseReq):
         }
 
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/import_profiles", headers=header,
-                              json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/import_profiles", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_start_id_get(self):
         prof_id = self._get_random_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/start/" + str(prof_id), headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/start/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_stop_id_get(self):
         prof_id = self._get_random_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/stop/" + str(prof_id), headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/stop/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_get(self):
@@ -527,8 +514,9 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_delete(self):
+        # FIXME: хардкод
         # FIXME: удаление профиля xBA, недостаточно прав
-        prof_id = None
+        prof_id = 1979
 
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
@@ -538,8 +526,7 @@ class XbaCook(BaseReq):
         prof_id = self._get_random_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/log/last", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/log/last", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_whitelist_post(self):
@@ -547,8 +534,7 @@ class XbaCook(BaseReq):
 
         data = {"data": [{"name": "ApiTest"}]}
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist", json=data,
-                              headers=header, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist", json=data, headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_whitelist_element_post(self):
@@ -560,24 +546,22 @@ class XbaCook(BaseReq):
 
         data = {"data": "ApiTest" + str(random_num)}
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist/element",
-                              json=data, headers=header, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist/element", json=data, headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_string_whitelist_get(self):
         prof_id = self._get_random_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/string/whitelist",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/string/whitelist", headers=header, verify=False)
         return resp
 
+    # FIXME: swagger - нет описания
     def xba_cook_profiles_id_list_whitelist_get(self):
         prof_id = self._get_random_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/list/whitelist",
-                             headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/list/whitelist", headers=header, verify=False)
         return resp
 
     def xba_cook_xba_get(self):
@@ -586,6 +570,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_xba_post(self):
+        """process POST req to set new syslog-mailing-alert xba settings"""
         data = {
             "res":
                 {
@@ -597,7 +582,7 @@ class XbaCook(BaseReq):
                     "destinations":
                         [
                             {
-                                "email": "y.vanin@ngrsoftlab.ru",
+                                "email": "y.vanin@ngrsoftlab.ru",   # FIXME:
                                 "syslog_host": "127.0.0.1",
                                 "syslog_port": 514,
                                 "syslog_protocol": "udp",
