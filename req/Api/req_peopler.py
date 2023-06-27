@@ -3,6 +3,10 @@ import random
 
 from req.Helpers.base_req import BaseReq
 
+API_AUTO_TEST_ = "API_AUTO_TEST_"
+
+auto_user_id = []   # список для пользователей, созданных автоматически
+
 
 class Peopler(BaseReq):
 
@@ -13,8 +17,23 @@ class Peopler(BaseReq):
         dct = json.loads(resp.text)
         return dct['res']['user_id']
 
+    def _get_auto_user_id(self) -> int:
+        # получить список ВСЕХ пользователей
+        resp_all_users = self.peopler_users_get()
+        all_users_info_rows = json.loads(resp_all_users.text)['res']
+        # фильтровать пользователей по API_AUTO_TEST_
+        for _row in all_users_info_rows:
+            # .lower автоматически применяется при регистрации @доменных пользователей
+            if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
+                auto_user_id.append(int(_row['id']))
+
+        # print(f"auto_user_id[] is: {auto_user_id}")
+        # FIXME: проверять длину списка auto_user_id, при == 0, создавать нового пользователя
+        return auto_user_id[-1]
+
     # def peopler_mainpage_get(self):
 
+    # FIXME: Хардкод >> _get_auto_user_id
     # FIXME: работа ключей email, name и .т.п. под вопросом ещё (c) Swagger
     # на фронте оно только меняет "роль" группе?
     def peopler_many_users_put(self):
@@ -30,6 +49,7 @@ class Peopler(BaseReq):
         return resp
 
     def peopler_many_users_post(self):
+        """process POST req for creating many users"""
         random_num = random.randint(1500, 1996)
         body = {
             # "role_id": 76,  # sys_api_test
@@ -70,10 +90,10 @@ class Peopler(BaseReq):
 
     def peopler_users_post(self):
         """Создание нового '@доменного' пользователя"""
-        random_num = random.randint(1000, 1500)
+        str_random_num = str(random.randint(1000, 1500))
 
         body = {
-            "name": f"auto_dp_{random_num}",
+            "name": API_AUTO_TEST_ + str_random_num,
             "role_id": 76,  # sys_api_test
             # "is_admin":     True,
             # "is_system":    True,
@@ -81,8 +101,6 @@ class Peopler(BaseReq):
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.peopler/users", headers=header, json=body, verify=False)
-
-        # print(json.loads(resp.text)['res'])
         return resp
 
     def peopler_users_id_get(self, user_id=None):
@@ -94,6 +112,7 @@ class Peopler(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp
 
+    # FIXME: if user_id=None >> взять пользователя из auto_user_id
     def peopler_users_id_put(self, user_id=None, body=None):
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, json=body, verify=False)
@@ -102,6 +121,8 @@ class Peopler(BaseReq):
     def peopler_users_delete(self, user_id=None):
         """Удалить пользователя по **ID**"""
 
+        # FIXME: получить пользователя из auto_user_id
+        # FIXME: перенести создание в auto_user_id
         if user_id is None:
             resp_new_user = self.peopler_users_post()           # Создание нового пользователя
             assert resp_new_user.status_code == 200, \
