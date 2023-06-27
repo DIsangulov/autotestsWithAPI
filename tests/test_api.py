@@ -603,7 +603,6 @@ class TestPeopler:
         resp = req.peopler_users_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip # работает в связке с TestPeopler.test_peopler_users_delete
     def test_peopler_users_post(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_users_post()

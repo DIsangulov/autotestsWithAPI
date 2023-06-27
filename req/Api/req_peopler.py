@@ -26,9 +26,16 @@ class Peopler(BaseReq):
             # .lower автоматически применяется при регистрации @доменных пользователей
             if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
                 auto_user_id.append(int(_row['id']))
-
         # print(f"auto_user_id[] is: {auto_user_id}")
-        # FIXME: проверять длину списка auto_user_id, при == 0, создавать нового пользователя
+
+        if len(auto_user_id) == 0:
+            resp_new_user = self.peopler_users_post()  # Создание нового @доменного пользователя
+            assert resp_new_user.status_code == 200, \
+                f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
+
+            new_user_id = json.loads(resp_new_user.text)['res']     # {"res":12345}
+            auto_user_id.append(int(new_user_id))
+
         return auto_user_id[-1]
 
     # def peopler_mainpage_get(self):
@@ -121,13 +128,12 @@ class Peopler(BaseReq):
     def peopler_users_delete(self, user_id=None):
         """Удалить пользователя по **ID**"""
 
-        # FIXME: получить пользователя из auto_user_id
-        # FIXME: перенести создание в auto_user_id
         if user_id is None:
-            resp_new_user = self.peopler_users_post()           # Создание нового пользователя
-            assert resp_new_user.status_code == 200, \
-                f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
-            user_id = json.loads(resp_new_user.text)['res']     # Получение user_id нового пользователя
+            user_id = self._get_auto_user_id()
+            # resp_new_user = self.peopler_users_post()           # Создание нового пользователя
+            # assert resp_new_user.status_code == 200, \
+            #     f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
+            # user_id = json.loads(resp_new_user.text)['res']     # Получение user_id нового пользователя
 
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
