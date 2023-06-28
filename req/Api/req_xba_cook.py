@@ -5,7 +5,8 @@ from req.Helpers.base_req import BaseReq
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-group_id = set()   # 'id' метапрофиля // API_AUTO_TEST_x
+profile_id = set()  # 'id' профиля xBA
+group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
 
 
 class DbName:
@@ -51,16 +52,22 @@ class XbaCook(BaseReq):
 
         return group_id.pop()                                               # возвращает случайное значение из group_id
 
-    # FIXME: получать рандом а не псевдорандом?
-    def _get_random_profile_id(self) -> int:
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, verify=False)
+    def _get_profile_id(self) -> int:
+        """get from global profile_id : API_AUTO_TEST_x"""
+        if len(profile_id) == 0:
+            resp_profile_id_list = self.xba_cook_profiles_get()             # запрос на список профилей xBA
+            _profile_id_rows = json.loads(resp_profile_id_list.text)['res']
+            for _row in _profile_id_rows:
+                if str(_row['name']).startswith(API_AUTO_TEST_):            # фильтр по шаблону > добавление в profile_id
+                    profile_id.add(int(_row['id']))
 
-        dct = json.loads(resp.text)
-        prof_id = dct['res'][2]['id']  # получили id профаила
-        # print(resp.text)
-        # print(f"prof_id is {prof_id}")
-        return prof_id
+        if len(profile_id) == 0:
+            resp_new_profile_id = self.xba_cook_profiles_post()             # запрос на создание нового профиля xBA
+            # FIXME: assert на status_code == 200
+            new_profile_id = json.loads(resp_new_profile_id.text)['res']
+            profile_id.add(int(new_profile_id))                             # добавление 'id' нового профиля xBA в profile_id
+
+        return profile_id.pop()
 
     def xba_cook_anomalies_get(self):
         header = {'token': self.token}
@@ -265,7 +272,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_export_profiles_post(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
         data = {"profile_ids": [str(prof_id)]}
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/export_profiles", headers=header, json=data, verify=False)
@@ -277,7 +284,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_drilldown_statement_id_post(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
         data = {
             "columns": [
                 ""
@@ -336,14 +343,14 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_max_min_id_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/graph/max_min/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_graph_personal_id_post(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         data = {
             "end": "2023-02-14T00:00:00Z",
@@ -357,7 +364,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_id_post(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         data = {
             "end": "2023-02-14T00:00:00Z",
@@ -507,21 +514,21 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_start_id_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/start/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_stop_id_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/stop/" + str(prof_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
@@ -537,7 +544,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_log_last_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/log/last", headers=header, verify=False)
@@ -545,7 +552,7 @@ class XbaCook(BaseReq):
 
     def xba_cook_profiles_id_whitelist_post(self):
         """process POST req to add element into profile whitelist"""
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         data = {"data": [{"name": "ApiTest"}]}      # FIXME: >> API_AUTO_TEST_
         header = {'token': self.token}
@@ -555,7 +562,7 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_id_whitelist_element_post(self):
         # FIXME: нельзя изменить в профиле, в котором идет "перерасчет" иначе
         # {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         random_num = random.randint(0, 999)
 
@@ -565,7 +572,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_string_whitelist_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/string/whitelist", headers=header, verify=False)
@@ -573,7 +580,7 @@ class XbaCook(BaseReq):
 
     # FIXME: swagger - нет описания
     def xba_cook_profiles_id_list_whitelist_get(self):
-        prof_id = self._get_random_profile_id()
+        prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/list/whitelist", headers=header, verify=False)
