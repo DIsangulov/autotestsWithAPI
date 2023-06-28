@@ -5,7 +5,7 @@ from req.Helpers.base_req import BaseReq
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-group_id = []   # 'id' метапрофиля // API_AUTO_TEST_x
+group_id = set()   # 'id' метапрофиля // API_AUTO_TEST_x
 
 
 class DbName:
@@ -35,20 +35,21 @@ class XbaCook(BaseReq):
         return db_id
 
     def _get_group_id(self) -> int:
-        """get from global group_id[]"""
-        resp_group_id_list = self.xba_cook_profiles_groups_get()        # запрос на список метапрофилей
-        _group_id_rows = json.loads(resp_group_id_list.text)['res']
-        for _row in _group_id_rows:
-            if str(_row['name']).startswith(API_AUTO_TEST_):            # фильтрация по шаблону > добавление в group_id[]
-                group_id.append(_row['id'])
+        """get from global group_id"""
+        if len(group_id) == 0:
+            resp_group_id_list = self.xba_cook_profiles_groups_get()        # запрос на список метапрофилей
+            _group_id_rows = json.loads(resp_group_id_list.text)['res']
+            for _row in _group_id_rows:
+                if str(_row['name']).startswith(API_AUTO_TEST_):            # фильтрация по шаблону > добавление в group_id
+                    group_id.add(int(_row['id']))
 
         if len(group_id) == 0:
-            resp_new_group_id = self.xba_cook_profiles_groups_post()    # запрос на создание нового метапрофиля
+            resp_new_group_id = self.xba_cook_profiles_groups_post()        # запрос на создание нового метапрофиля
             # FIXME: assert на status_code == 200
             new_group_id = json.loads(resp_new_group_id.text)['res']
-            group_id.append(int(new_group_id))                          # добавление 'id' нового метапрофиля в group_id[]
+            group_id.add(int(new_group_id))                                 # добавление 'id' нового метапрофиля в group_id[]
 
-        return random.choice(group_id)
+        return group_id.pop()                                               # возвращает случайное значение из group_id
 
     # FIXME: получать рандом а не псевдорандом?
     def _get_random_profile_id(self) -> int:
@@ -389,12 +390,11 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_groups_put(self):
         """process PUT req for updating group name"""
         rand = random.randint(100, 999)
-
-        group_id = 1496  # FIXME: хардкод
+        _group_id = self._get_group_id()
 
         data = {
-            "id": group_id,
-            "name": API_AUTO_TEST_ + "changed" + str(rand),
+            "id": _group_id,
+            "name": API_AUTO_TEST_ + "changed_" + str(rand),
             "weight": ""
         }
         header = {'token': self.token}
