@@ -5,6 +5,8 @@ from req.Helpers.base_req import BaseReq
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
+# api_test_role = ?? # FIXME: определить роль для тестовых пользователей # возможно, её нужно проверять/создавать
+
 auto_user_id = set()   # список для пользователей, созданных автоматически
 
 
@@ -42,14 +44,15 @@ class Peopler(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/mainpage", headers=header, verify=False)
         return resp
 
-    # FIXME: Хардкод >> _get_auto_user_id
     # FIXME: работа ключей email, name и .т.п. под вопросом ещё (c) Swagger
     # на фронте оно только меняет "роль" группе?
     def peopler_many_users_put(self):
+        auto_user_id_1 = self._get_auto_user_id()
+        auto_user_id_2 = self._get_auto_user_id()
         body = {"users":
             [
-                {"id": 7741},       # Dnaikk1
-                {"id": 8975}        # auto_dp_4421
+                {"id": auto_user_id_1},
+                {"id": auto_user_id_2}
             ],
             "role_id": 76,  # sys_api_test
         }
@@ -57,7 +60,6 @@ class Peopler(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
-    # FIXME: разлочить скип
     def peopler_many_users_post(self):
         """process POST req for creating many users"""
         random_num = random.randint(1500, 1996)
@@ -66,14 +68,14 @@ class Peopler(BaseReq):
             "users": [
                 {
                     "role_id": 76,  # sys_api_test
-                    "name": f"auto_dp_many_users_{random_num}",     # FIXME:
+                    "name": API_AUTO_TEST_ + f"many_users_{random_num}",
                     # "is_admin":     True,
                     # "is_system":    True,
                     # "is_tech":      True
                 },
                 {
                     "role_id": 76,  # sys_api_test
-                    "name": f"auto_dp_many_users_{random_num+1}",   # FIXME:
+                    "name": API_AUTO_TEST_ + f"many_users_{random_num + 1}",
                 },
             ]
         }
@@ -122,8 +124,17 @@ class Peopler(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         return resp
 
-    # FIXME: if user_id=None >> взять пользователя из auto_user_id
-    def peopler_users_id_put(self, user_id=None, body=None):
+    def peopler_users_id_put(self, user_id: int = None, body: dict = None):
+
+        if user_id is None:
+            user_id = self._get_auto_user_id()
+            body = {
+                "role_id":     76,         # sys_api_test
+                "is_admin":    False,
+                "is_system":   False,
+                "is_tech":     False
+            }
+
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, json=body, verify=False)
         return resp

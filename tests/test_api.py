@@ -581,16 +581,14 @@ class TestPeopler:
         resp = req.peopler_mainpage_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip # нестабильно, пока не зафиксировать пользователей
-    def test_peopler_many_users_put(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_many_users_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    @pytest.mark.skip # работает, но нужно автоудаление сделать ещё, чтобы не мусорить
     def test_peopler_many_users_post(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_many_users_post()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_peopler_many_users_put(self):
+        req = Peopler(SESS, HOST)
+        resp = req.peopler_many_users_put()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_peopler_profile_get(self):
@@ -618,28 +616,9 @@ class TestPeopler:
         resp = req.peopler_users_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip   # Нужны параметры user_id, body
     def test_peopler_users_id_put(self):
         req = Peopler(SESS, HOST)
         resp = req.peopler_users_id_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    @pytest.mark.parametrize("user_id, body",
-                             [
-                                 (
-                                     7741,                          # Dnaikk1
-                                     {
-                                         "role_id":     76,         # sys_api_test
-                                         "is_admin":    False,
-                                         "is_system":   False,
-                                         "is_tech":     False
-                                     }
-                                 )
-                             ]
-                             )
-    def test_peopler_users_id_put(self, user_id, body):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_id_put(user_id, body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_peopler_users_delete(self):
