@@ -5,6 +5,8 @@ from req.Helpers.base_req import BaseReq
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
+group_id = []   # 'id' метапрофиля // API_AUTO_TEST_x
+
 
 class DbName:
     picker_tables = "picker_tables"     # FIXME: перевести на таблицу > like. API_TEST_DBx
@@ -32,13 +34,21 @@ class XbaCook(BaseReq):
 
         return db_id
 
-    # FIXME: получать рандом а не псевдорандом?
-    def _get_random_group_id(self) -> int:
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        group_id = dct['res'][-1]['id']  # получили id группы
-        return group_id
+    def _get_group_id(self) -> int:
+        """get from global group_id[]"""
+        resp_group_id_list = self.xba_cook_profiles_groups_get()        # запрос на список метапрофилей
+        _group_id_rows = json.loads(resp_group_id_list.text)['res']
+        for _row in _group_id_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):            # фильтрация по шаблону > добавление в group_id[]
+                group_id.append(_row['id'])
+
+        if len(group_id) == 0:
+            resp_new_group_id = self.xba_cook_profiles_groups_post()    # запрос на создание нового метапрофиля
+            # FIXME: assert на status_code == 200
+            new_group_id = json.loads(resp_new_group_id.text)['res']
+            group_id.append(int(new_group_id))                          # добавление 'id' нового метапрофиля в group_id[]
+
+        return random.choice(group_id)
 
     # FIXME: получать рандом а не псевдорандом?
     def _get_random_profile_id(self) -> int:
@@ -403,13 +413,13 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_groups_group_id_profiles_get(self):
-        group_id = self._get_random_group_id()
+        _group_id = self._get_group_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id) + "/profiles", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(_group_id) + "/profiles", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_post(self):
-        group_id = self._get_random_group_id()
+        _group_id = self._get_group_id()
         data = {
             "end": "2023-02-14T00:00:00Z",
             "name": "",
@@ -418,7 +428,7 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(_group_id), headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_max_min_get(self):
