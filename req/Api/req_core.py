@@ -38,8 +38,7 @@ class Core(BaseReq):
             "user": "dataplan@ngrsoftlab.ru"
         }
         header = {'token': self.token, 'skey': "ANGARA"}
-        resp = self.sess.post(f"{self.host}/back/dp.core/active_directory/structure", headers=header, json=body,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.core/active_directory/structure", headers=header, json=body, verify=False)
         return resp
 
     def core_active_directory_test_settings_post(self):
@@ -53,8 +52,7 @@ class Core(BaseReq):
             "user": "dataplan@ngrsoftlab.ru"
         }
         header = {'token': self.token, 'skey': "ANGARA"}
-        resp = self.sess.post(f"{self.host}/back/dp.core/active_directory/test_settings", headers=header, json=body,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.core/active_directory/test_settings", headers=header, json=body, verify=False)
         return resp
 
     def core_check_backups_get(self):
@@ -353,14 +351,12 @@ class Core(BaseReq):
 
     def core_service_dp_storage_single_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_storage_single/restart", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_storage_single/restart", headers=header, verify=False)
         return resp
 
     def core_service_dp_storage_worker_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_storage_worker/restart", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_storage_worker/restart", headers=header, verify=False)
         return resp
 
     def core_service_dp_ml_get(self):
@@ -380,8 +376,7 @@ class Core(BaseReq):
 
     def core_service_dp_elements_eater_get(self):
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_elements_eater/restart", headers=header,
-                             verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.core/service/dp_elements_eater/restart", headers=header, verify=False)
         return resp
 
     def core_service_dp_frontend_get(self):
