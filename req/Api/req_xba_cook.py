@@ -48,7 +48,7 @@ class XbaCook(BaseReq):
             resp_new_group_id = self.xba_cook_profiles_groups_post()        # запрос на создание нового метапрофиля
             # FIXME: assert на status_code == 200
             new_group_id = json.loads(resp_new_group_id.text)['res']
-            group_id.add(int(new_group_id))                                 # добавление 'id' нового метапрофиля в group_id[]
+            group_id.add(int(new_group_id))                                 # добавление 'id' нового метапрофиля в group_id
 
         return group_id.pop()                                               # возвращает случайное значение из group_id
 

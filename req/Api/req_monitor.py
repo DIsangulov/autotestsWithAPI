@@ -59,141 +59,121 @@ class Monitor(BaseReq):
     def monitor_nodes_graphs_ml_ram_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/ram", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/ram", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_ml_cpu_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/cpu", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/cpu", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_ml_iops_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/iops", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/iops", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_ml_network_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/network", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/network", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_ml_picked_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/picked", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/ml/picked", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_picker_ram_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/ram", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/ram", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_picker_cpu_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/cpu", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/cpu", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_picker_iops_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/iops", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/iops", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_picker_network_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/network", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/network", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_picker_picked_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/picked", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/picker/picked", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_servicedb_ram_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/ram", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/ram", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_servicedb_cpu_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/cpu", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/cpu", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_servicedb_iops_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/iops", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/iops", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_servicedb_network_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/network", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/network", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_servicedb_picked_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/picked", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/servicedb/picked", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_datastore_ram_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/ram", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/ram", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_datastore_cpu_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/cpu", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/cpu", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_datastore_iops_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/iops", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/iops", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_datastore_network_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/network", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/network", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_graphs_datastore_picked_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/picked", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/picked", headers=header, json=data, verify=False)
         return resp
 
     def monitor_nodes_stats_ml_get(self):
@@ -219,29 +199,25 @@ class Monitor(BaseReq):
     def monitor_webserver_graphs_ram_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/ram", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/ram", headers=header, json=data, verify=False)
         return resp
 
     def monitor_webserver_graphs_cpu_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/cpu", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/cpu", headers=header, json=data, verify=False)
         return resp
 
     def monitor_webserver_graphs_iops_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/iops", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/iops", headers=header, json=data, verify=False)
         return resp
 
     def monitor_webserver_graphs_network_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/network", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/network", headers=header, json=data, verify=False)
         return resp
 
     def monitor_webserver_groups_get(self):
