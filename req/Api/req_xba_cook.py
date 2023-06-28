@@ -6,6 +6,10 @@ from req.Helpers.base_req import BaseReq
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 
+class DbName:
+    picker_tables = "picker_tables"     # FIXME: перевести на таблицу > like. API_TEST_DBx
+
+
 class XbaCook(BaseReq):
 
     def _get_user_id(self) -> int:
@@ -15,17 +19,18 @@ class XbaCook(BaseReq):
         dct = json.loads(resp.text)
         return dct['res']['user_id']
 
-    # FIXME: >> _get_db_id_by_name
-    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
+    def _get_db_id_by_name(self, db_name: str) -> int:
+        """Возвращает 'id' хранилища с указанным именем"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        json_data = json.loads(resp.text)
-        pt_id = None
-        for item in json_data['res']:
-            if item['name'] == 'picker_tables':
-                pt_id = item['id']
-        # print(f"pt_id = {pt_id}")
-        return pt_id
+        dct = json.loads(resp.text)
+        db_info_rows = dct['res']
+        db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
+        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
+
+        db_id = db_info_row['id']
+
+        return db_id
 
     # FIXME: получать рандом а не псевдорандом?
     def _get_random_group_id(self) -> int:
@@ -57,15 +62,15 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_check_entity_type_post(self):
+        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
         data = {
             "column": "1",
             # "db_id": pt_id,
-            "db_id": self._id_picker_tables_get(),
+            "db_id": db_picker_tables,
             "table": "ad_users_ngr"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/check_entity_type", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/check_entity_type", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_dashboard_post(self):
@@ -114,11 +119,12 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_info_settings_post(self):
+        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
         data = {
             "user_settings":
             {
                 # "db_id": pt_id,
-                "db_id": self._id_picker_tables_get(),
+                "db_id": db_picker_tables,
                 "db_name": "picker_tables",
                 "table_name": "ad_users_ngr",
                 "fields_mapping":
@@ -148,25 +154,24 @@ class XbaCook(BaseReq):
             "type": "user"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/entity/picker/max_min", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/entity/picker/max_min", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_entity_risks_description_post(self):
-        data = {"name": "shchetinin$@angaratech.ru",
+        data = {"name": "shchetinin$@angaratech.ru",        # FIXME: хардкод
                 "type": "user",
                 "start": "2023-02-13T00:00:00Z",
                 "end": "2023-02-14T00:00:00Z"}
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/entity/risks-description", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/entity/risks-description", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_max_min_post(self):
+        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
         data = {
             "column": "1",
             # "db_id": pt_id,
-            "db_id": self._id_picker_tables_get(),
+            "db_id": db_picker_tables,
             "table": "ad_users_ngr"
         }
         header = {'token': self.token}
@@ -186,6 +191,7 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_post(self):
         # FIXME: редактировать заполнение
         str_random_num = str(random.randint(1000, 9999))
+        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
         data = {
             # "id": ???
             "name": API_AUTO_TEST_ + str_random_num,
@@ -201,8 +207,8 @@ class XbaCook(BaseReq):
             "created": "2023-02-15T07:55:02.631066Z",
             "modified": "2023-02-15T07:55:02.631066Z",
             # "db_id": pt_id,
-            "db_id": self._id_picker_tables_get(),
-            "db_name": "picker_tables",     # FIXME: возможно, стоит использовать другую таблицу
+            "db_id": db_picker_tables,
+            "db_name": DbName.picker_tables,     # FIXME: возможно, стоит использовать другую таблицу
             "table_name": "ad_users_ngr",
             "status": 3,
             "profile_type": "median",
@@ -251,8 +257,7 @@ class XbaCook(BaseReq):
         prof_id = self._get_random_profile_id()
         data = {"profile_ids": [str(prof_id)]}
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/export_profiles", headers=header, json=data,
-                              verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/export_profiles", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_functions_get(self):
@@ -270,8 +275,7 @@ class XbaCook(BaseReq):
             "time": "2022-12-06T08:36:09Z"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/statement/" + str(prof_id),
-                              headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/statement/" + str(prof_id), headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_graph_drilldown_id_post(self, prof_id=None, data=None):
@@ -360,7 +364,7 @@ class XbaCook(BaseReq):
         rand_num = random.randint(0, 9999)
         data = {
             "id": rand_num,
-            "name": "F_auto_group_" + str(rand_num),    # FIXME:
+            "name": API_AUTO_TEST_ + str(rand_num),    # FIXME:
             "weight": ""
         }
         header = {'token': self.token}
@@ -374,13 +378,13 @@ class XbaCook(BaseReq):
 
     def xba_cook_profiles_groups_put(self):
         """process PUT req for updating group name"""
-        rand = random.randint(1200, 12500)
+        rand = random.randint(100, 999)
 
         group_id = 1496  # FIXME: хардкод
 
         data = {
             "id": group_id,
-            "name": "F_auto_name_changed_" + str(rand), # FIXME:
+            "name": API_AUTO_TEST_ + "changed" + str(rand),
             "weight": ""
         }
         header = {'token': self.token}
@@ -516,7 +520,7 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_id_delete(self):
         # FIXME: хардкод
         # FIXME: удаление профиля xBA, недостаточно прав
-        prof_id = 1979
+        prof_id = 2001
 
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
@@ -530,9 +534,10 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_id_whitelist_post(self):
+        """process POST req to add element into profile whitelist"""
         prof_id = self._get_random_profile_id()
 
-        data = {"data": [{"name": "ApiTest"}]}
+        data = {"data": [{"name": "ApiTest"}]}      # FIXME: >> API_AUTO_TEST_
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist", json=data, headers=header, verify=False)
         return resp
@@ -544,7 +549,7 @@ class XbaCook(BaseReq):
 
         random_num = random.randint(0, 999)
 
-        data = {"data": "ApiTest" + str(random_num)}
+        data = {"data": "ApiTest" + str(random_num)}        # FIXME:    >> API_AUTO_TEST_
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist/element", json=data, headers=header, verify=False)
         return resp
