@@ -35,7 +35,7 @@ class XbaCook(BaseReq):
         return db_id
 
     def _get_group_id(self) -> int:
-        """get from global group_id"""
+        """get from global group_id : API_AUTO_TEST_x"""
         if len(group_id) == 0:
             resp_group_id_list = self.xba_cook_profiles_groups_get()        # запрос на список метапрофилей
             _group_id_rows = json.loads(resp_group_id_list.text)['res']
@@ -407,9 +407,9 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_groups_id_delete(self):
-        group_id = None  # FIXME: удаление после создания шаблонистой группы
+        _group_id = self._get_group_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(group_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(_group_id), headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_group_id_profiles_get(self):

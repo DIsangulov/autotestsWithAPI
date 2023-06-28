@@ -1339,7 +1339,6 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_groups_info_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip # FIXME: пока не удаляем
     def test_xba_cook_profiles_groups_id_delete(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_groups_id_delete()
