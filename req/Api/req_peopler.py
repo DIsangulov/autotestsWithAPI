@@ -5,7 +5,7 @@ from req.Helpers.base_req import BaseReq
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-auto_user_id = []   # список для пользователей, созданных автоматически
+auto_user_id = set()   # список для пользователей, созданных автоматически
 
 
 class Peopler(BaseReq):
@@ -18,25 +18,24 @@ class Peopler(BaseReq):
         return dct['res']['user_id']
 
     def _get_auto_user_id(self) -> int:
-        # получить список ВСЕХ пользователей
-        resp_all_users = self.peopler_users_get()
-        all_users_info_rows = json.loads(resp_all_users.text)['res']
-        # фильтровать пользователей по API_AUTO_TEST_
-        for _row in all_users_info_rows:
-            # .lower автоматически применяется при регистрации @доменных пользователей
-            if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
-                auto_user_id.append(int(_row['id']))
-        # print(f"auto_user_id[] is: {auto_user_id}")
+        """get from global auto_user_id: API_AUTO_TEST_x"""
+        if len(auto_user_id) == 0:
+            resp_all_users = self.peopler_users_get()                       # получить список ВСЕХ пользователей
+            all_users_info_rows = json.loads(resp_all_users.text)['res']
+            for _row in all_users_info_rows:                                # фильтровать пользователей по API_AUTO_TEST_
+                # .lower автоматически применяется при регистрации @доменных пользователей
+                if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
+                    auto_user_id.add(int(_row['id']))
 
         if len(auto_user_id) == 0:
-            resp_new_user = self.peopler_users_post()  # Создание нового @доменного пользователя
+            resp_new_user = self.peopler_users_post()                       # Создание нового @доменного пользователя
             assert resp_new_user.status_code == 200, \
                 f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
 
-            new_user_id = json.loads(resp_new_user.text)['res']     # {"res":12345}
-            auto_user_id.append(int(new_user_id))
+            new_user_id = json.loads(resp_new_user.text)['res']             # {"res":12345}
+            auto_user_id.add(int(new_user_id))                              # добавление нового пользователя в auto_user_id
 
-        return auto_user_id[-1]
+        return auto_user_id.pop()                                           # возвращает случайное значение из auto_user_id
 
     def peopler_mainpage_get(self):
         header = {'token': self.token}
