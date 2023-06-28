@@ -149,3 +149,11 @@ class Peopler(BaseReq):
         resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
         # print(f"Пользователь {user_id}, был удален")
         return resp
+
+    # __del__
+
+    # Главное - не прострелить ногу # метод удаляет всех пользователей, которые остались в auto_user_id
+    def all_api_auto_test_user_delete(self):
+        # self._get_auto_user_id()    # .pop() -> один пользователь выживет
+        while len(auto_user_id) > 0:
+            resp = self.peopler_users_delete(auto_user_id.pop())
