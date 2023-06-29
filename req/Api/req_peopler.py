@@ -2,10 +2,11 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DpRoles
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
-
-# api_test_role = ?? # FIXME: определить роль для тестовых пользователей # возможно, её нужно проверять/создавать
+# sys_api_test = self.get_role_id_by_name(DpRoles.sys_api_test) # FIXME: реализовать геттер для получения роли
+sys_api_test = DpRoles.sys_api_test
 
 auto_user_id = set()   # список для пользователей, созданных автоматически
 
@@ -47,7 +48,7 @@ class Peopler(BaseReq):
                 {"id": auto_user_id_1},
                 {"id": auto_user_id_2}
             ],
-            "role_id": 76,  # sys_api_test
+            "role_id": sys_api_test,
         }
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
@@ -60,14 +61,14 @@ class Peopler(BaseReq):
             # "role_id": 76,  # sys_api_test
             "users": [
                 {
-                    "role_id": 76,  # sys_api_test
+                    "role_id": sys_api_test,
                     "name": API_AUTO_TEST_ + f"many_users_{random_num}",
                     # "is_admin":     True,
                     # "is_system":    True,
                     # "is_tech":      True
                 },
                 {
-                    "role_id": 76,  # sys_api_test
+                    "role_id": sys_api_test,
                     "name": API_AUTO_TEST_ + f"many_users_{random_num + 1}",
                 },
             ]
@@ -99,7 +100,7 @@ class Peopler(BaseReq):
 
         body = {
             "name": API_AUTO_TEST_ + str_random_num,
-            "role_id": 76,  # sys_api_test
+            "role_id": sys_api_test,
             # "is_admin":     True,
             # "is_system":    True,
             # "is_tech":      True
@@ -122,7 +123,7 @@ class Peopler(BaseReq):
         if user_id is None:
             user_id = self._get_auto_user_id()
             body = {
-                "role_id":     76,         # sys_api_test
+                "role_id":     sys_api_test,
                 "is_admin":    False,
                 "is_system":   False,
                 "is_tech":     False
