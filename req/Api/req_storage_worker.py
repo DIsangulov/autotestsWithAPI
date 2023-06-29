@@ -2,14 +2,9 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DbName
 
 reg_pid = []        # список, содержащий id новосозданных регулярных выражений
-
-
-class DbName:
-    picker_tables = "picker_tables"
-    API_TEST_DB1 = "API_TEST_DB1"
-    API_TEST_DB2 = "API_TEST_DB2"
 
 
 class StorageWorker(BaseReq):
@@ -26,22 +21,9 @@ class StorageWorker(BaseReq):
             self.storage_worker_psevdo_namer_regs_post()    # если нет, создай новую
         return reg_pid[-1]
 
-    def _get_db_id_by_name(self, db_name: str) -> int:
-        """Возвращает 'id' хранилища с указанным именем"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        db_info_rows = dct['res']
-        db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
-        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
-
-        db_id = db_info_row['id']
-
-        return db_id
-
     def storage_worker_ask_one_sql_post(self):
 
-        picker_tables_id = self._get_db_id_by_name(DbName.picker_tables)
+        picker_tables_id = self.get_db_id_by_name(DbName.picker_tables)
         header = {'token': self.token}
 
         # FIXME: прям инъекцию подцепить можно суда?
@@ -55,7 +37,7 @@ class StorageWorker(BaseReq):
 
     def storage_worker_ask_plain_sql_post(self):
 
-        picker_tables_id = self._get_db_id_by_name(DbName.picker_tables)
+        picker_tables_id = self.get_db_id_by_name(DbName.picker_tables)
         header = {'token': self.token}
 
         data = {"base_id": picker_tables_id, "tab_name": "ad_users_ngr", "columns":
@@ -175,13 +157,9 @@ class StorageWorker(BaseReq):
         return resp
 
     def storage_worker_storage_db_get(self):
+        """process GET to return all storage databases"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        # dct = json.loads(resp.text)
-        # global db_id
-        # db_id = dct['res'][0]['id']     # получили id базы данных
-        # print(f"db_id = {db_id}")       # API_TEST_DB2
-        # print(resp.text)
         return resp
 
     def storage_worker_storage_db_post(self):
@@ -197,7 +175,7 @@ class StorageWorker(BaseReq):
     def permitter_roles_editor_roles_for_storage_worker_put(self):
         # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
 
-        db_id = self._get_db_id_by_name(DbName.API_TEST_DB1)
+        db_id = self.get_db_id_by_name(DbName.API_TEST_DB1)
 
         header = {'token': self.token, 'ui': str(2)}
         data = {
