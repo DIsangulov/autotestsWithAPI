@@ -12,12 +12,6 @@ sequence_id = []        # 'id' последовательности
 
 
 class Scripter(BaseReq):
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
 
     def _get_script_id(self) -> int:
         if len(script_id) == 0:                             # global script_id # id скрипта
@@ -85,7 +79,7 @@ class Scripter(BaseReq):
             },
             "additional_files": [],
             # "author_id": at_uid
-            "author_id": self._get_user_id()
+            "author_id": self.get_self_user_id()
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
@@ -116,7 +110,7 @@ class Scripter(BaseReq):
         data = {
             "type": True,
             # "editor_id": at_uid,
-            "editor_id": self._get_user_id(),
+            "editor_id": self.get_self_user_id(),
             "id": _script_id,
             "name": "TestAPIscripter1",
             "description": "TestAPIscripter",
@@ -308,7 +302,7 @@ class Scripter(BaseReq):
             ],
             "node": 0,
             # "author_id": at_uid
-            "author_id": self._get_user_id()
+            "author_id": self.get_self_user_id()
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
@@ -318,7 +312,7 @@ class Scripter(BaseReq):
         _script_id = self._get_script_id()
         _seq_id = self._get_sequence_id()
         data = {
-            "name": " TestSeqApi",
+            "name": " TestSeqApi",              # FIXME:
             "description": " TestSeqApi1",
             "type": True,
             "scripts": [
@@ -339,8 +333,7 @@ class Scripter(BaseReq):
             ],
             "node": 0,
             "id": str(_seq_id),
-            # "author_id": at_uid
-            "author_id": self._get_user_id()
+            "author_id": self.get_self_user_id()
         }
         header = {'token': self.token}
         resp = self.sess.put(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
