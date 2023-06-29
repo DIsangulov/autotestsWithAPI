@@ -2,6 +2,7 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
@@ -18,17 +19,6 @@ class Absorber(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         dct = json.loads(resp.text)
         return dct['res']['user_id']
-
-    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        json_data = json.loads(resp.text)
-        pt_id = None
-        for item in json_data['res']:
-            if item['name'] == 'picker_tables':
-                pt_id = item['id']
-        # print(f"pt_id = {pt_id}")
-        return pt_id
 
     def _get_source_id(self) -> int:
         self.absorber_source_get()
@@ -256,7 +246,8 @@ class Absorber(BaseReq):
     def absorber_source_post(self):
         rand_num = random.randint(0, 999)
         self_user_id = self._get_user_id()                  # получить свой 'user_id'
-        db_picker_tables = self._id_picker_tables_get()     # получение 'id' хранилища 'picker_tables'
+        # db_picker_tables = self._id_picker_tables_get()     # получение 'id' хранилища 'picker_tables'
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
 
         header = {'token': self.token}
         data = {
@@ -304,7 +295,9 @@ class Absorber(BaseReq):
     def absorber_source_put(self):
         _source_id = self._get_source_id()
         self_user_id = self._get_user_id()                  # получить свой 'user_id'
-        db_picker_tables = self._id_picker_tables_get()     # получение 'id' таблицы 'picker_tables'
+        # db_picker_tables = self._id_picker_tables_get()     # получение 'id' таблицы 'picker_tables'
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+
         header = {'token': self.token}
         data = {
             "now": True,
