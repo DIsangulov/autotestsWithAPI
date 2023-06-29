@@ -83,11 +83,13 @@ class Peopler(BaseReq):
         return resp
 
     def peopler_profile_get(self):
+        """process GET req for getting user profile by token"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         return resp
 
     def peopler_profiles_get(self):
+        """process GET req for getting user profiles"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profiles", headers=header, verify=False)
         return resp
@@ -119,7 +121,7 @@ class Peopler(BaseReq):
             user_id = self.get_self_user_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/users/{user_id}", headers=header, verify=False)
         return resp
 
     def peopler_users_id_put(self, user_id: int = None, body: dict = None):
@@ -134,7 +136,7 @@ class Peopler(BaseReq):
             }
 
         header = {'token': self.token}
-        resp = self.sess.put(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, json=body, verify=False)
+        resp = self.sess.put(f"{self.host}/back/dp.peopler/users/{user_id}", headers=header, json=body, verify=False)
         return resp
 
     def peopler_users_delete(self, user_id=None):
@@ -144,7 +146,7 @@ class Peopler(BaseReq):
             user_id = self._get_auto_user_id()
 
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.peopler/users/{user_id}", headers=header, verify=False)
         # print(f"Пользователь {user_id}, был удален")
         return resp
 
@@ -155,3 +157,5 @@ class Peopler(BaseReq):
         self._collect_auto_user_id()
         while len(auto_user_id) > 0:
             self.peopler_users_delete(auto_user_id.pop())
+
+    # TODO: (10/16) find and add
