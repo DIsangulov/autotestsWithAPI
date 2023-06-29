@@ -12,13 +12,6 @@ auto_user_id = set()   # список для пользователей, соз�
 
 class Peopler(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_auto_user_id(self) -> int:
         """get from global auto_user_id: API_AUTO_TEST_x"""
         if len(auto_user_id) == 0:
@@ -118,7 +111,7 @@ class Peopler(BaseReq):
     def peopler_users_id_get(self, user_id=None):
         """Получить информацию пользователя по **ID**"""
         if user_id is None:
-            user_id = self._get_user_id()
+            user_id = self.get_self_user_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/users/" + str(user_id), headers=header, verify=False)
