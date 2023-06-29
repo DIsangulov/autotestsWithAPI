@@ -47,6 +47,14 @@ class BaseReq:
 
         return resp
 
+    # FIXME: определить self.user_id для уменьшения кол-ва обращений
+    def get_self_user_id(self) -> int:
+        """Возвращает 'user_id' текущего пользователя"""
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
+        dct = json.loads(resp.text)
+        return dct['res']['user_id']
+
     def get_db_id_by_name(self, db_name: str) -> int:
         """Возвращает 'id' хранилища с указанным именем"""
         header = {'token': self.token}
