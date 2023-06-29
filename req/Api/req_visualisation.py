@@ -13,13 +13,6 @@ visualisation_id = []   # 'id' визуализации
 
 class Visualisation(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_query_id(self) -> int:
         self.visualisation_query_get()              # запрос на получение списка всех 'query'
         if len(query_id) == 0:                      # global query_id
@@ -66,9 +59,8 @@ class Visualisation(BaseReq):
         """process POST req for creating/editing query by id"""
 
         random_num = random.randint(0, 999)
-        self_user_id = self._get_user_id()                                  # Получить свой 'user_id'
-        # db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)    # Получить 'id' хранилища 'picker_tables'
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+        self_user_id = self.get_self_user_id()                              # Получить свой 'user_id'
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)     # Получить 'id' хранилища 'picker_tables'
 
         header = {'token': self.token}
         data = {
@@ -126,7 +118,7 @@ class Visualisation(BaseReq):
 
     def visualisation_reports_post(self):
         random_num = random.randint(100, 999)
-        self_user_id = self._get_user_id()  # получить свой 'user_id'
+        self_user_id = self.get_self_user_id()  # получить свой 'user_id'
         header = {'token': self.token}
         data = {
             "name": f"{API_AUTO_TEST_}report_{random_num}",
@@ -168,7 +160,7 @@ class Visualisation(BaseReq):
 
     def visualisation_visualisation_post(self):
         """process POST req for creating/editing visualisation by id"""
-        self_user_id = self._get_user_id()  # получить свой 'user_id'
+        self_user_id = self.get_self_user_id()  # получить свой 'user_id'
         header = {'token': self.token}
         data = {
             "name": f"{API_AUTO_TEST_}visualisation",
