@@ -13,13 +13,6 @@ connector_id = []   # 'id' коннектора
 
 class Absorber(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_source_id(self) -> int:
         self.absorber_source_get()
         if len(source_id) == 0:             # global source_id
@@ -73,7 +66,7 @@ class Absorber(BaseReq):
         """process POST req for adding new сonnector"""
         rand_num = random.randint(1000, 9999)
 
-        self_user_id = self._get_user_id()      # получить свой 'user_id'
+        self_user_id = self.get_self_user_id()      # получить свой 'user_id'
 
         header = {'token': self.token}
         data = {
@@ -119,7 +112,7 @@ class Absorber(BaseReq):
 
     def absorber_library_connector_put(self):
         _con_id = self._get_connector_id()
-        self_user_id = self._get_user_id()      # получить свой 'user_id'
+        self_user_id = self.get_self_user_id()      # получить свой 'user_id'
         header = {'token': self.token}
 
         data = {
@@ -192,12 +185,12 @@ class Absorber(BaseReq):
         return resp
 
     def absorber_library_logo_post(self):
-        rand_num = random.randint(1000, 9999)
-        self_user_id = self._get_user_id()
+        str_rand_num = str(random.randint(1000, 9999))
+        self_user_id = self.get_self_user_id()
 
         header = {'token': self.token}
         data = {
-            "name": API_AUTO_TEST_ + str(rand_num),
+            "name": API_AUTO_TEST_ + str_rand_num,
             "editor_id": self_user_id,
             # "id": rand_logo_id,
             # "is_system": False,
@@ -208,7 +201,7 @@ class Absorber(BaseReq):
 
     def absorber_library_logo_put(self):
         _logo_id = self._get_logo_id()
-        self_user_id = self._get_user_id()
+        self_user_id = self.get_self_user_id()
 
         header = {'token': self.token}
         data = {
@@ -244,15 +237,14 @@ class Absorber(BaseReq):
         return resp
 
     def absorber_source_post(self):
-        rand_num = random.randint(0, 999)
-        self_user_id = self._get_user_id()                  # получить свой 'user_id'
-        # db_picker_tables = self._id_picker_tables_get()     # получение 'id' хранилища 'picker_tables'
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+        str_rand_num = str(random.randint(100, 999))
+        self_user_id = self.get_self_user_id()                              # получить свой 'user_id'
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)     # получить 'id' хранилища 'picker_tables'
 
         header = {'token': self.token}
         data = {
             "now": True,
-            "name": f"{API_AUTO_TEST_}" + str(rand_num),
+            "name": API_AUTO_TEST_ + str_rand_num,
             "description": "",
             "editor_id": self_user_id,
             "author_id": self_user_id,
@@ -294,9 +286,8 @@ class Absorber(BaseReq):
 
     def absorber_source_put(self):
         _source_id = self._get_source_id()
-        self_user_id = self._get_user_id()                  # получить свой 'user_id'
-        # db_picker_tables = self._id_picker_tables_get()     # получение 'id' таблицы 'picker_tables'
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+        self_user_id = self.get_self_user_id()                              # получить свой 'user_id'   '
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)     # получение 'id' таблицы 'picker_tables
 
         header = {'token': self.token}
         data = {
