@@ -2,6 +2,7 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DbName
 
 SYSLOG_HOST = "107.130.0.16"
 SYSLOG_PORT = 514
@@ -20,17 +21,6 @@ class RmCook(BaseReq):
         _rm_groups_info_rows = json.loads(_resp.text)['res']['groups']  # получить из запроса список групп
         _rm_group_info = random.choice(_rm_groups_info_rows)            # получить случайную строку из списка
         return int(_rm_group_info['id'])
-
-    def _id_picker_tables_get(self) -> int:  # забираем id таблицы picker_table
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        json_data = json.loads(resp.text)
-        pt_id = None
-        for item in json_data['res']:
-            if item['name'] == 'picker_tables':
-                pt_id = item['id']
-        # print(f"pt_id = {pt_id}")
-        return pt_id
 
     def rm_cook_active_directory_groups_get(self):
         header = {'token': self.token}
@@ -203,7 +193,8 @@ class RmCook(BaseReq):
         return resp
 
     def rm_cook_settings_sources_post(self):
-        db_picker_tables = self._id_picker_tables_get()
+        # db_picker_tables = self._id_picker_tables_get()
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         body = [{"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 1, "table_name": "ad_groups_ngr"},
                 {"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 2, "table_name": "ad_users_ngr"}]
         header = {'token': self.token}
