@@ -8,13 +8,6 @@ mailing_id = []     # 'id' рассылок
 
 class Reporter(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_mailing_id(self) -> int:
         if len(mailing_id) == 0:
             self.reporter_mailing_get()
@@ -24,7 +17,7 @@ class Reporter(BaseReq):
     def reporter_mailing_post(self):
         # исп: создание рассылки из отчета
         # на фронте видны у того, кто является "автором" рассылки
-        self_user_id = self._get_user_id()
+        self_user_id = self.get_self_user_id()
         data = {
             # "id":           435,                              # 'id' самой рассылки
             "name":         "TestAPIReport_auto_" + str(random.randint(0, 999)),            # имя рассылки
@@ -82,7 +75,7 @@ class Reporter(BaseReq):
                 # 282
             ],
             # "editor_id": 4870
-            "editor_id": self._get_user_id()
+            "editor_id": self.get_self_user_id()
         }
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing/sample", headers=header, json=data, verify=False)
@@ -104,7 +97,7 @@ class Reporter(BaseReq):
     def reporter_mailing_put(self):
         """process PUT req for changing mailing"""
         _mailing_id = self._get_mailing_id()
-        self_user_id = self._get_user_id()
+        self_user_id = self.get_self_user_id()
         data = {
             "id": _mailing_id,
             "name": "TestAPIReport_auto_edit_" + str(random.randint(0, 999)),
