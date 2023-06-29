@@ -2,15 +2,12 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 profile_id = set()  # 'id' профиля xBA
 group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
-
-
-class DbName:
-    picker_tables = "picker_tables"     # FIXME: перевести на таблицу > like. API_TEST_DBx
 
 
 class XbaCook(BaseReq):
@@ -21,19 +18,6 @@ class XbaCook(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         dct = json.loads(resp.text)
         return dct['res']['user_id']
-
-    def _get_db_id_by_name(self, db_name: str) -> int:
-        """Возвращает 'id' хранилища с указанным именем"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        db_info_rows = dct['res']
-        db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
-        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
-
-        db_id = db_info_row['id']
-
-        return db_id
 
     def _get_group_id(self) -> int:
         """get from global group_id : API_AUTO_TEST_x"""
@@ -80,7 +64,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_check_entity_type_post(self):
-        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             "column": "1",
             # "db_id": pt_id,
@@ -137,7 +121,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_info_settings_post(self):
-        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             "user_settings":
             {
@@ -185,7 +169,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_max_min_post(self):
-        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             "column": "1",
             # "db_id": pt_id,
@@ -204,7 +188,7 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_post(self):
         # FIXME: редактировать заполнение
         str_random_num = str(random.randint(1000, 9999))
-        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             # "id": ???
             "name": API_AUTO_TEST_ + str_random_num,
