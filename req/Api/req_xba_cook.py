@@ -199,11 +199,6 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, verify=False)
-
-        # dct = json.loads(resp.text)
-        # prof_id = dct['res'][2]['id']  # получили id профаила
-        # print(resp.text)
-        # print(f"prof_id is {prof_id}")
         return resp
 
     def xba_cook_profiles_post(self):
@@ -273,7 +268,7 @@ class XbaCook(BaseReq):
 
     def xba_cook_profiles_export_profiles_post(self):
         prof_id = self._get_profile_id()
-        data = {"profile_ids": [str(prof_id)]}
+        data = {"profile_ids": [prof_id]}
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/export_profiles", headers=header, json=data, verify=False)
         return resp
@@ -293,7 +288,7 @@ class XbaCook(BaseReq):
             "time": "2022-12-06T08:36:09Z"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/statement/" + str(prof_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/statement/{prof_id}", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_graph_drilldown_id_post(self, prof_id=None, data=None):
@@ -310,7 +305,7 @@ class XbaCook(BaseReq):
         #     }
 
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/" + str(prof_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/drilldown/{prof_id}", headers=header, json=data, verify=False)
 
         return resp
 
@@ -346,7 +341,7 @@ class XbaCook(BaseReq):
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/graph/max_min/" + str(prof_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/graph/max_min/{prof_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_graph_personal_id_post(self):
@@ -360,7 +355,7 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/personal/" + str(prof_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/personal/{prof_id}", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_graph_id_post(self):
@@ -374,7 +369,7 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/" + str(prof_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/{prof_id}", headers=header, json=data, verify=False)
         return resp
 
     def xba_cook_profiles_groups_post(self):
@@ -396,12 +391,12 @@ class XbaCook(BaseReq):
 
     def xba_cook_profiles_groups_put(self):
         """process PUT req for updating group name"""
-        rand = random.randint(100, 999)
+        rand_num = random.randint(100, 999)
         _group_id = self._get_group_id()
 
         data = {
             "id": _group_id,
-            "name": API_AUTO_TEST_ + "changed_" + str(rand),
+            "name": API_AUTO_TEST_ + f"changed_{rand_num}",
             "weight": ""
         }
         header = {'token': self.token}
@@ -416,13 +411,13 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_groups_id_delete(self):
         _group_id = self._get_group_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(_group_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_group_id_profiles_get(self):
         _group_id = self._get_group_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(_group_id) + "/profiles", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}/profiles", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_post(self):
@@ -435,12 +430,15 @@ class XbaCook(BaseReq):
             "timezone": "Europe/Moscow"
         }
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(_group_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}", headers=header, json=data, verify=False)
         return resp
 
+    # FIXME: _group_id = None # FIXME: @mark.skip
     def xba_cook_profiles_groups_id_max_min_get(self):
+        _group_id = None
+
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/2/max_min", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}/max_min", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
@@ -448,10 +446,11 @@ class XbaCook(BaseReq):
         # FIXME: хардкод
         prof_id = 1931
         group_id = 1493
+        weight = 2
 
         header = {'token': self.token}
         resp = self.sess.get(
-            f"{self.host}/back/dp.xba_cook/profiles/groups/" + str(prof_id) + "/" + str(group_id) + "/2", headers=header, verify=False)
+            f"{self.host}/back/dp.xba_cook/profiles/groups/{prof_id}/{group_id}/{weight}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_import_profiles_post(self):
@@ -514,24 +513,27 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_start_id_get(self):
+        """process GET req to start profile by id"""
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/start/" + str(prof_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/start/{prof_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_stop_id_get(self):
+        """process GET req to stop profile by id"""
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/stop/" + str(prof_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/stop/{prof_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_get(self):
+        """process GET req to get profile info by id"""
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_delete(self):
@@ -540,14 +542,14 @@ class XbaCook(BaseReq):
         prof_id = 2001
 
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_log_last_get(self):
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/log/last", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/log/last", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_whitelist_post(self):
@@ -556,7 +558,7 @@ class XbaCook(BaseReq):
 
         data = {"data": [{"name": "ApiTest"}]}      # FIXME: >> API_AUTO_TEST_
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist", json=data, headers=header, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/whitelist", json=data, headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_whitelist_element_post(self):
@@ -564,18 +566,19 @@ class XbaCook(BaseReq):
         # {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
         prof_id = self._get_profile_id()
 
-        random_num = random.randint(0, 999)
+        str_random_num = str(random.randint(100, 999))
 
-        data = {"data": "ApiTest" + str(random_num)}        # FIXME:    >> API_AUTO_TEST_
+        data = {"data": API_AUTO_TEST_ + str_random_num}
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/whitelist/element", json=data, headers=header, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/whitelist/element", json=data, headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_string_whitelist_get(self):
         prof_id = self._get_profile_id()
+        # FIXME: {form} = string
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/string/whitelist", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/string/whitelist", headers=header, verify=False)
         return resp
 
     # FIXME: swagger - нет описания
@@ -583,7 +586,7 @@ class XbaCook(BaseReq):
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/" + str(prof_id) + "/list/whitelist", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/list/whitelist", headers=header, verify=False)
         return resp
 
     def xba_cook_xba_get(self):
@@ -634,3 +637,10 @@ class XbaCook(BaseReq):
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/xba", json=data, headers=header, verify=False)
         return resp
+
+    # add
+    # [PUT] /back/dp.xba_cook/profiles/{id}
+
+    ## FIXME: нет описания в Swagger
+    # [POST] /back/dp.xba_cook/profiles/{prof_id}
+    # {"name":"tdasap1","db_id":2528,"table_name":"API_TEST_TABLE","author":"Ежов Сергей","author_id":4870,"editor":"Ежов Сергей","editor_id":4870,"created":"2023-06-29T07:14:11.117929Z","modified":"2023-06-29T07:48:38.692Z","id_function":1,"id_category":1,"group_info":null,"filter_settings":[{"field":"one","action":">","value":"10/10/1010 00:00:00","value_type":"DateTime"}],"profile_type":"median","status":3,"time_last_executed":"2023-06-29T07:14:12.198135Z","time_settings":{"time_column":"one","time_start":"1970-01-01T00:00:00.000Z","time_end":"1970-01-01T00:00:00.000Z","discretization_period":"week"},"entity_settings":{"entity_column":"one","entity_column_name":"other","entity_type":"one","additional_column":"","levels":{"level1":2,"level2":4,"level3":6,"level4":8}}}
