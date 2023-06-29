@@ -12,13 +12,6 @@ group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
 
 class XbaCook(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_group_id(self) -> int:
         """get from global group_id : API_AUTO_TEST_x"""
         if len(group_id) == 0:
@@ -188,6 +181,7 @@ class XbaCook(BaseReq):
     def xba_cook_profiles_post(self):
         # FIXME: редактировать заполнение
         str_random_num = str(random.randint(1000, 9999))
+        self_user_id = self.get_self_user_id()
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             # "id": ???
@@ -196,10 +190,10 @@ class XbaCook(BaseReq):
             "published": False,
             "opened": False,
             # "author_id": at_uid,
-            "author_id": self._get_user_id(),
+            "author_id": self_user_id,
             "author": "Тест Апи",
             # "editor_id": at_uid,
-            "editor_id": self._get_user_id(),
+            "editor_id": self_user_id,
             "editor": "Тест Апи",
             "created": "2023-02-15T07:55:02.631066Z",
             "modified": "2023-02-15T07:55:02.631066Z",
@@ -439,6 +433,7 @@ class XbaCook(BaseReq):
 
     def xba_cook_profiles_import_profiles_post(self):
         str_rand_num = str(random.randint(1200, 12500))
+        self_user_id = self.get_self_user_id()
         data = {
             "profile_list": [
                 {
@@ -447,14 +442,12 @@ class XbaCook(BaseReq):
                     "description": None,
                     "published": False,
                     "opened": False,
-                    "author_id": self._get_user_id(),
-                    # "author": "Ванин Юрий",
-                    "editor_id": self._get_user_id(),
-                    # "editor": "Ванин Юрий",
+                    "author_id": self_user_id,
+                    "editor_id": self_user_id,
                     "created": "2023-02-15T07:55:02.631066Z",
                     "modified": "2023-02-15T07:55:02.631066Z",
                     "db_id": None,
-                    "db_name": "picker_tables",     # FIXME: использовать другую таблицу?
+                    "db_name": DbName.picker_tables,     # FIXME: использовать другую таблицу?
                     "table_name": "ad_users_ngr",
                     "status": 3,
                     "profile_type": "median",
