@@ -10,13 +10,6 @@ session_id = []     # 'id' сессий текущего пользовател�
 
 class AuthApi(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_session_id(self) -> int:
         self.auth_sessions_uid_get()                # получение всех session_id для текущего пользователя
         if len(session_id) == 0:
@@ -67,7 +60,7 @@ class AuthApi(BaseReq):
         """Удалить ВСЕ сессии пользователя **user_id**"""
 
         if user_id is None:
-            user_id = self._get_user_id()
+            user_id = self.get_self_user_id()
 
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.auth/sessions/all/" + str(user_id), headers=header, verify=False)
@@ -88,7 +81,7 @@ class AuthApi(BaseReq):
         """Получить список сессий пользователя **user_id**"""
 
         if user_id is None:
-            user_id = self._get_user_id()
+            user_id = self.get_self_user_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.auth/sessions/" + str(user_id), headers=header, verify=False)
