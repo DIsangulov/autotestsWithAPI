@@ -25,7 +25,6 @@ from req.Api.req_visualisation import Visualisation
 
 urllib3.disable_warnings()
 
-# ________Constants________
 SESS = requests.Session()
 HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
@@ -626,6 +625,10 @@ class TestPeopler:
         resp = req.peopler_users_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # def __del__(self):    # FIXME >> after class
+    def test_all_api_auto_test_user_delete(self):
+        Peopler(SESS, HOST).all_api_auto_test_user_delete()
+
 
 class TestPermitter:
 
@@ -1101,11 +1104,6 @@ class TestStorageWorker:
         req = StorageWorker(SESS, HOST)
         resp = req.storage_worker_statistics_storage_search_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # def test_storage_worker_storage_db_get(self):
-    #     req = StorageWorker(sess, host)
-    #     resp = req.storage_worker_storage_db_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_storage_db_post(self):
         req = StorageWorker(SESS, HOST)

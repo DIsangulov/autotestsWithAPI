@@ -13,15 +13,19 @@ auto_user_id = set()   # список для пользователей, соз�
 
 class Peopler(BaseReq):
 
+    def _collect_auto_user_id(self):
+        resp_all_users = self.peopler_users_get()                           # получить список ВСЕХ пользователей
+        all_users_info_rows = json.loads(resp_all_users.text)['res']
+        for _row in all_users_info_rows:                                    # фильтровать пользователей по API_AUTO_TEST_
+            # .lower автоматически применяется при регистрации @доменных пользователей
+            if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
+                auto_user_id.add(int(_row['id']))
+        # FIXME: можно возвращаемым значением длину конечного списка возвращать, для ветвлений 'if'
+
     def _get_auto_user_id(self) -> int:
         """get from global auto_user_id: API_AUTO_TEST_x"""
         if len(auto_user_id) == 0:
-            resp_all_users = self.peopler_users_get()                       # получить список ВСЕХ пользователей
-            all_users_info_rows = json.loads(resp_all_users.text)['res']
-            for _row in all_users_info_rows:                                # фильтровать пользователей по API_AUTO_TEST_
-                # .lower автоматически применяется при регистрации @доменных пользователей
-                if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
-                    auto_user_id.add(int(_row['id']))
+            self._collect_auto_user_id()
 
         if len(auto_user_id) == 0:
             resp_new_user = self.peopler_users_post()                       # Создание нового @доменного пользователя
@@ -148,6 +152,6 @@ class Peopler(BaseReq):
 
     # Главное - не прострелить ногу # метод удаляет всех пользователей, которые остались в auto_user_id
     def all_api_auto_test_user_delete(self):
-        # self._get_auto_user_id()    # .pop() -> один пользователь выживет
+        self._collect_auto_user_id()
         while len(auto_user_id) > 0:
-            resp = self.peopler_users_delete(auto_user_id.pop())
+            self.peopler_users_delete(auto_user_id.pop())
