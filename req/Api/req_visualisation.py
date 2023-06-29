@@ -2,14 +2,9 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
-
-
-class DbName:
-    picker_tables = "picker_tables"
-    API_TEST_DB2 = "API_TEST_DB2"
-
 
 query_id = []           # 'id' sql запроса
 report_id = []          # 'id' отчета
@@ -24,19 +19,6 @@ class Visualisation(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
         dct = json.loads(resp.text)
         return dct['res']['user_id']
-
-    def _get_db_id_by_name(self, db_name: str) -> int:
-        """Возвращает 'id' хранилища с указанным именем"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        db_info_rows = dct['res']
-        db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
-        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
-
-        db_id = db_info_row['id']
-
-        return db_id
 
     def _get_query_id(self) -> int:
         self.visualisation_query_get()              # запрос на получение списка всех 'query'
@@ -85,7 +67,8 @@ class Visualisation(BaseReq):
 
         random_num = random.randint(0, 999)
         self_user_id = self._get_user_id()                                  # Получить свой 'user_id'
-        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)    # Получить 'id' хранилища 'picker_tables'
+        # db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)    # Получить 'id' хранилища 'picker_tables'
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
 
         header = {'token': self.token}
         data = {
