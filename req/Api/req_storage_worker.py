@@ -9,13 +9,6 @@ reg_pid = []        # список, содержащий id новосоздан
 
 class StorageWorker(BaseReq):
 
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
     def _get_temp_reg_pid(self) -> int:
         if len(reg_pid) == 0:                               # global reg_pid # id регулярного выражения
             self.storage_worker_psevdo_namer_regs_post()    # если нет, создай новую
@@ -63,7 +56,7 @@ class StorageWorker(BaseReq):
             "postfix": "1",
             "state": False,
             "is_on": False,
-            "author": self._get_user_id()           # автором является инициатор
+            "author": self.get_self_user_id()           # автором является инициатор
         }
 
         resp = self.sess.post(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs", headers=header, json=data, verify=False)
