@@ -262,9 +262,9 @@ class TestCore:
         resp = req.core_active_directory_test_settings_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_backups_get(self):
+    def test_core_check_get(self):
         req = Core(SESS, HOST)
-        resp = req.core_check_backups_get()
+        resp = req.core_check_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_common_get(self):
@@ -317,9 +317,9 @@ class TestCore:
         resp = req.core_email_send_test_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_email_in_get(self):
+    def test_core_email_type_get(self):
         req = Core(SESS, HOST)
-        resp = req.core_email_in_get()
+        resp = req.core_email_type_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_email_out_get(self):
@@ -344,7 +344,7 @@ class TestCore:
 
     def test_core_ip_get(self):
         req = Core(SESS, HOST)
-        resp = req.core_flag_get()
+        resp = req.core_ip_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_nodes_list_ml_get(self):
@@ -386,21 +386,6 @@ class TestCore:
         req = Core(SESS, HOST)
         resp = req.core_nodes_datastore_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # def test_core_nodes_test_datastore(self):
-    #     req = Core(sess, host)
-    #     resp = req.core_nodes_test_datastore_post()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-    #
-    # def test_core_nodes_datastore_post(self):
-    #     req = Core(sess, host)
-    #     resp = req.core_nodes_datastore_post()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-    #
-    # def test_core_nodes_datastore_delete(self):
-    #     req = Core(sess, host)
-    #     resp = req.core_nodes_datastore_delete()
-    #     assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_service_dp_alarmer_get(self):
         req = Core(SESS, HOST)
