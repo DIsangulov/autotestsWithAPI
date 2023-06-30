@@ -13,6 +13,8 @@ def _get_sample_data() -> dict:
 
 class Monitor(BaseReq):
 
+    # TODO: [POST] /back/dp.monitor/anomals/{flag}
+
     def monitor_anomals_flag_0_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
@@ -43,6 +45,8 @@ class Monitor(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.monitor/anomals/4", headers=header, json=data, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.monitor/dump/{what}
+
     def monitor_dump_server_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
@@ -56,6 +60,9 @@ class Monitor(BaseReq):
         return resp
 
     # -----------------------------------------------------------
+
+    # TODO: [POST] /back/dp.monitor/nodes/graphs/{what}/{metric}
+
     def monitor_nodes_graphs_ml_ram_post(self):
         data = _get_sample_data()
         header = {'token': self.token}
@@ -176,6 +183,8 @@ class Monitor(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.monitor/nodes/graphs/datastore/picked", headers=header, json=data, verify=False)
         return resp
 
+    # TODO: [GET] /back/dp.monitor/nodes/stats/{what}
+
     def monitor_nodes_stats_ml_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.monitor/nodes/stats/ml", headers=header, verify=False)
@@ -195,6 +204,8 @@ class Monitor(BaseReq):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.monitor/nodes/stats/datastore", headers=header, verify=False)
         return resp
+
+    # TODO: [POST] /back/dp.monitor/webserver/graphs/{metric}
 
     def monitor_webserver_graphs_ram_post(self):
         data = _get_sample_data()
@@ -221,9 +232,12 @@ class Monitor(BaseReq):
         return resp
 
     def monitor_webserver_groups_get(self):
+        """process GET req for getting all webserver components stats"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.monitor/webserver/groups", headers=header, verify=False)
         return resp
+
+    # TODO: [GET] /back/dp.monitor/webserver/stats/{what}
 
     def monitor_webserver_stats_sys_get(self):
         header = {'token': self.token}
