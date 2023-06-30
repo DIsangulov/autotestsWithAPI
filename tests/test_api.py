@@ -631,9 +631,9 @@ class TestPermitter:
         resp = req.permitter_db_watcher_all_tables_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_db_tables_get(self):
+    def test_permitter_db_watcher_db_tables_id_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_db_tables_get()
+        resp = req.permitter_db_watcher_db_tables_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_db_watcher_empty_role_dbs_get(self):
@@ -749,65 +749,65 @@ class TestPermitter:
         resp = req.permitter_element_rules_all_flags_script_sequence_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_query_get(self):
+    def test_permitter_element_rules_query_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_query_get()
+        resp = req.permitter_element_rules_query_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_visualisation_get(self):
+    def test_permitter_element_rules_visualisation_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_visualisation_get()
+        resp = req.permitter_element_rules_visualisation_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_report_get(self):
+    def test_permitter_element_rules_report_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_report_get()
+        resp = req.permitter_element_rules_report_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_mailing_get(self):
+    def test_permitter_element_rules_mailing_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_mailing_get()
+        resp = req.permitter_element_rules_mailing_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_script_get(self):
+    def test_permitter_element_rules_script_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_get()
+        resp = req.permitter_element_rules_script_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_script_sequence_get(self):
+    def test_permitter_element_rules_script_sequence_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_sequence_get()
+        resp = req.permitter_element_rules_script_sequence_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_query_post(self):
+    def test_permitter_element_rules_query_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_query_post()
+        resp = req.permitter_element_rules_query_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_visualisation_post(self):
+    def test_permitter_element_rules_visualisation_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_visualisation_post()
+        resp = req.permitter_element_rules_visualisation_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_report_post(self):
+    def test_permitter_element_rules_report_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_report_post()
+        resp = req.permitter_element_rules_report_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_mailing_post(self):
+    def test_permitter_element_rules_mailing_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_mailing_post()
+        resp = req.permitter_element_rules_mailing_post()
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_script_post(self):
+    def test_permitter_element_rules_script_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_post()
+        resp = req.permitter_element_rules_script_post()
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip  # FIXME: падает; хардкод
-    def test_permitter_element_rules_flags_script_sequence_post(self):
+    def test_permitter_element_rules_script_sequence_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_sequence_post()
+        resp = req.permitter_element_rules_script_sequence_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
