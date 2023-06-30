@@ -91,7 +91,7 @@ class TestAbsorber:
         resp = req.absorber_library_conn_type_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_absorber_library_connector_get(self):  # получаем список всех коннекторов
+    def test_absorber_library_connector_get(self):
         req = Absorber(SESS, HOST)
         resp = req.absorber_library_connector_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -209,8 +209,7 @@ class TestAlarmer:
         resp = req.alarmer_notification_settings_userone_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
-    def test_alarmer_notification_settings_type_post(self):  # проблемный
+    def test_alarmer_notification_settings_type_post(self):
         req = Alarmer(SESS, HOST)
         resp = req.alarmer_notification_settings_type_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -222,7 +221,7 @@ class TestAlarmer:
 
     def test_alarmer_notification_user_get(self):
         req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_user_get()
+        resp = req.alarmer_notification_type_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_alarmer_send_invitation_post(self):
