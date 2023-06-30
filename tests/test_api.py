@@ -24,7 +24,7 @@ from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
 
 urllib3.disable_warnings()
-
+# комент
 SESS = requests.Session()
 HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
