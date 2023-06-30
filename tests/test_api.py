@@ -1674,16 +1674,6 @@ class TestReporter:
         resp = req.reporter_screener_fast_pdf_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # def test_reporter_screener_fast_png_id_get(self): # ---- не используется ----
-    #     req = Reporter(sess, host)
-    #     resp = req.reporter_screener_fast_png_id_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-    #
-    # def test_reporter_screener_fast_pdf_id_get(self):
-    #     req = Reporter(sess, host)
-    #     resp = req.reporter_screener_fast_pdf_id_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     @pytest.mark.skip
     def test_reporter_screener_fast_xlsx_id_get(self):  # xlsx формируется на фронте
         req = Reporter(SESS, HOST)

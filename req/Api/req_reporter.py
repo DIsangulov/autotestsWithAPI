@@ -14,79 +14,13 @@ class Reporter(BaseReq):
         # FIXME: список рассылок mailing_id всё ещё может остаться пустым
         return mailing_id[-1]
 
-    def reporter_mailing_post(self):
-        # исп: создание рассылки из отчета
-        # на фронте видны у того, кто является "автором" рассылки
-        self_user_id = self.get_self_user_id()
-        data = {
-            # "id":           435,                              # 'id' самой рассылки
-            "name":         "TestAPIReport_auto_" + str(random.randint(0, 999)),            # имя рассылки
-            "description":  "описание рассылки",                # описание рассылки
-            "published":    False,
-            "opened":       False,
-            "author_id":    self_user_id,                       # 'id' автора
-            # "author_name":  "Владимир Даль",                  # >> по идее, имя автора
-            # "editor_id":    self_user_id,                     # 'id' редактора >> 'id' автора
-            # "editor_name":  "Владимир Даль",
-            # "created":      "2023-06-21T12:04:39.021816Z",
-            # "edited":       "2023-06-21T12:11:56.296546Z",
-            "type":         0,
-            "status":       True,
-            "syslog":       False,
-            "email":        True,
-            "db_id":        None,
-            # "report_id":    526,                            # 'id' отчета, из которой делается рассылка >> выпадающий список "Отчет"
-            "settings":
-                {
-                    "sampled":          False,
-                    "text":             "текст",                            # Текст письма
-                    "topic":            "тема измененная тема",             # Тема письма
-                    "ip":               "",
-                    "port":             0,
-                    "protocol":         "",
-                    "report_settings":  {"file_format": 1},
-                    "data_settings":    {"time_column": "","table_name": ""}
-                },
-            "elements": None,   # >> видимо 'Элементы отчета' >> int
-            "receivers": [      # 'id' получателей
-                # 7741  # Dnaikk
-            ]
-        }
-
-        header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing", headers=header, json=data, verify=False)
-        # print(resp.text)  # {"res":12345}
-        return resp
-
-    def reporter_mailing_sample_post(self):
-        # исп: "Отправить тестовое письмо себе"
-        data = {
-            "settings": {
-                "report_settings": {
-                    "file_format": 1
-                },
-                "text": "api_test_auto_text",
-                "topic": "api_test_auto_topic"
-            },
-            "type": 0,
-            "name": "api_test_auto_name",
-            "report_id": 408,       # несуществующий 'report_id', статус код 200; письмо не придет
-            "elements": [
-                # 282
-            ],
-            # "editor_id": 4870
-            "editor_id": self.get_self_user_id()
-        }
-        header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing/sample", headers=header, json=data, verify=False)
-        return resp
-
     def reporter_mailing_get(self):
         """process GET req for getting all mailings from library"""
         # получение всех рассылок (*редактором которых является запросивший)
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing", headers=header, verify=False)
 
+        # FIXME: перенести в _get_mailing_id
         dct = json.loads(resp.text)
         for _row in dct['res']:
             # print(_row)
@@ -144,6 +78,78 @@ class Reporter(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.reporter/mailing", headers=header, json=data, verify=False)
         return resp
 
+    def reporter_mailing_post(self):
+        """process POST req for adding new mailing"""
+        # исп: создание рассылки из отчета
+        # на фронте видны у того, кто является "автором" рассылки
+        self_user_id = self.get_self_user_id()
+        data = {
+            # "id":           435,                              # 'id' самой рассылки
+            "name":         "TestAPIReport_auto_" + str(random.randint(0, 999)),            # имя рассылки
+            "description":  "описание рассылки",                # описание рассылки
+            "published":    False,
+            "opened":       False,
+            "author_id":    self_user_id,                       # 'id' автора
+            # "author_name":  "Владимир Даль",                  # >> по идее, имя автора
+            # "editor_id":    self_user_id,                     # 'id' редактора >> 'id' автора
+            # "editor_name":  "Владимир Даль",
+            # "created":      "2023-06-21T12:04:39.021816Z",
+            # "edited":       "2023-06-21T12:11:56.296546Z",
+            "type":         0,
+            "status":       True,
+            "syslog":       False,
+            "email":        True,
+            "db_id":        None,
+            # "report_id":    526,                            # 'id' отчета, из которой делается рассылка >> выпадающий список "Отчет"
+            "settings":
+                {
+                    "sampled":          False,
+                    "text":             "текст",                            # Текст письма
+                    "topic":            "тема измененная тема",             # Тема письма
+                    "ip":               "",
+                    "port":             0,
+                    "protocol":         "",
+                    "report_settings":  {"file_format": 1},
+                    "data_settings":    {"time_column": "","table_name": ""}
+                },
+            "elements": None,   # >> видимо 'Элементы отчета' >> int
+            "receivers": [      # 'id' получателей
+                # 1234
+            ]
+        }
+
+        header = {'token': self.token}
+        resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing", headers=header, json=data, verify=False)
+        # print(resp.text)  # {"res":12345}
+        return resp
+
+    def reporter_mailing_sample_post(self):
+        """process POST req for getting mailing data sample from storage"""
+        # исп: "Отправить тестовое письмо себе"
+        _report_id = 408    # несуществующий 'report_id', статус код 200; письмо не придет
+        data = {
+            "settings": {
+                "report_settings": {
+                    "file_format": 1
+                },
+                "text": "api_test_auto_text",
+                "topic": "api_test_auto_topic"
+            },
+            "type": 0,
+            "name": "api_test_auto_name",
+            "report_id": _report_id,
+            "elements": [
+                # 282
+            ],
+            # "editor_id": 4870
+            "editor_id": self.get_self_user_id()
+        }
+        header = {'token': self.token}
+        resp = self.sess.post(f"{self.host}/back/dp.reporter/mailing/sample", headers=header, json=data, verify=False)
+        return resp
+
+    # TODO: [GET] /back/dp.reporter/mailing/typed/{type}
+
     def reporter_mailing_type_0_1_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/typed/0_1", headers=header, verify=False)
@@ -155,10 +161,21 @@ class Reporter(BaseReq):
         return resp
 
     def reporter_mailing_id_get(self):
+        """process GET req for getting mailing by id"""
         _mailing_id = self._get_mailing_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/" + str(_mailing_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.reporter/mailing/{_mailing_id}", headers=header, verify=False)
         return resp
+
+    def reporter_mailing_id_delete(self):
+        """process DELETE req for deleting mailing"""
+        # исп: удалить рассылку
+        _mailing_id = self._get_mailing_id()
+        header = {'token': self.token}
+        resp = self.sess.delete(f"{self.host}/back/dp.reporter/mailing/{_mailing_id}", headers=header, verify=False)
+        return resp
+
+    # TODO: [POST] /back/dp.reporter/screener/fast
 
     def reporter_screener_fast_png_post(self):
         # https://tasks.ngrsoftlab.ru/browse/DAT-4983
@@ -186,18 +203,7 @@ class Reporter(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.reporter/screener/fast", headers=header, json=data, verify=False)
         return resp
 
-    # def reporter_screener_fast_png_id_get(self): # ---- не используется ----
-    #     header = {'token': self.token}
-    #     resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/png/158", headers=header,
-    #                          verify=False)
-    #     return resp
-    #
-    # def reporter_screener_fast_pdf_id_get(self):
-    #     header = {'token': self.token}
-    #     resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/pdf/158", headers=header,
-    #                          verify=False)
-    #     return resp
-
+    # FIXME: нет описания [GET] /back/dp.reporter/screener/fast/{type}/{id}
     def reporter_screener_fast_xlsx_id_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/xlsx/158", headers=header, verify=False)
@@ -205,28 +211,24 @@ class Reporter(BaseReq):
 
     # FIXME: +front>usage // you can use _report_id where _report['published']==true?
     def reporter_visualisation_cached_role_report_report_id_role_id_post(self):
+        """process POST req for setting report-role"""
         _report_id = 10
+        _role_id = 1
         header = {'token': self.token}
-        # resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/role_report/158/1", headers=header, verify=False)
-        resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/role_report/{str(_report_id)}/1", headers=header, verify=False)
-        return resp
-
-    def reporter_mailing_id_delete(self):
-        # исп: удалить рассылку
-        _rep_id = self._get_mailing_id()
-        header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.reporter/mailing/" + str(_rep_id), headers=header, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/role_report/{_report_id}/{_role_id}", headers=header, verify=False)
         return resp
 
     def reporter_visualisation_cached_user_report_get(self):
+        """process GET req for getting report by id"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/visualisation_cached/user_report", headers=header, verify=False)
         return resp
 
     # FIXME: хардкод
     def reporter_visualisation_cached_user_report_report_id_post(self):
+        """process POST req for setting report-user"""
         # исп: на странице отчета >> прикрепить к главной странице
         _report_id = 10    # _report_id = 0 >> открепить от главной страницы
         header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/user_report/{str(_report_id)}", headers=header, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/user_report/{_report_id}", headers=header, verify=False)
         return resp
