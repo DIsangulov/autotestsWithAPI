@@ -48,47 +48,25 @@ class Scripter(BaseReq):
         return log_id
 
     def scripter_category_get(self):
+        """process GET tot get script categories (analytics/parsers/services)"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/category", headers=header, verify=False)
         # {"res":[{"name":"Аналитические","path":"analitycs"},{"name":"Парсеры","path":"parsers"},{"name":"Служебные","path":"service"}]}
         return resp
 
     def scripter_libs_get(self):
+        """process GET to get script libs list"""
         # исп: front>при создании скрипта>возвращает список "Разрешенные пакеты и библиотеки python"
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/libs", headers=header, verify=False)
         return resp
 
-    def scripter_script_post(self):
-        """process POST to create new script"""
-        rand_num = random.randint(0, 999)
-        data = {
-            # "author": "dataplan_qaa@ngrsoftlab.ru",
-            # "author": "Владимир Даль",
-            "name": API_AUTO_TEST_ + str(rand_num),
-            "description": API_AUTO_TEST_ + str(rand_num),
-            "type": True,
-            "category": 1,
-            "keys": [],
-            "node": 0,
-            "encrypt": False,
-            "encapsulate": False,
-            "main_file": {
-                "file_data": "print ('Test')",
-                "file_name": "script.py"
-            },
-            "additional_files": [],
-            # "author_id": at_uid
-            "author_id": self.get_self_user_id()
-        }
-        header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
-        return resp
-
     def scripter_script_get(self):
+        """process GET to get list of all scripts"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script", headers=header, verify=False)
 
+        # FIXME: перенести в _get_script_id
         script_info_rows = json.loads(resp.text)['res']
 
         # вывести список всех script_info
@@ -105,15 +83,15 @@ class Scripter(BaseReq):
         return resp
 
     def scripter_script_put(self):
-
+        """process PUT to edit existing script"""
+        str_rand_num = str(random.randint(0, 999))
         _script_id = self._get_script_id()
         data = {
             "type": True,
-            # "editor_id": at_uid,
             "editor_id": self.get_self_user_id(),
             "id": _script_id,
-            "name": "TestAPIscripter1",
-            "description": "TestAPIscripter",
+            "name": API_AUTO_TEST_ + "changed" + str_rand_num,
+            "description": API_AUTO_TEST_ + "changed" + str_rand_num,
             "category": 1,
             "keys": [
                 {
@@ -128,17 +106,35 @@ class Scripter(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
         return resp
 
+    def scripter_script_post(self):
+        """process POST to create new script"""
+        str_rand_num = str(random.randint(0, 999))
+        data = {
+            # "author": "dataplan_qaa@ngrsoftlab.ru",
+            # "author": "Владимир Даль",
+            "name": API_AUTO_TEST_ + str_rand_num,
+            "description": API_AUTO_TEST_ + str_rand_num,
+            "type": True,
+            "category": 1,
+            "keys": [],
+            "node": 0,
+            "encrypt": False,
+            "encapsulate": False,
+            "main_file": {
+                "file_data": "print ('Test')",
+                "file_name": "script.py"
+            },
+            "additional_files": [],
+            "author_id": self.get_self_user_id()
+        }
+        header = {'token': self.token}
+        resp = self.sess.post(f"{self.host}/back/dp.scripter/script", headers=header, json=data, verify=False)
+        return resp
+
     def scripter_script_exec_list_get(self):
         """process GET to get list of all scripts with access level exec"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/script/exec_list", headers=header, verify=False)
-        return resp
-
-    def scripter_script_id_get(self):
-        _script_id = self._get_script_id()
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id), headers=header, verify=False)
-        # print(resp.text)
         return resp
 
     def scripter_script_start_post(self, _script_id: int = None):
@@ -162,18 +158,35 @@ class Scripter(BaseReq):
 
     # FIXME: {"error":{"code":400,"msg":"Задание не было запущено"}}
     def scripter_script_stop_id_get(self):
+        """process GET req to stop script (if script started and user have rights for that)"""
         _script_id = self._get_script_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/stop/" + str(_script_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/stop/{_script_id}", headers=header, verify=False)
+        return resp
+
+    def scripter_script_id_get(self):
+        """process GET to get script by id"""
+        _script_id = self._get_script_id()
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}", headers=header, verify=False)
+        return resp
+
+    def scripter_script_id_delete(self):
+        """process DELETE to delete script by id (set flag deleted)"""
+        _script_id = self._get_script_id()
+        header = {'token': self.token}
+        resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/{_script_id}", headers=header, verify=False)
         return resp
 
     def scripter_script_id_files_get(self):
+        """process GET to get script files by id"""
         _script_id = self._get_script_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/files", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}/files", headers=header, verify=False)
         return resp
 
     def scripter_script_id_files_put(self):
+        """process GET to update script files by id"""
         _script_id = self._get_script_id()
         data = {
             "additional_files": [
@@ -188,16 +201,16 @@ class Scripter(BaseReq):
             }
         }
         header = {'token': self.token}
-        resp = self.sess.put(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/files", headers=header, json=data, verify=False)
+        resp = self.sess.put(f"{self.host}/back/dp.scripter/script/{_script_id}/files", headers=header, json=data, verify=False)
         return resp
 
     def scripter_script_id_log_get(self, _script_id: int = None) -> requests.Response:
-
+        """process GET to get script's history states (list of logs)"""
         if _script_id is None:
             _script_id = self._get_script_id()
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}/log", headers=header, verify=False)
 
         # print(resp.text)    # если скрипт '_script_id' не запускался >> {"res":null}
         return resp
@@ -212,7 +225,7 @@ class Scripter(BaseReq):
         # FIXME: ждать, пока скрипт исполнится?
 
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log", headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/{_script_id}/log", headers=header, verify=False)
         return resp
 
     def scripter_script_id_log_last_get(self):
@@ -224,32 +237,30 @@ class Scripter(BaseReq):
         # FIXME: ждать, пока скрипт исполнится?
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log/last", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}/log/last", headers=header, verify=False)
         return resp
 
     def scripter_script_script_id_log_log_id_get(self):
+        """process GET to get script log text by log history ID"""
         _script_id = self._get_script_id()
         _log_id = self._get_log_id(_script_id)
 
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log/" + str(_log_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}/log/{_log_id}", headers=header, verify=False)
         return resp
 
     def scripter_script_script_id_log_log_id_delete(self):
+        """process DELETE to delete script log by history id"""
         _script_id = self._get_script_id()
         _log_id = self._get_log_id(_script_id)
 
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(_script_id) + "/log/" + str(_log_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/{_script_id}/log/{_log_id}", headers=header, verify=False)
 
         # print(f"Был удален лог: {_log_id}")
         return resp
 
-    def scripter_script_id_delete(self):
-        _script_id = self._get_script_id()
-        header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.scripter/script/" + str(_script_id), headers=header, verify=False)
-        return resp
+    # TODO: [GET] /back/dp.scripter/script/{script_type}
 
     def scripter_script_type_admin_get(self):
         # исп: получить список скриптов "Административные"
@@ -264,9 +275,11 @@ class Scripter(BaseReq):
         return resp
 
     def scripter_sequence_get(self):
+        """process GET req to get full list of sequences"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence", headers=header, verify=False)
 
+        # FIXME: перенести в _get_sequence_id
         sequence_info_rows = json.loads(resp.text)['res']
 
         # вывести все строки скрипты>>"Последовательности"
@@ -281,43 +294,18 @@ class Scripter(BaseReq):
 
         return resp
 
-    def scripter_sequence_post(self):
-        """process POST to create new sequence"""
-
-        _script_id = self._get_script_id()
-        random_num = random.randint(0, 999)
-
-        data = {
-            "name": API_AUTO_TEST_ + str(random_num),                           # name of new sequence
-            "description": API_AUTO_TEST_ + str(random_num) + " description",   # ..and its description
-            "type": True,
-            "scripts": [
-                {
-                    # "name": "TestAPIscripter1",                               # ?? имя подцепаемого скрипта _script_id
-                    "id": str(_script_id),
-                    "keys": [{"CPU": 40}, {"RAM": 40}],
-                    "usage": True,
-                    "stage_num": 0
-                }
-            ],
-            "node": 0,
-            # "author_id": at_uid
-            "author_id": self.get_self_user_id()
-        }
-        header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
-        return resp
-
     def scripter_sequence_put(self):  # почему-то создает новую секвенцию, а не обновляет старую
+        """process PUT to edit existing sequence"""
+        str_random_num = str(random.randint(100, 999))
         _script_id = self._get_script_id()
         _seq_id = self._get_sequence_id()
         data = {
-            "name": " TestSeqApi",              # FIXME:
-            "description": " TestSeqApi1",
+            "name": API_AUTO_TEST_ + "changed" + str_random_num,
+            "description": API_AUTO_TEST_ + "changed" + str_random_num,
             "type": True,
             "scripts": [
                 {
-                    "name": "TestAPIscripter1",
+                    # "name": "TestAPIscripter1",
                     "id": str(_script_id),
                     "keys": [
                         {
@@ -339,20 +327,42 @@ class Scripter(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
         return resp
 
+    def scripter_sequence_post(self):
+        """process POST to create new sequence"""
+
+        _script_id = self._get_script_id()
+        str_random_num = str(random.randint(100, 999))
+
+        data = {
+            "name": API_AUTO_TEST_ + str_random_num,                           # name of new sequence
+            "description": API_AUTO_TEST_ + str_random_num + " description",   # ..and its description
+            "type": True,
+            "scripts": [
+                {
+                    # "name": "TestAPIscripter1",                               # ?? имя подцепаемого скрипта _script_id
+                    "id": str(_script_id),
+                    "keys": [{"CPU": 40}, {"RAM": 40}],
+                    "usage": True,
+                    "stage_num": 0
+                }
+            ],
+            "node": 0,
+            "author_id": self.get_self_user_id()
+        }
+        header = {'token': self.token}
+        resp = self.sess.post(f"{self.host}/back/dp.scripter/sequence", headers=header, json=data, verify=False)
+        return resp
+
     def scripter_sequence_log_id_get(self):
+        """process GET to get sequence states (logs list) by ID"""
         # исп: получить логи >> front: проваливаешься в скрипт;
         _seq_id = self._get_sequence_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/log/" + str(_seq_id), headers=header, verify=False)
-        return resp
-
-    def scripter_sequence_id_get(self):
-        _seq_id = self._get_sequence_id()
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(_seq_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/log/{_seq_id}", headers=header, verify=False)
         return resp
 
     def scripter_sequence_start_post(self):
+        """process POST req to start sequence (if it was not started and user have rights for that)"""
         _seq_id = self._get_sequence_id()
         data = {
             "id": str(_seq_id),
@@ -369,23 +379,35 @@ class Scripter(BaseReq):
 
     # FIXME: {"error":{"code":400,"msg":"Задание не было запущено"}}
     def scripter_sequence_stop_id_get(self):
+        """process GET to stop sequence (if it started and user have rights for that)"""
         _seq_id = self._get_sequence_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/stop/" + str(_seq_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/stop/{_seq_id}", headers=header, verify=False)
         return resp
+
+    def scripter_sequence_id_get(self):
+        """process GET tot get sequence by id"""
+        _seq_id = self._get_sequence_id()
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/{_seq_id}", headers=header, verify=False)
+        return resp
+
+    # TODO: [DELETE] /back/dp.scripter/sequence/{id}
+
+    # TODO: [DELETE] /back/dp.scripter/sequence/{id}/log
 
     def scripter_sequence_sequence_id_log_last_get(self):
+        """process GET to get sequence last log"""
         _seq_id = self._get_sequence_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(_seq_id) + "/log/last", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/{_seq_id}/log/last", headers=header, verify=False)
         return resp
 
-    # FIXME: хардкод в EP # >> sequence_id_log_log_id ??
-    def scripter_sequence_id_log_id_get(self):
-        _seq_id = self._get_sequence_id()
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.scripter/sequence/" + str(_seq_id) + "/log/last/TestAPIscripter1", headers=header, verify=False)
-        return resp
+    # TODO: [GET] /back/dp.scripter/sequence/{sequence_id}/log/{log_id}
+
+    # TODO: [DELETE] /back/dp.scripter/sequence/{sequence_id}/log/{log_id}
+
+    # TODO: [GET] /back/dp.scripter/sequence/{sequence_type}
 
     def scripter_sequence_sequence_type_admin_get(self):
         # исп: получить список Последовательностей "Административные"

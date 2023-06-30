@@ -1833,12 +1833,6 @@ class TestScripter:
         resp = req.scripter_sequence_sequence_id_log_last_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
-    def test_scripter_sequence_id_log_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_id_log_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_scripter_sequence_sequence_type_admin_get(self):
         req = Scripter(SESS, HOST)
         resp = req.scripter_sequence_sequence_type_admin_get()
