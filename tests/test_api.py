@@ -1890,16 +1890,19 @@ class TestUpdater:
         resp = req.updater_additions_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: check 200 or 400
     def test_updater_additions_addition_delete(self):
         req = Updater(SESS, HOST)
         resp = req.updater_additions_addition_delete()
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: check 200 or 400
     def test_updater_additions_addition_post(self):
         req = Updater(SESS, HOST)
         resp = req.updater_additions_addition_post()
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: check 200 or 400
     def test_updater_check_updates_get(self):
         req = Updater(SESS, HOST)
         resp = req.updater_check_updates_get()
