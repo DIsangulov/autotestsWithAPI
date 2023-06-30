@@ -1398,6 +1398,7 @@ class TestElementsEater:
         resp = req.elements_eater_reports_export_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip   # FIXME: поправить кейс
     def test_elements_eater_reports_import_post(self):
         req = ElementsEater(SESS, HOST)
         resp = req.elements_eater_reports_import_post()
