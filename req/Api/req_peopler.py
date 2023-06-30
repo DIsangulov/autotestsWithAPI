@@ -38,6 +38,7 @@ class Peopler(BaseReq):
         return auto_user_id.pop()                                           # возвращает случайное значение из auto_user_id
 
     def peopler_mainpage_get(self):
+        """process GET req to get pinned main page for user"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.peopler/mainpage", headers=header, verify=False)
         return resp
@@ -82,6 +83,18 @@ class Peopler(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.peopler/many_users", headers=header, json=body, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.peopler/pin_page/current_user
+
+    # TODO: [DELETE] /back/dp.peopler/pin_page/current_user
+
+    # TODO: [POST] /back/dp.peopler/pin_page/list/{type_subject}
+
+    # TODO: [POST] /back/dp.peopler/pin_page/{type_subject}
+
+    # TODO: [DELETE] /back/dp.peopler/pin_page/{type_subject}/{id}
+
+    # TODO: [POST] /back/dp.peopler/pinned_page_status
+
     def peopler_profile_get(self):
         """process GET req for getting user profile by token"""
         header = {'token': self.token}
@@ -125,6 +138,7 @@ class Peopler(BaseReq):
         return resp
 
     def peopler_users_id_put(self, user_id: int = None, body: dict = None):
+        """process PUT req for editing user by id"""
 
         if user_id is None:
             user_id = self._get_auto_user_id()
@@ -157,5 +171,3 @@ class Peopler(BaseReq):
         self._collect_auto_user_id()
         while len(auto_user_id) > 0:
             self.peopler_users_delete(auto_user_id.pop())
-
-    # TODO: (10/16) find and add
