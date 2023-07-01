@@ -1915,9 +1915,9 @@ class TestVisualisation:
         resp = req.visualisation_query_do_query_usage_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_visualisation_query_do_query_id_get(self):
+    def test_visualisation_query_query_id_get(self):
         req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_do_query_id_get()
+        resp = req.visualisation_query_query_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_visualisation_query_do_query_id_delete(self):
@@ -1972,7 +1972,7 @@ class TestVisualisation:
 
     def test_visualisation_visualisation_visualisation_id_get(self):
         req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_usage_visualisation_id_get()
+        resp = req.visualisation_visualisation_visualisation_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_visualisation_visualisation_visualisation_id_delete(self):
