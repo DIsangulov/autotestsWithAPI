@@ -1866,12 +1866,6 @@ class TestTaskplan:
         resp = req.taskplan_get_shedule_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip   # нет описания в swagger
-    def test_taskplan_tasks_post(self):
-        req = Taskplan(SESS, HOST)
-        resp = req.taskplan_tasks_post()
-        assert resp.status_code == 200 or 404, f"Ошибка, код {resp.status_code}, {resp.text}"
-
 
 class TestUpdater:
 
