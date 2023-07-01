@@ -1069,14 +1069,19 @@ class TestStorageWorker:
         resp = req.storage_worker_statistics_db_search_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_storage_worker_statistics_db_status_dbname_get(self):
+    def test_storage_worker_statistics_db_stats_dbname_get(self):
         req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_status_dbname_get()
+        resp = req.storage_worker_statistics_db_stats_dbname_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
         req = StorageWorker(SESS, HOST)
         resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_tabs_stats_dbname_get(self):
+        req = StorageWorker(SESS, HOST)
+        resp = req.storage_worker_statistics_db_tabs_stats_dbname_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_statistics_storage_search_post(self):
@@ -1086,7 +1091,7 @@ class TestStorageWorker:
 
     def test_storage_worker_statistics_test_selection_post(self):
         req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_storage_search_post()
+        resp = req.storage_worker_statistics_test_selection_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_storage_db_post(self):
