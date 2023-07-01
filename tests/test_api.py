@@ -1214,9 +1214,9 @@ class TestXbaCook:
         resp = req.xba_cook_entity_info_settings_entity_type_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_xba_cook_entity_picker_min_max_post(self):
+    def test_xba_cook_entity_picker_max_min_post(self):
         req = XbaCook(SESS, HOST)
-        resp = req.xba_cook_entity_picker_min_max_post()
+        resp = req.xba_cook_entity_picker_max_min_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_xba_cook_entity_risks_description_post(self):

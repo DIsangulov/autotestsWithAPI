@@ -46,17 +46,21 @@ class XbaCook(BaseReq):
 
         return profile_id.pop()
 
+    # FIXME: mark.skip
     def xba_cook_anomalies_get(self):
+        """process GET req to get all app anomalies"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/anomalies", headers=header, verify=False)
         return resp
 
     def xba_cook_anomalies_picker_max_min_get(self):
+        """process GET to get max and min date values"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/anomalies/picker/max_min", headers=header, verify=False)
         return resp
 
     def xba_cook_check_entity_type_post(self):
+        """process POST for checking if entity type column contains not more distinct values than 20 & no nulls"""
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             "column": "1",
@@ -69,6 +73,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_dashboard_post(self):
+        """process POST req to get xba dashboard data"""
         data = {
             "start_datetime": "2023-02-01T00:00:00.000Z",
             "time_zone": "Europe/Moscow"
@@ -77,7 +82,10 @@ class XbaCook(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/dashboard", headers=header, json=data, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.xba_cook/dashboard/profiles
+
     def xba_cook_entity_post(self):
+        """returns Entity card summary info and risk levels graph"""
         data = {
             "end": "",
             "name": "user",
@@ -89,6 +97,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_details_post(self):
+        """returns Entity card detailed info: risk levels pie chart, risk by profile table"""
         data = {
             "end": "",
             "name": "user",
@@ -100,6 +109,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_info_post(self):
+        """returns Entity card enrichment info (additional entity attributes from AD or DB-based dictionary)"""
         data = {
             "name": "user",
             "type": ""
@@ -109,11 +119,13 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_info_settings_get(self):
+        """returns Entity card enrichment settings"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/entity/info/settings", headers=header, verify=False)
         return resp
 
     def xba_cook_entity_info_settings_post(self):
+        """process POST req to set Entity card enrichment settings."""
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             "user_settings":
@@ -139,11 +151,14 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_info_settings_entity_type_delete(self):
+        """process DELETE req to remove Entity card enrichment settings"""
+        entity_type = "name"        # FIXME: какие ещё
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/entity/info/settings/name", headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/entity/info/settings/{entity_type}", headers=header, verify=False)
         return resp
 
-    def xba_cook_entity_picker_min_max_post(self):
+    def xba_cook_entity_picker_max_min_post(self):
+        """process GET to get max and min date values"""
         data = {
             "name": "user",
             "type": "user"
@@ -153,6 +168,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_entity_risks_description_post(self):
+        """returns Entity card summary info and risk levels graph"""
         data = {"name": "shchetinin$@angaratech.ru",        # FIXME: хардкод
                 "type": "user",
                 "start": "2023-02-13T00:00:00Z",
@@ -162,6 +178,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_max_min_post(self):
+        """process POST to get max and min column values"""
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
             "column": "1",
@@ -174,11 +191,13 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_get(self):
+        """process GET req to get profile list"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_post(self):
+        """process POST req to create new profile"""
         # FIXME: редактировать заполнение
         str_random_num = str(random.randint(1000, 9999))
         self_user_id = self.get_self_user_id()
@@ -240,11 +259,13 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_categories_get(self):
+        """process GET req to get profile categories"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/categories", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_export_profiles_post(self):
+        """process POST req to get profile list by ids"""
         prof_id = self._get_profile_id()
         data = {"profile_ids": [prof_id]}
         header = {'token': self.token}
@@ -252,11 +273,13 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_functions_get(self):
+        """process GET req to get profile functions"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/functions", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_graph_drilldown_statement_id_post(self):
+        """process POST to get statement for xba drilldown custom execution"""
         prof_id = self._get_profile_id()
         data = {
             "columns": [
@@ -287,6 +310,7 @@ class XbaCook(BaseReq):
 
         return resp
 
+    # FIXME: вынести из набора интерфейсов
     def xba_cook_profiles_graph_drilldown_id_post_xx_descriprion_key_check(self):
         # https://tasks.ngrsoftlab.ru/browse/DAT-5184
         # Проверка наличия ключа "description" в ответе
@@ -316,6 +340,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_max_min_id_get(self):
+        """process GET to get profile data max and min date"""
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
@@ -323,6 +348,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_personal_id_post(self):
+        """process POST to get profile personal data (personal level)"""
         prof_id = self._get_profile_id()
 
         data = {
@@ -337,6 +363,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_graph_id_post(self):
+        """process GET to get profile data for visualisation on front"""
         prof_id = self._get_profile_id()
 
         data = {
@@ -350,19 +377,8 @@ class XbaCook(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/{prof_id}", headers=header, json=data, verify=False)
         return resp
 
-    def xba_cook_profiles_groups_post(self):
-        """Создание метапрофиля"""
-        rand_num = random.randint(0, 9999)
-        data = {
-            "id": rand_num,
-            "name": API_AUTO_TEST_ + str(rand_num),    # FIXME:
-            "weight": ""
-        }
-        header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, json=data, verify=False)
-        return resp  # возвращает также ид новой группы
-
     def xba_cook_profiles_groups_get(self):
+        """process GET req to get groups list"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, verify=False)
         return resp
@@ -381,24 +397,41 @@ class XbaCook(BaseReq):
         resp = self.sess.put(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, json=data, verify=False)
         return resp
 
+    def xba_cook_profiles_groups_post(self):
+        """process POST to create new group"""
+        # Создание метапрофиля
+        str_rand_num = str(random.randint(1000, 9999))
+        data = {
+            "id": str_rand_num,     # FIXME: используется?
+            "name": API_AUTO_TEST_ + str_rand_num,
+            "weight": ""
+        }
+        header = {'token': self.token}
+        resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/groups", headers=header, json=data, verify=False)
+        return resp  # возвращает также ид новой группы
+
     def xba_cook_profiles_groups_info_get(self):
+        """process GET req to get info"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/info", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_delete(self):
+        """process DELETE to delete group"""
         _group_id = self._get_group_id()
         header = {'token': self.token}
         resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_group_id_profiles_get(self):
+        """process GET req to get list of profiles of the group"""
         _group_id = self._get_group_id()
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}/profiles", headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_groups_id_post(self):
+        """process GET to get profile group data for visualisation on front"""
         _group_id = self._get_group_id()
         data = {
             "end": "2023-02-14T00:00:00Z",
@@ -413,12 +446,16 @@ class XbaCook(BaseReq):
 
     # FIXME: _group_id = None # FIXME: @mark.skip
     def xba_cook_profiles_groups_id_max_min_get(self):
+        """process GET to get profile group data max and min date"""
         _group_id = None
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups/{_group_id}/max_min", headers=header, verify=False)
         return resp
 
+    # TODO: [DELETE] /back/dp.xba_cook/profiles/groups/{profile_id}/{group_id}
+
+    # FIXME: mark.skip
     def xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
         """process GET req to update profile weight in group"""
         # FIXME: хардкод
@@ -432,6 +469,7 @@ class XbaCook(BaseReq):
         return resp
 
     def xba_cook_profiles_import_profiles_post(self):
+        """process POST to create new profiles"""
         str_rand_num = str(random.randint(1200, 12500))
         self_user_id = self.get_self_user_id()
         data = {
@@ -513,7 +551,12 @@ class XbaCook(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}", headers=header, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.xba_cook/profiles/{id}
+    # {"name":"tdasap1","db_id":2528,"table_name":"API_TEST_TABLE","author":"Ежов Сергей","author_id":4870,"editor":"Ежов Сергей","editor_id":4870,"created":"2023-06-29T07:14:11.117929Z","modified":"2023-06-29T07:48:38.692Z","id_function":1,"id_category":1,"group_info":null,"filter_settings":[{"field":"one","action":">","value":"10/10/1010 00:00:00","value_type":"DateTime"}],"profile_type":"median","status":3,"time_last_executed":"2023-06-29T07:14:12.198135Z","time_settings":{"time_column":"one","time_start":"1970-01-01T00:00:00.000Z","time_end":"1970-01-01T00:00:00.000Z","discretization_period":"week"},"entity_settings":{"entity_column":"one","entity_column_name":"other","entity_type":"one","additional_column":"","levels":{"level1":2,"level2":4,"level3":6,"level4":8}}}
+
+    # FIXME: mark.skip
     def xba_cook_profiles_id_delete(self):
+        """process DELETE to delete xBA Profile"""
         # FIXME: хардкод
         # FIXME: удаление профиля xBA, недостаточно прав
         prof_id = 2001
@@ -522,23 +565,29 @@ class XbaCook(BaseReq):
         resp = self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}", headers=header, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.xba_cook/profiles/{id}/graph
+
     def xba_cook_profiles_id_log_last_get(self):
+        """process GET req to get profile last log by profile id"""
         prof_id = self._get_profile_id()
 
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/log/last", headers=header, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.xba_cook/profiles/{id}/summary
+
     def xba_cook_profiles_id_whitelist_post(self):
         """process POST req to add element into profile whitelist"""
         prof_id = self._get_profile_id()
 
-        data = {"data": [{"name": "ApiTest"}]}      # FIXME: >> API_AUTO_TEST_
+        data = {"data": [{"name": API_AUTO_TEST_ + "name"}]}      # FIXME: old: ApiTest; ?+ rand_num
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/whitelist", json=data, headers=header, verify=False)
         return resp
 
     def xba_cook_profiles_id_whitelist_element_post(self):
+        """process POST req to add element into profile whitelist"""
         # FIXME: нельзя изменить в профиле, в котором идет "перерасчет" иначе
         # {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
         prof_id = self._get_profile_id()
@@ -550,6 +599,12 @@ class XbaCook(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/whitelist/element", json=data, headers=header, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.xba_cook/profiles/{id}/zones
+
+    # == {id}/{form} ====================================================
+
+    # TODO: [GET] /back/dp.xba_cook/profiles/{id}/{form}/whitelist
+
     def xba_cook_profiles_id_string_whitelist_get(self):
         prof_id = self._get_profile_id()
         # FIXME: {form} = string
@@ -558,7 +613,6 @@ class XbaCook(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/string/whitelist", headers=header, verify=False)
         return resp
 
-    # FIXME: swagger - нет описания
     def xba_cook_profiles_id_list_whitelist_get(self):
         prof_id = self._get_profile_id()
 
@@ -566,7 +620,14 @@ class XbaCook(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/list/whitelist", headers=header, verify=False)
         return resp
 
+    # == {id}/{form} ====================================================
+
+    # TODO: [DELETE] /back/dp.xba_cook/profiles/{profile_id}/whitelist/element/{id}
+
+    # TODO: [POST] /back/dp.xba_cook/set_log_level_xba_py/{mode}
+
     def xba_cook_xba_get(self):
+        """process GET req to get current syslog-mailing-alert xba settings."""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.xba_cook/xba", headers=header, verify=False)
         return resp
@@ -614,10 +675,3 @@ class XbaCook(BaseReq):
         header = {'token': self.token}
         resp = self.sess.post(f"{self.host}/back/dp.xba_cook/xba", json=data, headers=header, verify=False)
         return resp
-
-    # add
-    # [PUT] /back/dp.xba_cook/profiles/{id}
-
-    ## FIXME: нет описания в Swagger
-    # [POST] /back/dp.xba_cook/profiles/{prof_id}
-    # {"name":"tdasap1","db_id":2528,"table_name":"API_TEST_TABLE","author":"Ежов Сергей","author_id":4870,"editor":"Ежов Сергей","editor_id":4870,"created":"2023-06-29T07:14:11.117929Z","modified":"2023-06-29T07:48:38.692Z","id_function":1,"id_category":1,"group_info":null,"filter_settings":[{"field":"one","action":">","value":"10/10/1010 00:00:00","value_type":"DateTime"}],"profile_type":"median","status":3,"time_last_executed":"2023-06-29T07:14:12.198135Z","time_settings":{"time_column":"one","time_start":"1970-01-01T00:00:00.000Z","time_end":"1970-01-01T00:00:00.000Z","discretization_period":"week"},"entity_settings":{"entity_column":"one","entity_column_name":"other","entity_type":"one","additional_column":"","levels":{"level1":2,"level2":4,"level3":6,"level4":8}}}
