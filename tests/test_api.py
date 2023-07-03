@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_alarmer import Alarmer
 from req.Api.req_core import Core
 from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
@@ -20,9 +19,10 @@ from req.Api.req_scripter import Scripter
 from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
-
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
+from tests.case.api.alarmer import AlarmerCase
+
 
 urllib3.disable_warnings()
 
@@ -118,74 +118,46 @@ class TestAbsorber:
 class TestAlarmer:
 
     def test_alarmer_notification_admin_all_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_admin_all_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_admin_all_get()
 
     def test_alarmer_notification_read_admin_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_read_admin_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_read_admin_get()
 
     def test_alarmer_notification_read_type_admin_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_read_type_admin_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_read_type_admin_post()
 
     def test_alarmer_notification_settings_admin_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_admin_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_admin_get()
 
     def test_alarmer_notification_settings_common_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_common_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_common_get()
 
     def test_alarmer_notification_settings_common_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_common_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_common_post()
 
     def test_alarmer_notification_settings_user_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_user_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_user_get()
 
     def test_alarmer_notification_settings_userone_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_userone_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_userone_post()
 
     def test_alarmer_notification_settings_type_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_type_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_type_post()
 
     def test_alarmer_notification_user_all_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_settings_user_all_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_settings_user_all_get()
 
     def test_alarmer_notification_user_get(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_type_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_notification_user_get()
 
     def test_alarmer_send_invitation_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_send_invitation_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_send_invitation_post()
 
     def test_alarmer_send_invitations_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_send_invitations_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_send_invitations_post()
 
     def test_alarmer_send_msg_post(self):
-        req = Alarmer(SESS, HOST)
-        resp = req.alarmer_send_msg_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AlarmerCase(SESS, HOST).case_alarmer_send_msg_post()
 
 
 class TestCore:
