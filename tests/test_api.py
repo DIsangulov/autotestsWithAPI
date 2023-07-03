@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_auth import AuthApi
 from req.Api.req_absorber import Absorber
 from req.Api.req_alarmer import Alarmer
 from req.Api.req_core import Core
@@ -34,50 +33,29 @@ HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
 class TestAuth:
 
-    def test_auth_local_register_post(self):
-        req = AuthApi(SESS, HOST, withauth=False)
-        resp = req.auth_local_register_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # def test_auth_ad_struct_get(self):
-    #     req = AuthApi(SESS, HOST)
-    #     resp = req.auth_ad_struct_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_auth_ad_struct_get(self):
         AuthApiCase(SESS, HOST).case_auth_ad_struct_get()
 
-    def test_auth_ou_users_post(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_ou_users_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_auth_sessions_get(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_sessions_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_auth_sessions_uid_get(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_sessions_uid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_auth_sessions_one_sid_del(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_sessions_one_sid_del()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_auth_sessions_all_uid_del(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_sessions_all_uid_del()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_auth_local_register_post(self):
+        AuthApiCase(SESS, HOST, withauth=False).case_auth_local_register_post()
 
     def test_auth_logout_get(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_logout_get()
+        AuthApiCase(SESS, HOST).case_auth_logout_get()
 
-        assert resp.status_code == 401, f"Ошибка, код {resp.status_code}, {resp.text}"
-        assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа: {resp.text}"
+    def test_auth_ou_users_post(self):
+        AuthApiCase(SESS, HOST).case_auth_ou_users_post()
+
+    def test_auth_sessions_get(self):
+        AuthApiCase(SESS, HOST).case_auth_sessions_get()
+
+    def test_auth_sessions_uid_get(self):
+        AuthApiCase(SESS, HOST).case_auth_sessions_uid_get()
+
+    def test_auth_sessions_one_sid_del(self):
+        AuthApiCase(SESS, HOST).case_auth_sessions_one_sid_del()
+
+    def test_auth_sessions_all_uid_del(self):
+        AuthApiCase(SESS, HOST).case_auth_sessions_all_uid_del()
 
 
 class TestAbsorber:
