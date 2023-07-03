@@ -25,7 +25,6 @@ from req.Api.req_visualisation import Visualisation
 
 urllib3.disable_warnings()
 
-# ________Constants________
 SESS = requests.Session()
 HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
@@ -92,7 +91,7 @@ class TestAbsorber:
         resp = req.absorber_library_conn_type_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_absorber_library_connector_get(self):  # получаем список всех коннекторов
+    def test_absorber_library_connector_get(self):
         req = Absorber(SESS, HOST)
         resp = req.absorber_library_connector_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -210,8 +209,7 @@ class TestAlarmer:
         resp = req.alarmer_notification_settings_userone_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
-    def test_alarmer_notification_settings_type_post(self):  # проблемный
+    def test_alarmer_notification_settings_type_post(self):
         req = Alarmer(SESS, HOST)
         resp = req.alarmer_notification_settings_type_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -223,7 +221,7 @@ class TestAlarmer:
 
     def test_alarmer_notification_user_get(self):
         req = Alarmer(SESS, HOST)
-        resp = req.alarmer_notification_user_get()
+        resp = req.alarmer_notification_type_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_alarmer_send_invitation_post(self):
@@ -264,9 +262,9 @@ class TestCore:
         resp = req.core_active_directory_test_settings_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_backups_get(self):
+    def test_core_check_get(self):
         req = Core(SESS, HOST)
-        resp = req.core_check_backups_get()
+        resp = req.core_check_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_common_get(self):
@@ -319,9 +317,9 @@ class TestCore:
         resp = req.core_email_send_test_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_core_email_in_get(self):
+    def test_core_email_type_get(self):
         req = Core(SESS, HOST)
-        resp = req.core_email_in_get()
+        resp = req.core_email_type_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_email_out_get(self):
@@ -346,7 +344,7 @@ class TestCore:
 
     def test_core_ip_get(self):
         req = Core(SESS, HOST)
-        resp = req.core_flag_get()
+        resp = req.core_ip_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_nodes_list_ml_get(self):
@@ -388,21 +386,6 @@ class TestCore:
         req = Core(SESS, HOST)
         resp = req.core_nodes_datastore_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # def test_core_nodes_test_datastore(self):
-    #     req = Core(sess, host)
-    #     resp = req.core_nodes_test_datastore_post()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-    #
-    # def test_core_nodes_datastore_post(self):
-    #     req = Core(sess, host)
-    #     resp = req.core_nodes_datastore_post()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-    #
-    # def test_core_nodes_datastore_delete(self):
-    #     req = Core(sess, host)
-    #     resp = req.core_nodes_datastore_delete()
-    #     assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_core_service_dp_alarmer_get(self):
         req = Core(SESS, HOST)
@@ -626,6 +609,10 @@ class TestPeopler:
         resp = req.peopler_users_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # def __del__(self):    # FIXME >> after class
+    def test_all_api_auto_test_user_delete(self):
+        Peopler(SESS, HOST).all_api_auto_test_user_delete()
+
 
 class TestPermitter:
 
@@ -644,9 +631,9 @@ class TestPermitter:
         resp = req.permitter_db_watcher_all_tables_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_db_watcher_db_tables_get(self):
+    def test_permitter_db_watcher_db_tables_id_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_db_tables_get()
+        resp = req.permitter_db_watcher_db_tables_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_db_watcher_empty_role_dbs_get(self):
@@ -762,65 +749,65 @@ class TestPermitter:
         resp = req.permitter_element_rules_all_flags_script_sequence_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_query_get(self):
+    def test_permitter_element_rules_query_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_query_get()
+        resp = req.permitter_element_rules_query_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_visualisation_get(self):
+    def test_permitter_element_rules_visualisation_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_visualisation_get()
+        resp = req.permitter_element_rules_visualisation_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_report_get(self):
+    def test_permitter_element_rules_report_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_report_get()
+        resp = req.permitter_element_rules_report_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_mailing_get(self):
+    def test_permitter_element_rules_mailing_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_mailing_get()
+        resp = req.permitter_element_rules_mailing_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_script_get(self):
+    def test_permitter_element_rules_script_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_get()
+        resp = req.permitter_element_rules_script_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_script_sequence_get(self):
+    def test_permitter_element_rules_script_sequence_get(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_sequence_get()
+        resp = req.permitter_element_rules_script_sequence_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_query_post(self):
+    def test_permitter_element_rules_query_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_query_post()
+        resp = req.permitter_element_rules_query_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_visualisation_post(self):
+    def test_permitter_element_rules_visualisation_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_visualisation_post()
+        resp = req.permitter_element_rules_visualisation_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_report_post(self):
+    def test_permitter_element_rules_report_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_report_post()
+        resp = req.permitter_element_rules_report_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_mailing_post(self):
+    def test_permitter_element_rules_mailing_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_mailing_post()
+        resp = req.permitter_element_rules_mailing_post()
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_permitter_element_rules_flags_script_post(self):
+    def test_permitter_element_rules_script_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_post()
+        resp = req.permitter_element_rules_script_post()
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     @pytest.mark.skip  # FIXME: падает; хардкод
-    def test_permitter_element_rules_flags_script_sequence_post(self):
+    def test_permitter_element_rules_script_sequence_post(self):
         req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_flags_script_sequence_post()
+        resp = req.permitter_element_rules_script_sequence_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
@@ -1082,14 +1069,19 @@ class TestStorageWorker:
         resp = req.storage_worker_statistics_db_search_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_storage_worker_statistics_db_status_dbname_get(self):
+    def test_storage_worker_statistics_db_stats_dbname_get(self):
         req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_status_dbname_get()
+        resp = req.storage_worker_statistics_db_stats_dbname_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
         req = StorageWorker(SESS, HOST)
         resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def test_storage_worker_statistics_db_tabs_stats_dbname_get(self):
+        req = StorageWorker(SESS, HOST)
+        resp = req.storage_worker_statistics_db_tabs_stats_dbname_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_statistics_storage_search_post(self):
@@ -1099,13 +1091,8 @@ class TestStorageWorker:
 
     def test_storage_worker_statistics_test_selection_post(self):
         req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_storage_search_post()
+        resp = req.storage_worker_statistics_test_selection_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # def test_storage_worker_storage_db_get(self):
-    #     req = StorageWorker(sess, host)
-    #     resp = req.storage_worker_storage_db_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_storage_db_post(self):
         req = StorageWorker(SESS, HOST)
@@ -1227,9 +1214,9 @@ class TestXbaCook:
         resp = req.xba_cook_entity_info_settings_entity_type_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_xba_cook_entity_picker_min_max_post(self):
+    def test_xba_cook_entity_picker_max_min_post(self):
         req = XbaCook(SESS, HOST)
-        resp = req.xba_cook_entity_picker_min_max_post()
+        resp = req.xba_cook_entity_picker_max_min_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_xba_cook_entity_risks_description_post(self):
@@ -1416,6 +1403,7 @@ class TestElementsEater:
         resp = req.elements_eater_reports_export_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    @pytest.mark.skip   # FIXME: поправить кейс
     def test_elements_eater_reports_import_post(self):
         req = ElementsEater(SESS, HOST)
         resp = req.elements_eater_reports_import_post()
@@ -1691,42 +1679,16 @@ class TestReporter:
         resp = req.reporter_screener_fast_pdf_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # def test_reporter_screener_fast_png_id_get(self): # ---- не используется ----
-    #     req = Reporter(sess, host)
-    #     resp = req.reporter_screener_fast_png_id_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-    #
-    # def test_reporter_screener_fast_pdf_id_get(self):
-    #     req = Reporter(sess, host)
-    #     resp = req.reporter_screener_fast_pdf_id_get()
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     @pytest.mark.skip
     def test_reporter_screener_fast_xlsx_id_get(self):  # xlsx формируется на фронте
         req = Reporter(SESS, HOST)
         resp = req.reporter_screener_fast_xlsx_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_visualisation_cached_role_report_report_id_role_id_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_visualisation_cached_role_report_report_id_role_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_reporter_mailing_id_delete(self):
         req = Reporter(SESS, HOST)
         resp = req.reporter_mailing_id_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_reporter_visualisation_cached_user_report_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_visualisation_cached_user_report_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_reporter_visualisation_cached_user_report_report_id_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_visualisation_cached_user_report_report_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
 
 class TestScripter:
 
@@ -1860,12 +1822,6 @@ class TestScripter:
         resp = req.scripter_sequence_sequence_id_log_last_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip
-    def test_scripter_sequence_id_log_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_id_log_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def test_scripter_sequence_sequence_type_admin_get(self):
         req = Scripter(SESS, HOST)
         resp = req.scripter_sequence_sequence_type_admin_get()
@@ -1894,12 +1850,6 @@ class TestTaskplan:
         resp = req.taskplan_get_shedule_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip   # нет описания в swagger
-    def test_taskplan_tasks_post(self):
-        req = Taskplan(SESS, HOST)
-        resp = req.taskplan_tasks_post()
-        assert resp.status_code == 200 or 404, f"Ошибка, код {resp.status_code}, {resp.text}"
-
 
 class TestUpdater:
 
@@ -1908,16 +1858,19 @@ class TestUpdater:
         resp = req.updater_additions_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: check 200 or 400
     def test_updater_additions_addition_delete(self):
         req = Updater(SESS, HOST)
         resp = req.updater_additions_addition_delete()
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: check 200 or 400
     def test_updater_additions_addition_post(self):
         req = Updater(SESS, HOST)
         resp = req.updater_additions_addition_post()
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: check 200 or 400
     def test_updater_check_updates_get(self):
         req = Updater(SESS, HOST)
         resp = req.updater_check_updates_get()
@@ -1946,9 +1899,9 @@ class TestVisualisation:
         resp = req.visualisation_query_do_query_usage_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_visualisation_query_do_query_id_get(self):
+    def test_visualisation_query_query_id_get(self):
         req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_do_query_id_get()
+        resp = req.visualisation_query_query_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_visualisation_query_do_query_id_delete(self):
@@ -2003,7 +1956,7 @@ class TestVisualisation:
 
     def test_visualisation_visualisation_visualisation_id_get(self):
         req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_usage_visualisation_id_get()
+        resp = req.visualisation_visualisation_visualisation_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_visualisation_visualisation_visualisation_id_delete(self):

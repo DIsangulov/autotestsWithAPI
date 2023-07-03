@@ -9,11 +9,13 @@ mail_pass = "8327kHLHsfohn;hksjkfou!"
 class Core(BaseReq):
 
     def core_active_directory_get(self):
+        """process GET req for getting current ad settings"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.core/active_directory", headers=header, verify=False)
         return resp
 
     def core_active_directory_post(self):
+        """process POST req with new settings for domain active directory to test and save (if ok)"""
         body = {
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
@@ -28,6 +30,7 @@ class Core(BaseReq):
         return resp
 
     def core_active_directory_structure_post(self):
+        """process POST req for getting domain AD struct (by root dir input)"""
         body = {
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
@@ -42,6 +45,7 @@ class Core(BaseReq):
         return resp
 
     def core_active_directory_test_settings_post(self):
+        """process POST req with new settings for domain active directory to test and save (if ok)"""
         body = {
             "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
             "host": "192.168.189.2",
@@ -55,17 +59,36 @@ class Core(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.core/active_directory/test_settings", headers=header, json=body, verify=False)
         return resp
 
-    def core_check_backups_get(self):
+    # TODO: [GET] /back/dp.core/backups
+
+    # TODO: [POST] /back/dp.core/backups
+
+    # TODO: [GET] /back/dp.core/backups/last
+
+    # TODO: [GET] /back/dp.core/backups/{id}
+
+    # TODO: [DELETE] /back/dp.core/backups
+
+    # TODO: [POST] /back/dp.core/backups/{id}/restore
+
+    # TODO: [POST] /back/dp.core/backups/{type}/upload
+
+    # TODO: [GET] /back/dp.core/backups/{type}/{id}/download
+
+    def core_check_get(self):
+        """process GET req for checking if the installation has start settings."""
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/check", headers=header, verify=False)
         return resp
 
     def core_common_get(self):
+        """process GET req for getting current common settings"""
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/common", headers=header, verify=False)
         return resp
 
     def core_common_post(self):
+        """process POST req with new common settings"""
         body = {"XMLName": {"Space": "", "Local": "common"},
                 "sessions": "7|day",
                 "ml": "",
@@ -80,6 +103,7 @@ class Core(BaseReq):
         return resp
 
     def core_common_test_post(self):
+        """process POST req with common settings to test"""
         body = {"XMLName": {"Space": "", "Local": "common"},
                 "sessions": "7|day",
                 "ml": "",
@@ -94,6 +118,9 @@ class Core(BaseReq):
         return resp
 
     # --------------------------------COMPONENT START-------------------------------
+
+    # TODO: нужен общий интерфейс [GET] /back/dp.core/component/{what}/{action}/{node}
+
     def core_component_ml_restart_get(self):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.core/component/ml/restart/0", headers=header, verify=False)
@@ -117,11 +144,13 @@ class Core(BaseReq):
     # --------------------------------COMPONENT END-------------------------------
 
     def core_download_settings_get(self):
+        """process GET req for getting static and dynamic settings"""
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.core/download_settings", headers=header, verify=False)
         return resp
 
     def core_email_import_cert_post(self):
+        """process POST req with new email cert for import"""
         with open("req/Files/mailCert.crt", 'r') as f:
             cert_text = f.read()
         body = {"data": cert_text}
@@ -130,6 +159,7 @@ class Core(BaseReq):
         return resp
 
     def core_email_send_test_post(self):
+        """process POST req with data for testing mail settings by test send"""
         body = {
             "description": "TestAPICore",
             "disable_tls": False,
@@ -145,10 +175,16 @@ class Core(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.core/email/send_test", headers=header, json=body, verify=False)
         return resp
 
-    def core_email_in_get(self):
+    def core_email_type_get(self):
+        """process GET req for getting current email settings (type = in/out)"""
+        _type = "in"    # FIXME: какие ещё есть
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.core/email/in", headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.core/email/{_type}", headers=header, verify=False)
         return resp
+
+    # -----------------------------------------------------
+
+    # TODO: [POST] /back/dp.core/email/{type}
 
     def core_email_out_get(self):
         header = {'token': self.token}
@@ -187,17 +223,25 @@ class Core(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.core/email/out", headers=header, json=body, verify=False)
         return resp
 
+    # ------------------------------------------------------
+
     def core_flag_get(self):
+        """process GET req with node settings to get has_nodes flag"""
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/flag", headers=header, verify=False)
         return resp
 
     def core_ip_get(self):
+        """process GET req for getting installation IP (haha)"""
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/ip", headers=header, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.core/nodes/delete/{what}
+
     # --------------------------------NODES LIST WHAT--------------------------------
+
+    # TODO: [GET] /back/dp.core/nodes/list/{what}
 
     def core_nodes_list_ml_get(self):
         header = {'token': self.token, 'skey': "ANGARA"}
@@ -236,7 +280,11 @@ class Core(BaseReq):
     #     resp = self.sess.post(f"{self.host}/back/dp.core/nodes/test/datastore", headers=header, json=body, verify=False)
     #     return resp
 
+    # TODO: [POST] /back/dp.core/nodes/test/{what}
+
     # --------------------------------NODES WHAT--------------------------------
+
+    # TODO: [GET] /back/dp.core/nodes/{what}
 
     def core_nodes_ml_get(self):
         header = {'token': self.token}
@@ -258,6 +306,8 @@ class Core(BaseReq):
         resp = self.sess.get(f"{self.host}/back/dp.core/nodes/datastore", headers=header, verify=False)
         return resp
 
+    # TODO: [POST] /back/dp.core/nodes/{what}
+
     def core_nodes_datastore_post(self):  # здесь нужны данные
         body = {"active": 0,
                 "has_nodes": "0",
@@ -274,6 +324,7 @@ class Core(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.core/nodes/datastore", headers=header, json=body, verify=False)
         return resp
 
+    # FIXME: нет описания для [DELETE] /back/dp.core/nodes/{what}
     def core_nodes_datastore_delete(self):
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.delete(f"{self.host}/back/dp.core/nodes/datastore", headers=header, verify=False)
@@ -281,7 +332,21 @@ class Core(BaseReq):
 
     # --------------------------------NODES WHAT--------------------------------
 
+    # TODO: [GET] /back/dp.core/save
+
+    # TODO: [GET] /back/dp.core/secrets
+
+    # TODO: [POST] /back/dp.core/secrets
+
+    # TODO: [GET] /back/dp.core/secrets/{id}
+
+    # TODO: [PUT] /back/dp.core/secrets/{id}
+
+    # TODO: [DELETE] /back/dp.core/secrets/{id}
+
     # --------------------------------SERVICE WHAT ACTION--------------------------------
+
+    # TODO: [GET] /back/dp.core/service/{what}/{action}
 
     def core_service_dp_alarmer_get(self):
         header = {'token': self.token}
@@ -421,22 +486,27 @@ class Core(BaseReq):
 
     # --------------------------------SERVICE WHAT ACTION--------------------------------
 
+    # TODO: [GET] /back/dp.core/services/all/{action}
+
     def core_service_all_restart_get(self):  # стенд не тянет этот метод
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.core/services/all/restart", headers=header, verify=False)
         return resp
 
     def core_sid_get(self):
+        """process GET req for getting installation SID"""
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/sid", headers=header, verify=False)
         return resp
 
     def core_syslog_get(self):
+        """process GET req for getting current syslog settings"""
         header = {'token': self.token, 'skey': "ANGARA"}
         resp = self.sess.get(f"{self.host}/back/dp.core/syslog", headers=header, verify=False)
         return resp
 
     def core_syslog_post(self):
+        """process POST req with new syslog settings"""
         body = {
             "destinations": [
                 {

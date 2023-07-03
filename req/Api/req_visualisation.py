@@ -2,14 +2,9 @@ import json
 import random
 
 from req.Helpers.base_req import BaseReq
+from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
-
-
-class DbName:
-    picker_tables = "picker_tables"
-    API_TEST_DB2 = "API_TEST_DB2"
-
 
 query_id = []           # 'id' sql запроса
 report_id = []          # 'id' отчета
@@ -17,26 +12,6 @@ visualisation_id = []   # 'id' визуализации
 
 
 class Visualisation(BaseReq):
-
-    def _get_user_id(self) -> int:
-        """Возвращает 'user_id' текущего пользователя"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        return dct['res']['user_id']
-
-    def _get_db_id_by_name(self, db_name: str) -> int:
-        """Возвращает 'id' хранилища с указанным именем"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db", headers=header, verify=False)
-        dct = json.loads(resp.text)
-        db_info_rows = dct['res']
-        db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
-        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
-
-        db_id = db_info_row['id']
-
-        return db_id
 
     def _get_query_id(self) -> int:
         self.visualisation_query_get()              # запрос на получение списка всех 'query'
@@ -65,6 +40,7 @@ class Visualisation(BaseReq):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/query", headers=header, verify=False)
 
+        # FIXME: перенести в _get_query_id
         query_info_rows = json.loads(resp.text)
         for _row in query_info_rows['res']:
             if str(_row['name']).startswith(API_AUTO_TEST_):
@@ -77,21 +53,21 @@ class Visualisation(BaseReq):
         _query_id = self._get_query_id()
         header = {'token': self.token}
         data = {"data": None}
-        resp = self.sess.post(f"{self.host}/back/dp.visualisation/query/do/" + str(_query_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.visualisation/query/do/{_query_id}", headers=header, json=data, verify=False)
         return resp
 
     def visualisation_query_save_post(self):
         """process POST req for creating/editing query by id"""
 
-        random_num = random.randint(0, 999)
-        self_user_id = self._get_user_id()                                  # Получить свой 'user_id'
-        db_picker_tables = self._get_db_id_by_name(DbName.picker_tables)    # Получить 'id' хранилища 'picker_tables'
+        str_random_num = str(random.randint(100, 999))
+        self_user_id = self.get_self_user_id()                              # Получить свой 'user_id'
+        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)     # Получить 'id' хранилища 'picker_tables'
 
         header = {'token': self.token}
         data = {
             "db_id": db_picker_tables,
-            "name": API_AUTO_TEST_ + str(random_num),
-            "description": API_AUTO_TEST_ + str(random_num),
+            "name": API_AUTO_TEST_ + str_random_num,
+            "description": API_AUTO_TEST_ + str_random_num,
             "published": False,
             "opened": False,
             "settings": {
@@ -123,27 +99,47 @@ class Visualisation(BaseReq):
         return resp
 
     def visualisation_query_do_query_usage_id_get(self):
+        """process GET req for getting query usage in visualisations by id"""
         _query_id = self._get_query_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/query/usage/" + str(_query_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/query/usage/{_query_id}", headers=header, verify=False)
         return resp
 
-    def visualisation_query_do_query_id_get(self):
+    def visualisation_query_query_id_get(self):
+        """process GET req for getting query by id"""
         _query_id = self._get_query_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/query/" + str(_query_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/query/{_query_id}", headers=header, verify=False)
         return resp
 
     def visualisation_query_do_query_id_delete(self):
         """process DELETE req for deleting query by id"""
         _query_id = self._get_query_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.visualisation/query/" + str(_query_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.visualisation/query/{_query_id}", headers=header, verify=False)
+        return resp
+
+    def visualisation_reports_get(self):
+        """process GET req for getting reports list"""
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/reports", headers=header, verify=False)
+
+        # FIXME: перенести в _get_report_id
+        report_id_info_rows = json.loads(resp.text)['res']
+        for _row in report_id_info_rows:
+            # print(_row)
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                report_id.append(int(_row['id']))
+
         return resp
 
     def visualisation_reports_post(self):
+        """
+        process POST req for creating/editing report by id
+        updates if report id is present, creates new report otherwise
+        """
         random_num = random.randint(100, 999)
-        self_user_id = self._get_user_id()  # получить свой 'user_id'
+        self_user_id = self.get_self_user_id()  # получить свой 'user_id'
         header = {'token': self.token}
         data = {
             "name": f"{API_AUTO_TEST_}report_{random_num}",
@@ -158,34 +154,37 @@ class Visualisation(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.visualisation/reports", headers=header, json=data, verify=False)
         return resp
 
-    def visualisation_reports_get(self):
-        """process GET req for getting reports list"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/reports", headers=header, verify=False)
-
-        report_id_info_rows = json.loads(resp.text)['res']
-        for _row in report_id_info_rows:
-            # print(_row)
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                report_id.append(int(_row['id']))
-
-        return resp
-
     def visualisation_reports_report_id_get(self):
+        """process GET req for getting report by id"""
         _rep_id = self._get_report_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/reports/" + str(_rep_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/reports/{_rep_id}", headers=header, verify=False)
         return resp
 
     def visualisation_reports_report_id_delete(self):
+        """process DELETE req for deleting report by id"""
         _rep_id = self._get_report_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.visualisation/reports/" + str(_rep_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.visualisation/reports/{_rep_id}", headers=header, verify=False)
+        return resp
+
+    def visualisation_visualisation_get(self):
+        """process GET req for getting visualisations list"""
+        header = {'token': self.token}
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation", headers=header, verify=False)
+
+        # FIXME: перенести в _get_visualisation_id
+        vis_id_info_rows = json.loads(resp.text)['res']
+        for _row in vis_id_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                visualisation_id.append(int(_row['id']))
+        # print(f"vis_id is: {visualisation_id}")
+
         return resp
 
     def visualisation_visualisation_post(self):
         """process POST req for creating/editing visualisation by id"""
-        self_user_id = self._get_user_id()  # получить свой 'user_id'
+        self_user_id = self.get_self_user_id()  # получить свой 'user_id'
         header = {'token': self.token}
         data = {
             "name": f"{API_AUTO_TEST_}visualisation",
@@ -206,20 +205,11 @@ class Visualisation(BaseReq):
         resp = self.sess.post(f"{self.host}/back/dp.visualisation/visualisation", headers=header, json=data, verify=False)
         return resp
 
-    def visualisation_visualisation_get(self):
-        """process GET req for getting visualisations list"""
-        header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation", headers=header, verify=False)
-
-        vis_id_info_rows = json.loads(resp.text)['res']
-        for _row in vis_id_info_rows:
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                visualisation_id.append(int(_row['id']))
-        # print(f"vis_id is: {visualisation_id}")
-
-        return resp
-
     def visualisation_visualisation_dataseries_visualisation_id_post(self):
+        """
+        process POST req for creating/editing dataseries in visualisation element
+        updates if dataseries id is present, creates new dataseries otherwise
+        """
         _vis_id = self._get_visualisation_id()
         _query_id = self._get_query_id()
         header = {'token': self.token}
@@ -259,10 +249,13 @@ class Visualisation(BaseReq):
             "subquery_id": None,
             "subquery_field": ""
         }
-        resp = self.sess.post(f"{self.host}/back/dp.visualisation/visualisation/dataseries/" + str(_vis_id), headers=header, json=data, verify=False)
+        resp = self.sess.post(f"{self.host}/back/dp.visualisation/visualisation/dataseries/{_vis_id}", headers=header, json=data, verify=False)
         return resp
 
+    # TODO: [DELETE] /back/dp.visualisation/visualisation/dataseries/{visualisation_id}/{dataseries_id}
+
     def visualisation_visualisation_types_get(self):
+        """process GET req for getting visual elements type list"""
         # front: создание визуализации > добавить серию > тип элемента
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/types", headers=header, verify=False)
@@ -272,19 +265,19 @@ class Visualisation(BaseReq):
         """process GET req for getting visualisation usages in reports by id"""
         _vis_id = self._get_visualisation_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/usage/" + str(_vis_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/usage/{_vis_id}", headers=header, verify=False)
         return resp
 
     def visualisation_visualisation_visualisation_id_get(self):
         """process GET req for getting visualisation by id"""
         _vis_id = self._get_visualisation_id()
         header = {'token': self.token}
-        resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/" + str(_vis_id), headers=header, verify=False)
+        resp = self.sess.get(f"{self.host}/back/dp.visualisation/visualisation/{_vis_id}", headers=header, verify=False)
         return resp
 
     def visualisation_visualisation_visualisation_id_delete(self):
         """process DELETE req for deleting visualisation by id"""
         _vis_id = self._get_visualisation_id()
         header = {'token': self.token}
-        resp = self.sess.delete(f"{self.host}/back/dp.visualisation/visualisation/" + str(_vis_id), headers=header, verify=False)
+        resp = self.sess.delete(f"{self.host}/back/dp.visualisation/visualisation/{_vis_id}", headers=header, verify=False)
         return resp
