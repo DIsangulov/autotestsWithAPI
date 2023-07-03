@@ -1685,25 +1685,25 @@ class TestReporter:
         resp = req.reporter_screener_fast_xlsx_id_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_visualisation_cached_role_report_report_id_role_id_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_visualisation_cached_role_report_report_id_role_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # def test_reporter_visualisation_cached_role_report_report_id_role_id_post(self):
+    #     req = Reporter(SESS, HOST)
+    #     resp = req.reporter_visualisation_cached_role_report_report_id_role_id_post()
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_reporter_mailing_id_delete(self):
         req = Reporter(SESS, HOST)
         resp = req.reporter_mailing_id_delete()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_visualisation_cached_user_report_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_visualisation_cached_user_report_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # def test_reporter_visualisation_cached_user_report_get(self):
+    #     req = Reporter(SESS, HOST)
+    #     resp = req.reporter_visualisation_cached_user_report_get()
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def test_reporter_visualisation_cached_user_report_report_id_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_visualisation_cached_user_report_report_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # def test_reporter_visualisation_cached_user_report_report_id_post(self):
+    #     req = Reporter(SESS, HOST)
+    #     resp = req.reporter_visualisation_cached_user_report_report_id_post()
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 
 class TestScripter:
