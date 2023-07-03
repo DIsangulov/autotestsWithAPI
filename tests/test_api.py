@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_absorber import Absorber
 from req.Api.req_alarmer import Alarmer
 from req.Api.req_core import Core
 from req.Api.req_licenser import Licenser
@@ -23,6 +22,7 @@ from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
 
 from tests.case.api.auth import AuthApiCase
+from tests.case.api.absorber import AbsorberCase
 
 urllib3.disable_warnings()
 
@@ -61,94 +61,58 @@ class TestAuth:
 class TestAbsorber:
 
     def test_absorber_library_columns_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_columns_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_columns_get()
 
     def test_absorber_library_conn_type_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_conn_type_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_conn_type_get()
 
     def test_absorber_library_conn_type_id_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_conn_type_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_conn_type_id_get()
 
     def test_absorber_library_connector_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_connector_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_connector_get()
 
     def test_absorber_library_connector_post(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_connector_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_connector_post()
 
     def test_absorber_library_connector_put(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_connector_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_connector_put()
 
     def test_absorber_library_connector_id_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_connector_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_connector_id_get()
 
-    def test_absorber_library_connector_delete(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_connector_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_absorber_library_connector_id_delete(self):
+        AbsorberCase(SESS, HOST).case_absorber_library_connector_id_delete()
 
     def test_absorber_library_logo_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_logo_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_logo_get()
 
     def test_absorber_library_logo_post(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_logo_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_logo_post()
 
     def test_library_logo_put(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_logo_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_logo_put()
 
     def test_absorber_library_logo_delete(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_library_logo_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_library_logo_delete()
 
     def test_absorber_source_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_source_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_source_get()
 
-    def test_absorber_source_post(self):  # тут какая-то задница
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_source_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_absorber_source_post(self):
+        AbsorberCase(SESS, HOST).case_absorber_source_post()
 
-    def test_absorber_source_put(self):  # тут какая-то задница
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_source_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_absorber_source_put(self):
+        AbsorberCase(SESS, HOST).case_absorber_source_put()
 
     def test_absorber_source_id_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_source_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_source_id_get()
 
     def test_absorber_source_id_debug_get(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_source_id_debug_get()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_source_id_debug_get()
 
     def test_absorber_source_id_delete(self):
-        req = Absorber(SESS, HOST)
-        resp = req.absorber_source_id_delete()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AbsorberCase(SESS, HOST).case_absorber_source_id_delete()
 
 
 class TestAlarmer:
