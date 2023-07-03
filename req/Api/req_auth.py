@@ -1,11 +1,30 @@
 import json
 import random
 
+import requests
+
 from req.Helpers.base_req import BaseReq
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 session_id = []     # 'id' сессий текущего пользователя
+
+
+class AuthApiNew:
+
+    def __init__(self, host, token):
+        self.sess = requests.Session()
+        self.host = host
+        self.token = token
+
+        self.sess.headers.update({'token': self.token})
+        self.sess.verify = False
+
+    def auth_ad_struct_get(self):
+        """process GET req for getting domain AD struct"""
+
+        return self.sess.get(f"{self.host}/back/dp.auth/ad_struct")
+
 
 
 class AuthApi(BaseReq):

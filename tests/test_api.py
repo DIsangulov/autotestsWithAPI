@@ -23,8 +23,11 @@ from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
 
+from tests.case.api.auth import AuthApiCase
+
 urllib3.disable_warnings()
 
+# TODO: перекинуть в base_req?
 SESS = requests.Session()
 HOST = os.environ.get('TARGET_URL', "https://10.130.0.22")
 
@@ -36,10 +39,13 @@ class TestAuth:
         resp = req.auth_local_register_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # def test_auth_ad_struct_get(self):
+    #     req = AuthApi(SESS, HOST)
+    #     resp = req.auth_ad_struct_get()
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     def test_auth_ad_struct_get(self):
-        req = AuthApi(SESS, HOST)
-        resp = req.auth_ad_struct_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        AuthApiCase(SESS, HOST).case_auth_ad_struct_get()
 
     def test_auth_ou_users_post(self):
         req = AuthApi(SESS, HOST)
