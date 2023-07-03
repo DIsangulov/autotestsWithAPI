@@ -208,28 +208,3 @@ class Reporter(BaseReq):
         header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.reporter/screener/fast/xlsx/158", headers=header, verify=False)
         return resp
-
-    # https://tasks.ngrsoftlab.ru/browse/DAT-4982
-    # def reporter_visualisation_cached_role_report_report_id_role_id_post(self):
-    #     """process POST req for setting report-role"""
-    #     _report_id = 10
-    #     _role_id = 1
-    #     header = {'token': self.token}
-    #     resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/role_report/{_report_id}/{_role_id}", headers=header, verify=False)
-    #     return resp
-
-    # https://tasks.ngrsoftlab.ru/browse/DAT-4982
-    # def reporter_visualisation_cached_user_report_get(self):
-    #     """process GET req for getting report by id"""
-    #     header = {'token': self.token}
-    #     resp = self.sess.get(f"{self.host}/back/dp.reporter/visualisation_cached/user_report", headers=header, verify=False)
-    #     return resp
-
-    # https://tasks.ngrsoftlab.ru/browse/DAT-4982
-    # def reporter_visualisation_cached_user_report_report_id_post(self):
-    #     """process POST req for setting report-user"""
-    #     # исп: на странице отчета >> прикрепить к главной странице
-    #     _report_id = 10    # _report_id = 0 >> открепить от главной страницы
-    #     header = {'token': self.token}
-    #     resp = self.sess.post(f"{self.host}/back/dp.reporter/visualisation_cached/user_report/{_report_id}", headers=header, verify=False)
-    #     return resp
