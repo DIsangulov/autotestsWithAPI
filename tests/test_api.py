@@ -10,7 +10,6 @@ from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import RmCook
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_elements_eater import ElementsEater
 from req.Api.req_log_eater import LogEater
 from req.Api.req_monitor import Monitor
 from req.Api.req_reporter import Reporter
@@ -22,6 +21,7 @@ from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
 from tests.case.api.core import CoreCase
+from tests.case.api.elements_eater import ElementsEaterCase
 
 urllib3.disable_warnings()
 
@@ -347,6 +347,15 @@ class TestCore:
 
     def test_core_syslog_post(self):
         CoreCase(SESS, HOST).case_core_syslog_post()
+
+
+class TestElementsEater:
+
+    def test_elements_eater_reports_export_post(self):
+        ElementsEaterCase(SESS, HOST).case_elements_eater_reports_export_post()
+
+    def test_elements_eater_reports_import_post(self):
+        ElementsEaterCase(SESS, HOST).case_elements_eater_reports_import_post()
 
 
 class TestLicenser:
@@ -1199,21 +1208,6 @@ class TestXbaCook:
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_xba_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-
-class TestElementsEater:
-
-    def test_elements_eater_reports_export_post(self):
-        req = ElementsEater(SESS, HOST)
-        resp = req.elements_eater_reports_export_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    @pytest.mark.skip   # FIXME: поправить кейс
-    def test_elements_eater_reports_import_post(self):
-        req = ElementsEater(SESS, HOST)
-        resp = req.elements_eater_reports_import_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
 
 class TestLogEater:
 

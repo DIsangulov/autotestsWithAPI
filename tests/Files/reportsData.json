@@ -1,5 +1,5 @@
 {
-  "version": "1.9",
+  "version": "1.10",
   "query_cube": [
     {
       "db_name": "picker_tables",
