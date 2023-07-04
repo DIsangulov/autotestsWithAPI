@@ -9,7 +9,6 @@ class ElementsEater(BaseReqRaw):
         """process POST req for exporting reports by ids"""
         return self.sess.post(f"{self.host}/back/dp.elements_eater/reports/export", json=data)
 
-    # FIXME: AssertionError: Ошибка, код 400, {"error":{"code":400,"msg":"Найдены несовместимые версии"}}
     def elements_eater_reports_import_post(self, files) -> requests.Response:
         """process POST req for importing reports into platform"""
         # files={'file': f}

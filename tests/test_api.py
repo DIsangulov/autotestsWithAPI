@@ -4,13 +4,11 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
 from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import RmCook
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_log_eater import LogEater
 from req.Api.req_monitor import Monitor
 from req.Api.req_reporter import Reporter
 from req.Api.req_scripter import Scripter
@@ -22,6 +20,8 @@ from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
 from tests.case.api.core import CoreCase
 from tests.case.api.elements_eater import ElementsEaterCase
+from tests.case.api.licenser import LicenserCase
+from tests.case.api.log_eater import LogEaterCase
 
 urllib3.disable_warnings()
 
@@ -361,14 +361,16 @@ class TestElementsEater:
 class TestLicenser:
 
     def test_licenser_activate_post(self):
-        req = Licenser(SESS, HOST)
-        resp = req.licenser_activate_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        LicenserCase(SESS, HOST).case_licenser_activate_post()
 
     def test_licenser_license_info_get(self):
-        req = Licenser(SESS, HOST)
-        resp = req.licenser_license_info_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        LicenserCase(SESS, HOST).case_licenser_license_info_get()
+
+
+class TestLogEater:
+
+    def test_log_eater_audit_users_days_get(self):
+        LogEaterCase(SESS, HOST).case_log_eater_audit_users_days_get()
 
 
 class TestPeopler:
@@ -1207,13 +1209,6 @@ class TestXbaCook:
     def test_xba_cook_xba_post(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_xba_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-class TestLogEater:
-
-    def test_log_eater_audit_users_days_get(self):
-        req = LogEater(SESS, HOST)
-        resp = req.log_eater_audit_users_days_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
 

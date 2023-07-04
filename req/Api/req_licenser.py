@@ -1,23 +1,18 @@
-from req.Helpers.base_req import BaseReq
+import requests
+
+from req.Helpers.base_req_raw import BaseReqRaw
 
 
-class Licenser(BaseReq):
+class Licenser(BaseReqRaw):
 
-    def licenser_activate_post(self):  # кидаем кривой ключ и ждем что его отобъет
+    def licenser_activate_post(self, body) -> requests.Response:
         """process POST req for activating license with text key"""
-        body = {
-            "key": "123-456-789"
-        }
-        header = {'token': self.token}
-        resp = self.sess.post(f"{self.host}/back/dp.licenser/activate", headers=header, json=body, verify=False)
-        return resp
+        return self.sess.post(f"{self.host}/back/dp.licenser/activate", json=body)
 
     # TODO: [POST] /back/dp.licenser/file_activate
 
-    def licenser_license_info_get(self):
+    def licenser_license_info_get(self) -> requests.Response:
         """process GET req for getting current license info"""
-        header = {'token': self.token, 'skey': "ANGARA"}
-        resp = self.sess.get(f"{self.host}/back/dp.licenser/license_info", headers=header, verify=False)
-        return resp
+        return self.sess.get(f"{self.host}/back/dp.licenser/license_info")
 
     # TODO: [POST] /back/dp.licenser/set_company
