@@ -25,10 +25,10 @@ class Monitor(BaseReqRaw):
         """process POST req for getting webserver usage graphs data"""
         return self.sess.post(f"{self.host}/back/dp.monitor/webserver/graphs/{metric}", json=data)
 
-    def monitor_webserver_groups_get(self):
+    def monitor_webserver_groups_get(self) -> requests.Response:
         """process GET req for getting all webserver components stats"""
         return self.sess.get(f"{self.host}/back/dp.monitor/webserver/groups")
 
-    def monitor_webserver_stats_what_get(self, what):
+    def monitor_webserver_stats_what_get(self, what) -> requests.Response:
         """process GET req for getting webserver component what stats"""
         return self.sess.get(f"{self.host}/back/dp.monitor/webserver/stats/{what}")

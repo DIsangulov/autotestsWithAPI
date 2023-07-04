@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_peopler import Peopler
 from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import RmCook
 from req.Api.req_storage_worker import StorageWorker
@@ -22,6 +21,7 @@ from tests.case.api.elements_eater import ElementsEaterCase
 from tests.case.api.licenser import LicenserCase
 from tests.case.api.log_eater import LogEaterCase
 from tests.case.api.monitor import MonitorCase
+from tests.case.api.peopler import PeoplerCase
 
 urllib3.disable_warnings()
 
@@ -376,58 +376,38 @@ class TestLogEater:
 class TestPeopler:
 
     def test_peopler_mainpage_get(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_mainpage_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_mainpage_get()
 
     def test_peopler_many_users_post(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_many_users_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_many_users_post()
 
     def test_peopler_many_users_put(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_many_users_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_many_users_put()
 
     def test_peopler_profile_get(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_profile_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_profile_get()
 
     def test_peopler_profiles_get(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_profiles_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_profiles_get()
 
     def test_peopler_users_get(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_users_get()
 
     def test_peopler_users_post(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_users_post()
 
     def test_peopler_users_id_get(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_users_id_get()
 
     def test_peopler_users_id_put(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_id_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_users_id_put()
 
     def test_peopler_users_delete(self):
-        req = Peopler(SESS, HOST)
-        resp = req.peopler_users_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PeoplerCase(SESS, HOST).case_peopler_users_delete()
 
     # def __del__(self):    # FIXME >> after class
     def test_all_api_auto_test_user_delete(self):
-        Peopler(SESS, HOST).all_api_auto_test_user_delete()
+        PeoplerCase(SESS, HOST).all_api_auto_test_user_delete()
 
 
 class TestPermitter:
