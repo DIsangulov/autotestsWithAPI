@@ -3,7 +3,7 @@ import requests
 from req.Helpers.base_req_raw import BaseReqRaw
 
 
-class AlarmerNew(BaseReqRaw):
+class Alarmer(BaseReqRaw):
 
     # TODO: [GET] /back/dp.alarmer/alert/service/names
 

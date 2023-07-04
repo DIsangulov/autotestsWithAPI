@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_core import Core
 from req.Api.req_licenser import Licenser
 from req.Api.req_peopler import Peopler
 from req.Api.req_permitter import Permitter
@@ -22,7 +21,7 @@ from req.Api.req_visualisation import Visualisation
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
-
+from tests.case.api.core import CoreCase
 
 urllib3.disable_warnings()
 
@@ -163,305 +162,191 @@ class TestAlarmer:
 class TestCore:
 
     def test_core_active_directory_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_active_directory_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_active_directory_get()
 
     def test_core_active_directory_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_active_directory_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_active_directory_post()
 
     def test_core_active_directory_structure_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_active_directory_structure_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_active_directory_structure_post()
 
     def test_core_active_directory_test_settings_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_active_directory_test_settings_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_active_directory_test_settings_post()
 
     def test_core_check_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_check_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_check_get()
 
     def test_core_common_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_common_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_common_get()
 
     def test_core_common_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_common_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_common_post()
 
     def test_core_common_test_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_common_test_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_common_test_post()
 
     def test_core_component_ml_restart_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_component_ml_restart_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_component_ml_restart_get()
 
     def test_core_component_picker_restart_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_component_picker_restart_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_component_picker_restart_get()
 
+    # "code":400
     def test_core_component_servicedb_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
-        req = Core(SESS, HOST)
-        resp = req.core_component_servicedb_restart_get()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_component_servicedb_restart_get()
 
-    def test_core_component_datastore_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
-        req = Core(SESS, HOST)
-        resp = req.core_component_datastore_restart_get()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # "code":400
+    def test_core_component_datastore_restart_get(self):
+        CoreCase(SESS, HOST).core_component_datastore_restart_get()
 
     def test_core_download_settings_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_download_settings_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_download_settings_get()
 
     def test_core_email_import_cert_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_email_import_cert_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_email_import_cert_post()
 
     def test_core_email_send_test_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_email_send_test_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_email_send_test_post()
 
-    def test_core_email_type_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_email_type_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_email_in_get(self):
+        CoreCase(SESS, HOST).case_core_email_in_get()
 
     def test_core_email_out_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_email_out_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_email_out_get()
 
     def test_core_email_in_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_email_out_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_email_in_post()
 
     def test_core_email_out_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_email_in_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_email_out_post()
 
     def test_core_flag_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_flag_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_flag_get()
 
     def test_core_ip_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_ip_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_ip_get()
 
     def test_core_nodes_list_ml_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_list_ml_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_list_ml_get()
 
     def test_core_nodes_list_picker_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_list_picker_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_list_picker_get()
 
     def test_core_nodes_list_servicedb_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_list_servicedb_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_list_servicedb_get()
 
     def test_core_nodes_list_datastore_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_list_datastore_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_list_datastore_get()
 
     def test_core_nodes_ml_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_ml_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_ml_get()
 
     def test_core_nodes_picker_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_picker_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_picker_get()
 
     def test_core_nodes_servicedb_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_servicedb_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_servicedb_get()
 
     def test_core_nodes_datastore_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_nodes_datastore_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_nodes_datastore_get()
 
-    def test_core_service_dp_alarmer_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_alarmer_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_alarmer_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_alarmer_restart_get()
 
-    def test_core_service_dp_auth_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_auth_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_auth_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_auth_restart_get()
 
-    def test_core_service_dp_core_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_core_get()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # "code":400
+    def test_core_service_dp_core_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_core_restart_get()
 
-    def test_core_service_dp_licenser_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_licenser_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_licenser_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_licenser_restart_get()
 
-    def test_core_service_dp_log_eater_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_log_eater_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_log_eater_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_log_eater_restart_get()
 
-    def test_core_service_dp_monitor_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_monitor_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_monitor_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_monitor_restart_get()
 
-    def test_core_service_dp_peopler_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_peopler_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_peopler_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_peopler_restart_get()
 
-    def test_core_service_dp_permitter_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_permitter_get()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # "code":400
+    def test_core_service_dp_permitter_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_permitter_restart_get()
 
-    def test_core_service_dp_postgres_single_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_postgres_single_get()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # "code":400
+    def test_core_service_dp_postgres_single_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_postgres_single_restart_get()
 
-    def test_core_service_dp_taskplan_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_taskplan_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_taskplan_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_taskplan_restart_get()
 
-    def test_core_service_dp_updater_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_updater_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_updater_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_updater_restart_get()
 
-    def test_core_service_dp_absorber_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_absorber_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_absorber_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_absorber_restart_get()
 
-    def test_core_service_dp_picker_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_picker_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_picker_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_picker_restart_get()
 
-    def test_core_service_dp_storage_single_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_storage_single_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_storage_single_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_storage_single_restart_get()
 
-    def test_core_service_dp_storage_worker_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_storage_worker_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_storage_worker_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_storage_worker_restart_get()
 
     def test_core_service_dp_ml_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_ml_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_service_dp_ml_restart_get()
 
-    def test_core_service_dp_scripter_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_scripter_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_scripter_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_scripter_restart_get()
 
-    def test_core_service_dp_datapie_baker_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_datapie_baker_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_datapie_baker_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_datapie_baker_restart_get()
 
-    def test_core_service_dp_elements_eater_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_elements_eater_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_elements_eater_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_elements_eater_restart_get()
 
-    def test_core_service_dp_frontend_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_frontend_get()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # "code":400
+    def test_core_service_dp_frontend_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_frontend_restart_get()
 
-    def test_core_service_dp_reporter_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_reporter_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_reporter_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_reporter_restart_get()
 
-    def test_core_service_dp_rm_cook_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_rm_cook_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_rm_cook_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_rm_cook_restart_get()
 
-    def test_core_service_dp_rm_ml_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_rm_ml_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_rm_ml_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_rm_ml_restart_get()
 
-    def test_core_service_dp_screener_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_screener_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_screener_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_screener_restart_get()
 
-    def test_core_service_dp_visualisation_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_visualisation_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_visualisation_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_visualisation_restart_get()
 
-    def test_core_service_dp_xba_cook_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_xba_cook_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_xba_cook_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_xba_cook_restart_get()
 
-    def test_core_service_dp_xba_py_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_service_dp_xba_py_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_core_service_dp_xba_py_restart_get(self):
+        CoreCase(SESS, HOST).case_core_service_dp_xba_py_restart_get()
 
     @pytest.mark.skip
     def test_core_service_all_restart_get(self):  # стенд не тянет этот метод!
-        req = Core(SESS, HOST)
-        resp = req.core_service_all_restart_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_service_all_restart_get()
 
     def test_core_sid_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_sid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_sid_get()
 
     def test_core_syslog_get(self):
-        req = Core(SESS, HOST)
-        resp = req.core_syslog_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_syslog_get()
 
     def test_core_syslog_post(self):
-        req = Core(SESS, HOST)
-        resp = req.core_syslog_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        CoreCase(SESS, HOST).case_core_syslog_post()
 
 
 class TestLicenser:

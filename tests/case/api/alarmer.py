@@ -1,5 +1,5 @@
 from req.Helpers.base_req import BaseReq
-from req.Api.req_alarmer import AlarmerNew
+from req.Api.req_alarmer import Alarmer
 from resourses.credentials import DpQaa
 
 _QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
@@ -9,7 +9,7 @@ API_AUTO_TEST_ = "API_AUTO_TEST_"
 class AlarmerCase(BaseReq):
 
     def case_alarmer_notification_admin_all_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         resp = req.alarmer_notification_admin_all_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -18,7 +18,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_read_admin_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         resp = req.alarmer_notification_read_admin_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -27,7 +27,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_read_type_admin_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         _type = "admin"     # FIXME: какие ещё типы
         body = {
@@ -40,7 +40,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_admin_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         resp = req.alarmer_notification_settings_admin_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -49,7 +49,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_common_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         resp = req.alarmer_notification_settings_common_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -58,7 +58,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_common_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         body = {
             "get_sys_notify": True,
@@ -71,7 +71,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_user_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         resp = req.alarmer_notification_settings_user_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -80,7 +80,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_userone_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         body = {
             "object_id": 1,
@@ -94,7 +94,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_type_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         _type = "user"
         body = {
@@ -107,7 +107,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_notification_settings_user_all_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         resp = req.alarmer_notification_settings_user_all_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -117,7 +117,7 @@ class AlarmerCase(BaseReq):
 
     # TODO: parametrize? type = user, type = admin
     def case_alarmer_notification_user_get(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         _type = "user"      # TODO: add also 'admin'
         resp = req.alarmer_notification_type_get(_type)
@@ -127,7 +127,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_send_invitation_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         body = {
             # "link": "https://10.130.0.22/",  # нужно?
@@ -142,7 +142,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_send_invitations_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         body = {
             # "link": "https://10.130.0.22/",     # нужно?
@@ -159,7 +159,7 @@ class AlarmerCase(BaseReq):
         return resp
 
     def case_alarmer_send_msg_post(self):
-        req = AlarmerNew(self.sess, self.host)
+        req = Alarmer(self.sess, self.host)
 
         body = {
             "topic": API_AUTO_TEST_ + "topic",
