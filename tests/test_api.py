@@ -9,7 +9,6 @@ from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import RmCook
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_monitor import Monitor
 from req.Api.req_reporter import Reporter
 from req.Api.req_scripter import Scripter
 from req.Api.req_taskplan import Taskplan
@@ -22,6 +21,7 @@ from tests.case.api.core import CoreCase
 from tests.case.api.elements_eater import ElementsEaterCase
 from tests.case.api.licenser import LicenserCase
 from tests.case.api.log_eater import LogEaterCase
+from tests.case.api.monitor import MonitorCase
 
 urllib3.disable_warnings()
 
@@ -1215,215 +1215,79 @@ class TestXbaCook:
 class TestMonitor:
 
     def test_monitor_anomals_flag_0_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_anomals_flag_0_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_anomals_flag_0_post()
 
     def test_monitor_anomals_flag_1_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_anomals_flag_1_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_anomals_flag_1_post()
 
     def test_monitor_anomals_flag_2_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_anomals_flag_2_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_anomals_flag_2_post()
 
     def test_monitor_anomals_flag_3_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_anomals_flag_3_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_anomals_flag_3_post()
 
     def test_monitor_anomals_flag_4_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_anomals_flag_4_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_anomals_flag_4_post()
 
-    @pytest.mark.skip
     def test_monitor_dump_server_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_dump_server_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_dump_server_post()
 
-    @pytest.mark.skip
     def test_monitor_dump_nodes_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_dump_nodes_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_dump_nodes_post()
 
-    # -----------------------------------------------------------
+    def test_monitor_nodes_graphs_ml_metrics_post(self):
+        MonitorCase(SESS, HOST).case_monitor_nodes_graphs_ml_metrics_post()
 
-    def test_monitor_nodes_graphs_ml_ram_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_ml_ram_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_monitor_nodes_graphs_picker_metrics_post(self):
+        MonitorCase(SESS, HOST).case_monitor_nodes_graphs_picker_metrics_post()
 
-    def test_monitor_nodes_graphs_ml_cpu_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_ml_cpu_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_ml_iops_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_ml_iops_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_ml_network_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_ml_network_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_ml_picked_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_ml_picked_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_picker_ram_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_picker_ram_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_picker_cpu_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_picker_cpu_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_picker_iops_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_picker_iops_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_picker_network_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_picker_network_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_picker_picked_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_picker_picked_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_servicedb_ram_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_servicedb_ram_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_servicedb_cpu_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_servicedb_cpu_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_servicedb_iops_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_servicedb_iops_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_servicedb_network_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_servicedb_network_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_servicedb_picked_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_servicedb_picked_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_monitor_nodes_graphs_servicedb_metrics_post(self):
+        MonitorCase(SESS, HOST).case_monitor_nodes_graphs_servicedb_metrics_post()
 
     def test_monitor_nodes_graphs_datastore_ram_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_datastore_ram_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_datastore_cpu_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_datastore_cpu_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_datastore_iops_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_datastore_iops_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_datastore_network_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_datastore_network_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_monitor_nodes_graphs_datastore_picked_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_graphs_datastore_picked_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    # -----------------------------------------------------------
+        MonitorCase(SESS, HOST).case_monitor_nodes_graphs_datastore_metrics_post()
 
     def test_monitor_nodes_stats_ml_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_stats_ml_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_nodes_stats_ml_get()
 
     def test_monitor_nodes_stats_picker_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_stats_picker_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_nodes_stats_picker_get()
 
     def test_monitor_nodes_stats_servicedb_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_stats_servicedb_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_nodes_stats_servicedb_get()
 
     def test_monitor_nodes_stats_datastore_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_nodes_stats_datastore_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_nodes_stats_datastore_get()
 
     def test_monitor_webserver_graphs_ram_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_graphs_ram_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_graphs_ram_post()
 
     def test_monitor_webserver_graphs_cpu_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_graphs_cpu_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_graphs_cpu_post()
 
     def test_monitor_webserver_graphs_iops_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_graphs_iops_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_graphs_iops_post()
 
     def test_monitor_webserver_graphs_network_post(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_graphs_network_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_graphs_network_post()
 
     def test_monitor_webserver_groups_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_groups_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_groups_get()
 
     def test_monitor_webserver_stats_sys_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_stats_sys_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_stats_sys_get()
 
     def test_monitor_webserver_stats_visual_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_stats_visual_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_stats_visual_get()
 
     def test_monitor_webserver_stats_analytics_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_stats_analytics_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_stats_analytics_get()
 
     def test_monitor_webserver_stats_datastore_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_stats_datastore_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_stats_datastore_get()
 
     def test_monitor_webserver_stats_dataproc_get(self):
-        req = Monitor(SESS, HOST)
-        resp = req.monitor_webserver_stats_dataproc_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        MonitorCase(SESS, HOST).case_monitor_webserver_stats_dataproc_get()
 
 
 class TestReporter:
