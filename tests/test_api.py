@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_permitter import Permitter
 from req.Api.req_rm_cook import RmCook
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
@@ -491,116 +490,70 @@ class TestPermitter:
     def test_permitter_element_rules_all_script_sequence_id_get(self):
         PermitterCase(SESS, HOST).case_permitter_element_rules_all_script_sequence_id_get()
 
-    def test_permitter_element_rules_query_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_query_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_query_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_query_id_get()
 
-    def test_permitter_element_rules_visualisation_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_visualisation_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_visualisation_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_visualisation_id_get()
 
-    def test_permitter_element_rules_report_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_report_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # def test_permitter_element_rules_report_get(self):
+    #
+    # def test_permitter_element_rules_mailing_get(self):
+    #
+    # def test_permitter_element_rules_script_get(self):
+    #
+    # def test_permitter_element_rules_script_sequence_get(self):
 
-    def test_permitter_element_rules_mailing_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_mailing_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_query_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_query_id_post()
 
-    def test_permitter_element_rules_script_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_script_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_visualisation_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_visualisation_id_post()
 
-    def test_permitter_element_rules_script_sequence_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_script_sequence_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_report_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_report_id_post()
 
-    def test_permitter_element_rules_query_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_query_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_mailing_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_mailing_id_post()
 
-    def test_permitter_element_rules_visualisation_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_visualisation_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_script_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_script_id_post()
 
-    def test_permitter_element_rules_report_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_report_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_permitter_element_rules_mailing_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_mailing_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_permitter_element_rules_script_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_script_post()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    @pytest.mark.skip  # FIXME: падает; хардкод
-    def test_permitter_element_rules_script_sequence_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_script_sequence_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_script_sequence_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_script_sequence_id_post()
 
     def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_delete_element_type_query_element_id_post()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_element_rules_delete_query_id_post()
 
     def test_permitter_roles_editor_roles_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_roles_editor_roles_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_roles_editor_roles_get()
 
     def test_permitter_roles_editor_roles_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_roles_editor_roles_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_roles_editor_roles_post()
 
     def test_permitter_roles_editor_roles_edit_id_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_roles_editor_roles_edit_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_roles_editor_roles_edit_id_get()
 
     def test_permitter_roles_editor_roles_id_put(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_roles_editor_roles_id_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_roles_editor_roles_id_put()
 
     def test_permitter_roles_editor_roles_id_delete(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_roles_editor_roles_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_roles_editor_roles_id_delete()
 
     def test_permitter_user_rules_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_user_rules_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_user_rules_get()
 
     def test_permitter_users_elements_count_who_id_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_users_elements_count_who_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_users_elements_count_who_id_get()
 
     def test_permitter_users_new_author_who_id(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_users_new_author_who_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_users_new_author_who_id_post()
 
-    def test_permitter_who_rules_who_id_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_who_rules_who_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_user_rules_who_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_user_rules_who_id_get()
+
+    def test_permitter_role_rules_who_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_role_rules_who_id_get()
 
 
 class TestRmCook:
