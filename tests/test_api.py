@@ -22,6 +22,7 @@ from tests.case.api.licenser import LicenserCase
 from tests.case.api.log_eater import LogEaterCase
 from tests.case.api.monitor import MonitorCase
 from tests.case.api.peopler import PeoplerCase
+from tests.case.api.permitter import PermitterCase
 
 urllib3.disable_warnings()
 
@@ -405,7 +406,7 @@ class TestPeopler:
     def test_peopler_users_delete(self):
         PeoplerCase(SESS, HOST).case_peopler_users_delete()
 
-    # def __del__(self):    # FIXME >> after class
+    # def __del__(self):
     def test_all_api_auto_test_user_delete(self):
         PeoplerCase(SESS, HOST).all_api_auto_test_user_delete()
 
@@ -413,137 +414,82 @@ class TestPeopler:
 class TestPermitter:
 
     def test_permitter_check_ui_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_check_ui_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_check_ui_get()
 
     def test_permitter_db_watcher_all_db_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_all_db_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_all_db_get()
 
     def test_permitter_db_watcher_all_tables_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_all_tables_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_all_tables_get()
 
     def test_permitter_db_watcher_db_tables_id_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_db_tables_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_db_tables_id_get()
 
     def test_permitter_db_watcher_empty_role_dbs_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_empty_role_dbs_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_empty_role_dbs_get()
 
     def test_permitter_db_watcher_empty_role_tables_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_empty_role_tables_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_empty_role_tables_get()
 
     def test_permitter_db_watcher_empty_role_tables_id_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_empty_role_tables_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_empty_role_tables_id_get()
 
     def test_permitter_db_watcher_get_tab_name_id_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_db_watcher_get_tab_name_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        PermitterCase(SESS, HOST).case_permitter_db_watcher_get_tab_name_id_get()
 
-    def test_permitter_element_flags_query_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_query_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_flags_query_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_query_id_get()
 
-    def test_permitter_element_flags_visualisation_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_visualisation_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_flags_visualisation_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_visualisation_id_get()
 
-    def test_permitter_element_flags_report_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_report_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_flags_report_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_report_id_get()
 
-    @pytest.mark.skip  # FIXME: падает; хз
-    def test_permitter_element_flags_mailing_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_mailing_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_flags_mailing_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_mailing_id_get()
 
-    @pytest.mark.skip  # FIXME: падает; хардкод
-    def test_permitter_element_flags_script_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_script_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_flags_script_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_script_id_get()
 
-    @pytest.mark.skip  # FIXME: падает; хардкод
-    def test_permitter_element_flags_script_sequence_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_script_sequence_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_flags_script_sequence_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_script_sequence_id_get()
 
-    def test_permitter_element_flags_query_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_query_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+    def test_permitter_element_flags_query_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_query_id_post()
 
-    def test_permitter_element_flags_visualisation_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_visualisation_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+    def test_permitter_element_flags_visualisation_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_visualisation_id_post()
 
-    def test_permitter_element_flags_report_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_report_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+    def test_permitter_element_flags_report_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_report_id_post()
 
-    def test_permitter_element_flags_mailing_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_report_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+    def test_permitter_element_flags_mailing_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_mailing_id_post()
 
-    def test_permitter_element_flags_script_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_script_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+    def test_permitter_element_flags_script_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_script_id_post()
 
-    def test_permitter_element_flags_script_sequence_post(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_flags_sscript_sequence_post()
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"  # 403 логичный ответ на изменение чужого профиля
+    def test_permitter_element_flags_script_sequence_id_post(self):
+        PermitterCase(SESS, HOST).case_permitter_element_flags_script_sequence_id_post()
 
-    def test_permitter_element_rules_all_flags_query_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_all_flags_query_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_all_query_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_all_query_id_get()
 
-    def test_permitter_element_rules_all_flags_visualisation_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_all_flags_visualisation_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_all_visualisation_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_all_visualisation_id_get()
 
-    def test_permitter_element_rules_all_flags_report_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_all_flags_report_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_all_report_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_all_report_id_get()
 
-    def test_permitter_element_rules_all_flags_mailing_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_all_flags_mailing_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_all_mailing_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_all_mailing_id_get()
 
-    def test_permitter_element_rules_all_flags_script_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_all_flags_script_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_all_script_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_all_script_id_get()
 
-    def test_permitter_element_rules_all_flags_script_sequence_get(self):
-        req = Permitter(SESS, HOST)
-        resp = req.permitter_element_rules_all_flags_script_sequence_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_permitter_element_rules_all_script_sequence_id_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_all_script_sequence_id_get()
 
     def test_permitter_element_rules_query_get(self):
         req = Permitter(SESS, HOST)
@@ -1424,6 +1370,7 @@ class TestScripter:
         req = Scripter(SESS, HOST)
         resp = req.scripter_sequence_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        print(resp.text)
 
     def test_scripter_sequence_post(self):
         req = Scripter(SESS, HOST)
