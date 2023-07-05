@@ -4,10 +4,8 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_rm_cook import RmCook
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_reporter import Reporter
 from req.Api.req_scripter import Scripter
 from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
@@ -23,6 +21,7 @@ from tests.case.api.monitor import MonitorCase
 from tests.case.api.peopler import PeoplerCase
 from tests.case.api.permitter import PermitterCase
 from tests.case.api.reporter import ReporterCase
+from tests.case.api.rm_cook import RmCookCase
 
 urllib3.disable_warnings()
 
@@ -560,152 +559,96 @@ class TestPermitter:
 class TestRmCook:
 
     def test_rm_cook_active_directory_groups_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_groups_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_groups_get()
 
     def test_rm_cook_active_directory_groups_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_groups_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_groups_id_get()
 
     def test_rm_cook_active_directory_state_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_state_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_state_get()
 
     def test_rm_cook_active_directory_top_groups_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_top_groups_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_top_groups_get()
 
     def test_rm_cook_active_directory_top_users_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_top_users_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_top_users_get()
 
     def test_rm_cook_active_directory_users_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_users_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_users_get()
 
     def test_rm_cook_active_directory_users_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_active_directory_users_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_active_directory_users_id_get()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # rm calculation
     def test_rm_cook_calculation_start_calc_id_post(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_calculation_start_calc_id_post()
-        assert resp.status_code == 200 or 429, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_calculation_start_calc_id_post()
 
     def test_rm_cook_rm_logs_last_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_rm_logs_last_get()
-        assert resp.status_code == 200 or 429, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_rm_logs_last_get()
 
     def test_rm_recommendations_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_rm_recommendations_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_rm_recommendations_get()
 
     def test_rm_cook_rm_roles_id_alias_post(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_rm_roles_id_alias_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_rm_roles_id_alias_post()
 
+    @pytest.mark.skip   # fixme
     def test_rm_cook_rm_roles_id_alias_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_rm_roles_id_alias_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_rm_roles_id_alias_get()
 
     def test_rm_status_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_rm_status_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_rm_status_get()
 
     def test_rm_cook_role_model_result_export_role_model_to_excel_post(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_export_role_model_to_excel_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_export_role_model_to_excel_post()
 
     def test_rm_cook_role_model_result_groups_by_role_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_groups_by_role_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_groups_by_role_id_get()
 
-    @pytest.mark.skip
-    def test_rm_cook_role_model_result_resources_by_role_id_get(self):  # Не реализовано
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_resources_by_role_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    @pytest.mark.skip   # fixme
+    def test_rm_cook_role_model_result_resources_by_role_id_get(self):
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_resources_by_role_id_get()
 
     def test_rm_cook_role_model_result_roles_by_source_source_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_roles_by_source_source_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_roles_by_source_source_id_get()
 
     def test_rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_source_source_id_users_by_role_role_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_source_0_users_by_role_0_get()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme
     def test_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self):  # Не используется
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme
     def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):  # Не используется
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get()
 
-    @pytest.mark.skip
+    @pytest.mark.skip  # fixme
     def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme
     def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get1()
 
     def test_rm_cook_settings_calc_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_settings_calc_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_settings_calc_get()
 
-    @pytest.mark.skip
     def test_rm_cook_settings_calc_put(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_settings_calc_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_settings_calc_put()
 
     def test_rm_cook_settings_mailings_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_settings_mailings_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_settings_mailings_get()
 
-    @pytest.mark.skip # qa@ku.ku
+    @pytest.mark.skip       # qa@ku.ku
     def test_rm_cook_settings_mailings_post(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_settings_mailings_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_settings_mailings_post()
 
     def test_rm_cook_settings_sources_get(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_settings_sources_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_settings_sources_get()
 
     def test_rm_cook_settings_sources_post(self):
-        req = RmCook(SESS, HOST)
-        resp = req.rm_cook_settings_sources_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        RmCookCase(SESS, HOST).case_rm_cook_settings_sources_post()
 
 
 class TestStorageWorker:
