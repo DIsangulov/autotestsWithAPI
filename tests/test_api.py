@@ -22,6 +22,7 @@ from tests.case.api.log_eater import LogEaterCase
 from tests.case.api.monitor import MonitorCase
 from tests.case.api.peopler import PeoplerCase
 from tests.case.api.permitter import PermitterCase
+from tests.case.api.reporter import ReporterCase
 
 urllib3.disable_warnings()
 
@@ -1172,60 +1173,35 @@ class TestMonitor:
 class TestReporter:
 
     def test_reporter_mailing_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_post()
 
     def test_reporter_mailing_sample_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_sample_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_sample_post()
 
     def test_reporter_mailing_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_get()
 
     def test_reporter_mailing_put(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_put()
 
-    def test_reporter_mailing_type_0_1_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_type_0_1_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    def test_reporter_mailing_typed_0_1_get(self):
+        ReporterCase(SESS, HOST).case_reporter_mailing_typed_0_1_get()
 
     def test_reporter_mailing_type_2_3_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_type_2_3_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_typed_2_3_get()
 
     def test_reporter_mailing_id_get(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_id_get()
 
     def test_reporter_screener_fast_png_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_screener_fast_png_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_screener_fast_png_post()
 
     def test_reporter_screener_fast_pdf_post(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_screener_fast_pdf_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    @pytest.mark.skip
-    def test_reporter_screener_fast_xlsx_id_get(self):  # xlsx формируется на фронте
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_screener_fast_xlsx_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_screener_fast_pdf_post()
 
     def test_reporter_mailing_id_delete(self):
-        req = Reporter(SESS, HOST)
-        resp = req.reporter_mailing_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ReporterCase(SESS, HOST).case_reporter_mailing_id_delete()
+
 
 class TestScripter:
 
