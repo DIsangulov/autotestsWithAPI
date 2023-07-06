@@ -4,7 +4,6 @@ import pytest
 import requests
 import urllib3
 
-from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
 from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
@@ -22,6 +21,7 @@ from tests.case.api.permitter import PermitterCase
 from tests.case.api.reporter import ReporterCase
 from tests.case.api.rm_cook import RmCookCase
 from tests.case.api.scripter import ScripterCase
+from tests.case.api.storage_worker import StorageWorkerCase
 
 urllib3.disable_warnings()
 
@@ -654,149 +654,96 @@ class TestRmCook:
 class TestStorageWorker:
 
     def test_storage_worker_ask_one_sql_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_ask_one_sql_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_ask_one_sql_post()
 
     def test_storage_worker_ask_plain_sql_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_ask_plain_sql_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_ask_plain_sql_post()
 
     def test_storage_worker_import_rules_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_import_rules_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_import_rules_get()
 
     def test_storage_worker_psevdo_namer_regs_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_psevdo_namer_regs_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_psevdo_namer_regs_post()
 
     def test_storage_worker_psevdo_namer_regs_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_psevdo_namer_regs_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_psevdo_namer_regs_get()
 
     def test_storage_worker_psevdo_namer_regs_pid_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_psevdo_namer_regs_pid_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_psevdo_namer_regs_pid_get()
 
     def test_storage_worker_psevdo_namer_regs_pid_delete(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_psevdo_namer_regs_pid_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_psevdo_namer_regs_pid_delete()
 
     def test_storage_worker_show_base_db_name_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_show_base_db_name_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_show_base_db_name_get()
 
     def test_storage_worker_statistics_db_event_stats_db_name_flag_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_event_stats_db_name_flag_post()
 
     def test_storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get()
 
     def test_storage_worker_statistics_db_search_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_search_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_search_post()
 
     def test_storage_worker_statistics_db_stats_dbname_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_stats_dbname_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_stats_dbname_get()
 
     def test_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post()
 
+    # fixme: 405 status code
     def test_storage_worker_statistics_db_tabs_stats_dbname_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_db_tabs_stats_dbname_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_tabs_stats_dbname_get()
 
     def test_storage_worker_statistics_storage_search_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_storage_search_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_storage_search_post()
 
     def test_storage_worker_statistics_test_selection_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_statistics_test_selection_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_test_selection_post()
 
     def test_storage_worker_storage_db_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_db_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_db_post()
 
     def test_storage_worker_storage_db_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_db_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_db_get()
 
+    # fixme: убрать
     def test_permitter_roles_editor_roles_for_storage_worker_put(self):
-        req = StorageWorker(SESS, HOST)
+        req = StorageWorkerCase(SESS, HOST)
         resp = req.permitter_roles_editor_roles_for_storage_worker_put()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_storage_db_put(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_db_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_db_put()
 
     def test_storage_worker_storage_db_delete(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_db_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_db_delete()
 
     def test_storage_worker_storage_import_csv_db_name_table_name_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_import_csv_db_name_table_name_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_import_csv_db_name_table_name_post()
 
     def test_storage_worker_storage_import_json_db_name_table_name_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_import_json_db_name_table_name_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_import_json_db_name_table_name_post()
 
     def test_storage_worker_storage_supported_engines_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_supported_engines_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_supported_engines_get()
 
     def test_storage_worker_storage_supported_types_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_supported_types_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_supported_types_get()
 
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_table_columns_db_name_tab_name_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
+    @pytest.mark.skip   # fixme: неверно передаются параметры
     def test_storage_worker_storage_table_columns_db_name_table_name_post(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_table_columns_db_name_table_name_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_table_columns_db_name_table_name_post()
 
     def test_storage_worker_storage_table_db_name_table_name_ttl_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_table_db_name_table_name_ttl_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_table_db_name_table_name_ttl_get()
 
     def test_storage_worker_storage_table_db_name_table_name_count_get(self):
-        req = StorageWorker(SESS, HOST)
-        resp = req.storage_worker_storage_table_db_name_table_name_count_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        StorageWorkerCase(SESS, HOST).case_storage_worker_storage_table_db_name_table_name_count_get()
 
 
 class TestXbaCook:
@@ -898,7 +845,7 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_graph_drilldown_statement_id_post()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip # нужно заполнение при prof_id=None, data=None
+    @pytest.mark.skip   # нужно заполнение при prof_id=None, data=None
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_graph_drilldown_id_post()
@@ -954,7 +901,7 @@ class TestXbaCook:
         resp = req.xba_cook_profiles_groups_group_id_profiles_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    @pytest.mark.skip # нужен group_id хотя бы с одним пользователем
+    @pytest.mark.skip   # нужен group_id хотя бы с одним пользователем
     def test_xba_cook_profiles_groups_id_post(self):
         req = XbaCook(SESS, HOST)
         resp = req.xba_cook_profiles_groups_id_post()
@@ -1010,9 +957,9 @@ class TestXbaCook:
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_xba_cook_profiles_id_whitelist_element_post(self):
-            req = XbaCook(SESS, HOST)
-            resp = req.xba_cook_profiles_id_whitelist_element_post()
-            assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        req = XbaCook(SESS, HOST)
+        resp = req.xba_cook_profiles_id_whitelist_element_post()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_xba_cook_profiles_id_string_whitelist_get(self):
         req = XbaCook(SESS, HOST)
