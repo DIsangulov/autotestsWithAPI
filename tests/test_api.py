@@ -6,7 +6,6 @@ import urllib3
 
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_scripter import Scripter
 from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
@@ -22,6 +21,7 @@ from tests.case.api.peopler import PeoplerCase
 from tests.case.api.permitter import PermitterCase
 from tests.case.api.reporter import ReporterCase
 from tests.case.api.rm_cook import RmCookCase
+from tests.case.api.scripter import ScripterCase
 
 urllib3.disable_warnings()
 
@@ -1149,155 +1149,97 @@ class TestReporter:
 class TestScripter:
 
     def test_scripter_category_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_category_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_category_get()
 
     def test_scripter_libs_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_libs_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_libs_get()
 
     def test_scripter_script_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_get()
 
     def test_scripter_script_post(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_post()
 
     def test_scripter_script_put(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_put()
 
     def test_scripter_script_exec_list_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_exec_list_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_exec_list_get()
 
     def test_scripter_script_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_id_get()
 
     def test_scripter_script_start_post(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_start_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_start_post()
 
     def test_scripter_script_stop_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_stop_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_stop_id_get()
 
     def test_scripter_script_id_files_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_files_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_id_files_get()
 
     def test_scripter_script_id_files_put(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_files_put()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_id_files_put()
 
     def test_scripter_script_id_log_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_log_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_id_log_get()
 
-    def test_scripter_script_id_log_last_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_log_last_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_scripter_script_id_log_log_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_script_id_log_log_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_scripter_script_id_log_log_id_delete(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_script_id_log_log_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
+    # fixme:    падает
     def test_scripter_script_id_log_delete(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_log_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_id_log_delete()
 
-    def test_scripter_script_type_user_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_type_user_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # fixme:    падает
+    def test_scripter_script_id_log_last_get(self):
+        ScripterCase(SESS, HOST).case_scripter_script_id_log_last_get()
+
+    # fixme:    падает
+    def test_scripter_script_id_log_log_id_get(self):
+        ScripterCase(SESS, HOST).case_scripter_script_script_id_log_log_id_get()
+
+    # fixme:    падает
+    def test_scripter_script_id_log_log_id_delete(self):
+        ScripterCase(SESS, HOST).case_scripter_script_script_id_log_log_id_delete()
 
     def test_scripter_script_type_admin_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_type_admin_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_type_admin_get()
+
+    def test_scripter_script_type_user_get(self):
+        ScripterCase(SESS, HOST).case_scripter_script_type_user_get()
 
     def test_scripter_sequence_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
+        ScripterCase(SESS, HOST).case_scripter_sequence_get()
 
     def test_scripter_sequence_post(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_post()
 
+    # fixme
     def test_scripter_sequence_put(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_put()
 
+    # fixme
     def test_scripter_sequence_log_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_log_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_log_id_get()
 
     def test_scripter_sequence_id_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_id_get()
 
     def test_scripter_sequence_start_post(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_start_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_start_post()
 
     def test_scripter_sequence_stop_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_stop_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_stop_id_get()
 
     def test_scripter_sequence_id_log_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_sequence_id_log_last_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_sequence_id_log_last_get()
 
     def test_scripter_sequence_sequence_type_admin_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_sequence_type_admin_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_sequence_type_admin_get()
 
     def test_scripter_sequence_sequence_type_user_get(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_sequence_type_user_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def test_scripter_sequence_id_delete(self):
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_sequence_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_sequence_sequence_type_user_get()
 
     def test_scripter_script_id_delete(self):  # удаление скрипта
-        req = Scripter(SESS, HOST)
-        resp = req.scripter_script_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        ScripterCase(SESS, HOST).case_scripter_script_id_delete()
 
 
 class TestTaskplan:
