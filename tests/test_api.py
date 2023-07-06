@@ -5,7 +5,6 @@ import requests
 import urllib3
 
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_taskplan import Taskplan
 from req.Api.req_updater import Updater
 from req.Api.req_visualisation import Visualisation
 from tests.case.api.auth import AuthApiCase
@@ -22,6 +21,8 @@ from tests.case.api.reporter import ReporterCase
 from tests.case.api.rm_cook import RmCookCase
 from tests.case.api.scripter import ScripterCase
 from tests.case.api.storage_worker import StorageWorkerCase
+from tests.case.api.taskplan import TaskplanCase
+from tests.case.api.updater import UpdaterCase
 
 urllib3.disable_warnings()
 
@@ -1192,35 +1193,22 @@ class TestScripter:
 class TestTaskplan:
 
     def test_taskplan_get_shedule_post(self):
-        req = Taskplan(SESS, HOST)
-        resp = req.taskplan_get_shedule_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        TaskplanCase(SESS, HOST).case_taskplan_get_shedule_post()
 
 
 class TestUpdater:
 
     def test_updater_additions_get(self):
-        req = Updater(SESS, HOST)
-        resp = req.updater_additions_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        UpdaterCase(SESS, HOST).case_updater_additions_get()
 
-    # TODO: check 200 or 400
     def test_updater_additions_addition_delete(self):
-        req = Updater(SESS, HOST)
-        resp = req.updater_additions_addition_delete()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        UpdaterCase(SESS, HOST).case_updater_additions_addition_delete()
 
-    # TODO: check 200 or 400
     def test_updater_additions_addition_post(self):
-        req = Updater(SESS, HOST)
-        resp = req.updater_additions_addition_post()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        UpdaterCase(SESS, HOST).case_updater_additions_addition_post()
 
-    # TODO: check 200 or 400
     def test_updater_check_updates_get(self):
-        req = Updater(SESS, HOST)
-        resp = req.updater_check_updates_get()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        UpdaterCase(SESS, HOST).case_updater_check_updates_get()
 
 
 class TestVisualisation:
