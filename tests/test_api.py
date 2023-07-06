@@ -5,8 +5,6 @@ import requests
 import urllib3
 
 from req.Api.req_xba_cook import XbaCook
-from req.Api.req_updater import Updater
-from req.Api.req_visualisation import Visualisation
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -23,6 +21,7 @@ from tests.case.api.scripter import ScripterCase
 from tests.case.api.storage_worker import StorageWorkerCase
 from tests.case.api.taskplan import TaskplanCase
 from tests.case.api.updater import UpdaterCase
+from tests.case.api.visualisation import VisualisationCase
 
 urllib3.disable_warnings()
 
@@ -1214,86 +1213,52 @@ class TestUpdater:
 class TestVisualisation:
 
     def test_visualisation_query_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_query_get()
 
     def test_visualisation_query_do_query_id_post(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_do_query_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_query_do_query_id_post()
 
     def test_visualisation_query_save_post(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_save_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_query_save_post()
 
     def test_visualisation_query_do_query_usage_id_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_do_query_usage_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_query_do_query_usage_id_get()
 
     def test_visualisation_query_query_id_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_query_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_query_query_id_get()
 
     def test_visualisation_query_do_query_id_delete(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_query_do_query_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_query_do_query_id_delete()
 
     def test_visualisation_reports_post(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_reports_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_reports_post()
 
     def test_visualisation_reports_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_reports_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_reports_get()
 
     def test_visualisation_reports_report_id_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_reports_report_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_reports_report_id_get()
 
     def test_visualisation_reports_report_id_delete(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_reports_report_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_reports_report_id_delete()
 
     def test_visualisation_visualisation_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_visualisation_get()
 
     def test_visualisation_visualisation_post(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_visualisation_post()
 
     def test_visualisation_visualisation_dataseries_visualisation_id_post(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_dataseries_visualisation_id_post()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_visualisation_dataseries_visualisation_id_post()
 
     def test_visualisation_visualisation_types_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_types_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_visualisation_types_get()
 
     def test_visualisation_visualisation_usage_visualisation_id_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_usage_visualisation_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_visualisation_usage_visualisation_id_get()
 
     def test_visualisation_visualisation_visualisation_id_get(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_visualisation_id_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).case_visualisation_visualisation_visualisation_id_get()
 
     def test_visualisation_visualisation_visualisation_id_delete(self):
-        req = Visualisation(SESS, HOST)
-        resp = req.visualisation_visualisation_visualisation_id_delete()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        VisualisationCase(SESS, HOST).visualisation_visualisation_visualisation_id_delete()
