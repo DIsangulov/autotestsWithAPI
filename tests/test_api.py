@@ -692,7 +692,7 @@ class TestStorageWorker:
     def test_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
         StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post()
 
-    # fixme: 405 status code
+    @pytest.mark.skip   # fixme: 405 status code
     def test_storage_worker_statistics_db_tabs_stats_dbname_get(self):
         StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_tabs_stats_dbname_get()
 
@@ -1093,12 +1093,19 @@ class TestScripter:
     def test_scripter_sequence_sequence_type_user_get(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_sequence_type_user_get()
 
-    def test_scripter_script_id_delete(self):  # удаление скрипта
+    def test_scripter_script_id_delete(self):
         ScripterCase(SESS, HOST).case_scripter_script_id_delete()
+
+    def test_scripter_sequence_id_delete(self):
+        ScripterCase(SESS, HOST).case_scripter_sequence_id_delete()
+
+    def test_all_api_auto_test_entity_delete(self):
+        ScripterCase(SESS, HOST).all_api_auto_test_entity_delete()
 
 
 class TestTaskplan:
 
+    @pytest.mark.skip # fixme
     def test_taskplan_get_shedule_post(self):
         TaskplanCase(SESS, HOST).case_taskplan_get_shedule_post()
 

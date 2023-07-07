@@ -107,7 +107,9 @@ class Scripter(BaseReqRaw):
         """process GET tot get sequence by id"""
         return self.sess.get(f"{self.host}/back/dp.scripter/sequence/{_seq_id}")
 
-    # TODO: [DELETE] /back/dp.scripter/sequence/{id}
+    def scripter_sequence_id_delete(self, seq_id):
+        """process DELETE to Delete sequence by ID"""
+        return self.sess.delete(f"{self.host}/back/dp.scripter/sequence/{seq_id}")
 
     # TODO: [DELETE] /back/dp.scripter/sequence/{id}/log
 

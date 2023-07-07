@@ -267,7 +267,7 @@ class PermitterCase(BaseReq):
         }
         resp = req.permitter_element_rules_element_type_element_id_post(element_type, element_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
+        # print(resp.text)
 
     def case_permitter_element_rules_query_id_post(self):
         element_type = "query"

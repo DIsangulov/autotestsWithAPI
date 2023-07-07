@@ -17,6 +17,7 @@ class PeoplerCase(BaseReq):
     def _collect_auto_user_id(self):
         # resp_all_users = self.peopler_users_get()
         resp_all_users = Peopler(self.sess, self.host).peopler_users_get()   # получить список ВСЕХ пользователей
+        # fixme: add assert sc == 200
         all_users_info_rows = json.loads(resp_all_users.text)['res']
         for _row in all_users_info_rows:                                        # фильтровать по API_AUTO_TEST_
             # .lower автоматически применяется при регистрации @доменных пользователей
@@ -145,7 +146,7 @@ class PeoplerCase(BaseReq):
     def case_peopler_users_delete(self):
         req = Peopler(self.sess, self.host)
         user_id = self._get_auto_user_id()
-        resp = req.peopler_users_delete(user_id)
+        resp = req.peopler_users_id_delete(user_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(f"Пользователь {user_id}, был удален")
 
@@ -155,4 +156,4 @@ class PeoplerCase(BaseReq):
     def all_api_auto_test_user_delete(self):
         self._collect_auto_user_id()
         while len(auto_user_id) > 0:
-            Peopler(self.sess, self.host).peopler_users_delete(auto_user_id.pop())
+            Peopler(self.sess, self.host).peopler_users_id_delete(auto_user_id.pop())

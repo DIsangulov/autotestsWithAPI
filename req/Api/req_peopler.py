@@ -53,6 +53,6 @@ class Peopler(BaseReqRaw):
         """process PUT req for editing user by id"""
         return self.sess.put(f"{self.host}/back/dp.peopler/users/{user_id}", json=body)
 
-    def peopler_users_delete(self, user_id) -> requests.Response:
+    def peopler_users_id_delete(self, user_id) -> requests.Response:
         """Удалить пользователя по **ID**"""
         return self.sess.delete(f"{self.host}/back/dp.peopler/users/{user_id}")
