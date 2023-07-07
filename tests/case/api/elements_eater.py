@@ -18,10 +18,8 @@ class ElementsEaterCase(BaseReq):
     def case_elements_eater_reports_import_post(self):
         req = ElementsEater(self.sess, self.host)
 
-        # filepath = os.path.dirname(
-        #     os.path.dirname(__file__)) + "/Files/reportsData.json"  # filepath = "./путь до файла"
+        filepath = os.path.dirname(__file__) + "/../../Files/reportsData.json"
 
-        filepath = os.getcwd() + "/Files/reportsData.json"
         # print(f"filepath is :{filepath}")
         # print(os.path.exists(filepath))
 

@@ -202,9 +202,9 @@ class CoreCase(BaseReq):
     def case_core_email_import_cert_post(self):
         req = Core(self.sess, self.host)
 
-        _path = os.getcwd()
+        file_path = os.path.dirname(__file__) + "/../../Files/mailCert.crt"
 
-        with open(f"{_path}/Files/mailCert.crt", 'r') as f:
+        with open(file_path, 'r') as f:
             cert_text = f.read()
         body = {"data": cert_text}
         resp = req.core_email_import_cert_post(body)
