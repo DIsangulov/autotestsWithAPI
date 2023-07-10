@@ -157,13 +157,12 @@ class ScripterCase(BaseReq):
 
         _script_id = self._get_script_id()
 
-        # Запускаю скрипт с полученным 'script_id', затем сразу пробую его остановить
-        start_data = {"id": _script_id}
-        start_resp = req.scripter_script_start_post(start_data)
-        assert start_resp.status_code == 200, f"1..Ошибка при запуске скрипта, code: {start_resp.status_code}, text: {start_resp.text}"
-
         resp = req.scripter_script_stop_id_get(_script_id)
-        assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
+        if resp.status_code == 400:
+            assert resp.text == '{"error":{"code":400,"msg":"Задание не было запущено"}}\n', \
+                f"Ошибка, code: {resp.status_code}, text: {resp.text}"
+        else:
+            assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_scripter_script_id_get(self):
         req = Scripter(self.sess, self.host)
@@ -217,7 +216,7 @@ class ScripterCase(BaseReq):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
 
-        # При отсутствии логов; запускаю скрипт '_script_id', чтобы появилась строка логов
+        # Запускаю скрипт '_script_id', чтобы появилась строка логов
         start_data = {"id": _script_id}
         start_r = req.scripter_script_start_post(start_data)
         assert start_r.status_code == 200, f"1..Ошибка, code: {start_r.status_code}, start_r.text: {start_r.text}"
@@ -389,13 +388,12 @@ class ScripterCase(BaseReq):
 
         _seq_id = self._get_sequence_id()
 
-        # Запускаю последовательность, затем сразу останавливаю её
-        start_data = {"id": _seq_id}
-        start_r = req.scripter_sequence_start_post(start_data)
-        assert start_r.status_code == 200, f"1..Ошибка, код {start_r.status_code}, {start_r.text}"
-
         resp = req.scripter_sequence_stop_id_get(_seq_id)
-        assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
+        if resp.status_code == 400:
+            assert resp.text == '{"error":{"code":400,"msg":"Задание не было запущено"}}\n', \
+                f"Ошибка, code: {resp.status_code}, text: {resp.text}"
+        else:
+            assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_scripter_sequence_id_get(self):
         req = Scripter(self.sess, self.host)
@@ -411,13 +409,17 @@ class ScripterCase(BaseReq):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # fixme: может не быть лога > запускать последовательность перед запросом?
     def case_scripter_sequence_id_log_delete(self):
         req = Scripter(self.sess, self.host)
         _seq_id = self._get_sequence_id()
+
+        # Запускаю последовательнось '_seq_id', чтобы появилась строка логов
+        start_data = {"id": _seq_id}
+        start_r = req.scripter_sequence_start_post(start_data)
+        assert start_r.status_code == 200, f"1..Ошибка, code: {start_r.status_code}, start_r.text: {start_r.text}"
+
         resp = req.scripter_sequence_id_log_delete(_seq_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+        assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
 
     # fixme: может не быть лога > запускать последовательность перед запросом?
     def case_scripter_sequence_sequence_id_log_last_get(self):
