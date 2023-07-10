@@ -7,74 +7,100 @@ from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-logo_id = []
-source_id = []      # 'id' источника данных
-connector_id = []   # 'id' коннектора
+logo_id = set()
+source_id = set()      # 'id' источника данных
+connector_id = set()   # 'id' коннектора
 
 
 class AbsorberCase(BaseReq):
 
+    def _collect_source_id(self):
+        resp = Absorber(self.sess, self.host).absorber_source_get()
+        assert resp.status_code == 200, f"assert::absorber_source_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        source_info_rows = json.loads(resp.text)['res']
+        for _row in source_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                source_id.add(_row['id'])
+
     def _get_source_id(self) -> int:
-        self.case_absorber_source_get()
-        if len(source_id) == 0:             # global source_id
-            self.case_absorber_source_post()     # если нет источника - создай новый
-            # FIXME: после создания добавлять его в список source_id
-        return source_id[-1]
+        """get from global source_id: API_AUTO_TEST_x"""
+        if len(source_id) == 0:
+            self._collect_source_id()
+
+        if len(source_id) == 0:                                 # global source_id
+            r_new_source = self.case_absorber_source_post()     # если нет источника - создай новый
+            new_source_id = json.loads(r_new_source.text)['res']
+            return int(new_source_id)
+
+        return source_id.pop()
+
+    def _collect_connector_id(self):
+        resp = Absorber(self.sess, self.host).absorber_library_connector_get()
+        assert resp.status_code == 200, f"assert::absorber_library_connector_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        connector_info_rows = json.loads(resp.text)['res']
+        for _row in connector_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                connector_id.add(_row['id'])
 
     def _get_connector_id(self) -> int:
-        self.case_absorber_library_connector_get()
-        if len(connector_id) == 0:                  # global connector_id
-            self.case_absorber_library_connector_post()  # если нет - создай новый
-            # FIXME: после создания добавлять его в список connector_id
-        return connector_id[-1]
+        if len(connector_id) == 0:
+            self._collect_connector_id()
+
+        if len(connector_id) == 0:                                          # global connector_id
+            r_new_connector = self.case_absorber_library_connector_post()   # если нет - создай новый
+            new_connector_id = json.loads(r_new_connector.text)['res']
+            return int(new_connector_id)
+
+        return connector_id.pop()
+
+    def _collect_logo_id(self):
+        resp = Absorber(self.sess, self.host).absorber_library_logo_get()
+        assert resp.status_code == 200, f"assert::absorber_library_logo_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        logo_info_rows = json.loads(resp.text)['res']
+        for _row in logo_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                logo_id.add(_row['id'])
 
     def _get_logo_id(self) -> int:
-        self.case_absorber_library_logo_get()
-        if len(logo_id) == 0:                  # global logo_id
-            self.case_absorber_library_logo_post()  # если нет - создай новый
-            # FIXME: после создания добавлять его в список logo_id
-        return logo_id[-1]
+        if len(logo_id) == 0:
+            self._collect_logo_id()
+
+        if len(logo_id) == 0:                                       # global logo_id
+            r_new_logo = self.case_absorber_library_logo_post()     # если нет - создай новый
+            new_logo_id = json.loads(r_new_logo.text)['res']
+            return int(new_logo_id)
+
+        return logo_id.pop()
 
     def case_absorber_library_columns_get(self):
         req = Absorber(self.sess, self.host)
         resp = req.absorber_library_columns_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_absorber_library_conn_type_get(self):
         req = Absorber(self.sess, self.host)
         resp = req.absorber_library_conn_type_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
         # print(resp.text)
-        return resp
 
     def case_absorber_library_conn_type_id_get(self):
         req = Absorber(self.sess, self.host)
 
-        _id = 1     # FIXME: magic
+        # 1 > default   # 4 > jdbc      # 7 > tcp_udp
+        # 2 > syslog    # 5 > python    # 8 > python_clickhouse
+        # 3 > beats     # 6 > python_ad
+        _id = 3  # FIXME: magic
         resp = req.absorber_library_conn_type_id_get(_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
+        print(resp.text)
 
     def case_absorber_library_connector_get(self):
         req = Absorber(self.sess, self.host)
         resp = req.absorber_library_connector_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # FIXME: перенести логику в _get_connector_id
-        connector_info_rows = json.loads(resp.text)['res']
-        for _row in connector_info_rows:
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                # print(_row)
-                connector_id.append(_row['id'])
-
-        # print(resp.text)
-        return resp
 
     def case_absorber_library_connector_put(self):
         req = Absorber(self.sess, self.host)
@@ -126,9 +152,6 @@ class AbsorberCase(BaseReq):
         }
         resp = req.absorber_library_connector_put(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_absorber_library_connector_post(self):
         req = Absorber(self.sess, self.host)
@@ -189,9 +212,6 @@ class AbsorberCase(BaseReq):
         resp = req.absorber_library_connector_id_get(con_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_absorber_library_connector_id_delete(self):
         req = Absorber(self.sess, self.host)
 
@@ -199,24 +219,31 @@ class AbsorberCase(BaseReq):
         resp = req.absorber_library_connector_id_delete(con_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
+    # TODO: [POST] /back/dp.absorber/library/external/{type}
+    def case_absorber_library_external_driver_post(self):
+        req = Absorber(self.sess, self.host)
+
+        _type = "driver"
+        file = None
+        resp = req.absorber_library_external_type_post(_type, file)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        print(resp.text)
+
+    # TODO: [POST] /back/dp.absorber/library/external/{type}
+    def case_absorber_library_external_pattern_post(self):
+        req = Absorber(self.sess, self.host)
+
+        _type = "pattern"
+        file = None
+        resp = req.absorber_library_external_type_post(_type, file)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        print(resp.text)
 
     def case_absorber_library_logo_get(self):
         req = Absorber(self.sess, self.host)
 
         resp = req.absorber_library_logo_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # FIXME: перенести логику в _get_logo_id
-        logo_info_rows = json.loads(resp.text)['res']
-        for _row in logo_info_rows:
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                # print(_row)
-                logo_id.append(_row['id'])
-
-        # print(resp.text)
-        return resp
 
     def case_absorber_library_logo_put(self):
         req = Absorber(self.sess, self.host)
@@ -236,9 +263,6 @@ class AbsorberCase(BaseReq):
 
         resp = req.absorber_library_logo_put(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_absorber_library_logo_post(self):
         req = Absorber(self.sess, self.host)
@@ -260,6 +284,15 @@ class AbsorberCase(BaseReq):
         # print(resp.text)
         return resp
 
+    # TODO: [GET] /back/dp.absorber/library/logo/{id}
+    def case_absorber_library_logo_id_get(self):
+        req = Absorber(self.sess, self.host)
+
+        _logo_id = 1212
+        resp = req.absorber_library_logo_id_get(_logo_id)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        print(resp.text)
+
     def case_absorber_library_logo_delete(self):
         req = Absorber(self.sess, self.host)
 
@@ -267,36 +300,24 @@ class AbsorberCase(BaseReq):
         resp = req.absorber_library_logo_delete(_logo_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_absorber_source_get(self):
         req = Absorber(self.sess, self.host)
 
         resp = req.absorber_source_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # FIXME: перенести логику в _get_source_id
-        source_info_rows = json.loads(resp.text)['res']
-        for _row in source_info_rows:
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                # print(_row['name'])
-                source_id.append(_row['id'])
-
-        # print(resp.text)
-        return resp
-
     def case_absorber_source_put(self):
         req = Absorber(self.sess, self.host)
 
+        str_rand_num = str(random.randint(1000, 9999))
         _source_id = self._get_source_id()
         self_user_id = self.get_self_user_id()                              # получить свой 'user_id'   '
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)     # получение 'id' таблицы 'picker_tables
 
         data = {
             "now": True,
-            "name": f"{API_AUTO_TEST_}changed",
-            "description": "new description",
+            "name": f"{API_AUTO_TEST_}changed_{str_rand_num}",
+            "description": f"{API_AUTO_TEST_}description",
             "editor_id": self_user_id,
             "author_id": self_user_id,
             "node": 0,
@@ -337,9 +358,6 @@ class AbsorberCase(BaseReq):
 
         resp = req.absorber_source_put(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_absorber_source_post(self):
         req = Absorber(self.sess, self.host)
@@ -401,9 +419,6 @@ class AbsorberCase(BaseReq):
         resp = req.absorber_source_id_get(_source_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_absorber_source_id_delete(self):
         req = Absorber(self.sess, self.host)
 
@@ -411,16 +426,12 @@ class AbsorberCase(BaseReq):
         resp = req.absorber_source_id_delete(_source_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     # FIXME: код 400, {"error":{"code":400,"description":"code: 400, message: bad ssh commands","msg":"Ошибка выполнения ssh команд"}}
     def case_absorber_source_id_debug_get(self):
+        # {"error":{"code":400,"msg":"Режим отладки выключен"}}
         req = Absorber(self.sess, self.host)
 
-        _source_id = self._get_source_id()
+        # _source_id = self._get_source_id()
+        _source_id = 105
         resp = req.absorber_source_id_debug_get(_source_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp

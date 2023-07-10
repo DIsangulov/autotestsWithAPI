@@ -38,7 +38,9 @@ class Absorber(BaseReqRaw):
         """process DELETE req for deleting сonnector"""
         return self.sess.delete(f"{self.host}/back/dp.absorber/library/connector/{con_id}")
 
-    # TODO: [POST] /back/dp.absorber/library/external/{type}
+    def absorber_library_external_type_post(self, _type, file):
+        """process POST req for importing external file with driver or parsing patterns"""
+        return self.sess.post(f"{self.host}/back/dp.absorber/library/external/{_type}", files=file)
 
     def absorber_library_logo_get(self) -> requests.Response:
         """process GET req for getting all logos from library"""
@@ -52,7 +54,9 @@ class Absorber(BaseReqRaw):
         """process POST req for new logo addition"""
         return self.sess.post(f"{self.host}/back/dp.absorber/library/logo", json=data)
 
-    # TODO: [GET] /back/dp.absorber/library/logo/{id}
+    def absorber_library_logo_id_get(self, logo_id):
+        """process GET req for getting logo by id"""
+        return self.sess.get(f"{self.host}/back/dp.absorber/library/logo/{logo_id}")
 
     def absorber_library_logo_delete(self, _logo_id) -> requests.Response:
         """process DELETE req for deleting logo"""
