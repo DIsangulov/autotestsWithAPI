@@ -13,9 +13,9 @@ class Absorber(BaseReqRaw):
         """process GET req for getting all conn types from library"""
         return self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type")
 
-    def absorber_library_conn_type_id_get(self, _id) -> requests.Response:
+    def absorber_library_conn_type_id_get(self, conn_type_id) -> requests.Response:
         """process GET req for getting conn types from library by id"""
-        return self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type/{_id}")
+        return self.sess.get(f"{self.host}/back/dp.absorber/library/conn_type/{conn_type_id}")
 
     def absorber_library_connector_get(self) -> requests.Response:
         """process GET req for getting all сonnectors from library"""

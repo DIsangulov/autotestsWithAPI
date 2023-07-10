@@ -100,7 +100,6 @@ class TestAbsorber:
     def test_absorber_library_logo_get(self):
         AbsorberCase(SESS, HOST).case_absorber_library_logo_get()
 
-    @pytest.mark.skip   # todo: new
     def test_absorber_library_logo_id_get(self):
         AbsorberCase(SESS, HOST).case_absorber_library_logo_id_get()
 
