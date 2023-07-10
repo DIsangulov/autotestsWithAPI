@@ -7,49 +7,79 @@ from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-query_id = []           # 'id' sql запроса
-report_id = []          # 'id' отчета
-visualisation_id = []   # 'id' визуализации
+query_id = set()           # 'id' sql запроса
+report_id = set()          # 'id' отчета
+visualisation_id = set()   # 'id' визуализации
 
 # TODO: есть подозрения, что бек не отрабатывает иногда запросы со значением smth_id = None
 
 
 class VisualisationCase(BaseReq):
 
+    def _collect_query_id(self):
+        resp = Visualisation(self.sess, self.host).visualisation_query_get()
+        assert resp.status_code == 200, f"assert::visualisation_query_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        query_info_rows = json.loads(resp.text)
+        for _row in query_info_rows['res']:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                query_id.add(int(_row['id']))
+
     def _get_query_id(self) -> int:
-        self.case_visualisation_query_get()             # запрос на получение списка всех 'query'
-        if len(query_id) == 0:                          # global query_id
-            self.case_visualisation_query_save_post()   # если нет, создай новый
-            # FIXME: после создания, добавлять id в список 'query_id'
-        return query_id[-1]
+        if len(query_id) == 0:
+            self._collect_query_id()
+
+        if len(query_id) == 0:                                          # global query_id
+            r_new_query = self.case_visualisation_query_save_post()     # если нет, создай новый
+            new_query_id = json.loads(r_new_query.text)['res']
+            return int(new_query_id)
+
+        return query_id.pop()
+
+    def _collect_report_id(self):
+        resp = Visualisation(self.sess, self.host).visualisation_reports_get()
+        assert resp.status_code == 200, f"assert::visualisation_reports_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        report_id_info_rows = json.loads(resp.text)['res']
+        for _row in report_id_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                report_id.add(int(_row['id']))
 
     def _get_report_id(self) -> int:
-        self.case_visualisation_reports_get()           # запрос на получение списка всех отчетов
+        if len(report_id) == 0:
+            self._collect_report_id()
+
         if len(report_id) == 0:                         # global report_id
-            self.case_visualisation_reports_post()      # если нет, создать новый
-            # FIXME: после создания, добавлять id в список 'report_id'
-        return report_id[-1]
+            r_new_report = self.case_visualisation_reports_post()      # если нет, создать новый
+            new_report_id = json.loads(r_new_report.text)['res']
+            return int(new_report_id)
+
+        return report_id.pop()
+
+    def _collect_visualisation_id(self):
+        resp = Visualisation(self.sess, self.host).visualisation_visualisation_get()
+        assert resp.status_code == 200, f"assert::visualisation_visualisation_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        vis_info_rows = json.loads(resp.text)['res']
+        for _row in vis_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                visualisation_id.add(int(_row['id']))
 
     def _get_visualisation_id(self) -> int:
-        self.case_visualisation_visualisation_get()         # запрос на получение списка всех визуализаций
+        if len(visualisation_id) == 0:
+            self._collect_visualisation_id()
+
         if len(visualisation_id) == 0:                      # global visualisation_id
-            self.case_visualisation_visualisation_post()    # создание новой визуализации
-            # FIXME: после создания, добавлять id в список 'visualisation_id'
-        return visualisation_id[-1]
+            r_new_vis = self.case_visualisation_visualisation_post()    # создание новой визуализации
+            new_vis_id = json.loads(r_new_vis.text)['res']
+            return int(new_vis_id)
+
+        return visualisation_id.pop()
 
     def case_visualisation_query_get(self):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_query_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-        # FIXME: перенести в _get_query_id
-        query_info_rows = json.loads(resp.text)
-        for _row in query_info_rows['res']:
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                query_id.append(int(_row['id']))
-
-        return resp
 
     def case_visualisation_query_do_query_id_post(self):
         req = Visualisation(self.sess, self.host)
@@ -99,11 +129,12 @@ class VisualisationCase(BaseReq):
         resp = req.visualisation_query_save_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        return resp
 
-    def case_visualisation_query_do_query_usage_id_get(self):
+    def case_visualisation_query_usage_id_get(self):
         req = Visualisation(self.sess, self.host)
         _query_id = self._get_query_id()
-        resp = req.visualisation_query_do_query_usage_id_get(_query_id)
+        resp = req.visualisation_query_usage_id_get(_query_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
@@ -114,10 +145,10 @@ class VisualisationCase(BaseReq):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    def case_visualisation_query_do_query_id_delete(self):
+    def case_visualisation_query_id_delete(self):
         req = Visualisation(self.sess, self.host)
         _query_id = self._get_query_id()
-        resp = req.visualisation_query_do_query_id_delete(_query_id)
+        resp = req.visualisation_query_id_delete(_query_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
@@ -125,17 +156,6 @@ class VisualisationCase(BaseReq):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_reports_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-
-        # FIXME: перенести в _get_report_id
-        report_id_info_rows = json.loads(resp.text)['res']
-        for _row in report_id_info_rows:
-            # print(_row)
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                report_id.append(int(_row['id']))
-
-        return resp
 
     def case_visualisation_reports_post(self):
         req = Visualisation(self.sess, self.host)
@@ -144,8 +164,8 @@ class VisualisationCase(BaseReq):
         data = {
             "name": f"{API_AUTO_TEST_}report_{random_num}",
             "description": f"{API_AUTO_TEST_}report_description",
-            "created": "2023-03-09T07:20:34.318Z",
-            "modified": "2023-03-09T07:20:34.318Z",
+            # "created": "2034-03-09T07:20:34.318Z",    # fixme: 01.01.0001, 02:30
+            # "modified": "2023-03-09T07:20:34.318Z",   # fixme:
             "author_id": self_user_id,
             "editor": self.username,
             "editor_id": self_user_id,
@@ -154,6 +174,7 @@ class VisualisationCase(BaseReq):
         resp = req.visualisation_reports_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        return resp
 
     def case_visualisation_reports_report_id_get(self):
         req = Visualisation(self.sess, self.host)
@@ -167,28 +188,19 @@ class VisualisationCase(BaseReq):
         _rep_id = self._get_report_id()
         resp = req.visualisation_reports_report_id_delete(_rep_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_visualisation_visualisation_get(self):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_visualisation_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-        # FIXME: перенести в _get_visualisation_id
-        vis_id_info_rows = json.loads(resp.text)['res']
-        for _row in vis_id_info_rows:
-            if str(_row['name']).startswith(API_AUTO_TEST_):
-                visualisation_id.append(int(_row['id']))
-        # print(f"vis_id is: {visualisation_id}"
-        return resp
 
     def case_visualisation_visualisation_post(self):
         req = Visualisation(self.sess, self.host)
+        str_rand_num = str(random.randint(1000, 9999))
         self_user_id = self.get_self_user_id()  # получить свой 'user_id'
         data = {
-            "name": f"{API_AUTO_TEST_}visualisation",
-            "description": f"{API_AUTO_TEST_}visualisation",
+            "name": f"{API_AUTO_TEST_}visualisation_{str_rand_num}",
+            "description": f"{API_AUTO_TEST_}visualisation_description",
             "published": False,
             "opened": False,
             "author_id": self_user_id,
@@ -205,14 +217,16 @@ class VisualisationCase(BaseReq):
         resp = req.visualisation_visualisation_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        return resp
 
     def case_visualisation_visualisation_dataseries_visualisation_id_post(self):
         req = Visualisation(self.sess, self.host)
+        str_rand_num = str(random.randint(1000, 9999))
         _vis_id = self._get_visualisation_id()
         _query_id = self._get_query_id()
         data = {
-            "name": API_AUTO_TEST_ + "data_series",
-            "description": API_AUTO_TEST_ + "data_series desc",
+            "name": API_AUTO_TEST_ + "data_series_" + str_rand_num,
+            "description": API_AUTO_TEST_ + "data_series_description",
             "element_type": 1,
             "query_id": _query_id,
             "data": "",
@@ -276,3 +290,18 @@ class VisualisationCase(BaseReq):
         resp = req.visualisation_visualisation_visualisation_id_delete(_vis_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    # __del__
+    def all_api_auto_test_entity_delete(self):
+        delete_req = Visualisation(self.sess, self.host)
+        self._collect_query_id()
+        while len(query_id) > 0:
+            delete_req.visualisation_query_id_delete(query_id.pop())
+
+        self._collect_report_id()
+        while len(report_id) > 0:
+            delete_req.visualisation_reports_report_id_delete(report_id.pop())
+
+        self._collect_visualisation_id()
+        while len(visualisation_id) > 0:
+            delete_req.visualisation_visualisation_visualisation_id_delete(visualisation_id.pop())

@@ -260,6 +260,7 @@ class AbsorberCase(BaseReq):
     def case_absorber_library_logo_put(self):
         req = Absorber(self.sess, self.host)
 
+        str_rand_num = str(random.randint(1000, 9999))
         _logo_id = self._get_logo_id()
         self_user_id = self.get_self_user_id()
 
@@ -269,7 +270,7 @@ class AbsorberCase(BaseReq):
         sample_image = base64.b64encode(bytes_image).decode("utf8")
 
         data = {
-            "name": API_AUTO_TEST_ + "name_changed",
+            "name": API_AUTO_TEST_ + "changed_" + str_rand_num,
             "id": _logo_id,
             "data": f"data:image/jpeg;base64," + sample_image,
             "editor_id": self_user_id,
@@ -465,3 +466,18 @@ class AbsorberCase(BaseReq):
         _source_id = 105
         resp = req.absorber_source_id_debug_get(_source_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # __del__
+    def all_api_auto_test_entity_delete(self):
+        delete_req = Absorber(self.sess, self.host)
+        self._collect_source_id()
+        while len(source_id) > 0:
+            delete_req.absorber_source_id_delete(source_id.pop())
+
+        self._collect_connector_id()
+        while len(connector_id) > 0:
+            delete_req.absorber_library_connector_id_delete(connector_id.pop())
+
+        self._collect_logo_id()
+        while len(logo_id) > 0:
+            delete_req.absorber_library_logo_delete(logo_id.pop())

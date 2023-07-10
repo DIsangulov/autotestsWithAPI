@@ -16,7 +16,7 @@ class Visualisation(BaseReqRaw):
         """process POST req for creating/editing query by id"""
         return self.sess.post(f"{self.host}/back/dp.visualisation/query/save", json=data)
 
-    def visualisation_query_do_query_usage_id_get(self, _query_id):
+    def visualisation_query_usage_id_get(self, _query_id):
         """process GET req for getting query usage in visualisations by id"""
         return self.sess.get(f"{self.host}/back/dp.visualisation/query/usage/{_query_id}")
 
@@ -24,7 +24,7 @@ class Visualisation(BaseReqRaw):
         """process GET req for getting query by id"""
         return self.sess.get(f"{self.host}/back/dp.visualisation/query/{_query_id}")
 
-    def visualisation_query_do_query_id_delete(self, _query_id):
+    def visualisation_query_id_delete(self, _query_id):
         """process DELETE req for deleting query by id"""
         return self.sess.delete(f"{self.host}/back/dp.visualisation/query/{_query_id}")
 

@@ -125,6 +125,10 @@ class TestAbsorber:
     def test_absorber_source_id_delete(self):
         AbsorberCase(SESS, HOST).case_absorber_source_id_delete()
 
+    # __del__
+    def test_all_api_auto_test_entity_delete(self):
+        AbsorberCase(SESS, HOST).all_api_auto_test_entity_delete()
+
 
 class TestAlarmer:
 
@@ -1151,14 +1155,14 @@ class TestVisualisation:
     def test_visualisation_query_save_post(self):
         VisualisationCase(SESS, HOST).case_visualisation_query_save_post()
 
-    def test_visualisation_query_do_query_usage_id_get(self):
-        VisualisationCase(SESS, HOST).case_visualisation_query_do_query_usage_id_get()
+    def test_visualisation_query_usage_id_get(self):
+        VisualisationCase(SESS, HOST).case_visualisation_query_usage_id_get()
 
     def test_visualisation_query_query_id_get(self):
         VisualisationCase(SESS, HOST).case_visualisation_query_query_id_get()
 
-    def test_visualisation_query_do_query_id_delete(self):
-        VisualisationCase(SESS, HOST).case_visualisation_query_do_query_id_delete()
+    def test_visualisation_query_id_delete(self):
+        VisualisationCase(SESS, HOST).case_visualisation_query_id_delete()
 
     def test_visualisation_reports_post(self):
         VisualisationCase(SESS, HOST).case_visualisation_reports_post()
@@ -1192,3 +1196,7 @@ class TestVisualisation:
 
     def test_visualisation_visualisation_visualisation_id_delete(self):
         VisualisationCase(SESS, HOST).visualisation_visualisation_visualisation_id_delete()
+
+    # __del__
+    def test_all_api_auto_test_entity_delete(self):
+        VisualisationCase(SESS, HOST).all_api_auto_test_entity_delete()
