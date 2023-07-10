@@ -60,26 +60,6 @@ class ScripterCase(BaseReq):
 
         return sequence_id.pop()
 
-    # todo: убрать внутрь кейсов
-    def _get_log_id(self, _script_id: int) -> int:
-        # лог есть у скрипта, который запускался хоть один раз || {"res":null}
-
-        # запрос на получение логов у скрипта _script_id
-        log_resp = Scripter(self.sess, self.host).scripter_script_id_log_get(_script_id)
-        # {"res":null}
-        # {"res":[{"id":359949,"name":"","start":"2023-06-22T14:44:53.544363Z","status":"выполнен",...
-
-        # проверка на результат != null
-        if log_resp.text == '{"res":null}\n':
-            Scripter(self.sess, self.host).scripter_script_start_post(_script_id)             # запускаем скрипт _script_id
-            # FIXME: нужно ли дожидаться исполнения скрипта?
-            log_resp = Scripter(self.sess, self.host).scripter_script_id_log_get(_script_id)  # повторный запрос на наличие логов
-            # FIXME: кинуть ещё одну проверку logs != null; вообще, скрипт может и не исполниться, логов не будет тогда снова
-
-        dct = json.loads(log_resp.text)
-        log_id = dct['res'][-1]['id']
-        return log_id
-
     def case_scripter_category_get(self):
         req = Scripter(self.sess, self.host)
         resp = req.scripter_category_get()
@@ -172,13 +152,18 @@ class ScripterCase(BaseReq):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # FIXME: {"error":{"code":400,"msg":"Задание не было запущено"}}
     def case_scripter_script_stop_id_get(self):
         req = Scripter(self.sess, self.host)
+
         _script_id = self._get_script_id()
+
+        # Запускаю скрипт с полученным 'script_id', затем сразу пробую его остановить
+        start_data = {"id": _script_id}
+        start_resp = req.scripter_script_start_post(start_data)
+        assert start_resp.status_code == 200, f"1..Ошибка при запуске скрипта, code: {start_resp.status_code}, text: {start_resp.text}"
+
         resp = req.scripter_script_stop_id_get(_script_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+        assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_scripter_script_id_get(self):
         req = Scripter(self.sess, self.host)
@@ -231,30 +216,57 @@ class ScripterCase(BaseReq):
     def case_scripter_script_id_log_delete(self):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
-        # {"error":{"code":400,"description":"sql: no rows in result set","msg":"Ошибка выборки из бд"}}
+
         # При отсутствии логов; запускаю скрипт '_script_id', чтобы появилась строка логов
-        req.scripter_script_start_post(_script_id)     # запрос на старт исполнения скрипта '_script_id'
-        # FIXME: ждать, пока скрипт исполнится?
+        start_data = {"id": _script_id}
+        start_r = req.scripter_script_start_post(start_data)
+        assert start_r.status_code == 200, f"1..Ошибка, code: {start_r.status_code}, start_r.text: {start_r.text}"
+
         resp = req.scripter_script_id_log_delete(_script_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+        assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_scripter_script_id_log_last_get(self):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
 
-        # {"error":{"code":400,"description":"sql: no rows in result set","msg":"Ошибка выборки из бд"}}
-        # При отсутствии логов; запускаю скрипт '_script_id', чтобы появилась строка логов
-        req.scripter_script_start_post(_script_id)     # запрос на старт исполнения скрипта '_script_id'
-        # FIXME: ждать, пока скрипт исполнится?
+        # нет лога, если скрипт не запускался
+        # лог ещё не сформирован, если скрипт был только-что запущен
+        # "sql: Scan error on column index 0, name \"log\": converting NULL to string is unsupported","msg":"Ошибка выборки из бд"}}
+
+        # start_data = {"id": _script_id}
+        # start_r = req.scripter_script_start_post(start_data)
+        # assert start_r.status_code == 200, f"1..Ошибка, code: {start_r.status_code}, start_r.text: {start_r.text}"
+
         resp = req.scripter_script_id_log_last_get(_script_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+
+    # <><>
+    def _get_script_log_id(self, _script_id: int) -> int:
+        # лог есть у скрипта, который запускался хоть один раз || {"res":null}
+
+        # запрос на получение логов у скрипта _script_id
+        log_resp = Scripter(self.sess, self.host).scripter_script_id_log_get(_script_id)
+        # {"res":null}
+        # {"res":[{"id":359949,"name":"","start":"2023-06-22T14:44:53.544363Z","status":"выполнен",...
+
+        if log_resp.text == '{"res":null}\n':
+            # старт скрипта, если нет логов
+            start_data = {"id": _script_id}
+            start_r = Scripter(self.sess, self.host).scripter_script_start_post(start_data)
+            assert start_r.status_code == 200, f"Ошибка, ..script_start_post, code: {start_r.status_code}, text: {start_r.text}"
+
+            # повторный запрос на наличие логов
+            log_resp = Scripter(self.sess, self.host).scripter_script_id_log_get(_script_id)
+            assert log_resp.text != '{"res":null}\n', f"Ошибка при попытке получения лога, code: {log_resp.status_code}, text: {log_resp.text}"
+
+        dct = json.loads(log_resp.text)
+        log_id = dct['res'][-1]['id']
+        return int(log_id)
 
     def case_scripter_script_script_id_log_log_id_get(self):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
-        _log_id = self._get_log_id(_script_id)
+        _log_id = self._get_script_log_id(_script_id)
         resp = req.scripter_script_script_id_log_log_id_get(_script_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -262,11 +274,11 @@ class ScripterCase(BaseReq):
     def case_scripter_script_script_id_log_log_id_delete(self):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
-        _log_id = self._get_log_id(_script_id)
+        _log_id = self._get_script_log_id(_script_id)
         resp = req.scripter_script_script_id_log_log_id_delete(_script_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
-        # print(f"Был удален лог: {_log_id}")
+    # <><>
 
     def case_scripter_script_type_admin_get(self):
         req = Scripter(self.sess, self.host)
@@ -288,7 +300,8 @@ class ScripterCase(BaseReq):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    def case_scripter_sequence_put(self):  # почему-то создает новую секвенцию, а не обновляет старую
+    def case_scripter_sequence_put(self):
+        # fixme: check: почему-то создает новую секвенцию, а не обновляет старую
         req = Scripter(self.sess, self.host)
 
         str_random_num = str(random.randint(100, 999))
@@ -371,13 +384,18 @@ class ScripterCase(BaseReq):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # FIXME: {"error":{"code":400,"msg":"Задание не было запущено"}}
     def case_scripter_sequence_stop_id_get(self):
         req = Scripter(self.sess, self.host)
+
         _seq_id = self._get_sequence_id()
+
+        # Запускаю последовательность, затем сразу останавливаю её
+        start_data = {"id": _seq_id}
+        start_r = req.scripter_sequence_start_post(start_data)
+        assert start_r.status_code == 200, f"1..Ошибка, код {start_r.status_code}, {start_r.text}"
+
         resp = req.scripter_sequence_stop_id_get(_seq_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+        assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_scripter_sequence_id_get(self):
         req = Scripter(self.sess, self.host)
@@ -391,14 +409,62 @@ class ScripterCase(BaseReq):
         _seq_id = self._get_sequence_id()
         resp = req.scripter_sequence_id_delete(_seq_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
+        # print(resp.text)
 
+    # fixme: может не быть лога > запускать последовательность перед запросом?
+    def case_scripter_sequence_id_log_delete(self):
+        req = Scripter(self.sess, self.host)
+        _seq_id = self._get_sequence_id()
+        resp = req.scripter_sequence_id_log_delete(_seq_id)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # print(resp.text)
+
+    # fixme: может не быть лога > запускать последовательность перед запросом?
     def case_scripter_sequence_sequence_id_log_last_get(self):
         req = Scripter(self.sess, self.host)
         _seq_id = self._get_sequence_id()
         resp = req.scripter_sequence_sequence_id_log_last_get(_seq_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    # <><>
+    def _get_sequence_log_id(self, _seq_id: int) -> int:
+        # лог есть у последовательности, которая запускалась хоть один раз || {"res":null}
+
+        # запрос на получение логов у последовательности _seq_id
+        log_resp = Scripter(self.sess, self.host).scripter_sequence_log_id_get(_seq_id)
+        # {"res":null}
+        # {"res":[{"id":359949,"name":"","start":"2023-06-22T14:44:53.544363Z","status":"выполнен",...
+
+        if log_resp.text == '{"res":null}\n':
+            # старт последовательности, если нет логов
+            start_data = {"id": _seq_id}
+            start_r = Scripter(self.sess, self.host).scripter_sequence_start_post(start_data)
+            assert start_r.status_code == 200, f"Ошибка, ..sequence_start_post, code: {start_r.status_code}, text: {start_r.text}"
+
+            # повторный запрос на наличие логов
+            log_resp = Scripter(self.sess, self.host).scripter_sequence_log_id_get(_seq_id)
+            assert log_resp.text != '{"res":null}\n', f"Ошибка при попытке получения лога, code: {log_resp.status_code}, text: {log_resp.text}"
+
+        dct = json.loads(log_resp.text)
+        log_id = dct['res'][-1]['id']
+        return int(log_id)
+
+    def case_scripter_sequence_sequence_id_log_log_id_get(self):
+        req = Scripter(self.sess, self.host)
+        _seq_id = self._get_sequence_id()
+        _log_id = self._get_sequence_log_id(_seq_id)
+        resp = req.scripter_sequence_sequence_id_log_log_id_get(_seq_id, _log_id)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_scripter_sequence_sequence_id_log_log_id_delete(self):
+        req = Scripter(self.sess, self.host)
+        _seq_id = self._get_sequence_id()
+        _log_id = self._get_sequence_log_id(_seq_id)
+        resp = req.scripter_sequence_sequence_id_log_log_id_delete(_seq_id, _log_id)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        print(resp.text)
+    # <><>
 
     def case_scripter_sequence_sequence_type_admin_get(self):
         # исп: получить список Последовательностей "Административные"

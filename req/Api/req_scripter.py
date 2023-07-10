@@ -111,15 +111,21 @@ class Scripter(BaseReqRaw):
         """process DELETE to Delete sequence by ID"""
         return self.sess.delete(f"{self.host}/back/dp.scripter/sequence/{seq_id}")
 
-    # TODO: [DELETE] /back/dp.scripter/sequence/{id}/log
+    def scripter_sequence_id_log_delete(self, seq_id):
+        """process DELETE to delete all sequence logs from now"""
+        return self.sess.delete(f"{self.host}/back/dp.scripter/sequence/{seq_id}/log")
 
     def scripter_sequence_sequence_id_log_last_get(self, _seq_id):
         """process GET to get sequence last log"""
         return self.sess.get(f"{self.host}/back/dp.scripter/sequence/{_seq_id}/log/last")
 
-    # TODO: [GET] /back/dp.scripter/sequence/{sequence_id}/log/{log_id}
+    def scripter_sequence_sequence_id_log_log_id_get(self, sequence_id, log_id):
+        """process GET to get sequence log text by log ID"""
+        return self.sess.get(f"{self.host}/back/dp.scripter/sequence/{sequence_id}/log/{log_id}")
 
-    # TODO: [DELETE] /back/dp.scripter/sequence/{sequence_id}/log/{log_id}
+    def scripter_sequence_sequence_id_log_log_id_delete(self, sequence_id, log_id):
+        """process DELETE to delete sequence log by history id"""
+        return self.sess.delete(f"{self.host}/back/dp.scripter/sequence/{sequence_id}/log/{log_id}")
 
     def scripter_sequence_sequence_type_get(self, sequence_type):
         """process GET req to get list of admin/user sequences"""

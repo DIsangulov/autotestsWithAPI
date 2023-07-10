@@ -1039,21 +1039,11 @@ class TestScripter:
     def test_scripter_script_id_log_get(self):
         ScripterCase(SESS, HOST).case_scripter_script_id_log_get()
 
-    # fixme:    падает
-    def test_scripter_script_id_log_delete(self):
-        ScripterCase(SESS, HOST).case_scripter_script_id_log_delete()
-
-    # fixme:    падает
     def test_scripter_script_id_log_last_get(self):
         ScripterCase(SESS, HOST).case_scripter_script_id_log_last_get()
 
-    # fixme:    падает
     def test_scripter_script_id_log_log_id_get(self):
         ScripterCase(SESS, HOST).case_scripter_script_script_id_log_log_id_get()
-
-    # fixme:    падает
-    def test_scripter_script_id_log_log_id_delete(self):
-        ScripterCase(SESS, HOST).case_scripter_script_script_id_log_log_id_delete()
 
     def test_scripter_script_type_admin_get(self):
         ScripterCase(SESS, HOST).case_scripter_script_type_admin_get()
@@ -1067,13 +1057,8 @@ class TestScripter:
     def test_scripter_sequence_post(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_post()
 
-    # fixme
     def test_scripter_sequence_put(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_put()
-
-    # fixme
-    def test_scripter_sequence_log_id_get(self):
-        ScripterCase(SESS, HOST).case_scripter_sequence_log_id_get()
 
     def test_scripter_sequence_id_get(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_id_get()
@@ -1084,7 +1069,13 @@ class TestScripter:
     def test_scripter_sequence_stop_get(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_stop_id_get()
 
-    def test_scripter_sequence_id_log_get(self):
+    def test_scripter_sequence_log_id_get(self):
+        ScripterCase(SESS, HOST).case_scripter_sequence_log_id_get()
+
+    def test_scripter_sequence_sequence_id_log_log_id_get(self):
+        ScripterCase(SESS, HOST).case_scripter_sequence_sequence_id_log_log_id_get()
+
+    def test_scripter_sequence_id_log_last_get(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_sequence_id_log_last_get()
 
     def test_scripter_sequence_sequence_type_admin_get(self):
@@ -1093,8 +1084,20 @@ class TestScripter:
     def test_scripter_sequence_sequence_type_user_get(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_sequence_type_user_get()
 
+    def test_scripter_script_id_log_log_id_delete(self):
+        ScripterCase(SESS, HOST).case_scripter_script_script_id_log_log_id_delete()
+
+    def test_scripter_script_id_log_delete(self):
+        ScripterCase(SESS, HOST).case_scripter_script_id_log_delete()
+
     def test_scripter_script_id_delete(self):
         ScripterCase(SESS, HOST).case_scripter_script_id_delete()
+
+    def test_scripter_sequence_sequence_id_log_log_id_delete(self):
+        ScripterCase(SESS, HOST).case_scripter_sequence_sequence_id_log_log_id_delete()
+
+    def test_scripter_sequence_id_log_delete(self):
+        ScripterCase(SESS, HOST).case_scripter_sequence_id_log_delete()
 
     def test_scripter_sequence_id_delete(self):
         ScripterCase(SESS, HOST).case_scripter_sequence_id_delete()
@@ -1105,7 +1108,7 @@ class TestScripter:
 
 class TestTaskplan:
 
-    @pytest.mark.skip # fixme
+    @pytest.mark.skip   # fixme
     def test_taskplan_get_shedule_post(self):
         TaskplanCase(SESS, HOST).case_taskplan_get_shedule_post()
 
