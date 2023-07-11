@@ -512,13 +512,17 @@ class TestPermitter:
     def test_permitter_element_rules_visualisation_id_get(self):
         PermitterCase(SESS, HOST).case_permitter_element_rules_visualisation_id_get()
 
-    # def test_permitter_element_rules_report_get(self):
-    #
-    # def test_permitter_element_rules_mailing_get(self):
-    #
-    # def test_permitter_element_rules_script_get(self):
-    #
-    # def test_permitter_element_rules_script_sequence_get(self):
+    def test_permitter_element_rules_report_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_report_id_get()
+
+    def test_permitter_element_rules_mailing_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_mailing_id_get()
+
+    def test_permitter_element_rules_script_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_script_id_get()
+
+    def test_permitter_element_rules_script_sequence_get(self):
+        PermitterCase(SESS, HOST).case_permitter_element_rules_script_sequence_id_get()
 
     def test_permitter_element_rules_query_id_post(self):
         PermitterCase(SESS, HOST).case_permitter_element_rules_query_id_post()
@@ -570,6 +574,9 @@ class TestPermitter:
 
     def test_permitter_role_rules_who_id_get(self):
         PermitterCase(SESS, HOST).case_permitter_role_rules_who_id_get()
+
+    def test_all_temp_roles_delete(self):
+        PermitterCase(SESS, HOST).all_temp_roles_delete()
 
 
 class TestRmCook:
@@ -1015,6 +1022,9 @@ class TestReporter:
 
     def test_reporter_mailing_id_delete(self):
         ReporterCase(SESS, HOST).case_reporter_mailing_id_delete()
+
+    def test_all_api_auto_test_mailing_delete(self):
+        ReporterCase(SESS, HOST).all_api_auto_test_mailing_delete()
 
 
 class TestScripter:

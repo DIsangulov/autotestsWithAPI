@@ -6,29 +6,37 @@ from req.Api.req_reporter import Reporter
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-mailing_id = []     # 'id' рассылок
+mailing_id = set()     # 'id' рассылок
 
 
 class ReporterCase(BaseReq):
 
+    def _collect_mailing_id(self):
+        resp = Reporter(self.sess, self.host).reporter_mailing_get()
+        assert resp.status_code == 200, f"assert::reporter_mailing_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        if resp.text != '{"res":null}\n':
+            mailing_info_rows = json.loads(resp.text)['res']
+            for _row in mailing_info_rows:
+                if str(_row['name']).startswith(API_AUTO_TEST_):
+                    mailing_id.add(int(_row['id']))
+        # print(f"mailing_id is now: {mailing_id}")
+
     def _get_mailing_id(self) -> int:
         if len(mailing_id) == 0:
-            self.case_reporter_mailing_get()
-        # FIXME: список рассылок mailing_id всё ещё может остаться пустым
-        return mailing_id[-1]
+            self._collect_mailing_id()
+
+        if len(mailing_id) == 0:
+            r_new_mailing = self.case_reporter_mailing_post()
+            new_mailing_id = json.loads(r_new_mailing.text)['res']
+            return int(new_mailing_id)
+
+        return mailing_id.pop()
 
     def case_reporter_mailing_get(self):
         req = Reporter(self.sess, self.host)
         resp = req.reporter_mailing_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-        # FIXME: перенести в _get_mailing_id
-        dct = json.loads(resp.text)
-        for _row in dct['res']:
-            # print(_row)
-            mailing_id.append(int(_row['id']))
-        # print(f"report_id is now: {rep_id}")
 
     def case_reporter_mailing_put(self):
         req = Reporter(self.sess, self.host)
@@ -122,6 +130,7 @@ class ReporterCase(BaseReq):
         resp = req.reporter_mailing_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)  # {"res":12345}
+        return resp
 
     def case_reporter_mailing_sample_post(self):
         req = Reporter(self.sess, self.host)
@@ -198,3 +207,10 @@ class ReporterCase(BaseReq):
         resp = req.reporter_screener_fast_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    # __del__
+    def all_api_auto_test_mailing_delete(self):
+        delete_req = Reporter(self.sess, self.host)
+        self._collect_mailing_id()
+        while len(mailing_id) > 0:
+            delete_req.reporter_mailing_id_delete(mailing_id.pop())

@@ -15,15 +15,14 @@ auto_user_id = set()   # список для пользователей, соз�
 class PeoplerCase(BaseReq):
 
     def _collect_auto_user_id(self):
-        # resp_all_users = self.peopler_users_get()
-        resp_all_users = Peopler(self.sess, self.host).peopler_users_get()   # получить список ВСЕХ пользователей
-        # fixme: add assert sc == 200
-        all_users_info_rows = json.loads(resp_all_users.text)['res']
-        for _row in all_users_info_rows:                                        # фильтровать по API_AUTO_TEST_
+        resp = Peopler(self.sess, self.host).peopler_users_get()    # получить список ВСЕХ пользователей
+        assert resp.status_code == 200, f"assert::peopler_users_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        all_users_info_rows = json.loads(resp.text)['res']
+        for _row in all_users_info_rows:                            # фильтровать по API_AUTO_TEST_
             # .lower автоматически применяется при регистрации @доменных пользователей
             if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
                 auto_user_id.add(int(_row['id']))
-        # FIXME: можно возвращаемым значением длину конечного списка возвращать, для ветвлений 'if'
 
     def _get_auto_user_id(self) -> int:
         """get from global auto_user_id: API_AUTO_TEST_x"""
@@ -31,21 +30,19 @@ class PeoplerCase(BaseReq):
             self._collect_auto_user_id()
 
         if len(auto_user_id) == 0:
-            resp_new_user = self.case_peopler_users_post()                  # Создание нового @доменного пользователя
+            resp_new_user = self.case_peopler_users_post()          # Создание нового @доменного пользователя
             assert resp_new_user.status_code == 200, \
                 f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
 
-            new_user_id = json.loads(resp_new_user.text)['res']             # {"res":12345}
-            auto_user_id.add(int(new_user_id))                              # добавление нового пользователя в auto_user_id
+            new_user_id = json.loads(resp_new_user.text)['res']     # {"res":12345}
+            return int(new_user_id)                                 # вернуть 'id' нового пользователя
 
-        return auto_user_id.pop()                                           # возвращает случайное значение из auto_user_id
+        return auto_user_id.pop()                                   # возвращает случайное значение из auto_user_id
 
     def case_peopler_mainpage_get(self):
         req = Peopler(self.sess, self.host)
-
         resp = req.peopler_mainpage_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     # FIXME: работа ключей | name, rolename | под вопросом ещё (c) Swagger
     # на фронте оно только меняет "роль" группе?

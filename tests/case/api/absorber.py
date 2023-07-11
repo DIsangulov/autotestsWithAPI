@@ -313,7 +313,6 @@ class AbsorberCase(BaseReq):
         _logo_id = self._get_logo_id()
         resp = req.absorber_library_logo_id_get(_logo_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
 
     def case_absorber_library_logo_delete(self):
         req = Absorber(self.sess, self.host)

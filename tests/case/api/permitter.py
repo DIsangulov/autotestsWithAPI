@@ -3,6 +3,9 @@ import random
 
 from req.Helpers.base_req import BaseReq
 from req.Api.req_permitter import Permitter
+from tests.case.api.reporter import ReporterCase
+from tests.case.api.scripter import ScripterCase
+from tests.case.api.visualisation import VisualisationCase
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
@@ -18,15 +21,58 @@ def _get_sample_data() -> dict:
     return s_data
 
 
-role_id = []
+role_id = set()
+
+
+class ElementType:
+    query = "query"
+    visualisation = "visualisation"
+    report = "report"
+    mailing = "mailing"
+    script = "script"
+    script_sequence = "script_sequence"
 
 
 class PermitterCase(BaseReq):
 
+    def _get_element_id_by_type(self, element_type) -> int:
+        match element_type:
+            case ElementType.query:
+                return VisualisationCase(self.sess, self.host)._get_query_id()
+            case ElementType.visualisation:
+                return VisualisationCase(self.sess, self.host)._get_visualisation_id()
+            case ElementType.report:
+                return VisualisationCase(self.sess, self.host)._get_report_id()
+            case ElementType.mailing:
+                return ReporterCase(self.sess, self.host)._get_mailing_id()
+            case ElementType.script:
+                return ScripterCase(self.sess, self.host)._get_script_id()
+            case ElementType.script_sequence:
+                return ScripterCase(self.sess, self.host)._get_sequence_id()
+            case _:
+                assert False, f"Неверно выбран тип для {self.__class__.__name__}::{self._get_element_id_by_type.__name__}, element_type: {element_type}"
+
+    def _collect_temp_role_id(self):
+        req = Permitter(self.sess, self.host)
+        req.sess.headers.update({'ui': "2"})
+        resp = req.permitter_roles_editor_roles_get()
+        assert resp.status_code == 200, f"assert::permitter_roles_editor_roles_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        role_info_rows = json.loads(resp.text)['res']
+        for _row in role_info_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                role_id.add(int(_row['id']))
+
     def _get_temp_role_id(self) -> int:
+        if len(role_id) == 0:
+            self._collect_temp_role_id()
+
         if len(role_id) == 0:   # global role_id
-            self.case_permitter_roles_editor_roles_post()
-        return role_id[-1]
+            r_new_role = self.case_permitter_roles_editor_roles_post()  # создать новую роль
+            new_role_id = json.loads(r_new_role.text)['res']
+            return int(new_role_id)
+
+        return role_id.pop()
 
     def _get_random_tab_id(self) -> int:
         header = {'token': self.token, 'ui': str(2)}
@@ -98,37 +144,37 @@ class PermitterCase(BaseReq):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         resp = req.permitter_element_flags_element_type_element_id_get(element_type, element_id)
+        # print(f"e_type: {element_type}, e_id: {element_id}, rtext: {resp.text}")
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_permitter_element_flags_query_id_get(self):
-        element_type = "query"
-        element_id = 123    # FIXME:
+        element_type = ElementType.query
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_flags_visualisation_id_get(self):
-        element_type = "visualisation"
-        element_id = 260    # FIXME:
+        element_type = ElementType.visualisation
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_flags_report_id_get(self):
-        element_type = "report"
-        element_id = 4      # FIXME:
+        element_type = ElementType.report
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_flags_mailing_id_get(self):
-        element_type = "mailing"
-        element_id = 428      # FIXME:
+        element_type = ElementType.mailing
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_flags_script_id_get(self):
-        element_type = "script"
-        element_id = 25        # FIXME:
+        element_type = ElementType.script
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_flags_script_sequence_id_get(self):
-        element_type = "script_sequence"
-        element_id = 25         # FIXME:    # ?! прошел на несуществующем element_id
+        element_type = ElementType.script_sequence
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_get(element_type, element_id)
     # <><><> <><><>
 
@@ -141,41 +187,43 @@ class PermitterCase(BaseReq):
             "published": True
         }
         resp = req.permitter_element_flags_element_type_element_id_post(element_type, element_id, data)
+        # print(f"e_type: {element_type}, e_id: {element_id}, rtext: {resp.text}")
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)    # 200, при попытке изменить свой 'element', 400 - чужой
+        # 200, при попытке изменить свой 'element', 400 - чужой
 
     def case_permitter_element_flags_query_id_post(self):
-        element_type = "query"
-        element_id = 139        # FIXME:
+        element_type = ElementType.query
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_flags_visualisation_id_post(self):
-        element_type = "visualisation"
-        element_id = 281        # FIXME:
+        element_type = ElementType.visualisation
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_flags_report_id_post(self):
-        element_type = "report"
-        element_id = 397        # FIXME:
+        element_type = ElementType.report
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_flags_mailing_id_post(self):
-        element_type = "mailing"
-        element_id = 480        # FIXME:
+        element_type = ElementType.mailing
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_flags_script_id_post(self):
-        element_type = "script"
-        element_id = 344        # FIXME:
+        element_type = ElementType.script
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_flags_script_sequence_id_post(self):
-        element_type = "script_sequence"
-        element_id = 81         # FIXME:
+        element_type = ElementType.script_sequence
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_flags_element_type_element_id_post(element_type, element_id)
     # <><><> <><><>
 
     # <><><> <><><>
+    # fixme: возвращает 200 с любым int значением element_id; query_id = 123456
     def _permitter_element_rules_all_element_type_element_id_get(self, element_type, element_id):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
@@ -184,70 +232,92 @@ class PermitterCase(BaseReq):
         # print(resp.text)
 
     def case_permitter_element_rules_all_query_id_get(self):
-        element_type = "query"
-        element_id = 139123123        # FIXME
+        element_type = ElementType.query
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_rules_all_visualisation_id_get(self):
-        element_type = "visualisation"
-        element_id = 281        # FIXME
+        element_type = ElementType.visualisation
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_rules_all_report_id_get(self):
-        element_type = "report"
-        element_id = 397        # FIXME
+        element_type = ElementType.report
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_rules_all_mailing_id_get(self):
-        element_type = "mailing"
-        element_id = 480        # FIXME
+        element_type = ElementType.mailing
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_rules_all_script_id_get(self):
-        element_type = "script"
-        element_id = 344        # FIXME
+        element_type = ElementType.script
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_rules_all_script_sequence_id_get(self):
-        element_type = "script_sequence"
-        element_id = 81         # FIXME
+        element_type = ElementType.script_sequence
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
     # <><><> <><><>
 
+    # <><><> <><><>
     # FIXME: 200 or 400; add other element_type's
+    def _permitter_element_rules_delete_element_type_element_id_post(self, element_type, element_id):
+        pass
+
     def case_permitter_element_rules_delete_query_id_post(self):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
-        element_type = "query"
-        element_id = 139        # FIXME
+        element_type = ElementType.query
+        element_id = self._get_element_id_by_type(element_type)
         # FIXME: id -> в post-url и в data; who_id << ??
         data = {"access": True, "exec": True, "id": element_id, "is_user": True, "read": True, "who_id": 5, "write": True}
         resp = req.permitter_element_rules_delete_element_type_element_id_post(element_type, element_id, data)
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+        print(resp.text)
+    # <><><> <><><>
 
     # <><><> <><><>
+    # fixme: возвращает 200 с любым int значением element_id; query_id = 123456
     def _permitter_element_rules_element_type_element_id_get(self, element_type, element_id):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         resp = req.permitter_element_rules_element_type_element_id_get(element_type, element_id)
+        # print(f"e_type: {element_type}, e_id: {element_id}, rtext: {resp.text}")
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_permitter_element_rules_query_id_get(self):
-        element_type = "query"
-        element_id = 139        # FIXME
+        element_type = ElementType.query
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_get(element_type, element_id)
 
     def case_permitter_element_rules_visualisation_id_get(self):
-        element_type = "visualisation"
-        element_id = 1231123213    # FIXME
+        element_type = ElementType.visualisation
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_get(element_type, element_id)
 
-    # def case_permitter_element_rules_report_id_get(self):
-    # def case_permitter_element_rules_mailing_id_get(self):
-    # def case_permitter_element_rules_script_id_get(self):
-    # def case_permitter_element_rules_script_id_sequence_get(self):
+    def case_permitter_element_rules_report_id_get(self):
+        element_type = ElementType.report
+        element_id = self._get_element_id_by_type(element_type)
+        self._permitter_element_rules_element_type_element_id_get(element_type, element_id)
+
+    def case_permitter_element_rules_mailing_id_get(self):
+        element_type = ElementType.mailing
+        element_id = self._get_element_id_by_type(element_type)
+        self._permitter_element_rules_element_type_element_id_get(element_type, element_id)
+
+    def case_permitter_element_rules_script_id_get(self):
+        element_type = ElementType.script
+        element_id = self._get_element_id_by_type(element_type)
+        self._permitter_element_rules_element_type_element_id_get(element_type, element_id)
+
+    def case_permitter_element_rules_script_sequence_id_get(self):
+        element_type = ElementType.script_sequence
+        element_id = self._get_element_id_by_type(element_type)
+        self._permitter_element_rules_element_type_element_id_get(element_type, element_id)
+
     # <><><> <><><>
 
     # <><><> <><><>
@@ -270,33 +340,33 @@ class PermitterCase(BaseReq):
         # print(resp.text)
 
     def case_permitter_element_rules_query_id_post(self):
-        element_type = "query"
-        element_id = 139        # FIXME
+        element_type = ElementType.query
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_rules_visualisation_id_post(self):
-        element_type = "visualisation"
-        element_id = 281        # fixme
+        element_type = ElementType.visualisation
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_rules_report_id_post(self):
-        element_type = "report"
-        element_id = 397        # fixme
+        element_type = ElementType.report
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_rules_mailing_id_post(self):
-        element_type = "mailing"
-        element_id = 480        # fixme
+        element_type = ElementType.mailing
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_rules_script_id_post(self):
-        element_type = "script"
-        element_id = 344        # fixme
+        element_type = ElementType.script
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_post(element_type, element_id)
 
     def case_permitter_element_rules_script_sequence_id_post(self):
-        element_type = "script_sequence"
-        element_id = 81         # fixme
+        element_type = ElementType.script_sequence
+        element_id = self._get_element_id_by_type(element_type)
         self._permitter_element_rules_element_type_element_id_post(element_type, element_id)
     # <><><> <><><>
 
@@ -315,14 +385,11 @@ class PermitterCase(BaseReq):
         resp = req.permitter_roles_editor_roles_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
-
-        # FIXME: перенести логику в _get_temp_role_id
-        dct = json.loads(resp.text)
-        role_id.append(int(dct['res']))     # global role_id    # получили id роли
+        return resp
 
     def case_permitter_roles_editor_roles_edit_id_get(self):
         req = Permitter(self.sess, self.host)
-        req.sess.headers.update({'ui': "2"})
+        # req.sess.headers.update({'ui': "2"})
         _role_id = self._get_temp_role_id()
         resp = req.permitter_roles_editor_roles_edit_id_get(_role_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -330,7 +397,7 @@ class PermitterCase(BaseReq):
 
     def case_permitter_roles_editor_roles_id_put(self):
         req = Permitter(self.sess, self.host)
-        req.sess.headers.update({'ui': "2"})
+        # req.sess.headers.update({'ui': "2"})
         _role_id = self._get_temp_role_id()
         data = _get_sample_data()
         resp = req.permitter_roles_editor_roles_id_put(_role_id, data)
@@ -339,7 +406,7 @@ class PermitterCase(BaseReq):
 
     def case_permitter_roles_editor_roles_id_delete(self):
         req = Permitter(self.sess, self.host)
-        req.sess.headers.update({'ui': "2"})
+        # req.sess.headers.update({'ui': "2"})
         _role_id = self._get_temp_role_id()
         resp = req.permitter_roles_editor_roles_id_delete(_role_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -347,7 +414,7 @@ class PermitterCase(BaseReq):
 
     def case_permitter_user_rules_get(self):
         req = Permitter(self.sess, self.host)
-        req.sess.headers.update({'ui': "2"})
+        # req.sess.headers.update({'ui': "2"})
         resp = req.permitter_user_rules_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -355,7 +422,7 @@ class PermitterCase(BaseReq):
     def case_permitter_users_elements_count_who_id_get(self):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
-        who_id = 123
+        who_id = 123    # fixme:<
         resp = req.permitter_users_elements_count_who_id_get(who_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -376,7 +443,7 @@ class PermitterCase(BaseReq):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         who = "user"
-        who_id = 123
+        who_id = 123    # fixme:<
         resp = req.permitter_who_rules_who_id_get(who, who_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -385,10 +452,14 @@ class PermitterCase(BaseReq):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         who = "role"
-        who_id = 123
+        who_id = 123    # fixme:<
         resp = req.permitter_who_rules_who_id_get(who, who_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # def __del__(self):
-    #     pass  # delete all temp_role_id ' s
+    # __del__
+    def all_temp_roles_delete(self):
+        delete_req = Permitter(self.sess, self.host)
+        self._collect_temp_role_id()
+        while len(role_id) > 0:
+            delete_req.permitter_roles_editor_roles_id_delete(role_id.pop())
