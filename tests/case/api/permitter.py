@@ -12,11 +12,11 @@ API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 def _get_sample_data() -> dict:
     s_data = {"name": f"{API_AUTO_TEST_}{random.randint(100, 999)}", "views": [
-        {"id": 1, "name": "Администрирование", "ui_part": "administration", "read": False, "write": False, "disabled": []},
-        {"id": 2, "name": "Данные", "ui_part": "data", "read": False, "write": False, "disabled": []},
-        {"id": 3, "name": "Аналитика", "ui_part": "analytics", "read": False, "write": False, "disabled": []},
-        {"id": 4, "name": "xBA", "ui_part": "xba", "read": False, "write": False, "disabled": []},
-        {"id": 5, "name": "Role Mining", "ui_part": "rm", "read": False, "write": False, "disabled": []}
+        {"ui_part": "administration", "read": False, "write": False},
+        {"ui_part": "data", "read": False, "write": False},
+        {"ui_part": "analytics", "read": False, "write": False},
+        {"ui_part": "xba", "read": False, "write": False},
+        {"ui_part": "rm", "read": False, "write": False}
     ]}
     return s_data
 

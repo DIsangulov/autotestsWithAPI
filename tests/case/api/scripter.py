@@ -465,7 +465,7 @@ class ScripterCase(BaseReq):
         _log_id = self._get_sequence_log_id(_seq_id)
         resp = req.scripter_sequence_sequence_id_log_log_id_delete(_seq_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
+        # print(resp.text)
     # <><>
 
     def case_scripter_sequence_sequence_type_admin_get(self):

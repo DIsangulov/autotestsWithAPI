@@ -715,7 +715,6 @@ class TestStorageWorker:
     def test_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
         StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post()
 
-    @pytest.mark.skip   # fixme: 405 status code
     def test_storage_worker_statistics_db_tabs_stats_dbname_get(self):
         StorageWorkerCase(SESS, HOST).case_storage_worker_statistics_db_tabs_stats_dbname_get()
 
@@ -730,12 +729,6 @@ class TestStorageWorker:
 
     def test_storage_worker_storage_db_get(self):
         StorageWorkerCase(SESS, HOST).case_storage_worker_storage_db_get()
-
-    # fixme: убрать
-    def test_permitter_roles_editor_roles_for_storage_worker_put(self):
-        req = StorageWorkerCase(SESS, HOST)
-        resp = req.permitter_roles_editor_roles_for_storage_worker_put()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def test_storage_worker_storage_db_put(self):
         StorageWorkerCase(SESS, HOST).case_storage_worker_storage_db_put()

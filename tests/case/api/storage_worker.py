@@ -3,6 +3,7 @@ import random
 
 from req.Helpers.base_req import BaseReq
 from req.Api.req_storage_worker import StorageWorker
+from req.Api.req_permitter import Permitter
 from resourses.credentials import DbName
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
@@ -18,53 +19,54 @@ class StorageWorkerCase(BaseReq):
             self.case_storage_worker_psevdo_namer_regs_post()    # если нет, создай новую
         return reg_pid[-1]
 
-    # FIXME: обращение к api соседнего класса
-    # кинуть в отдельный _метод > запускать сразу после создания хранилища
-    def permitter_roles_editor_roles_for_storage_worker_put(self):
+    def _permitter_sysop_add_permission_to_change_db_by_name(self, db_name):
         # Меняем пермишенны у роли, чтобы дальше смоги изменять и удалять таблицу
+        # >> фактически, добавить доступ к хранилищу db_name для роли "sysop"
 
-        db_id = self.get_db_id_by_name(DbName.API_TEST_DB1)
+        db_id = self.get_db_id_by_name(db_name)
 
-        header = {'token': self.token, 'ui': str(2)}
+        _role_id = 5
+        _rolename = "sysop"
+
         data = {
-            "id": 5,
-            "name": "sysop",
-            "rolename": "sysop",
+            # "id": _role_id,
+            "name": _rolename,
+            "rolename": _rolename,
             "views": [{
-                "id": 1,
-                "name": "Администрирование",
+                # "id": 1,
+                # "name": "Администрирование",
                 "ui_part": "administration",
                 "read": True,
                 "write": True,
-                "disabled": ["read"]
+                # "disabled": ["read"]
             }, {
-                "id": 2,
-                "name": "Данные",
+                # "id": 2,
+                # "name": "Данные",
                 "ui_part": "data",
                 "read": True,
                 "write": True,
-                "disabled": ["read"]
+                # "disabled": ["read"]
             }, {
-                "id": 3,
-                "name": "Аналитика",
+                # "id": 3,
+                # "name": "Аналитика",
                 "ui_part": "analytics",
                 "read": True,
                 "write": True,
-                "disabled": ["read"]
+                # "disabled": ["read"]
             }, {
-                "id": 4,
-                "name": "xBA",
+                # "id": 4,
+                # "name": "xBA",
                 "ui_part": "xba",
                 "read": True,
                 "write": True,
-                "disabled": ["read"]
+                # "disabled": ["read"]
             }, {
-                "id": 5,
-                "name": "Role Mining",
+                # "id": 5,
+                # "name": "Role Mining",
                 "ui_part": "rm",
                 "read": True,
                 "write": True,
-                "disabled": ["read"]
+                # "disabled": ["read"]
             }],
             "dbs": [{
                 "id": db_id,
@@ -73,10 +75,14 @@ class StorageWorkerCase(BaseReq):
                 "select": True,
                 "update": True
             }],
-            "report_id": None
+            # "report_id": None
         }
-        resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/5", headers=header, json=data, verify=False)
-        return resp
+
+        req = Permitter(self.sess, self.host)
+        req.sess.headers.update({'ui': '2'})
+        resp = req.permitter_roles_editor_roles_id_put(_role_id, data)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/{_role_id}", headers=header, json=data, verify=False)
 
     def case_storage_worker_ask_one_sql_post(self):
         req = StorageWorker(self.sess, self.host)
@@ -252,11 +258,13 @@ class StorageWorkerCase(BaseReq):
         req = StorageWorker(self.sess, self.host)
         data = {
             "base_name": DbName.API_TEST_DB1,
-            "description": f"{DbName.API_TEST_DB1} auto created"
+            "description": f"..for api test things"
         }
         resp = req.storage_worker_storage_db_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+
+        # доступ на изменение хранилища API_TEST_DB1
+        self._permitter_sysop_add_permission_to_change_db_by_name(DbName.API_TEST_DB1)
 
     def case_storage_worker_storage_db_delete(self):
         req = StorageWorker(self.sess, self.host)

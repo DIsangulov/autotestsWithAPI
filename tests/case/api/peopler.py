@@ -3,11 +3,9 @@ import random
 
 from req.Helpers.base_req import BaseReq
 from req.Api.req_peopler import Peopler
-from resourses.credentials import DpRoles
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
-# sys_api_test = self.get_role_id_by_name(DpRoles.sys_api_test) # FIXME: реализовать геттер для получения роли
-sys_api_test = DpRoles.sys_api_test
+sys_api_test = 76   # fixme?
 
 auto_user_id = set()   # список для пользователей, созданных автоматически
 
