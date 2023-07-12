@@ -224,6 +224,7 @@ class ScripterCase(UserSession):
         resp = req.scripter_script_id_log_delete(_script_id)
         assert resp.status_code == 200, f"0..Ошибка, код {resp.status_code}, {resp.text}"
 
+    # fixme: может не быть лога > запускать скрипт перед запросом?
     def case_scripter_script_id_log_last_get(self):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()

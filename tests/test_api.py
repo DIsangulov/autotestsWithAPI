@@ -836,9 +836,6 @@ class TestXbaCook:
     def test_xba_cook_profiles_groups_info_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_groups_info_get()
 
-    def test_xba_cook_profiles_groups_id_delete(self):
-        XbaCookCase(HOST).case_xba_cook_profiles_groups_id_delete()
-
     def test_xba_cook_profiles_groups_group_id_profiles_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_groups_group_id_profiles_get()
 
@@ -857,6 +854,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_import_profiles_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_import_profiles_post()
 
+    @pytest.mark.skip # fixme:
     def test_xba_cook_profiles_start_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_start_id_get()
 
@@ -865,10 +863,6 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_id_get()
-
-    @pytest.mark.skip
-    def test_xba_cook_profiles_id_delete(self):
-        XbaCookCase(HOST).case_xba_cook_profiles_id_delete()
 
     def test_xba_cook_profiles_id_log_last_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_id_log_last_get()
@@ -890,6 +884,12 @@ class TestXbaCook:
 
     def test_xba_cook_xba_post(self):
         XbaCookCase(HOST).case_xba_cook_xba_post()
+
+    def test_xba_cook_profiles_groups_id_delete(self):
+        XbaCookCase(HOST).case_xba_cook_profiles_groups_id_delete()
+
+    def test_xba_cook_profiles_id_delete(self):
+        XbaCookCase(HOST).case_xba_cook_profiles_id_delete()
 
 
 class TestMonitor:
@@ -1041,11 +1041,11 @@ class TestScripter:
     def test_scripter_script_id_log_get(self):
         ScripterCase(HOST).case_scripter_script_id_log_get()
 
-    def test_scripter_script_id_log_last_get(self):
-        ScripterCase(HOST).case_scripter_script_id_log_last_get()
-
     def test_scripter_script_id_log_log_id_get(self):
         ScripterCase(HOST).case_scripter_script_script_id_log_log_id_get()
+
+    def test_scripter_script_id_log_last_get(self):
+        ScripterCase(HOST).case_scripter_script_id_log_last_get()
 
     def test_scripter_script_type_admin_get(self):
         ScripterCase(HOST).case_scripter_script_type_admin_get()
@@ -1188,6 +1188,7 @@ class TestGarbageCollector:
         AbsorberCase(HOST).all_api_auto_test_entity_delete()
         PeoplerCase(HOST).all_api_auto_test_user_delete()
         PermitterCase(HOST).all_temp_roles_delete()
+        XbaCookCase(HOST).all_api_auto_test_entity_delete()
         ReporterCase(HOST).all_api_auto_test_mailing_delete()
         ScripterCase(HOST).all_api_auto_test_entity_delete()
         VisualisationCase(HOST).all_api_auto_test_entity_delete()

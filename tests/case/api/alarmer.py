@@ -134,6 +134,7 @@ class AlarmerCase(UserSession):
             # "msg": "TestAPI",                # нужно?
             "to": _QA_SPAM_EMAIL,
             "user_id": 4870     # FIXME: могу отправлять сообщения от другого имени?
+            # "user_id": self.get_self_user_id()
         }
         resp = req.alarmer_send_invitation_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -151,6 +152,7 @@ class AlarmerCase(UserSession):
                 _QA_SPAM_EMAIL
             ],
             "user_id": 4870     # FIXME: могу отправлять сообщения от другого имени?
+            # "user_id": self.get_self_user_id()
         }
         resp = req.alarmer_send_invitations_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
