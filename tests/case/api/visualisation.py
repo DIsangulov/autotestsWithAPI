@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_visualisation import Visualisation
 from resourses.credentials import DbName
 
@@ -14,7 +14,7 @@ visualisation_id = set()   # 'id' визуализации
 # TODO: есть подозрения, что бек не отрабатывает иногда запросы со значением smth_id = None
 
 
-class VisualisationCase(BaseReq):
+class VisualisationCase(UserSession):
 
     def _collect_query_id(self):
         resp = Visualisation(self.sess, self.host).visualisation_query_get()

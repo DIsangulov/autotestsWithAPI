@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Taskplan(BaseReqRaw):
+class Taskplan(BaseReq):
 
     # TODO: [POST] /back/dp.taskplan/add_task   # front: создание рассылки из отчета
 

@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_storage_worker import StorageWorker
 from req.Api.req_permitter import Permitter
 from resourses.credentials import DbName
@@ -11,7 +11,7 @@ API_AUTO_TEST_ = "API_AUTO_TEST_"
 reg_pid = []        # список, содержащий id новосозданных регулярных выражений
 
 
-class StorageWorkerCase(BaseReq):
+class StorageWorkerCase(UserSession):
 
     # fixme: add _collect
     def _get_temp_reg_pid(self) -> int:

@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_reporter import Reporter
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
@@ -9,7 +9,7 @@ API_AUTO_TEST_ = "API_AUTO_TEST_"
 mailing_id = set()     # 'id' рассылок
 
 
-class ReporterCase(BaseReq):
+class ReporterCase(UserSession):
 
     def _collect_mailing_id(self):
         resp = Reporter(self.sess, self.host).reporter_mailing_get()

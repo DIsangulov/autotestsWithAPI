@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_rm_cook import RmCook
 from resourses.credentials import DbName
 
@@ -9,7 +9,7 @@ SYSLOG_HOST = "107.130.0.16"
 SYSLOG_PORT = 514
 
 
-class RmCookCase(BaseReq):
+class RmCookCase(UserSession):
 
     def _get_random_rm_user_id(self) -> int:
         # fixme: обращаться напрямую к RmCook

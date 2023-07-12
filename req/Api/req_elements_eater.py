@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class ElementsEater(BaseReqRaw):
+class ElementsEater(BaseReq):
 
     def elements_eater_reports_export_post(self, data) -> requests.Response:
         """process POST req for exporting reports by ids"""

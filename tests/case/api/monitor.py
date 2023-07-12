@@ -1,4 +1,4 @@
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_monitor import Monitor
 
 
@@ -12,7 +12,7 @@ def _get_sample_data() -> dict:
     return s_data
 
 
-class MonitorCase(BaseReq):
+class MonitorCase(UserSession):
 
     def case_monitor_anomals_flag_0_post(self):
         req = Monitor(self.sess, self.host)

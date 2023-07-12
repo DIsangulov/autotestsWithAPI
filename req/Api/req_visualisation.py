@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Visualisation(BaseReqRaw):
+class Visualisation(BaseReq):
 
     def visualisation_query_get(self):
         """process GET req for getting query list"""

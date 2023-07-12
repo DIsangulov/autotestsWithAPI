@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class LogEater(BaseReqRaw):
+class LogEater(BaseReq):
 
     def log_eater_audit_users_days_get(self, days) -> requests.Response:
         """process GET req http handler for getting path to file with user audit logs for "days" days count"""

@@ -2,13 +2,13 @@ import json
 import random
 import string
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_auth import AuthApi
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 
-class AuthApiCase(BaseReq):
+class AuthApiCase(UserSession):
 
     def _get_session_id(self, user_id) -> int:
         session_id = set()

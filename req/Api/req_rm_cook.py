@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class RmCook(BaseReqRaw):
+class RmCook(BaseReq):
 
     def rm_cook_active_directory_groups_get(self):
         """process GET req to get AD groups list."""

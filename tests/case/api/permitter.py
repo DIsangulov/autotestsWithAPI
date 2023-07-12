@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_permitter import Permitter
 from tests.case.api.reporter import ReporterCase
 from tests.case.api.scripter import ScripterCase
@@ -33,22 +33,22 @@ class ElementType:
     script_sequence = "script_sequence"
 
 
-class PermitterCase(BaseReq):
+class PermitterCase(UserSession):
 
     def _get_element_id_by_type(self, element_type) -> int:
         match element_type:
             case ElementType.query:
-                return VisualisationCase(self.sess, self.host)._get_query_id()
+                return VisualisationCase(self.host)._get_query_id()
             case ElementType.visualisation:
-                return VisualisationCase(self.sess, self.host)._get_visualisation_id()
+                return VisualisationCase(self.host)._get_visualisation_id()
             case ElementType.report:
-                return VisualisationCase(self.sess, self.host)._get_report_id()
+                return VisualisationCase(self.host)._get_report_id()
             case ElementType.mailing:
-                return ReporterCase(self.sess, self.host)._get_mailing_id()
+                return ReporterCase(self.host)._get_mailing_id()
             case ElementType.script:
-                return ScripterCase(self.sess, self.host)._get_script_id()
+                return ScripterCase(self.host)._get_script_id()
             case ElementType.script_sequence:
-                return ScripterCase(self.sess, self.host)._get_sequence_id()
+                return ScripterCase(self.host)._get_sequence_id()
             case _:
                 assert False, f"Неверно выбран тип для {self.__class__.__name__}::{self._get_element_id_by_type.__name__}, element_type: {element_type}"
 
@@ -276,7 +276,7 @@ class PermitterCase(BaseReq):
         data = {"access": True, "exec": True, "id": element_id, "is_user": True, "read": True, "who_id": 5, "write": True}
         resp = req.permitter_element_rules_delete_element_type_element_id_post(element_type, element_id, data)
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-        print(resp.text)
+        # print(resp.text)
     # <><><> <><><>
 
     # <><><> <><><>

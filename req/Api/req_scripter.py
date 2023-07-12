@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Scripter(BaseReqRaw):
+class Scripter(BaseReq):
 
     def scripter_category_get(self):
         """process GET tot get script categories (analytics/parsers/services)"""

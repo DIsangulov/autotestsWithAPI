@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
 from resourses.credentials import DbName
 
@@ -11,7 +11,7 @@ profile_id = set()  # 'id' профиля xBA
 group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
 
 
-class XbaCookCase(BaseReq):
+class XbaCookCase(UserSession):
 
     # fixme: add collect
     def _get_group_id(self) -> int:

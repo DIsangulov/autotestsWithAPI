@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_peopler import Peopler
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
@@ -10,7 +10,7 @@ sys_api_test = 76   # fixme?
 auto_user_id = set()   # список для пользователей, созданных автоматически
 
 
-class PeoplerCase(BaseReq):
+class PeoplerCase(UserSession):
 
     def _collect_auto_user_id(self):
         resp = Peopler(self.sess, self.host).peopler_users_get()    # получить список ВСЕХ пользователей

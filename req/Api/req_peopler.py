@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Peopler(BaseReqRaw):
+class Peopler(BaseReq):
 
     def peopler_mainpage_get(self) -> requests.Response:
         """process GET req to get pinned main page for user"""

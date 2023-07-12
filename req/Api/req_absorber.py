@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Absorber(BaseReqRaw):
+class Absorber(BaseReq):
 
     def absorber_library_columns_get(self) -> requests.Response:
         """process GET req for getting all columns dict elements from library"""

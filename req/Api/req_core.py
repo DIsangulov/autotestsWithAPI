@@ -1,6 +1,6 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 act_dir_pass = "d8hELYed9L809RB9FkSO!"
 ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
@@ -8,7 +8,7 @@ ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
 mail_pass = "8327kHLHsfohn;hksjkfou!"
 
 
-class Core(BaseReqRaw):
+class Core(BaseReq):
 
     def core_active_directory_get(self) -> requests.Response:
         """process GET req for getting current ad settings"""

@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Updater(BaseReqRaw):
+class Updater(BaseReq):
 
     def updater_additions_get(self):
         """process GET req to get list of available additions"""

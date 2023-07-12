@@ -3,7 +3,7 @@ import os
 import random
 import base64
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_absorber import Absorber
 from resourses.credentials import DbName
 
@@ -25,7 +25,7 @@ class ConnType:
     t_python_clickhouse = 8
 
 
-class AbsorberCase(BaseReq):
+class AbsorberCase(UserSession):
 
     def _collect_source_id(self):
         resp = Absorber(self.sess, self.host).absorber_source_get()

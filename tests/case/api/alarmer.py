@@ -1,4 +1,4 @@
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_alarmer import Alarmer
 from resourses.credentials import DpQaa
 
@@ -6,7 +6,7 @@ _QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 
-class AlarmerCase(BaseReq):
+class AlarmerCase(UserSession):
 
     def case_alarmer_notification_admin_all_get(self):
         req = Alarmer(self.sess, self.host)

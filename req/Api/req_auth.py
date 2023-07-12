@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class AuthApi(BaseReqRaw):
+class AuthApi(BaseReq):
 
     def auth_ad_struct_get(self) -> requests.Response:
         """process GET req for getting domain AD struct"""

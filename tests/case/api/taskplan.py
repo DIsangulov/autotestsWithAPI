@@ -1,8 +1,8 @@
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_taskplan import Taskplan
 
 
-class TaskplanCase(BaseReq):
+class TaskplanCase(UserSession):
 
     # [post] /add_task
     # {"sched_type": "mailing", "object_id": 426, "schedule": {"sched_id": 0, "flag": 3, "timezone": "Europe/Moscow", "interval": {"val": "30", "str": "hour"}, "day": {"val": "", "hhmm": "00:00"}, "week": {"days": null, "hhmm": "00:00"}, "month": {"var": 0, "day": "1", "val": "2", "val2": "", "wday": "", "wnum": "", "hhmm": "00:00"}}, "timezone": "Europe/Moscow"}

@@ -1,8 +1,8 @@
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_licenser import Licenser
 
 
-class LicenserCase(BaseReq):
+class LicenserCase(UserSession):
 
     def case_licenser_activate_post(self):
         # кидаем кривой ключ и ждем что его отобъет

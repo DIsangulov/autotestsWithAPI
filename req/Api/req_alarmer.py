@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Alarmer(BaseReqRaw):
+class Alarmer(BaseReq):
 
     # TODO: [GET] /back/dp.alarmer/alert/service/names
 

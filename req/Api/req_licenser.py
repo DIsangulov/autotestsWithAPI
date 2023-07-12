@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Licenser(BaseReqRaw):
+class Licenser(BaseReq):
 
     def licenser_activate_post(self, body) -> requests.Response:
         """process POST req for activating license with text key"""

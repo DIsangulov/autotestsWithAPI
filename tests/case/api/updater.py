@@ -1,8 +1,8 @@
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_updater import Updater
 
 
-class UpdaterCase(BaseReq):
+class UpdaterCase(UserSession):
 
     def case_updater_additions_get(self):
         req = Updater(self.sess, self.host)

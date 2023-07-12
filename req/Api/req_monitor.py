@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Monitor(BaseReqRaw):
+class Monitor(BaseReq):
 
     def monitor_anomals_flag_post(self, flag, data) -> requests.Response:
         """process POST req for getting anomalies (not used)"""

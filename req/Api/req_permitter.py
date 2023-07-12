@@ -1,9 +1,9 @@
 import requests
 
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Permitter(BaseReqRaw):
+class Permitter(BaseReq):
 
     def permitter_check_ui_get(self) -> requests.Response:
         """process GET req for getting ui rules for token ([admin,data,analytics,xba,rm], 0-no access, 1-read, 2-write)"""

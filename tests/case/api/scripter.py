@@ -1,7 +1,7 @@
 import json
 import random
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_scripter import Scripter
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
@@ -10,7 +10,7 @@ script_id = set()          # 'id' скрипта  # предполагается
 sequence_id = set()        # 'id' последовательности
 
 
-class ScripterCase(BaseReq):
+class ScripterCase(UserSession):
 
     def _collect_script_id(self):
         resp = Scripter(self.sess, self.host).scripter_script_get()

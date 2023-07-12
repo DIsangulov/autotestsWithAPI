@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class StorageWorker(BaseReqRaw):
+class StorageWorker(BaseReq):
 
     def storage_worker_ask_one_sql_post(self, data):
         """process POST req with raw sql ask for executing it"""

@@ -1,10 +1,10 @@
 import os
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_elements_eater import ElementsEater
 
 
-class ElementsEaterCase(BaseReq):
+class ElementsEaterCase(UserSession):
 
     def case_elements_eater_reports_export_post(self):
         req = ElementsEater(self.sess, self.host)

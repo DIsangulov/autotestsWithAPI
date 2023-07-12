@@ -1,6 +1,6 @@
 import os
 
-from req.Helpers.base_req import BaseReq
+from req.Helpers.user_session import UserSession
 from req.Api.req_core import Core
 
 
@@ -10,7 +10,7 @@ ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
 mail_pass = "8327kHLHsfohn;hksjkfou!"
 
 
-class CoreCase(BaseReq):
+class CoreCase(UserSession):
 
     def case_core_active_directory_get(self):
         req = Core(self.sess, self.host)

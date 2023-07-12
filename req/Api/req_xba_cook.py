@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class XbaCook(BaseReqRaw):
+class XbaCook(BaseReq):
 
     def xba_cook_anomalies_get(self):
         """process GET req to get all app anomalies"""

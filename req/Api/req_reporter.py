@@ -1,7 +1,7 @@
-from req.Helpers.base_req_raw import BaseReqRaw
+from req.Helpers.base_req import BaseReq
 
 
-class Reporter(BaseReqRaw):
+class Reporter(BaseReq):
 
     def reporter_mailing_get(self):
         """process GET req for getting all mailings from library"""
