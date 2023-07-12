@@ -544,6 +544,21 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_id_log_last_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def case_xba_cook_profiles_id_summary_post(self):
+        # https://tasks.ngrsoftlab.ru/browse/DAT-5211
+        req = XbaCook(self.sess, self.host)
+        # prof_id = self._get_xba_profile_id()
+        prof_id = 1888      # fixme:< нужен живой профиль
+        # data = {
+        #     "entity_group": "host",
+        #     "start": "2022-10-21T16:39:01Z",
+        #     "end": "2023-07-12T03:46:08Z"
+        # }
+        data = {}
+        resp = req.xba_cook_profiles_id_summary_post(prof_id, data)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # print(resp.text)
+
     def case_xba_cook_profiles_id_whitelist_post(self):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()

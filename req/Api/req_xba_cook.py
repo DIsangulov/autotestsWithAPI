@@ -164,7 +164,9 @@ class XbaCook(BaseReq):
         """process GET req to get profile last log by profile id"""
         return self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/{prof_id}/log/last")
 
-    # TODO: [POST] /back/dp.xba_cook/profiles/{id}/summary
+    def xba_cook_profiles_id_summary_post(self, xba_profile_id, data):
+        """process POST to get profile summary data and top-10 of risky entities"""
+        return self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/{xba_profile_id}/summary", json=data)
 
     def xba_cook_profiles_id_whitelist_post(self, prof_id, data):
         """process POST req to add element into profile whitelist"""

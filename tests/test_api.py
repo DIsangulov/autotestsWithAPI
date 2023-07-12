@@ -867,6 +867,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_log_last_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_id_log_last_get()
 
+    def test_xba_cook_profiles_id_summary_post(self):
+        XbaCookCase(HOST).case_xba_cook_profiles_id_summary_post()
+
     def test_xba_cook_profiles_id_whitelist_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_id_whitelist_post()
 
