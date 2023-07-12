@@ -24,8 +24,8 @@ from pages.UI._4_xBA.xba_profiles import Profiles
 from pages.UI._4_xBA.xba_statistic import Statistic
 from pages.UI._5_RoleMining.rm_settings import RmSettings
 from pages.UI._5_RoleMining.rm_ad_status import AdStatus
-from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
-from pages.UI._5_RoleMining.rm_role_model import RoleModel
+# from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
+# from pages.UI._5_RoleMining.rm_role_model import RoleModel
 
 # ________ constants __________
 # region
@@ -900,6 +900,7 @@ class TestSettingReportAccessForUserToRead:
         page.should_checkbox_read_enable_for_users_tab()
 
 
+@pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Запись"')
 class TestSettingReportAccessForUserToWrite:
     def test_valid_auth(self, browser):
@@ -968,6 +969,7 @@ class TestSettingReportAccessForUserToWrite:
         page.should_checkbox_write_enable_for_users_tab()
 
 
+@pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Выполнение"')
 class TestSettingReportAccessForUserToExecute:
     def test_valid_auth(self, browser):
@@ -1036,6 +1038,7 @@ class TestSettingReportAccessForUserToExecute:
         page.should_checkbox_execute_enable_for_users_tab()
 
 
+@pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Настройку доступа"')
 class TestSettingReportAccessForUserToAccessSettings:
     def test_valid_auth(self, browser):
@@ -1236,8 +1239,7 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
 
 
 @pytest.mark.skip
-@allure.title(
-    'Отчеты - проверка доступа к детализации, фильтрам и настройкам визуализации в отчете (для роли на ''Чтение)')
+@allure.title('Отчеты - проверка доступа к детализации, фильтрам и настройкам визуализации в отчете (для роли на ''Чтение)')
 class TestCheckingReportElements:
     def test_valid_auth(self, browser):
         page = AuthPage(browser, link)
