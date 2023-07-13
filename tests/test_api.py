@@ -854,7 +854,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_import_profiles_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_import_profiles_post()
 
-    @pytest.mark.skip # fixme:
+    @pytest.mark.skip    # fixme:
     def test_xba_cook_profiles_start_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_start_id_get()
 
@@ -1110,7 +1110,13 @@ class TestScripter:
 
 class TestTaskplan:
 
-    @pytest.mark.skip   # fixme
+    def test_taskplan_add_task_post(self):
+        TaskplanCase(HOST).case_taskplan_add_task_post()
+
+    @pytest.mark.skip
+    def test_taskplan_delete_task(self):
+        TaskplanCase(HOST).case_taskplan_delete_task()
+
     def test_taskplan_get_shedule_post(self):
         TaskplanCase(HOST).case_taskplan_get_shedule_post()
 

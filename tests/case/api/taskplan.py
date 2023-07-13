@@ -1,30 +1,77 @@
 from req.Helpers.user_session import UserSession
 from req.Api.req_taskplan import Taskplan
+from tests.case.api.reporter import ReporterCase
 
 
 class TaskplanCase(UserSession):
 
-    # [post] /add_task
-    # {"sched_type": "mailing", "object_id": 426, "schedule": {"sched_id": 0, "flag": 3, "timezone": "Europe/Moscow", "interval": {"val": "30", "str": "hour"}, "day": {"val": "", "hhmm": "00:00"}, "week": {"days": null, "hhmm": "00:00"}, "month": {"var": 0, "day": "1", "val": "2", "val2": "", "wday": "", "wnum": "", "hhmm": "00:00"}}, "timezone": "Europe/Moscow"}
+    # TODO: [POST] /back/dp.taskplan/add_task   # front: создание рассылки из отчета
+    def case_taskplan_add_task_post(self):
+        req = Taskplan(self.sess, self.host)
 
+        sched_type = "mailing"      # todo: какие ещё типы
+        mailing_id = ReporterCase(self.host)._get_mailing_id()
+
+        data = {
+            "sched_type": "mailing",
+            "object_id": mailing_id,
+            "schedule": {
+                "sched_id": 0,
+                "flag": 0,
+                "timezone": "Europe/Moscow",
+                "interval": {
+                    "val": "30",
+                    "str": "min"
+                },
+                "day": {
+                    "val": "",
+                    "hhmm": "00:00"
+                },
+                "week": {
+                    "days": None,
+                    "hhmm": "00:00"
+                },
+                "month": {
+                    "var": 0,
+                    "day": "",
+                    "val": "",
+                    "val2": "",
+                    "wday": "",
+                    "wnum": "",
+                    "hhmm": "00:00"
+                }
+            },
+            "timezone": "Europe/Moscow"
+        }
+        resp = req.taskplan_add_task_post(data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # \u003c (<)    # \u003e (>)
+        # {"error":{"code":400,"description":"can not identify type of object: \u003cnil\u003e","msg":"Неверные параметры"}}
+
+    # TODO: [DELETE] /back/dp.taskplan/delete_task
+    def case_taskplan_delete_task(self):
+        req = Taskplan(self.sess, self.host)
+        data = None
+        resp = req.taskplan_delete_task(data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # fixme: add taskplan then get_shedule
     def case_taskplan_get_shedule_post(self):
         req = Taskplan(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
-        # data = {
-        #     "sched_type": "script_exec",
-        #     "timezone": "Europe/Moscow",
-        #     "data": {
-        #         "object_id": 1902
-        #     }
-        # }
+        sched_type = "mailing"
+        mailing_id = ReporterCase(self.host)._get_mailing_id()
         data = {
-            "sched_type": "mailing",
+            "sched_type": sched_type,
             "timezone": "Europe/Moscow",
-            # FIXME: нужна существующая рассылка с установленным расписанием
-            # add_task <<<<
-            "data": {"object_id":    483}
+            "data": {
+                "object_id": mailing_id
+            }
         }
 
         resp = req.taskplan_get_shedule_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # {"error":{"code":426,"msg":"Пожалуйста, установите расписание"}}
