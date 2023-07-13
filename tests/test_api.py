@@ -1191,6 +1191,7 @@ class TestGarbageCollector:
         AbsorberCase(HOST).all_api_auto_test_entity_delete()
         PeoplerCase(HOST).all_api_auto_test_user_delete()
         PermitterCase(HOST).all_temp_roles_delete()
+        StorageWorkerCase(HOST).all_api_auto_test_regs_delete()
         XbaCookCase(HOST).all_api_auto_test_entity_delete()
         ReporterCase(HOST).all_api_auto_test_mailing_delete()
         ScripterCase(HOST).all_api_auto_test_entity_delete()

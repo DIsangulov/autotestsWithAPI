@@ -12,25 +12,23 @@ SYSLOG_PORT = 514
 class RmCookCase(UserSession):
 
     def _get_random_rm_user_id(self) -> int:
-        # fixme: обращаться напрямую к RmCook
-        _resp = self.case_rm_cook_active_directory_users_get()          # получить запрос со списком пользователей
-        _rm_users_info_rows = json.loads(_resp.text)['res']['users']    # получить из запроса список пользователей
-        _rm_user_info = random.choice(_rm_users_info_rows)              # получить случайную строку из списка
-        return int(_rm_user_info['id'])
+        # получить запрос со списком rm_пользователей
+        resp = RmCook(self.sess, self.host).rm_cook_active_directory_users_get()
+        rm_users_info_rows = json.loads(resp.text)['res']['users']    # получить из запроса список пользователей
+        rm_user_info = random.choice(rm_users_info_rows)              # получить случайную строку из списка
+        return int(rm_user_info['id'])
 
     def _get_random_rm_group_id(self) -> int:
-        # fixme: обращаться напрямую к RmCook
-        _resp = self.case_rm_cook_active_directory_groups_get()         # получить запрос со списком групп
-        _rm_groups_info_rows = json.loads(_resp.text)['res']['groups']  # получить из запроса список групп
-        _rm_group_info = random.choice(_rm_groups_info_rows)            # получить случайную строку из списка
-        return int(_rm_group_info['id'])
+        # получить запрос со списком rm_групп
+        resp = RmCook(self.sess, self.host).rm_cook_active_directory_groups_get()
+        rm_groups_info_rows = json.loads(resp.text)['res']['groups']  # получить из запроса список групп
+        rm_group_info = random.choice(rm_groups_info_rows)            # получить случайную строку из списка
+        return int(rm_group_info['id'])
 
     def case_rm_cook_active_directory_groups_get(self):
         req = RmCook(self.sess, self.host)
         resp = req.rm_cook_active_directory_groups_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-        return resp
 
     def case_rm_cook_active_directory_groups_id_get(self):
         req = RmCook(self.sess, self.host)
@@ -61,8 +59,6 @@ class RmCookCase(UserSession):
         req = RmCook(self.sess, self.host)
         resp = req.rm_cook_active_directory_users_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-        return resp
 
     def case_rm_cook_active_directory_users_id_get(self):
         req = RmCook(self.sess, self.host)

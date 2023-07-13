@@ -8,16 +8,30 @@ from tests.case.api.permitter import PermitterCase
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
-reg_pid = []        # список, содержащий id новосозданных регулярных выражений
+reg_pid = set()        # список, содержащий id новосозданных регулярных выражений
 
 
 class StorageWorkerCase(UserSession):
 
-    # fixme: add _collect
-    def _get_temp_reg_pid(self) -> int:
+    def _collect_reg_pid(self):
+        resp = StorageWorker(self.sess, self.host).storage_worker_psevdo_namer_regs_get()
+        assert resp.status_code == 200, f"assert::storage_worker_psevdo_namer_regs_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        reg_info_rows = json.loads(resp.text)['res']
+        for _row in reg_info_rows:
+            if str(_row['rus']).startswith(API_AUTO_TEST_):
+                reg_pid.add(int(_row['id']))
+
+    def _get_reg_pid(self) -> int:
+        if len(reg_pid) == 0:
+            self._collect_reg_pid()
+
         if len(reg_pid) == 0:                               # global reg_pid # id регулярного выражения
-            self.case_storage_worker_psevdo_namer_regs_post()    # если нет, создай новую
-        return reg_pid[-1]
+            r_new_reg_pid = self.case_storage_worker_psevdo_namer_regs_post()    # если нет, создай новую
+            new_reg_pid = json.loads(r_new_reg_pid.text)['res']
+            return int(new_reg_pid)
+
+        return reg_pid.pop()
 
     def case_storage_worker_ask_one_sql_post(self):
         req = StorageWorker(self.sess, self.host)
@@ -71,13 +85,11 @@ class StorageWorkerCase(UserSession):
         resp = req.storage_worker_psevdo_namer_regs_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
-
-        dct = json.loads(resp.text)
-        reg_pid.append(int(dct['res']))  # global reg_pid
+        return resp
 
     def case_storage_worker_psevdo_namer_regs_pid_get(self):
         req = StorageWorker(self.sess, self.host)
-        _reg_pid = self._get_temp_reg_pid()
+        _reg_pid = self._get_reg_pid()
         resp = req.storage_worker_psevdo_namer_regs_pid_get(_reg_pid)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -85,12 +97,10 @@ class StorageWorkerCase(UserSession):
     def case_storage_worker_psevdo_namer_regs_pid_delete(self):
         req = StorageWorker(self.sess, self.host)
 
-        # FIXME: удалять элемент из списка reg_pid после удачного получения 'resp'
-        _reg_pid = self._get_temp_reg_pid()
+        _reg_pid = self._get_reg_pid()
 
         resp = req.storage_worker_psevdo_namer_regs_pid_delete(_reg_pid)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_show_base_db_name_get(self):
         req = StorageWorker(self.sess, self.host)
@@ -301,3 +311,9 @@ class StorageWorkerCase(UserSession):
         resp = req.storage_worker_storage_table_db_name_table_name_count_get(db_name, table_name, count)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    def all_api_auto_test_regs_delete(self):
+        delete_req = StorageWorker(self.sess, self.host)
+        self._collect_reg_pid()
+        while len(reg_pid) > 0:
+            delete_req.storage_worker_psevdo_namer_regs_pid_delete(reg_pid.pop())
