@@ -127,20 +127,17 @@ class AlarmerCase(UserSession):
         return resp
 
     def case_alarmer_send_invitation_post(self):
+        # "user_id" > https://tasks.ngrsoftlab.ru/browse/DAT-5291
         req = Alarmer(self.sess, self.host)
 
         body = {
             # "link": "https://10.130.0.22/",  # нужно?
             # "msg": "TestAPI",                # нужно?
             "to": _QA_SPAM_EMAIL,
-            "user_id": 4870     # FIXME: могу отправлять сообщения от другого имени?
-            # "user_id": self.get_self_user_id()
+            # "user_id": 4870
         }
         resp = req.alarmer_send_invitation_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_alarmer_send_invitations_post(self):
         req = Alarmer(self.sess, self.host)
@@ -151,14 +148,10 @@ class AlarmerCase(UserSession):
             "to": [
                 _QA_SPAM_EMAIL
             ],
-            "user_id": 4870     # FIXME: могу отправлять сообщения от другого имени?
-            # "user_id": self.get_self_user_id()
+            # "user_id": 4870
         }
         resp = req.alarmer_send_invitations_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_alarmer_send_msg_post(self):
         req = Alarmer(self.sess, self.host)
