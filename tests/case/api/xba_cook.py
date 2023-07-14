@@ -336,12 +336,15 @@ class XbaCookCase(UserSession):
         except KeyError:
             assert False, f"Ошибка, отсутствует ключ res>info>description в ответе, {resp.text}"
 
-    # fixme: {"error":{"code":400,"msg":"Нет данных"}}
+    # fixme:
     def case_xba_cook_profiles_max_min_id_get(self):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_max_min_id_get(prof_id)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # профиль 'prof_id' не запускался >> {"error":{"code":400,"msg":"Нет данных"}}
+        # профиль запускался; выполнен с ошибками >> {"res":{"max":null,"min":null}}
 
     def case_xba_cook_profiles_graph_personal_id_post(self):
         req = XbaCook(self.sess, self.host)
@@ -390,7 +393,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         str_rand_num = str(random.randint(1000, 9999))
         data = {
-            "id": str_rand_num,     # FIXME: используется?
+            # "id": str_rand_num,
             "name": API_AUTO_TEST_ + str_rand_num,
             "weight": ""
         }
@@ -416,10 +419,13 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_groups_group_id_profiles_get(_group_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # fixme: # нужен group_id хотя бы с одним пользователем
+    # fixme: # нужен group_id хотя бы с одним профилем
     def case_xba_cook_profiles_groups_id_post(self):
         req = XbaCook(self.sess, self.host)
         _group_id = self._get_xba_group_id()
+
+        # todo: profile_id_put < _group_id
+
         data = {
             "end": "2023-02-14T00:00:00Z",
             "name": "",
@@ -428,22 +434,24 @@ class XbaCookCase(UserSession):
             "timezone": "Europe/Moscow"
         }
         resp = req.xba_cook_profiles_groups_id_post(_group_id, data)
+        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: _group_id = None # FIXME: @mark.skip
+    # FIXME: FIXME: @mark.skip
     def case_xba_cook_profiles_groups_id_max_min_get(self):
         req = XbaCook(self.sess, self.host)
-        _group_id = None
+        _group_id = self._get_xba_group_id()
         resp = req.xba_cook_profiles_groups_id_max_min_get(_group_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # {"error":{"code":400,"description":"no completed profiles in this group","msg":"Нет данных"}}
 
     # FIXME: mark.skip
     def case_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
         req = XbaCook(self.sess, self.host)
         # FIXME: хардкод
-        prof_id = 1931
-        group_id = 1493
-        weight = 2
+        prof_id = 2077
+        group_id = 1553
+        weight = 20
         resp = req.xba_cook_profiles_groups_profile_id_group_id_weight_get(prof_id, group_id, weight)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -454,7 +462,7 @@ class XbaCookCase(UserSession):
         data = {
             "profile_list": [
                 {
-                    # "id": str_rand_num,         # FIXME: ??
+                    # "id": str_rand_num,
                     "name": API_AUTO_TEST_ + str_rand_num,
                     "description": None,
                     "published": False,
@@ -504,12 +512,12 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_import_profiles_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # fixme: mark.skip; {"error":{"code":400,"msg":"Задание уже запустили"}}
     def case_xba_cook_profiles_start_id_get(self):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_start_id_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # {"error":{"code":400,"msg":"Задание уже запустили"}}
 
     def case_xba_cook_profiles_stop_id_get(self):
         req = XbaCook(self.sess, self.host)
@@ -543,6 +551,21 @@ class XbaCookCase(UserSession):
         prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_id_log_last_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_xba_cook_profiles_id_summary_post(self):
+        # https://tasks.ngrsoftlab.ru/browse/DAT-5211
+        req = XbaCook(self.sess, self.host)
+        # prof_id = self._get_xba_profile_id()
+        prof_id = 1888      # fixme:< нужен живой профиль
+        # data = {
+        #     "entity_group": "host",
+        #     "start": "2022-10-21T16:39:01Z",
+        #     "end": "2023-07-12T03:46:08Z"
+        # }
+        data = {}
+        resp = req.xba_cook_profiles_id_summary_post(prof_id, data)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # print(resp.text)
 
     def case_xba_cook_profiles_id_whitelist_post(self):
         req = XbaCook(self.sess, self.host)

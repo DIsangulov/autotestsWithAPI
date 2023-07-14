@@ -815,6 +815,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_1888_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_graph_drilldown_1888_post()
 
+    def test_xba_cook_profiles_start_id_get(self):
+        XbaCookCase(HOST).case_xba_cook_profiles_start_id_get()
+
     def test_xba_cook_profiles_max_min_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_max_min_id_get()
 
@@ -854,10 +857,6 @@ class TestXbaCook:
     def test_xba_cook_profiles_import_profiles_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_import_profiles_post()
 
-    @pytest.mark.skip # fixme:
-    def test_xba_cook_profiles_start_id_get(self):
-        XbaCookCase(HOST).case_xba_cook_profiles_start_id_get()
-
     def test_xba_cook_profiles_stop_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_stop_id_get()
 
@@ -866,6 +865,9 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_id_log_last_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_id_log_last_get()
+
+    def test_xba_cook_profiles_id_summary_post(self):
+        XbaCookCase(HOST).case_xba_cook_profiles_id_summary_post()
 
     def test_xba_cook_profiles_id_whitelist_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_id_whitelist_post()
@@ -1020,14 +1022,14 @@ class TestScripter:
     def test_scripter_script_put(self):
         ScripterCase(HOST).case_scripter_script_put()
 
+    def test_scripter_script_start_post(self):
+        ScripterCase(HOST).case_scripter_script_start_post()
+
     def test_scripter_script_exec_list_get(self):
         ScripterCase(HOST).case_scripter_script_exec_list_get()
 
     def test_scripter_script_id_get(self):
         ScripterCase(HOST).case_scripter_script_id_get()
-
-    def test_scripter_script_start_post(self):
-        ScripterCase(HOST).case_scripter_script_start_post()
 
     def test_scripter_script_stop_id_get(self):
         ScripterCase(HOST).case_scripter_script_stop_id_get()
@@ -1107,7 +1109,13 @@ class TestScripter:
 
 class TestTaskplan:
 
-    @pytest.mark.skip   # fixme
+    def test_taskplan_add_task_post(self):
+        TaskplanCase(HOST).case_taskplan_add_task_post()
+
+    @pytest.mark.skip
+    def test_taskplan_delete_task(self):
+        TaskplanCase(HOST).case_taskplan_delete_task()
+
     def test_taskplan_get_shedule_post(self):
         TaskplanCase(HOST).case_taskplan_get_shedule_post()
 
@@ -1188,6 +1196,7 @@ class TestGarbageCollector:
         AbsorberCase(HOST).all_api_auto_test_entity_delete()
         PeoplerCase(HOST).all_api_auto_test_user_delete()
         PermitterCase(HOST).all_temp_roles_delete()
+        StorageWorkerCase(HOST).all_api_auto_test_regs_delete()
         XbaCookCase(HOST).all_api_auto_test_entity_delete()
         ReporterCase(HOST).all_api_auto_test_mailing_delete()
         ScripterCase(HOST).all_api_auto_test_entity_delete()
