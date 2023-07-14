@@ -55,7 +55,7 @@ history_job: # Название job
   stage: history_copy # Это второй stage, который нужно выполнить
 
   #image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
-  image: registry.ngrsoftlab:ru:8888/storytel
+  image: registry.ngrsoftlab.ru:8888/storytel
 
   script:
     - 'curl --location --output artifacts.zip --header "PRIVATE-TOKEN: $TOKEN" "https://gitlab.ngrsoftlab.ru/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_REF_NAME/download?job=pages"' # Новый метод скачивания архива
