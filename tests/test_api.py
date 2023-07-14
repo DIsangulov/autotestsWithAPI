@@ -33,7 +33,7 @@ class TestAuth:
         AuthApiCase(HOST).case_auth_ad_struct_get()
 
     def test_auth_local_register_post(self):
-        AuthApiCase(HOST, withauth=False).case_auth_local_register_post()
+        AuthApiCase(HOST, with_auth=False).case_auth_local_register_post()
 
     def test_auth_logout_get(self):
         AuthApiCase(HOST).case_auth_logout_get()

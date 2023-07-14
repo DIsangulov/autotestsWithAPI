@@ -3,39 +3,25 @@ import os
 
 import requests
 
-from resourses.credentials import DpQaa, DpQaaLocal
+from resourses.credentials import TestUsers
 
 
 class UserSession:
 
-    def __init__(self, host, *, authdata: dict = None, withauth: bool = True):
+    def __init__(self, host, *, auth_data: dict = TestUsers.DpQaa, with_auth: bool = True):
         self.sess = requests.Session()
+        # self.sess.headers.update({'token': self.token})
+        self.sess.verify = False
+
         self.host = host
         self.token = None
         self.user_id = None
 
-        # self.sess.headers.update({'token': self.token})
-        self.sess.verify = False
+        self.username = os.environ.get('TARGET_API_USER', auth_data.get("username"))
+        self._password = os.environ.get('TARGET_API_PASSWORD', auth_data.get("password"))
+        self._local = os.environ.get('TARGET_API_USER_IS_LOCAL', auth_data.get("local"))
 
-        self.username   = None
-        self._password  = None
-        self._local     = False
-
-        if authdata is None:
-            if self._local:
-                self.username = os.environ.get('TARGET_API_USER', DpQaaLocal.USER)
-                self._password = os.environ.get('TARGET_API_PASSWORD', DpQaaLocal.PASS)
-            else:
-                self.username = os.environ.get('TARGET_API_USER', DpQaa.USER)       # "dataplan_qaa@ngrsoftlab.ru"
-                self._password = os.environ.get('TARGET_API_PASSWORD', DpQaa.PASS)  # "fHNHQBc7jEKfaO0kywZz!!"
-        else:
-            # self.username = os.environ.get('TARGET_API_USER', authdata['username'])
-            # self._password = os.environ.get('TARGET_API_PASSWORD', authdata['password'])
-            # self._local = authdata['local']
-            assert False, f"Авторизация по пользовательской 'authdata' не реализован"
-            pass
-
-        if withauth:
+        if with_auth:
             self.auth()
 
     def auth(self):
