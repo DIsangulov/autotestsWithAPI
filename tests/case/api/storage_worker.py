@@ -209,7 +209,7 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # доступ на изменение хранилища API_TEST_DB1
-        PermitterCase(self.host).permitter_sysop_add_permission_to_change_db_by_name(DbName.API_TEST_DB1)
+        PermitterCase().permitter_sysop_add_permission_to_change_db_by_name(DbName.API_TEST_DB1)
 
     def case_storage_worker_storage_db_delete(self):
         req = StorageWorker(self.sess, self.host)

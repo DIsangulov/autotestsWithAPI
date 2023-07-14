@@ -9,12 +9,12 @@ from resourses.credentials import TestUsers
 
 class UserSession:
 
-    def __init__(self, host, *, auth_data: dict = TestUsers.DpQaa, with_auth: bool = True):
+    def __init__(self, *, auth_data: dict = TestUsers.DpQaa, with_auth: bool = True):
         self.sess = requests.Session()
         # self.sess.headers.update({'token': self.token})
         self.sess.verify = False
 
-        self.host = host
+        self.host = os.environ.get('TARGET_URL', "https://10.130.0.22")
         self.token = None
         self.user_id = None
 
