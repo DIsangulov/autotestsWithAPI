@@ -3,6 +3,7 @@ import os
 
 import requests
 
+from req.Api.req_auth import AuthApi
 from resourses.credentials import TestUsers
 
 
@@ -30,7 +31,8 @@ class UserSession:
             "password": self._password,
             "local":    self._local
         }
-        resp = self.sess.post(f"{self.host}/back/dp.auth/login", json=data)
+        # resp = self.sess.post(f"{self.host}/back/dp.auth/login", json=data)
+        resp = AuthApi(self.sess, self.host).auth_login_post(data)
 
         assert resp.status_code == 200, f"Ошибка авторизации, код {resp.status_code}, {resp.text}"
         dct = json.loads(resp.text)

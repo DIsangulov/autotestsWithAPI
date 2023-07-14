@@ -13,9 +13,9 @@ class AuthApi(BaseReq):
         """process POST req with new local user info (credentials + info) for registration"""
         return self.sess.post(f"{self.host}/back/dp.auth/local/register", json=body)
 
-    # TODO: /back/dp.auth/login
-    # def login(self):
-    #     pass
+    def auth_login_post(self, body) -> requests.Response:
+        """process POST req with auth data"""
+        return self.sess.post(f"{self.host}/back/dp.auth/login", json=body)
 
     def auth_logout_get(self) -> requests.Response:
         """Выход из системы ( текущая сессия )"""

@@ -48,6 +48,9 @@ class AuthApiCase(UserSession):
         resp = req.auth_local_register_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # user_session.py
+    # def case_auth_login_post(self):
+
     def case_auth_logout_get(self):
         req = AuthApi(self.sess, self.host)
         resp = req.auth_logout_get()
