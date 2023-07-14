@@ -76,8 +76,8 @@ class PermitterCase(UserSession):
         return role_id.pop()
 
     def _get_random_tab_id(self) -> int:
-        header = {'token': self.token, 'ui': str(2)}
-        resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/all_tables", headers=header, verify=False)
+        # header = {'token': self.token, 'ui': str(2)}
+        resp = self.sess.get(f"{self.host}/back/dp.permitter/db_watcher/all_tables")
         dct = json.loads(resp.text)
         return dct['res'][1]['id']
 
