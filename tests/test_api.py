@@ -815,6 +815,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_1888_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_graph_drilldown_1888_post()
 
+    def test_xba_cook_profiles_start_id_get(self):
+        XbaCookCase(HOST).case_xba_cook_profiles_start_id_get()
+
     def test_xba_cook_profiles_max_min_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_max_min_id_get()
 
@@ -853,10 +856,6 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_import_profiles_post(self):
         XbaCookCase(HOST).case_xba_cook_profiles_import_profiles_post()
-
-    @pytest.mark.skip    # fixme:
-    def test_xba_cook_profiles_start_id_get(self):
-        XbaCookCase(HOST).case_xba_cook_profiles_start_id_get()
 
     def test_xba_cook_profiles_stop_id_get(self):
         XbaCookCase(HOST).case_xba_cook_profiles_stop_id_get()
