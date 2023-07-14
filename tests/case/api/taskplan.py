@@ -13,7 +13,7 @@ class TaskplanCase(UserSession):
         mailing_id = ReporterCase(self.host)._get_mailing_id()
 
         data = {
-            "sched_type": "mailing",
+            "sched_type": sched_type,
             "object_id": mailing_id,
             "schedule": {
                 "sched_id": 0,
