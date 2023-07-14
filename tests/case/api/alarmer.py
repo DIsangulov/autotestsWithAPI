@@ -1,6 +1,5 @@
 from req.Helpers.user_session import UserSession
 from req.Api.req_alarmer import Alarmer
-from resourses.credentials import DpQaa
 
 _QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 API_AUTO_TEST_ = "API_AUTO_TEST_"
@@ -167,9 +166,9 @@ class AlarmerCase(UserSession):
             "protocol": "smpt",
             "to": _QA_SPAM_EMAIL,
             # "send_user": DpQaa.USER,
-            "send_user": "Владимир Даль",       # FIXME: Имя отправителя в полученном сообщении
-            "psw": DpQaa.PASS,      # пароль для аунтефикации
-            "user": DpQaa.USER      # имя для аунтефикации
+            "send_user": "Владимир Даль",   # ??: Имя отправителя в полученном сообщении
+            "psw": self._password,          # пароль для аунтефикации
+            "user": self.username           # имя для аунтефикации
         }
         resp = req.alarmer_send_msg_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
