@@ -1022,14 +1022,14 @@ class TestScripter:
     def test_scripter_script_put(self):
         ScripterCase(HOST).case_scripter_script_put()
 
+    def test_scripter_script_start_post(self):
+        ScripterCase(HOST).case_scripter_script_start_post()
+
     def test_scripter_script_exec_list_get(self):
         ScripterCase(HOST).case_scripter_script_exec_list_get()
 
     def test_scripter_script_id_get(self):
         ScripterCase(HOST).case_scripter_script_id_get()
-
-    def test_scripter_script_start_post(self):
-        ScripterCase(HOST).case_scripter_script_start_post()
 
     def test_scripter_script_stop_id_get(self):
         ScripterCase(HOST).case_scripter_script_stop_id_get()
