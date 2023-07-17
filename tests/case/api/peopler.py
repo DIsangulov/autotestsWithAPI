@@ -40,6 +40,7 @@ class PeoplerCase(UserSession):
     def case_peopler_mainpage_get(self):
         req = Peopler(self.sess, self.host)
         resp = req.peopler_mainpage_get()
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # FIXME: работа ключей | name, rolename | под вопросом ещё (c) Swagger
@@ -83,6 +84,102 @@ class PeoplerCase(UserSession):
         resp = req.peopler_many_users_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    # == peopler/pin_page/x ========================================
+    # https://tasks.ngrsoftlab.ru/browse/DAT-4982
+    def _peopler_pin_page_current_user_path_post(self, pin_path):
+        # закрепить страницу "pin_path" за текущим пользователем
+        req = Peopler(self.sess, self.host)
+        data = {
+            # "obj_id": 0,
+            # "obj_type": "script",
+            "path": pin_path        # sample: "/scripts"
+        }
+        resp = req.peopler_pin_page_current_user_post(data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # todo: get_mainpage >> assert на ответ resp.text = pin_path
+        return resp
+
+    def case_peopler_pin_page_current_user_post(self):
+        path = "/scripts"
+        self._peopler_pin_page_current_user_path_post(path)
+
+    def case_peopler_pin_page_current_user_delete(self):
+        # открепить закреп от текущего пользователя
+        req = Peopler(self.sess, self.host)
+        resp = req.peopler_pin_page_current_user_delete()
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # {"error":{"code":400,"msg":"страницу не удалось открепить (она не была закреплена для данного субъекта)"}}
+
+    def _peopler_pin_page_list_type_subject_post(self, type_subject, path):
+        # получить список закрепленных пользователей "user" или ролей "role" для "path"
+        req = Peopler(self.sess, self.host)
+        data = {
+            "path": path
+        }
+        resp = req.peopler_pin_page_list_type_subject_post(type_subject, data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        return resp
+
+    def case_peopler_pin_page_list_role_post(self):
+        type_subject = "role"
+        path = "/scripts"
+        self._peopler_pin_page_list_type_subject_post(type_subject, path)
+
+    def case_peopler_pin_page_list_user_post(self):
+        type_subject = "user"
+        path = "/scripts"
+        self._peopler_pin_page_list_type_subject_post(type_subject, path)
+
+    def case_peopler_pin_page_type_subject_post(self):
+        # закрепить у пользователя|роли (subject_id), что (path)
+        req = Peopler(self.sess, self.host)
+
+        # todo: user / role
+        subject_type = "user"
+        # subject_type = "role" # id 5 == sysop
+
+        data = {
+            # "obj_id": 0,
+            # "obj_type": "metaprofiles",
+            "path": "/metaprofiles",
+            "subject_id": self.get_self_user_id()
+        }
+
+        resp = req.peopler_pin_page_type_subject_post(subject_type, data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_peopler_pin_page_type_subject_id_delete(self):
+        # убрать закреп у пользователя|роли (id)
+        req = Peopler(self.sess, self.host)
+
+        # todo: user \ role
+        # subject_type = "role"
+        subject_type = "user"
+        # subject_id = "5"  # sysop
+        subject_id = self.get_self_user_id()    # == peopler_pin_page_current_user_delete
+
+        resp = req.peopler_pin_page_type_subject_id_delete(subject_type, subject_id)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # {"error":{"code":400,"msg":"страницу не удалось открепить (она не была закреплена для данного субъекта)"}}
+
+    def case_peopler_pinned_page_status_post(self):
+        # закреплен ли "path" за текущим пользователем
+        req = Peopler(self.sess, self.host)
+        _path = "/scripts"
+        data = {
+            "path": _path
+        }
+        resp = req.peopler_pinned_page_status_post(data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # {"res":0}     # {"res":1}     # ?? {"res":2}
+    # == peopler/pin_page/x ========================================
 
     def case_peopler_profile_get(self):
         req = Peopler(self.sess, self.host)

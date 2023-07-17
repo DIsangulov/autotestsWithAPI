@@ -389,6 +389,27 @@ class TestPeopler:
     def test_peopler_many_users_put(self):
         PeoplerCase().case_peopler_many_users_put()
 
+    def test_peopler_pin_page_current_user_post(self):
+        PeoplerCase().case_peopler_pin_page_current_user_post()
+
+    def test_peopler_pin_page_current_user_delete(self):
+        PeoplerCase().case_peopler_pin_page_current_user_delete()
+
+    def test_peopler_pin_page_list_role_post(self):
+        PeoplerCase().case_peopler_pin_page_list_role_post()
+
+    def test_peopler_pin_page_list_user_post(self):
+        PeoplerCase().case_peopler_pin_page_list_user_post()
+
+    def test_peopler_pin_page_type_subject_post(self):
+        PeoplerCase().case_peopler_pin_page_type_subject_post()
+
+    def test_peopler_pin_page_type_subject_id_delete(self):
+        PeoplerCase().case_peopler_pin_page_type_subject_id_delete()
+
+    def test_peopler_pinned_page_status_post(self):
+        PeoplerCase().case_peopler_pinned_page_status_post()
+
     def test_peopler_profile_get(self):
         PeoplerCase().case_peopler_profile_get()
 
@@ -792,6 +813,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_post(self):
         XbaCookCase().case_xba_cook_profiles_post()
 
+    def test_xba_cook_profiles_start_id_get(self):
+        XbaCookCase().case_xba_cook_profiles_start_id_get()
+
     def test_xba_cook_profiles_categories_get(self):
         XbaCookCase().case_xba_cook_profiles_categories_get()
 
@@ -810,9 +834,6 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_graph_drilldown_1888_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_1888_post()
-
-    def test_xba_cook_profiles_start_id_get(self):
-        XbaCookCase().case_xba_cook_profiles_start_id_get()
 
     def test_xba_cook_profiles_max_min_id_get(self):
         XbaCookCase().case_xba_cook_profiles_max_min_id_get()
