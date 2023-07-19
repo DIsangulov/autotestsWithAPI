@@ -1151,6 +1151,9 @@ class TestUpdater:
     def test_updater_check_updates_get(self):
         UpdaterCase().case_updater_check_updates_get()
 
+    def test_updater_versions_get(self):
+        UpdaterCase().case_updater_versions_get()
+
 
 class TestVisualisation:
 

@@ -34,4 +34,9 @@ class UpdaterCase(UserSession):
         assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-
+    def case_updater_versions_get(self):
+        # DAT-5287
+        req = Updater(self.sess, self.host)
+        resp = req.updater_versions_get()
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
