@@ -115,6 +115,9 @@ class TestAbsorber:
     def test_absorber_source_id_debug_get(self):
         AbsorberCase().case_absorber_source_id_debug_get()
 
+    def test_absorber_source_id_log_get(self):
+        AbsorberCase().case_absorber_source_id_log_get()
+
     def test_absorber_source_id_delete(self):
         AbsorberCase().case_absorber_source_id_delete()
 
