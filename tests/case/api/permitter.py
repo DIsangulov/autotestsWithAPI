@@ -3,7 +3,6 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_permitter import Permitter
-from resourses.credentials import DbName
 from tests.case.api.reporter import ReporterCase
 from tests.case.api.scripter import ScripterCase
 from tests.case.api.visualisation import VisualisationCase
@@ -96,62 +95,44 @@ class PermitterCase(UserSession):
             "name": _rolename,
             "rolename": _rolename,
             "views": [{
-                # "id": 1,
-                # "name": "Администрирование",
                 "ui_part": "administration",
                 "read": True,
                 "write": True,
-                # "disabled": ["read"]
             }, {
-                # "id": 2,
-                # "name": "Данные",
                 "ui_part": "data",
                 "read": True,
                 "write": True,
-                # "disabled": ["read"]
             }, {
-                # "id": 3,
-                # "name": "Аналитика",
                 "ui_part": "analytics",
                 "read": True,
                 "write": True,
-                # "disabled": ["read"]
             }, {
-                # "id": 4,
-                # "name": "xBA",
                 "ui_part": "xba",
                 "read": True,
                 "write": True,
-                # "disabled": ["read"]
             }, {
-                # "id": 5,
-                # "name": "Role Mining",
                 "ui_part": "rm",
                 "read": True,
                 "write": True,
-                # "disabled": ["read"]
             }],
             "dbs": [{
                 "id": db_id,
-                "name": DbName.API_TEST_DB1,
+                # "name": DbName.API_TEST_DB1,
                 "db_id": 0,
                 "select": True,
                 "update": True
             }],
-            # "report_id": None
         }
 
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': '2'})
         resp = req.permitter_roles_editor_roles_id_put(_role_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # resp = self.sess.put(f"{self.host}/back/dp.permitter/roles_editor/roles/{_role_id}", headers=header, json=data, verify=False)
 
     def case_permitter_check_ui_get(self):
         req = Permitter(self.sess, self.host)
         resp = req.permitter_check_ui_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_permitter_db_watcher_all_db_get(self):
         req = Permitter(self.sess, self.host)

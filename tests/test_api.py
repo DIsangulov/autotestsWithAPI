@@ -757,6 +757,10 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
+    @pytest.mark.skip
+    def test_storage_worker_storage_table_db_name_post(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
+
     @pytest.mark.skip   # fixme: неверно передаются параметры
     def test_storage_worker_storage_table_columns_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_table_name_post()
@@ -770,7 +774,10 @@ class TestStorageWorker:
 
 class TestXbaCook:
 
-    @pytest.mark.skip
+    def test_xba_cook_profiles_post(self):
+        XbaCookCase().case_xba_cook_profiles_post()
+
+    # супер тяжелый запрос 30-120 секунд
     def test_xba_cook_anomalies_get(self):
         XbaCookCase().case_xba_cook_anomalies_get()
 
@@ -782,6 +789,28 @@ class TestXbaCook:
 
     def test_xba_cook_dashboard_post(self):
         XbaCookCase().case_xba_cook_dashboard_post()
+
+    @pytest.mark.skip   # todo: new
+    def test_xba_cook_dashboard_entities_post(self):
+        XbaCookCase().case_xba_cook_dashboard_entities_post()
+
+    @pytest.mark.skip   # todo: new
+    def test_xba_cook_dashboard_entities_more_post(self):
+        XbaCookCase().case_xba_cook_dashboard_entities_more_post()
+
+    @pytest.mark.skip   # todo: new
+    def test_xba_cook_dashboard_groups_post(self):
+        XbaCookCase().case_xba_cook_dashboard_groups_post()
+
+    # @pytest.mark.skip   # todo: new
+    def test_xba_cook_dashboard_groups_more_post(self):
+        XbaCookCase().case_xba_cook_dashboard_groups_more_post()
+
+    def test_xba_cook_dashboard_profiles_post(self):
+        XbaCookCase().case_xba_cook_dashboard_profiles_post()
+
+    def test_xba_cook_dashboard_profiles_more_post(self):
+        XbaCookCase().case_xba_cook_dashboard_profiles_more_post()
 
     def test_xba_cook_entity_post(self):
         XbaCookCase().case_xba_cook_entity_post()
@@ -813,9 +842,6 @@ class TestXbaCook:
     def test_xba_cook_profiles_get(self):
         XbaCookCase().case_xba_cook_profiles_get()
 
-    def test_xba_cook_profiles_post(self):
-        XbaCookCase().case_xba_cook_profiles_post()
-
     def test_xba_cook_profiles_start_id_get(self):
         XbaCookCase().case_xba_cook_profiles_start_id_get()
 
@@ -838,9 +864,6 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_1888_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_1888_post()
 
-    def test_xba_cook_profiles_max_min_id_get(self):
-        XbaCookCase().case_xba_cook_profiles_max_min_id_get()
-
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
 
@@ -862,13 +885,16 @@ class TestXbaCook:
     def test_xba_cook_profiles_groups_group_id_profiles_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_group_id_profiles_get()
 
-    @pytest.mark.skip
     def test_xba_cook_profiles_groups_id_post(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_post()
 
     @pytest.mark.skip
     def test_xba_cook_profiles_groups_id_max_min_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_max_min_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_xba_cook_profiles_groups_profile_id_group_id_delete(self):
+        XbaCookCase().case_xba_cook_profiles_groups_profile_id_group_id_delete()
 
     @pytest.mark.skip
     def test_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
@@ -883,11 +909,20 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_get(self):
         XbaCookCase().case_xba_cook_profiles_id_get()
 
-    def test_xba_cook_profiles_id_log_last_get(self):
-        XbaCookCase().case_xba_cook_profiles_id_log_last_get()
-
+    # todo: # DAT-5211
     def test_xba_cook_profiles_id_summary_post(self):
         XbaCookCase().case_xba_cook_profiles_id_summary_post()
+
+    # todo: # DAT-5230
+    def test_xba_cook_profiles_id_graph_post(self):
+        XbaCookCase().case_xba_cook_profiles_id_graph_post()
+
+    # todo: DAT-5276
+    def test_xba_cook_profiles_id_zones_post(self):
+        XbaCookCase().case_xba_cook_profiles_id_zones_post()
+
+    def test_xba_cook_profiles_id_log_last_get(self):
+        XbaCookCase().case_xba_cook_profiles_id_log_last_get()
 
     def test_xba_cook_profiles_id_whitelist_post(self):
         XbaCookCase().case_xba_cook_profiles_id_whitelist_post()
@@ -901,6 +936,10 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_list_whitelist_get(self):
         XbaCookCase().case_xba_cook_profiles_id_list_whitelist_get()
 
+    @pytest.mark.skip   # todo
+    def test_xba_cook_profiles_profile_id_whitelist_element_id_delete(self):
+        XbaCookCase().case_xba_cook_profiles_profile_id_whitelist_element_id_delete()
+
     def test_xba_cook_xba_get(self):
         XbaCookCase().case_xba_cook_xba_get()
 
@@ -909,6 +948,12 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_groups_id_delete(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_delete()
+
+    def test_xba_cook_profiles_max_min_id_get(self):
+        XbaCookCase().case_xba_cook_profiles_max_min_id_get()
+
+    def test_xba_cook_profiles_id_post(self):
+        XbaCookCase().case_xba_cook_profiles_id_post()
 
     def test_xba_cook_profiles_id_delete(self):
         XbaCookCase().case_xba_cook_profiles_id_delete()

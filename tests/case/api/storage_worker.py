@@ -275,18 +275,26 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # def storage_worker_storage_table_db_name_post(self):
-    #     header = {'token': self.token}
-    #     data = {"auto_read": True, "columns":
-    #         [{"name": "one", "type": "DateTime"},
-    #          {"name": "two", "type": "UInt64"},
-    #          {"name": "three", "type": "String"}],
-    #             "engine": "MergeTree", "order_by":
-    #                 "one", "partition_by": "tuple()",
-    #             "tab_name": "API_TEST_DB1", "ttl": 0, "ttl_base": ""}
-    #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1",
-    #                           headers=header, json=data, verify=False)
-    #     return resp
+    # TODO: [POST] /back/dp.storage_worker/storage/table/{db_name}
+    def case_storage_worker_storage_table_db_name_post(self):
+        # def storage_worker_storage_table_db_name_post(self):
+        #     header = {'token': self.token}
+        #     data = {"auto_read": True, "columns":
+        #         [{"name": "one", "type": "DateTime"},
+        #          {"name": "two", "type": "UInt64"},
+        #          {"name": "three", "type": "String"}],
+        #             "engine": "MergeTree", "order_by":
+        #                 "one", "partition_by": "tuple()",
+        #             "tab_name": "API_TEST_DB1", "ttl": 0, "ttl_base": ""}
+        #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1",
+        #                           headers=header, json=data, verify=False)
+        #     return resp
+        req = StorageWorker(self.sess, self.host)
+        db_name = None
+        data = {}
+        resp = req.storage_worker_storage_table_db_name_post(db_name, data)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # def storage_worker_storage_table_table_db_name_table_name(self):
     #     header = {'token': self.token}
