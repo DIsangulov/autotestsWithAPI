@@ -1,3 +1,5 @@
+import json
+
 from req.Helpers.user_session import UserSession
 from req.Api.req_updater import Updater
 
@@ -8,31 +10,39 @@ class UpdaterCase(UserSession):
         req = Updater(self.sess, self.host)
         resp = req.updater_additions_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     # TODO: check 200 or 400
     def case_updater_additions_addition_post(self):
         req = Updater(self.sess, self.host)
-        addition = "geo_ip"     # FIXME: какие ещё есть? << updater_additions_get
+        addition = "geo_ip"     # geo_ip|rm_demo|xba_demo
         resp = req.updater_additions_addition_post(addition)
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # TODO: check 200 or 400
-    # fixme: {"error":{"code":403,"description":"no access to geo_ip database","msg":"Запрещено"}}
     def case_updater_additions_addition_delete(self):
         req = Updater(self.sess, self.host)
-        addition = "geo_ip"
+        addition = "geo_ip"     # geo_ip|rm_demo|xba_demo
         resp = req.updater_additions_addition_delete(addition)
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # # 400: {"error":{"code":403,"description":"no access to geo_ip database","msg":"Запрещено"}}
 
-    # TODO: check 200 or 400
     def case_updater_check_updates_get(self):
         req = Updater(self.sess, self.host)
         resp = req.updater_check_updates_get()
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"2.Ошибка, код {resp.status_code}, {resp.text}"
+        # 200: {"res":[{"current_version":"1.9.0","new_version":"1.9.1"}]}
+
+        resp_data: dict = json.loads(resp.text)['res'][0]
+        resp_data_keys = resp_data.keys()
+
+        key_to_check = "current_version"
+        assert key_to_check in resp_data_keys, f"1.Ошибка, отсутствует ключ '{key_to_check}' в ответе: {resp.text}"
+
+        key_to_check = "new_version"
+        assert key_to_check in resp_data_keys, f"0.Ошибка, отсутствует ключ '{key_to_check}' в ответе: {resp.text}"
 
     def case_updater_versions_get(self):
         # DAT-5287

@@ -5,6 +5,7 @@ from req.Helpers.user_session import UserSession
 from req.Api.req_rm_cook import RmCook
 from resourses.credentials import DbName
 
+_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 SYSLOG_HOST = "107.130.0.16"
 SYSLOG_PORT = 514
 
@@ -205,28 +206,33 @@ class RmCookCase(UserSession):
     def case_rm_cook_settings_mailings_get(self):
         req = RmCook(self.sess, self.host)
         resp = req.rm_cook_settings_mailings_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_rm_cook_settings_mailings_post(self):
         req = RmCook(self.sess, self.host)
-        body = {"destinations": [
-            {"email": "",
-             "syslog_host": SYSLOG_HOST,
-             "syslog_port": SYSLOG_PORT,
-             "syslog_protocol": "tcp",
-             "disable_syslog": False,
-             "disable_email": True, "id": 1},
-            {"email": "qa@ku.ku",
-             "syslog_host": "",
-             "syslog_port": 0,
-             "syslog_protocol": "",
-             "disable_syslog": True,
-             "disable_email": True,
-             "id": 2}]}
+        body = {
+            "destinations": [
+                {
+                    "email": "",
+                    "syslog_host": SYSLOG_HOST,
+                    "syslog_port": SYSLOG_PORT,
+                    "syslog_protocol": "TCP",
+                    "disable_syslog": False,
+                    "disable_email": True,
+                }, {
+                    "email": _QA_SPAM_EMAIL,
+                    # "syslog_host": "",
+                    # "syslog_port": 0,
+                    "syslog_protocol": "",
+                    "disable_syslog": True,
+                    "disable_email": False,
+                }
+            ]
+        }
         resp = req.rm_cook_settings_mailings_post(body)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_rm_cook_settings_sources_get(self):
         req = RmCook(self.sess, self.host)

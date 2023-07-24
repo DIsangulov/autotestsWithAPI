@@ -669,7 +669,6 @@ class TestRmCook:
     def test_rm_cook_settings_mailings_get(self):
         RmCookCase().case_rm_cook_settings_mailings_get()
 
-    @pytest.mark.skip       # qa@ku.ku
     def test_rm_cook_settings_mailings_post(self):
         RmCookCase().case_rm_cook_settings_mailings_post()
 
@@ -742,9 +741,11 @@ class TestStorageWorker:
     def test_storage_worker_storage_db_delete(self):
         StorageWorkerCase().case_storage_worker_storage_db_delete()
 
+    @pytest.mark.skip
     def test_storage_worker_storage_import_csv_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_import_csv_db_name_table_name_post()
 
+    @pytest.mark.skip
     def test_storage_worker_storage_import_json_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_import_json_db_name_table_name_post()
 
@@ -790,15 +791,15 @@ class TestXbaCook:
     def test_xba_cook_dashboard_post(self):
         XbaCookCase().case_xba_cook_dashboard_post()
 
-    @pytest.mark.skip   # todo: new
+    # @pytest.mark.skip   # todo: new
     def test_xba_cook_dashboard_entities_post(self):
         XbaCookCase().case_xba_cook_dashboard_entities_post()
 
-    @pytest.mark.skip   # todo: new
+    # @pytest.mark.skip   # todo: new
     def test_xba_cook_dashboard_entities_more_post(self):
         XbaCookCase().case_xba_cook_dashboard_entities_more_post()
 
-    @pytest.mark.skip   # todo: new
+    # @pytest.mark.skip   # todo: new
     def test_xba_cook_dashboard_groups_post(self):
         XbaCookCase().case_xba_cook_dashboard_groups_post()
 

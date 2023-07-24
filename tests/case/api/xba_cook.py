@@ -8,13 +8,14 @@ from req.Api.req_xba_cook import XbaCook
 from resourses.credentials import DbName
 from tests.case.api.permitter import PermitterCase
 
+_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
 
 
-def datetime_now_z() -> str:
+def get_datetime_now_z() -> str:
     # 2023-07-20T17:04:16Z
     return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
 
@@ -84,6 +85,14 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
     }
 
     return sample_data.copy()
+
+
+class EntityCategory:
+    user = "user"
+    host = "host"
+    process = "process"
+    department = "department"
+    other = "other"
 
 
 class XbaCookCase(UserSession):
@@ -169,9 +178,10 @@ class XbaCookCase(UserSession):
         # DAT-5251
         req = XbaCook(self.sess, self.host)
         data = {
-            "start": "2021-10-21T16:39:01Z",
-            "end": "2023-07-12T09:00:00Z",
-            "entity_category": "user"    # fixme: ?
+            "start": "2022-10-21T16:39:01Z",
+            # "end": "2023-07-12T09:00:00Z",
+            "end": get_datetime_now_z(),
+            "entity_category": EntityCategory.process    # todo: user|host|process|department|other
         }
         # data = {}   # :400
         resp = req.xba_cook_dashboard_entities_post(data)
@@ -182,13 +192,14 @@ class XbaCookCase(UserSession):
         # DAT-5251
         req = XbaCook(self.sess, self.host)
         data = {
-            "start": "2021-10-21T16:39:01Z",
-            "end": "2023-07-12T09:00:00Z",
-            "entity_category": "sus"  # fixme: ?
+            "start": "2023-07-21T16:39:01Z",
+            # "end": "2023-07-12T09:00:00Z",
+            "end": get_datetime_now_z(),
+            "entity_category": EntityCategory.user  # todo: user|host|process|department|other
         }
         # data = {}   # :200
         resp = req.xba_cook_dashboard_entities_more_post(data)
-        print(resp.text)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: {"res":{"entities_for_top":[]}}
 
@@ -198,22 +209,23 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "department": True,   # << error
+            "department": True,
             # "department": False,
-            # "user": True,
+            "user": True,
             # "user": False,
-            # "host": True,
+            "host": True,
             # "host": False,
-            # "other": True,
+            "other": True,
             # "other": False,
-            "process": True,    # << error
+            "process": True,
             # "process": False,
             "start": "2021-10-21T16:39:01Z",
-            "end": "2023-07-12T09:00:00Z",
+            # "end": "2023-07-12T09:00:00Z",
+            "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
         resp = req.xba_cook_dashboard_groups_post(data)
-        print(resp.text)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 400: {"error":{"code":400,"msg":"Добавьте хотя бы одну категорию"}}
 
@@ -233,7 +245,8 @@ class XbaCookCase(UserSession):
             "process": True,
             # "process": False,
             "start": "2021-10-21T16:39:01Z",
-            "end": "2023-07-12T09:00:00Z",
+            # "end": "2023-07-12T09:00:00Z",
+            "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
         resp = req.xba_cook_dashboard_groups_more_post(data)
@@ -808,44 +821,53 @@ class XbaCookCase(UserSession):
     def case_xba_cook_xba_post(self):
         req = XbaCook(self.sess, self.host)
         data = {
-            "res":
-                {
-                    "XMLName":
-                        {
-                            "Space": "",
-                            "Local": "xba"
-                        },
-                    "destinations":
-                        [
-                            {
-                                "email": "y.vanin@ngrsoftlab.ru",
-                                "syslog_host": "127.0.0.1",
-                                "syslog_port": 514,
-                                "syslog_protocol": "udp",
-                                "disable_syslog": False,
-                                "disable_email": False
-                            },
-                            {
-                                "email": "",
-                                "syslog_host": "1.12.3.22",
-                                "syslog_port": 333,
-                                "syslog_protocol": "tcp",
-                                "disable_syslog": False,
-                                "disable_email": True
-                            },
-                            {
-                                "email": "",
-                                "syslog_host": "2.212.23.31",
-                                "syslog_port": 33,
-                                "syslog_protocol": "tcp",
-                                "disable_syslog": False,
-                                "disable_email": True
-                            }
-                        ]
-                }
+            # "XMLName":
+            #     {
+            #         "Space": "",
+            #         "Local": "xba"
+            #     },
+            "destinations":
+                [
+                    {
+                        "email": _QA_SPAM_EMAIL,
+                        # "syslog_host": "",
+                        # "syslog_port": "",
+                        "syslog_protocol": "TCP",
+                        "disable_syslog": True,
+                        "disable_email": False
+                    },
+                    # {
+                    #     "email": "y.vanin@ngrsoftlab.ru",
+                    #     # "syslog_host": "127.0.0.1",
+                    #     # "syslog_port": 514,
+                    #     "syslog_protocol": "udp",
+                    #     "disable_syslog": True,
+                    #     "disable_email": False
+                    # },
+                    {
+                        "email": "",
+                        "syslog_host": "1.12.3.22",
+                        "syslog_port": 333,
+                        "syslog_protocol": "tcp",
+                        "disable_syslog": True,
+                        "disable_email": True
+                    },
+                    {
+                        "email": "",
+                        "syslog_host": "2.212.23.31",
+                        "syslog_port": 33,
+                        "syslog_protocol": "tcp",
+                        "disable_syslog": True,
+                        "disable_email": True
+                    }
+                ]
+
         }
+
         resp = req.xba_cook_xba_post(data)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 400: {"error":{"code":400,"description":"duplicate destination email","msg":"Обнаружен повторяющийся объект настроек"}}
 
     # __del__
     def all_api_auto_test_entity_delete(self):
