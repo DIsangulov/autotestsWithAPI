@@ -707,7 +707,7 @@ class XbaCookCase(UserSession):
         prof_id = self._get_xba_profile_id()    # status: запущен | выполнен
         data = {
             "start": "2022-10-21T16:39:01Z",
-            "end": "2023-07-18T09:46:09Z",
+            "end": get_datetime_now_z(),
             # "entity": "?",
             # "entity_group": "?str(int)"
         }
@@ -726,9 +726,9 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
         data = {
-            # "entity_group": "host",
+            "entity_group": "user",
             "start": "2023-02-09T00:00:00Z",
-            "end": "2023-07-16T00:00:00Z"
+            "end": get_datetime_now_z()
         }
         # data = {}
         resp = req.xba_cook_profiles_id_summary_post(prof_id, data)
@@ -769,17 +769,17 @@ class XbaCookCase(UserSession):
 
         prof_id = self._get_xba_profile_id()
         data = {
-            "start": "2023-02-09T00:00:00Z",
-            "end": "2023-07-16T00:00:00Z",
-            "entity_group": "0",  # str(int)
+            "start": "2022-02-09T00:00:00Z",
+            "end": get_datetime_now_z(),
+            # "entity_group": "other",  # str(int)
             # "zone": "red",     # todo: red|green|yellow
             # "zones": {
-            #     "red_high": 10,
-            #     "red_low": 1000,
-            #     "yellow_high": 1337,
-            #     "yellow_low": 234,
-            #     "green_high": 0,
-            #     "green_low": 0,
+            #     "red_high": 3,
+            #     "red_low": 3,
+            #     "yellow_high": 2,
+            #     "yellow_low": 2,
+            #     "green_high": 1,
+            #     "green_low": 1,
             # }
         }
         resp = req.xba_cook_profiles_id_zones_post(prof_id, data)

@@ -910,11 +910,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_get(self):
         XbaCookCase().case_xba_cook_profiles_id_get()
 
-    # todo: # DAT-5211
     def test_xba_cook_profiles_id_summary_post(self):
         XbaCookCase().case_xba_cook_profiles_id_summary_post()
 
-    # todo: # DAT-5230
     def test_xba_cook_profiles_id_graph_post(self):
         XbaCookCase().case_xba_cook_profiles_id_graph_post()
 
