@@ -179,13 +179,12 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         data = {
             "start": "2022-10-21T16:39:01Z",
-            # "end": "2023-07-12T09:00:00Z",
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process    # todo: user|host|process|department|other
         }
         # data = {}   # :400
         resp = req.xba_cook_dashboard_entities_post(data)
-        print(resp.text)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_dashboard_entities_more_post(self):
@@ -193,9 +192,8 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         data = {
             "start": "2023-07-21T16:39:01Z",
-            # "end": "2023-07-12T09:00:00Z",
             "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.user  # todo: user|host|process|department|other
+            "entity_category": EntityCategory.host  # todo: user|host|process|department|other
         }
         # data = {}   # :200
         resp = req.xba_cook_dashboard_entities_more_post(data)
@@ -262,8 +260,8 @@ class XbaCookCase(UserSession):
 
         data = {
             "start": "2022-10-21T16:39:01Z",
-            "end": "2023-07-18T09:46:09Z",
-            "entity_category": "user",  # todo: user|host|process|department|other
+            "end": get_datetime_now_z(),
+            "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,  # 0  # 1-11
             }
         # data = {}
@@ -277,14 +275,14 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "end": "2023-07-18T09:46:09Z",
-            "entity_category": "user",  # todo: user|host|process|department|other
+            "start": "2022-10-21T16:39:01Z",
+            "end": get_datetime_now_z(),
+            "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,   # 0  # 1-11
-            "start": "2022-10-21T16:39:01Z"
             }
         # data = {}
         resp = req.xba_cook_dashboard_profiles_more_post(data)
-        # print(resp.text)
+        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"res":{"top_profiles_table":null}}
 
