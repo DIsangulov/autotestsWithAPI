@@ -797,11 +797,9 @@ class TestXbaCook:
     def test_xba_cook_dashboard_entities_more_post(self):
         XbaCookCase().case_xba_cook_dashboard_entities_more_post()
 
-    # @pytest.mark.skip   # todo: new
     def test_xba_cook_dashboard_groups_post(self):
         XbaCookCase().case_xba_cook_dashboard_groups_post()
 
-    # @pytest.mark.skip   # todo: new
     def test_xba_cook_dashboard_groups_more_post(self):
         XbaCookCase().case_xba_cook_dashboard_groups_more_post()
 

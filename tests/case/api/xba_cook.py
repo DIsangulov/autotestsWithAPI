@@ -201,56 +201,54 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: {"res":{"entities_for_top":[]}}
 
-    # todo: сделать комбинаторный кейс для всех вариантов true|false?
     def case_xba_cook_dashboard_groups_post(self):
         # DAT-5252
         req = XbaCook(self.sess, self.host)
 
-        data = {
-            "department": True,
-            # "department": False,
-            "user": True,
-            # "user": False,
-            "host": True,
-            # "host": False,
-            "other": True,
-            # "other": False,
-            "process": True,
-            # "process": False,
+        data_keyless = {
             "start": "2021-10-21T16:39:01Z",
-            # "end": "2023-07-12T09:00:00Z",
             "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
-        resp = req.xba_cook_dashboard_groups_post(data)
+        resp = req.xba_cook_dashboard_groups_post(data_keyless)
         # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 400, f"1.Ошибка, код {resp.status_code}, {resp.text}"
         # 400: {"error":{"code":400,"msg":"Добавьте хотя бы одну категорию"}}
+        assert resp.text == '{"error":{"code":400,"msg":"Добавьте хотя бы одну категорию"}}\n', f"resp.text: {resp.text}"
+
+        d_keys = ["department", "user", "host", "process", "other"]
+
+        for key in d_keys:
+            data = data_keyless.copy()
+            data.update({key: True})
+
+            resp = req.xba_cook_dashboard_groups_post(data)
+            # print(resp.text)
+            assert resp.status_code == 200, f"c.key: {key}. Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_dashboard_groups_more_post(self):
         # DAT-5252
         req = XbaCook(self.sess, self.host)
 
-        data = {
-            "department": True,
-            # "department": False,
-            "user": True,
-            # "user": False,
-            "host": True,
-            # "host": False,
-            "other": True,
-            # "other": False,
-            "process": True,
-            # "process": False,
+        data_keyless = {
             "start": "2021-10-21T16:39:01Z",
-            # "end": "2023-07-12T09:00:00Z",
             "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
-        resp = req.xba_cook_dashboard_groups_more_post(data)
+        resp = req.xba_cook_dashboard_groups_more_post(data_keyless)
         # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200, f"1.Ошибка, код {resp.status_code}, {resp.text}"
         # 200: {"res":{"groups_for_top":[]}}
+
+        d_keys = ["department", "user", "host", "process", "other"]
+
+        for key in d_keys:
+            data = data_keyless.copy()
+            data.update({key: True})
+
+            resp = req.xba_cook_dashboard_groups_post(data)
+            # print(resp.text)
+            assert resp.status_code == 200, f"c.key: {key}. Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_dashboard_profiles_post(self):
         # DAT-5245
