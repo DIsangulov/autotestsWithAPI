@@ -900,8 +900,6 @@ class TestXbaCook:
     def test_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_profile_id_group_id_weight_get()
 
-
-
     def test_xba_cook_profiles_stop_id_get(self):
         XbaCookCase().case_xba_cook_profiles_stop_id_get()
 
@@ -949,11 +947,11 @@ class TestXbaCook:
     def test_xba_cook_profiles_max_min_id_get(self):
         XbaCookCase().case_xba_cook_profiles_max_min_id_get()
 
-    def test_xba_cook_profiles_id_post(self):
-        XbaCookCase().case_xba_cook_profiles_id_post()
-
     def test_xba_cook_profiles_id_delete(self):
         XbaCookCase().case_xba_cook_profiles_id_delete()
+
+    def test_xba_cook_profiles_id_post(self):
+        XbaCookCase().case_xba_cook_profiles_id_post()
 
 
 class TestMonitor:

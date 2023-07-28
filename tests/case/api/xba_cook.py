@@ -155,14 +155,13 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
-            "column": "1",
-            # "db_id": pt_id,
             "db_id": db_picker_tables,
-            "table": "ad_users_ngr"
+            "table": "ad_users_ngr",
+            "column": "Enabled",  # TODO: задача на валидацию данных в полях
         }
         resp = req.xba_cook_check_entity_type_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_dashboard_post(self):
         req = XbaCook(self.sess, self.host)
