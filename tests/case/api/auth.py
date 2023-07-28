@@ -56,6 +56,7 @@ class AuthApiCase(UserSession):
         resp = req.auth_logout_get()
         assert resp.status_code == 401, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа: {resp.text}"
+        self.sess.headers.clear()
 
     def case_auth_ou_users_post(self):
         req = AuthApi(self.sess, self.host)
@@ -75,12 +76,14 @@ class AuthApiCase(UserSession):
         user_id = self.get_self_user_id()
         resp = req.auth_sessions_all_uid_del(user_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        self.sess.headers.clear()
 
     def case_auth_sessions_one_sid_del(self):
         req = AuthApi(self.sess, self.host)
         _session_id = self._get_session_id(self.get_self_user_id())
         resp = req.auth_sessions_one_sid_del(_session_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        self.sess.headers.clear()
 
     def case_auth_sessions_uid_get(self):
         req = AuthApi(self.sess, self.host)

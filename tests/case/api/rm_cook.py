@@ -5,6 +5,7 @@ from req.Helpers.user_session import UserSession
 from req.Api.req_rm_cook import RmCook
 from resourses.credentials import DbName
 
+_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 SYSLOG_HOST = "107.130.0.16"
 SYSLOG_PORT = 514
 
@@ -14,6 +15,7 @@ class RmCookCase(UserSession):
     def _get_random_rm_user_id(self) -> int:
         # получить запрос со списком rm_пользователей
         resp = RmCook(self.sess, self.host).rm_cook_active_directory_users_get()
+        # fixme: assert status code == 200
         rm_users_info_rows = json.loads(resp.text)['res']['users']    # получить из запроса список пользователей
         rm_user_info = random.choice(rm_users_info_rows)              # получить случайную строку из списка
         return int(rm_user_info['id'])
@@ -21,6 +23,7 @@ class RmCookCase(UserSession):
     def _get_random_rm_group_id(self) -> int:
         # получить запрос со списком rm_групп
         resp = RmCook(self.sess, self.host).rm_cook_active_directory_groups_get()
+        # fixme: assert status code == 200
         rm_groups_info_rows = json.loads(resp.text)['res']['groups']  # получить из запроса список групп
         rm_group_info = random.choice(rm_groups_info_rows)            # получить случайную строку из списка
         return int(rm_group_info['id'])
@@ -203,28 +206,33 @@ class RmCookCase(UserSession):
     def case_rm_cook_settings_mailings_get(self):
         req = RmCook(self.sess, self.host)
         resp = req.rm_cook_settings_mailings_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_rm_cook_settings_mailings_post(self):
         req = RmCook(self.sess, self.host)
-        body = {"destinations": [
-            {"email": "",
-             "syslog_host": SYSLOG_HOST,
-             "syslog_port": SYSLOG_PORT,
-             "syslog_protocol": "tcp",
-             "disable_syslog": False,
-             "disable_email": True, "id": 1},
-            {"email": "qa@ku.ku",
-             "syslog_host": "",
-             "syslog_port": 0,
-             "syslog_protocol": "",
-             "disable_syslog": True,
-             "disable_email": True,
-             "id": 2}]}
+        body = {
+            "destinations": [
+                {
+                    "email": "",
+                    "syslog_host": SYSLOG_HOST,
+                    "syslog_port": SYSLOG_PORT,
+                    "syslog_protocol": "TCP",
+                    "disable_syslog": False,
+                    "disable_email": True,
+                }, {
+                    "email": _QA_SPAM_EMAIL,
+                    # "syslog_host": "",
+                    # "syslog_port": 0,
+                    "syslog_protocol": "",
+                    "disable_syslog": True,
+                    "disable_email": False,
+                }
+            ]
+        }
         resp = req.rm_cook_settings_mailings_post(body)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_rm_cook_settings_sources_get(self):
         req = RmCook(self.sess, self.host)

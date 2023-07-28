@@ -85,3 +85,7 @@ class Absorber(BaseReq):
     def absorber_source_id_debug_get(self, _source_id) -> requests.Response:
         """process GET req for getting source debug info (last action.RowLimitFromDebugFile/N(later) strings from debug file) by id"""
         return self.sess.get(f"{self.host}/back/dp.absorber/source/{_source_id}/debug")
+
+    def absorber_source_id_log_get(self, source_id):
+        """process GET req for getting source last log by id"""
+        return self.sess.get(f"{self.host}/back/dp.absorber/source/{source_id}/log")

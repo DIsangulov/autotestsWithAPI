@@ -466,6 +466,18 @@ class AbsorberCase(UserSession):
         resp = req.absorber_source_id_debug_get(_source_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def case_absorber_source_id_log_get(self):
+        # DAT-5372
+        req = Absorber(self.sess, self.host)
+
+        _source_id = self._get_source_id()
+        resp = req.absorber_source_id_log_get(_source_id)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 200: {"res":""}
+        # 200: {"res":"--no errors, empty log--"}
+        # 200: {"res":"Log: no data\nError: No errors"}
+
     # __del__
     def all_api_auto_test_entity_delete(self):
         delete_req = Absorber(self.sess, self.host)

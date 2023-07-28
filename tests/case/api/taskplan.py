@@ -5,12 +5,12 @@ from tests.case.api.reporter import ReporterCase
 
 class TaskplanCase(UserSession):
 
-    # TODO: [POST] /back/dp.taskplan/add_task   # front: создание рассылки из отчета
+    # front: создание рассылки из отчета
     def case_taskplan_add_task_post(self):
         req = Taskplan(self.sess, self.host)
 
         sched_type = "mailing"      # todo: какие ещё типы
-        mailing_id = ReporterCase(self.host)._get_mailing_id()
+        mailing_id = ReporterCase()._get_mailing_id()
 
         data = {
             "sched_type": sched_type,
@@ -62,7 +62,7 @@ class TaskplanCase(UserSession):
         req = Taskplan(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         sched_type = "mailing"
-        mailing_id = ReporterCase(self.host)._get_mailing_id()
+        mailing_id = ReporterCase()._get_mailing_id()
         data = {
             "sched_type": sched_type,
             "timezone": "Europe/Moscow",

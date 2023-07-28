@@ -17,17 +17,35 @@ class Peopler(BaseReq):
         """process POST req for creating many users"""
         return self.sess.post(f"{self.host}/back/dp.peopler/many_users", json=body)
 
-    # TODO: [POST] /back/dp.peopler/pin_page/current_user
+    def peopler_pin_page_current_user_post(self, data) -> requests.Response:
+        """process POST req to pin page for current user"""
+        return self.sess.post(f"{self.host}/back/dp.peopler/pin_page/current_user", json=data)
 
-    # TODO: [DELETE] /back/dp.peopler/pin_page/current_user
+    def peopler_pin_page_current_user_delete(self) -> requests.Response:
+        """process DELETE req to unpin page for current user"""
+        return self.sess.delete(f"{self.host}/back/dp.peopler/pin_page/current_user")
 
-    # TODO: [POST] /back/dp.peopler/pin_page/list/{type_subject}
+    def peopler_pin_page_list_type_subject_post(self, type_subject, body) -> requests.Response:
+        """process POST req to get subject(user or role) list for pinned page"""
+        return self.sess.post(f"{self.host}/back/dp.peopler/pin_page/list/{type_subject}", json=body)
 
-    # TODO: [POST] /back/dp.peopler/pin_page/{type_subject}
+    def peopler_pin_page_type_subject_post(self, type_subject, data) -> requests.Response:
+        """process POST req to pin page for subject(user or role)"""
+        return self.sess.post(f"{self.host}/back/dp.peopler/pin_page/{type_subject}", json=data)
 
-    # TODO: [DELETE] /back/dp.peopler/pin_page/{type_subject}/{id}
+    def peopler_pin_page_type_subject_id_delete(self, type_subject, subj_id) -> requests.Response:
+        """process DELETE req to unpin page for subject(user or role)"""
+        return self.sess.delete(f"{self.host}/back/dp.peopler/pin_page/{type_subject}/{subj_id}")
 
-    # TODO: [POST] /back/dp.peopler/pinned_page_status
+    def peopler_pinned_page_status_post(self, data) -> requests.Response:
+        """
+            process POST req to get pinned page status
+            0 - not pinned from either the modal window or for the current user
+            1 - pinned for the current user
+            2 - fixed with a modal window
+        :return:
+        """
+        return self.sess.post(f"{self.host}/back/dp.peopler/pinned_page_status", json=data)
 
     def peopler_profile_get(self) -> requests.Response:
         """process GET req for getting user profile by token"""

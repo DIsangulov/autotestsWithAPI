@@ -23,4 +23,6 @@ class Updater(BaseReq):
 
     # TODO: def [POST] /back/dp.updater/update_from_archive
 
-    # TODO new: /back/dp.updater/versions   # https://tasks.ngrsoftlab.ru/browse/DAT-5287
+    def updater_versions_get(self):
+        """process GET req to get list {component-version-version state} list"""
+        return self.sess.get(f"{self.host}/back/dp.updater/versions")

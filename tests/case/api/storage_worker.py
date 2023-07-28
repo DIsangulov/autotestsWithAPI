@@ -104,25 +104,26 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_show_base_db_name_get(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables      # FIXME:
+        db_name = DbName.picker_tables
         resp = req.storage_worker_show_base_db_name_get(db_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_statistics_db_event_stats_db_name_flag_post(self):
         req = StorageWorker(self.sess, self.host)
 
-        db_name = DbName.picker_tables  # FIXME:
-        flag = 0                        # FIXME: magic
+        db_name = DbName.picker_tables
+
+        # flag == | 0 - сегодня | 1 - вчера | 2 - неделя | 3 - месяц | 4 - год
+        flag = 0    # todo: прогнать в цикле все флаги
         data = {"timezone": "Europe/Moscow"}
         resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post(db_name, flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        tab_name = "ad_groups_ngr"      # FIXME:    tab_name rel db_name
+        db_name = DbName.picker_tables
+        tab_name = "ad_groups_ngr"
         resp = req.storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(db_name, tab_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -130,8 +131,8 @@ class StorageWorkerCase(UserSession):
     def case_storage_worker_statistics_db_search_post(self):
         req = StorageWorker(self.sess, self.host)
         data = {
-            "database_name": "picker_tables",   # FIXME:
-            # "pattern": "pattern"              # fixme
+            "database_name": DbName.picker_tables,
+            # "pattern": "pattern"      # fixme
             "use_regexps": True
         }
         resp = req.storage_worker_statistics_db_search_post(data)
@@ -147,17 +148,23 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        tab_name = "ad_groups_ngr"      # FIXME: tab_name rel db_name
-        flag = 0                        # FIXME: magic?
+
+        db_name = DbName.picker_tables
+        tab_name = "ad_groups_ngr"
+        # flag == | 0 - сегодня | 1 - вчера | 2 - неделя | 3 - месяц | 4 - год
+        flag = 0    # todo: прогнать в цикле все флаги
         data = {"timezone": "Europe/Moscow"}
         resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(db_name, tab_name, flag, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_statistics_db_tabs_stats_dbname_get(self):
         req = StorageWorker(self.sess, self.host)
+
+        self.sess.headers.update({
+            "ui": "1",
+        })
         dbname = DbName.picker_tables
+
         resp = req.storage_worker_statistics_db_tabs_stats_dbname_get(dbname)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -165,7 +172,7 @@ class StorageWorkerCase(UserSession):
     def case_storage_worker_statistics_storage_search_post(self):
         req = StorageWorker(self.sess, self.host)
         data = {
-            "database_name": "picker_tables",
+            "database_name": DbName.picker_tables,
             "table": "ad_users_ngr",
             "filter_columns": ["mail"],
             "select_columns": ["mail"],
@@ -178,7 +185,11 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_statistics_test_selection_post(self):
         req = StorageWorker(self.sess, self.host)
-        data = {"database_name": "picker_tables", "table_name": "ad_users_ngr", "name": "name"}
+        data = {
+            "database_name": DbName.picker_tables,
+            "table_name": "ad_users_ngr",
+            "name": "name"
+        }
         resp = req.storage_worker_statistics_test_selection_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -209,7 +220,7 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # доступ на изменение хранилища API_TEST_DB1
-        PermitterCase(self.host).permitter_sysop_add_permission_to_change_db_by_name(DbName.API_TEST_DB1)
+        PermitterCase().permitter_sysop_add_permission_to_change_db_by_name(DbName.API_TEST_DB1)
 
     def case_storage_worker_storage_db_delete(self):
         req = StorageWorker(self.sess, self.host)
@@ -220,8 +231,8 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_storage_import_csv_db_name_table_name_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        table_name = "ad_groups_ngr"    # FIXME: table_name rel db_name
+        db_name = DbName.picker_tables
+        table_name = "ad_groups_ngr"
         data = {"data": None}
         resp = req.storage_worker_storage_import_csv_db_name_table_name_post(db_name, table_name, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -229,8 +240,8 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_storage_import_json_db_name_table_name_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        table_name = "ad_groups_ngr"    # FIXME: table_name rel db_name
+        db_name = DbName.picker_tables
+        table_name = "ad_groups_ngr"
         data = {"data": None}
         resp = req.storage_worker_storage_import_json_db_name_table_name_post(db_name, table_name, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -250,8 +261,8 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        tab_name = "ad_groups_ngr"      # FIXME: tab_name rel db_name
+        db_name = DbName.picker_tables
+        tab_name = "ad_groups_ngr"
         resp = req.storage_worker_storage_table_columns_db_name_tab_name_get(db_name, tab_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -261,7 +272,7 @@ class StorageWorkerCase(UserSession):
     # .."msg": "Ошибка создания view"}}
     def case_storage_worker_storage_table_columns_db_name_table_name_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
+        db_name = DbName.picker_tables  # FIXME: picker_tables >> test_db
         table_name = "ad_groups_ngr"    # FIXME: table_name rel db_name
         data = [
             {"name": "Nopt", "dtype": "DateTime", "alias": "псевдоним", "mask_it": False},
@@ -275,18 +286,26 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # def storage_worker_storage_table_db_name_post(self):
-    #     header = {'token': self.token}
-    #     data = {"auto_read": True, "columns":
-    #         [{"name": "one", "type": "DateTime"},
-    #          {"name": "two", "type": "UInt64"},
-    #          {"name": "three", "type": "String"}],
-    #             "engine": "MergeTree", "order_by":
-    #                 "one", "partition_by": "tuple()",
-    #             "tab_name": "API_TEST_DB1", "ttl": 0, "ttl_base": ""}
-    #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1",
-    #                           headers=header, json=data, verify=False)
-    #     return resp
+    # TODO: [POST] /back/dp.storage_worker/storage/table/{db_name}
+    def case_storage_worker_storage_table_db_name_post(self):
+        # def storage_worker_storage_table_db_name_post(self):
+        #     header = {'token': self.token}
+        #     data = {"auto_read": True, "columns":
+        #         [{"name": "one", "type": "DateTime"},
+        #          {"name": "two", "type": "UInt64"},
+        #          {"name": "three", "type": "String"}],
+        #             "engine": "MergeTree", "order_by":
+        #                 "one", "partition_by": "tuple()",
+        #             "tab_name": "API_TEST_DB1", "ttl": 0, "ttl_base": ""}
+        #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1",
+        #                           headers=header, json=data, verify=False)
+        #     return resp
+        req = StorageWorker(self.sess, self.host)
+        db_name = None
+        data = {}
+        resp = req.storage_worker_storage_table_db_name_post(db_name, data)
+        print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # def storage_worker_storage_table_table_db_name_table_name(self):
     #     header = {'token': self.token}
@@ -297,20 +316,20 @@ class StorageWorkerCase(UserSession):
 
     def case_storage_worker_storage_table_db_name_table_name_ttl_get(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        table_name = "ad_groups_ngr"    # FIXME: table_name rel db_name
+        db_name = DbName.picker_tables
+        table_name = "ad_groups_ngr"
         resp = req.storage_worker_storage_table_db_name_table_name_ttl_get(db_name, table_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_storage_worker_storage_table_db_name_table_name_count_get(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DbName.picker_tables  # FIXME:
-        table_name = "ad_groups_ngr"    # FIXME: table_name rel db_name
+        db_name = DbName.picker_tables
+        table_name = "ad_groups_ngr"
         count = 2                       # number of rows limit
         resp = req.storage_worker_storage_table_db_name_table_name_count_get(db_name, table_name, count)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def all_api_auto_test_regs_delete(self):
         delete_req = StorageWorker(self.sess, self.host)

@@ -123,7 +123,9 @@ class StorageWorker(BaseReq):
         """process POST to set aliases for columns"""
         return self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/columns/{db_name}/{table_name}", json=data)
 
-    # TODO: [POST] /back/dp.storage_worker/storage/table/{db_name}
+    def storage_worker_storage_table_db_name_post(self, db_name, data):
+        """process POST to create storage DB table (if not exists)"""
+        return self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}", json=data)
 
     # TODO: [POST] /back/dp.storage_worker/storage/table/{db_name}/{table_name}
 

@@ -11,6 +11,8 @@ mailing_id = set()     # 'id' рассылок
 
 class ReporterCase(UserSession):
 
+    # TODO: _get_report_id
+
     def _collect_mailing_id(self):
         resp = Reporter(self.sess, self.host).reporter_mailing_get()
         assert resp.status_code == 200, f"assert::reporter_mailing_get, failed. status_code: {resp.status_code}, text: {resp.text}"
@@ -134,7 +136,8 @@ class ReporterCase(UserSession):
 
     def case_reporter_mailing_sample_post(self):
         req = Reporter(self.sess, self.host)
-        _report_id = 408    # несуществующий 'report_id', статус код 200; письмо не придет
+        _report_id = 525    # FIXME: хардкод
+        # _report_id = self._get_report_id()    # TODO: реализовать
         data = {
             "settings": {
                 "report_settings": {
@@ -153,8 +156,8 @@ class ReporterCase(UserSession):
             "editor_id": self.get_self_user_id()
         }
         resp = req.reporter_mailing_sample_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_reporter_mailing_typed_0_1_get(self):
         req = Reporter(self.sess, self.host)
