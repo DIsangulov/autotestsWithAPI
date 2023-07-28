@@ -1103,8 +1103,8 @@ class TestScripter:
     def test_scripter_script_id_log_get(self):
         ScripterCase().case_scripter_script_id_log_get()
 
-    def test_scripter_script_id_log_log_id_get(self):
-        ScripterCase().case_scripter_script_script_id_log_log_id_get()
+    def test_scripter_script_id_log_id_get(self):
+        ScripterCase().case_scripter_script_id_log_id_get()
 
     def test_scripter_script_id_log_last_get(self):
         ScripterCase().case_scripter_script_id_log_last_get()

@@ -265,11 +265,11 @@ class ScripterCase(UserSession):
         log_id = dct['res'][-1]['id']
         return int(log_id)
 
-    def case_scripter_script_script_id_log_log_id_get(self):
+    def case_scripter_script_id_log_id_get(self):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
         _log_id = self._get_script_log_id(_script_id)
-        resp = req.scripter_script_script_id_log_log_id_get(_script_id, _log_id)
+        resp = req.scripter_script_id_log_id_get(_script_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"error":{"code":400,"description":"sql: Scan error on column index 0, name \"log\": converting NULL to string is unsupported","msg":"Ошибка выборки из бд"}}
 
