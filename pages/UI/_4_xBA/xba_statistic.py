@@ -13,7 +13,7 @@ class Statistic(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Статистика xBA" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/xBA-statistics/profiles", "URL's do not match"
+        assert self.page.url == self.host + "/xBA-statistics/profiles", "URL's do not match"
 
     # def save_xba_diagram_image(self):
     #     self.save_image(*XbaLocators.PUK)

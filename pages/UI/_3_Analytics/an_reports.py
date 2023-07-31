@@ -22,7 +22,7 @@ class Reports(BasePage):
         self.page.wait_for_selector(AdminLocators.TITLE_MSG_OLD)
         assert "Отчеты" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/report", "URL's do not match"
+        assert self.page.url == self.host + "/report", "URL's do not match"
 
     def create_new_report(self):
         self.page.click(AnalyticsLocators.ADD_REPORT_BUTTON)

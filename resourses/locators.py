@@ -21,6 +21,7 @@ class MainLocators:
 class AuthLocators:
     LOGIN_INPUT = "//input[@type='email']"
     PAS_INPUT = "//input[@type='password']"
+    CHECKBOX_LOCAL = "//input[@type='checkbox']/.."
     ENTER_BUT = "//*[contains(text(),'Войти')]"
     PASS_VISIBLE = "//span[@class='icon is-right has-text-primary is-clickable']"
 

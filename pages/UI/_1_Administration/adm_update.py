@@ -13,4 +13,4 @@ class Update(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Состояние обновления системы" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/system-update", "URL's do not match"
+        assert self.page.url == self.host + "/system-update", "URL's do not match"

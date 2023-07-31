@@ -13,7 +13,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/common", "URL's do not match"
+        assert self.page.url == self.host + "/settings/common", "URL's do not match"
 
     def open_adm_settings_domain_controller(self):
         self.page.click(AdminLocators.DOMAIN_CONTROLLER)
@@ -22,7 +22,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/domain", "URL's do not match"
+        assert self.page.url == self.host + "/settings/domain", "URL's do not match"
 
     def open_adm_settings_service_db(self):
         self.page.click(AdminLocators.SERVICE_DB)
@@ -31,7 +31,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/cluster", "URL's do not match"
+        assert self.page.url == self.host + "/settings/cluster", "URL's do not match"
 
     def open_adm_settings_storage(self):
         self.page.click(AdminLocators.STORAGE)
@@ -40,7 +40,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/storage", "URL's do not match"
+        assert self.page.url == self.host + "/settings/storage", "URL's do not match"
 
     def open_adm_settings_data_collection(self):
         self.page.click(AdminLocators.DATA_COLLECTION)
@@ -49,7 +49,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/collector", "URL's do not match"
+        assert self.page.url == self.host + "/settings/collector", "URL's do not match"
 
     def open_adm_settings_data_analysis(self):
         self.page.click(AdminLocators.DATA_ANALYSIS)
@@ -58,7 +58,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/ml", "URL's do not match"
+        assert self.page.url == self.host + "/settings/ml", "URL's do not match"
 
     def open_adm_settings_post(self):
         self.page.click(AdminLocators.POST)
@@ -67,7 +67,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/ms", "URL's do not match"
+        assert self.page.url == self.host + "/settings/ms", "URL's do not match"
 
     def open_adm_settings_syslog(self):
         self.page.click(AdminLocators.SYSLOG)
@@ -76,7 +76,7 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/sys", "URL's do not match"
+        assert self.page.url == self.host + "/settings/sys", "URL's do not match"
 
     def open_adm_settings_secrets(self):
         self.page.click(AdminLocators.SECRETS)
@@ -85,4 +85,4 @@ class Settings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/settings/secrets", "URL's do not match"
+        assert self.page.url == self.host + "/settings/secrets", "URL's do not match"
