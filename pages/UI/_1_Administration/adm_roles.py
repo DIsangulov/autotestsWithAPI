@@ -9,8 +9,8 @@ from resourses.locators import AdminLocators
 
 class Roles(BasePage):
 
-    def __init__(self, page: Page, host: str):
-        super().__init__(page, host)
+    def __init__(self, page: Page):
+        super().__init__(page)
         self.page_path = "/roles"
 
     def open_adm_roles(self):
