@@ -1,30 +1,33 @@
 from playwright.sync_api import Playwright, Page    # FIXME: Playwright
 
 from resourses.credentials import TestUsers
-from resourses.locators import AuthLocators
+from resourses.locators import AuthLocators, MainLocators
 
 HOST = "https://10.130.0.22"    # FIXME: os.environ
 
 
-# todo: наследовать от компонентов
 class BasePage:
     # def __init__(self, page: Page, host: str, timeout: int = 10):
     def __init__(self, page: Page, host: str):
         self.page = page
 
+        self.username = None
+
         self.host = host
-        self.page_path = ""
+        self.page_path = "/"
 
         # self.page.set_default_timeout(timeout * 1000)
 
     def auth(self, *, auth_data: dict = TestUsers.DpQaaLocal):
-        # todo: if "token" == null
         self.page.goto(HOST)
         self.page.fill(AuthLocators.LOGIN_INPUT, auth_data.get("username"))
-        self.page.fill(AuthLocators.PAS_INPUT, auth_data.get("password"))
+        self.page.fill(AuthLocators.PASSWORD_INPUT, auth_data.get("password"))
         if auth_data.get("local"):
             self.page.click(AuthLocators.CHECKBOX_LOCAL)
-        self.page.click(AuthLocators.ENTER_BUT)
+        self.page.click(AuthLocators.ENTER_BUTTON)
+        self.page.wait_for_selector(MainLocators.HEADER_LOGO)
+
+        self.username = auth_data.get("username")
 
     def open(self):
         self.page.goto(self.host + self.page_path)

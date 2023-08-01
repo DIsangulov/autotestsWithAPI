@@ -31,18 +31,30 @@ from tests.case.ui.auth_ui import AuthCase
 # from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
 # from pages.UI._5_RoleMining.rm_role_model import RoleModel
 
-# FIXME: перенести в base_page
 # FIXME: os.environ
 HOST = "https://10.130.0.22"
 
-# TODO -> передавать пользователя здесь -> auth
-# TODO -> передавать headless -> хз
 
-
+@allure.suite("Страница Авторизации")
 class TestAuth:
 
-    def test_valid_auth(self, browser):
-        AuthCase(browser, HOST).valid_auth()
+    @allure.title("Самая обычная авторизация")
+    def test_valid_auth(self, browser_without_auth):
+        AuthCase(browser_without_auth, HOST).valid_auth()
+
+    @allure.title("test_link")
+    @allure.description("Описание, это описание")
+    @allure.link("https://10.130.0.22/profiles/")   # fixme: delete
+    def test_with_link(self):
+        pass
+
+    @allure.title("test_fail")
+    def test_failed(self):
+        assert False
+
+    @allure.title("test_fail2")
+    def test_failed2(self, browser_without_auth):
+        AuthCase(browser_without_auth, HOST).fail()
 
 
 class TestAdministration1:
