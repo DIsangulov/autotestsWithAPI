@@ -1,20 +1,15 @@
 import time
 
+from pages.Helpers.base_case import BaseCase
 from pages.UI._1_Administration.adm_roles import Roles
 
 
-class AdministrationCase:
-
-    def __init__(self, browser, host: str):
-        self.browser = browser
-        self.host = host
+class AdministrationCase(BaseCase):
 
     def open_adm_roles(self):
-        page = Roles(self.browser, self.host)
-        # page.auth()
-        # time.sleep(4)   # fixme: delete
-        # page.open_adm_roles()
+        page = Roles(self._page)
         page.open()
+        # todo: case
 
     def another_case(self):
         pass

@@ -1,25 +1,31 @@
-from playwright.sync_api import Playwright, Page    # FIXME: Playwright
+from playwright.sync_api import Page
 
 from resourses.credentials import TestUsers
 from resourses.locators import AuthLocators, MainLocators
 
-HOST = "https://10.130.0.22"    # FIXME: os.environ
-
 
 class BasePage:
+
+    HOST: str = None
+
+    @staticmethod
+    def set_host(new_host: str):
+        BasePage.HOST = new_host
+
     # def __init__(self, page: Page, host: str, timeout: int = 10):
-    def __init__(self, page: Page, host: str):
+    def __init__(self, page: Page):
         self.page = page
 
         self.username = None
 
-        self.host = host
+        self.host = BasePage.HOST
         self.page_path = "/"
 
         # self.page.set_default_timeout(timeout * 1000)
 
     def auth(self, *, auth_data: dict = TestUsers.DpQaaLocal):
-        self.page.goto(HOST)
+        self.host = BasePage.HOST
+        self.page.goto(self.host)
         self.page.fill(AuthLocators.LOGIN_INPUT, auth_data.get("username"))
         self.page.fill(AuthLocators.PASSWORD_INPUT, auth_data.get("password"))
         if auth_data.get("local"):
@@ -31,6 +37,9 @@ class BasePage:
 
     def open(self):
         self.page.goto(self.host + self.page_path)
+
+    def goto_page(self, page_path: str):
+        self.page.goto(self.host + page_path)
 
     def open_new_tab(self, link):
         self.page.click(f'text={link}')
@@ -60,4 +69,3 @@ class BasePage:
     def save_image(self, selector: str):
         image = self.page.query_selector(selector)
         image.screenshot(path='features/images/screenshot.png')
-
