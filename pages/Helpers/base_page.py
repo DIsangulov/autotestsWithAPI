@@ -21,10 +21,9 @@ class BasePage:
         self.host = BasePage.HOST
         self.page_path = "/"
 
-        # self.page.set_default_timeout(timeout * 1000)
+        self.page.set_default_timeout(10000)
 
     def auth(self, *, auth_data: dict = TestUsers.DpQaaLocal):
-        self.host = BasePage.HOST
         self.page.goto(self.host)
         self.page.fill(AuthLocators.LOGIN_INPUT, auth_data.get("username"))
         self.page.fill(AuthLocators.PASSWORD_INPUT, auth_data.get("password"))

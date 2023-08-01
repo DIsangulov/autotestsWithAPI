@@ -1,9 +1,10 @@
 class AuthLocators:
     LOGIN_INPUT = "//input[@type='email']"
-    PASSWORD_INPUT = "//input[@type='password']"
+    PASSWORD_INPUT = "//input[@id='password']"
     CHECKBOX_LOCAL = "//input[@type='checkbox']/.."
-    ENTER_BUTTON = "//*[contains(text(),'Войти')]"
+    ENTER_BUTTON = "//button[span[contains(text(), 'Войти')]]"
     PASS_VISIBLE = "//span[@class='icon is-right has-text-primary is-clickable']"
+    WRONG_LOG_PASS_ALERT = "//div[@role='alert'][contains(text(), 'Неверный логин или пароль')]"
 
 
 class MainLocators:

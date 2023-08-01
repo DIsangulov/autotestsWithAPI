@@ -19,6 +19,9 @@ class AuthPage(BasePage):
 
         self.CHECKBOX_LOCAL = page.locator(AuthLocators.CHECKBOX_LOCAL)
         self.ENTER_BUTTON = page.locator(AuthLocators.ENTER_BUTTON)
+
+        self.WRONG_LOGPASS_ALERT = page.locator(AuthLocators.WRONG_LOG_PASS_ALERT)
+
         # self.REGISTER_LINK = page.locator()   # todo:
 
     # FIXME: зависимости

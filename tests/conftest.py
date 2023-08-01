@@ -28,7 +28,7 @@ def browser_without_auth():
 @pytest.fixture(scope='session')
 def browser():
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(channel="chrome", headless=False)
+        browser = playwright.chromium.launch(channel="chrome", headless=True)
         context = browser.new_context(
             ignore_https_errors=True,
             extra_http_headers={"user-agent": "Super-test-machine-v30801"}
