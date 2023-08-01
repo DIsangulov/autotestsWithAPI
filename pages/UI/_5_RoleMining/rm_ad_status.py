@@ -17,7 +17,7 @@ class AdStatus(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Состояние Active Directory" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/role-mining/state-ad/statistics", "URL's do not match"
+        assert self.page.url == self.host + "/role-mining/state-ad/statistics", "URL's do not match"
 
     def open_rm_ad_status_recommendation(self):
         self.page.click(RoleMiningLocators.RECOMMENDATION)
@@ -26,7 +26,7 @@ class AdStatus(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Состояние Active Directory" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/role-mining/state-ad/recommendations", "URL's do not match"
+        assert self.page.url == self.host + "/role-mining/state-ad/recommendations", "URL's do not match"
 
     def configuring_anomaly_distribution(self):
         self.page.click(RoleMiningLocators.GEAR_BUTTON)

@@ -12,4 +12,4 @@ class Requests(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_OLD)
         assert "Запросы" in self.is_element_present(AdminLocators.TITLE_MSG_OLD).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/query-list", "URL's do not match"
+        assert self.page.url == self.host + "/query-list", "URL's do not match"
