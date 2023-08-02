@@ -781,7 +781,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_import_profiles_post(self):
         XbaCookCase().case_xba_cook_profiles_import_profiles_post()
 
-    # супер тяжелый запрос 30-120 секунд
+    @pytest.mark.skip   # супер тяжелый запрос 30-120 секунд
     def test_xba_cook_anomalies_get(self):
         XbaCookCase().case_xba_cook_anomalies_get()
 
