@@ -15,7 +15,8 @@ class RmCookCase(UserSession):
     def _get_random_rm_user_id(self) -> int:
         # получить запрос со списком rm_пользователей
         resp = RmCook(self.sess, self.host).rm_cook_active_directory_users_get()
-        # fixme: assert status code == 200
+        assert resp.status_code == 200, f"Ошибка при получении списка AD users {resp.status_code}, {resp.text}"
+
         rm_users_info_rows = json.loads(resp.text)['res']['users']    # получить из запроса список пользователей
         rm_user_info = random.choice(rm_users_info_rows)              # получить случайную строку из списка
         return int(rm_user_info['id'])
@@ -23,7 +24,8 @@ class RmCookCase(UserSession):
     def _get_random_rm_group_id(self) -> int:
         # получить запрос со списком rm_групп
         resp = RmCook(self.sess, self.host).rm_cook_active_directory_groups_get()
-        # fixme: assert status code == 200
+        assert resp.status_code == 200, f"Ошибка при получении списка AD groups {resp.status_code}, {resp.text}"
+
         rm_groups_info_rows = json.loads(resp.text)['res']['groups']  # получить из запроса список групп
         rm_group_info = random.choice(rm_groups_info_rows)            # получить случайную строку из списка
         return int(rm_group_info['id'])

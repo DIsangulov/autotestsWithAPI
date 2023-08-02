@@ -56,7 +56,8 @@ class UserSession:
         if self.user_id is None:
             # header = {'token': self.token}
             resp = self.sess.get(f"{self.host}/back/dp.peopler/profile")
-            # todo: assert 200
+            assert resp.status_code == 200, f"Ошибка при получении профиля пользователя {resp.status_code}, {resp.text}"
+
             dct = json.loads(resp.text)
             self.user_id = int(dct['res']['user_id'])
         return self.user_id
@@ -65,7 +66,8 @@ class UserSession:
         """Возвращает 'id' хранилища с указанным именем"""
         # header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db")
-        # todo: assert 200
+        assert resp.status_code == 200, f"Ошибка при получении списка хранилищ {resp.status_code}, {resp.text}"
+
         dct = json.loads(resp.text)
         db_info_rows = dct['res']
         db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
