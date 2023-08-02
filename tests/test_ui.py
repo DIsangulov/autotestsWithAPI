@@ -44,8 +44,28 @@ class TestAuth:
     def test_valid_auth(self, browser_without_auth, auth_data_ad):
         AuthCase(browser_without_auth).valid_auth(auth_data_ad)
 
+    @allure.title("Авторизация | Чекбокс | invalid")
+    @allure.description("Проставлен чекбокс 'локально' для неЛокального пользователя")
+    @pytest.mark.parametrize('auth_data_invalid', [{
+        "username": TestUsers.DpQaa.get("username"),
+        "password": TestUsers.DpQaa.get("password"),
+        "local": True   # <- будет клик на чекбокс 'локально'
+    }])
+    def test_invalid_checkbox_auth(self, browser_without_auth, auth_data_invalid):
+        AuthCase(browser_without_auth).invalid_auth(auth_data_invalid)
+
+    @allure.title("Авторизация | Неверный пароль | invalid")
+    @allure.description("Попытка авторизации с неверным паролем")
+    @pytest.mark.parametrize('auth_data_invalid', [{
+        "username": TestUsers.DpQaa.get("username"),
+        "password": TestUsers.DpQaa.get("password") + "mistake",
+        "local": TestUsers.DpQaa.get("local")
+    }])
+    def test_invalid_password_auth(self, browser_without_auth, auth_data_invalid):
+        AuthCase(browser_without_auth).invalid_auth(auth_data_invalid)
+
     # tit 203 323, 363
-    @allure.title("Авторизация Локальный пользователь valid")
+    @allure.title("Авторизация | Локальный пользователь | valid")
     @allure.description("Самая обычная авторизация Локальный пользователь")
     @pytest.mark.parametrize('auth_data_local', [TestUsers.DpQaaLocal])
     def test_valid_auth_local(self, browser_without_auth, auth_data_local):
@@ -86,8 +106,8 @@ class TestAuth:
     def test_invalid_cuz_no_checkbox_auth_local(self, browser_without_auth, auth_data_no_checkbox):
         AuthCase(browser_without_auth).invalid_auth(auth_data_no_checkbox)
 
+    # tit 638
     @allure.title("Авторизация | Локальный пользователь | Невалидный логин")
-    @allure.id(638)
     @allure.description("Локальный пользователь, пароль верный, но не логин")
     @pytest.mark.parametrize('auth_data_no_checkbox', [{
         "username": TestUsers.DpQaaLocal.get("username") + "mistake",
@@ -97,7 +117,7 @@ class TestAuth:
     def test_invalid_login_auth_local(self, browser_without_auth, auth_data_no_checkbox):
         AuthCase(browser_without_auth).invalid_auth(auth_data_no_checkbox)
 
-    # todo: tit 708
+    # tit 708
     @allure.title("Авторизация | Выход из профиля пользователя")
     @allure.description(f"Выход по кнопке 'Выйти'")
     @pytest.mark.parametrize('auth_data', [TestUsers.DpQaaLocal])

@@ -1,5 +1,3 @@
-import time
-
 import allure
 from playwright.sync_api import expect
 
@@ -110,16 +108,33 @@ class AuthCase(BaseCase):
             expect(logo).to_be_visible(visible=False)
 
     def log_out(self, auth_data: dict):
+
+        # step.авторизация
         self.valid_auth_no_steps(auth_data)
 
         page = AuthPage(self._page)
-        page.SIDE_BAR.click()
-        time.sleep(1)
-        page.HUMAN_ICON.click()
-        page.SIGN_OUT.click()
-        time.sleep(4)
 
-        # todo: пып,
+        with allure.step("Кликнуть на выпадающее меню 'Пользователь'"):
+            page.PROFILE_BUTTON.click()
+
+        # with allure.step("Отображается выпадающий список с кнопками"):
+        #     # ngr-card display none
+
+        with allure.step("- 'Профиль пользователя'"):
+            expect(page.PB_USER_PROFILE).to_be_visible()
+
+        with allure.step("- 'Настройки уведомлений'"):
+            expect(page.PB_NOTIFICATION_SETTINGS).to_be_visible()
+
+        with allure.step("- 'Выход'"):
+            expect(page.PB_SIGN_OUT).to_be_visible()
+
+        with allure.step("Кликнуть по кнопке 'Выйти'"):
+            page.PB_SIGN_OUT.click()
+
+        with allure.step("Отображается страница авторизации"):
+            current_url = page.page.url
+            assert current_url.startswith(page.host + AuthPage.page_path), f"Страница авторизации не открылась"
 
     # todo: hint: поле обязательно для заполнения логин
     # todo: hint: поле обязательно для заполнения пароль
