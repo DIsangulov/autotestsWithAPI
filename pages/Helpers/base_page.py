@@ -1,10 +1,11 @@
 from playwright.sync_api import Page
 
+from pages.Helpers.n_navigation import Navigation
 from resourses.credentials import TestUsers
 from resourses.locators import AuthLocators, MainLocators
 
 
-class BasePage:
+class BasePage(Navigation):
 
     HOST: str = None
 
@@ -14,6 +15,7 @@ class BasePage:
 
     # def __init__(self, page: Page, host: str, timeout: int = 10):
     def __init__(self, page: Page):
+        super().__init__(page)
         self.page = page
 
         self.username = None

@@ -1,3 +1,5 @@
+import time
+
 import allure
 from playwright.sync_api import expect
 
@@ -7,6 +9,21 @@ from resourses.locators import MainLocators
 
 
 class AuthCase(BaseCase):
+
+    @allure.step("Авторизация")
+    def valid_auth_no_steps(self, auth_data: dict):
+        page = AuthPage(self._page)
+        page.open()
+        current_url = page.page.url
+        assert current_url.startswith(page.host + AuthPage.page_path), f"Страница авторизации не открылась"
+
+        page.LOGIN_INPUT.fill(auth_data.get("username"))
+        page.PASSWORD_INPUT.fill(auth_data.get("password"))
+        if auth_data.get("local"):
+            page.CHECKBOX_LOCAL.click()
+        page.ENTER_BUTTON.click()
+        logo = self._page.locator(MainLocators.HEADER_LOGO)
+        expect(logo).to_be_visible(timeout=10000)
 
     @allure.step("Авторизация valid")
     def valid_auth(self, auth_data: dict):
@@ -44,9 +61,9 @@ class AuthCase(BaseCase):
 
         with allure.step('Кликнуть по кнопке "Войти"'):
             page.ENTER_BUTTON.click()
-            logo = self._page.locator(MainLocators.HEADER_LOGO)
 
         with allure.step("Авторизация прошла"):
+            logo = self._page.locator(MainLocators.HEADER_LOGO)
             expect(logo).to_be_visible(timeout=10000)
 
     @allure.step("Авторизация invalid")
@@ -86,11 +103,23 @@ class AuthCase(BaseCase):
 
         with allure.step('Кликнуть по кнопке "Войти"'):
             page.ENTER_BUTTON.click()
-            logo = self._page.locator(MainLocators.HEADER_LOGO)
 
         with allure.step("Авторизация не прошла"):
+            logo = self._page.locator(MainLocators.HEADER_LOGO)
             expect(page.WRONG_LOGPASS_ALERT).to_be_visible()
             expect(logo).to_be_visible(visible=False)
 
-        # todo: hint: поле обязательно для заполнения логин
-        # todo: hint: поле обязательно для заполнения пароль
+    def log_out(self, auth_data: dict):
+        self.valid_auth_no_steps(auth_data)
+
+        page = AuthPage(self._page)
+        page.SIDE_BAR.click()
+        time.sleep(1)
+        page.HUMAN_ICON.click()
+        page.SIGN_OUT.click()
+        time.sleep(4)
+
+        # todo: пып,
+
+    # todo: hint: поле обязательно для заполнения логин
+    # todo: hint: поле обязательно для заполнения пароль

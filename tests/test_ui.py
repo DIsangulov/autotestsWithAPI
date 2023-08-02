@@ -3,6 +3,8 @@ import time
 import allure
 import pytest
 
+from resourses.credentials import TestUsers
+
 from pages.UI._0_Auth.auth_page import AuthPage
 from pages.UI._1_Administration.adm_licenses import Licenses
 from pages.UI._1_Administration.adm_monitoring import Monitoring
@@ -24,7 +26,6 @@ from pages.UI._4_xBA.xba_profiles import Profiles
 from pages.UI._4_xBA.xba_statistic import Statistic
 from pages.UI._5_RoleMining.rm_settings import RmSettings
 from pages.UI._5_RoleMining.rm_ad_status import AdStatus
-from resourses.credentials import TestUsers
 
 from tests.case.ui.administration_ui import AdministrationCase
 from tests.case.ui.auth_ui import AuthCase
@@ -34,6 +35,7 @@ from tests.case.ui.auth_ui import AuthCase
 
 
 @allure.suite("Страница Авторизации")
+@allure.issue("https://tasks.ngrsoftlab.ru/browse/QA-198")
 class TestAuth:
 
     @allure.title("Авторизация valid")
@@ -42,15 +44,15 @@ class TestAuth:
     def test_valid_auth(self, browser_without_auth, auth_data_ad):
         AuthCase(browser_without_auth).valid_auth(auth_data_ad)
 
+    # tit 203 323, 363
     @allure.title("Авторизация Локальный пользователь valid")
-    @allure.id(203)     # tit 323, 363
     @allure.description("Самая обычная авторизация Локальный пользователь")
     @pytest.mark.parametrize('auth_data_local', [TestUsers.DpQaaLocal])
     def test_valid_auth_local(self, browser_without_auth, auth_data_local):
         AuthCase(browser_without_auth).valid_auth(auth_data_local)
 
+    # tit 240 332, 508, 861
     @allure.title("Авторизация | Локальный пользователь | invalid")
-    @allure.id(240)     # tit 332, 508, 861
     @allure.description("Авторизация Локальный пользователь с неверными логином и паролем")
     @pytest.mark.parametrize('auth_data_invalid', [{
         "username": 'test_invalid_username',
@@ -60,8 +62,8 @@ class TestAuth:
     def test_invalid_auth_local(self, browser_without_auth, auth_data_invalid):
         AuthCase(browser_without_auth).invalid_auth(auth_data_invalid)
 
+    # tit 371
     @allure.title("Авторизация | Локальный пользователь | Неправильный пароль")
-    @allure.id(371)
     @allure.description("Авторизация Локальный пользователь с неверным паролем")
     @pytest.mark.parametrize('auth_data_wrong_password', [{
         "username": TestUsers.DpQaaLocal.get("username"),
@@ -73,8 +75,8 @@ class TestAuth:
 
     # todo: tit 532
 
+    # tit 594
     @allure.title("Авторизация | Локальный пользователь | Без чекбокса")
-    @allure.id(594)
     @allure.description("Локальный пользователь, не проставил чекбокс 'local'")
     @pytest.mark.parametrize('auth_data_no_checkbox', [{
         "username": TestUsers.DpQaaLocal.get("username"),
@@ -96,6 +98,11 @@ class TestAuth:
         AuthCase(browser_without_auth).invalid_auth(auth_data_no_checkbox)
 
     # todo: tit 708
+    @allure.title("Авторизация | Выход из профиля пользователя")
+    @allure.description(f"Выход по кнопке 'Выйти'")
+    @pytest.mark.parametrize('auth_data', [TestUsers.DpQaaLocal])
+    def test_log_out(self, browser_without_auth, auth_data):
+        AuthCase(browser_without_auth).log_out(auth_data)
 
 
 @pytest.mark.skip
