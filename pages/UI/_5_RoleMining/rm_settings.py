@@ -15,7 +15,7 @@ class RmSettings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки Role mining" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/role-mining/settings/source", "URL's do not match"
+        assert self.page.url == self.host + "/role-mining/settings/source", "URL's do not match"
 
     def open_rm_settings_calculation_settings(self):
         self.page.click(RoleMiningLocators.CALCULATION_SETTINGS)
@@ -24,7 +24,7 @@ class RmSettings(BasePage):
         self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
         assert "Настройки Role mining" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
             "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.url + "/role-mining/settings/calc", "URL's do not match"
+        assert self.page.url == self.host + "/role-mining/settings/calc", "URL's do not match"
 
     def clear_sources_rm_settings(self):
         self.wait_until_elem_be_clickable(RoleMiningLocators.CLEAR_BUTTON)

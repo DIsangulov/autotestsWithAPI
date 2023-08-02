@@ -1,6 +1,14 @@
+class AuthLocators:
+    LOGIN_INPUT = "//input[@type='email']"
+    PASSWORD_INPUT = "//input[@id='password']"
+    CHECKBOX_LOCAL = "//input[@type='checkbox']/.."
+    ENTER_BUTTON = "//button[span[contains(text(), 'Войти')]]"
+    PASS_VISIBLE = "//span[@class='icon is-right has-text-primary is-clickable']"
+    WRONG_LOG_PASS_ALERT = "//div[@role='alert'][contains(text(), 'Неверный логин или пароль')]"
 
 
 class MainLocators:
+    HEADER_LOGO = "//div[@class='n-app-navigation__header']"
     PRE_ENTER = "//*[contains(text(),'Дополнительные')]"
     PRE_ENTER_AGREE = "//*[contains(text(),'Перейти на сайт')]"
     SUCCESS_ENTER = "//a[@class='n-app-navigation__logo router-link-exact-active router-link-active']"
@@ -16,13 +24,6 @@ class MainLocators:
     SIGN_OUT = "//*[contains(text(),'Выйти')]"
     OPTIONS_VISIBLE = "//div[@class='options visible']"
     ADD_BUTTON = "//*[text()='Добавить']"
-
-
-class AuthLocators:
-    LOGIN_INPUT = "//input[@type='email']"
-    PAS_INPUT = "//input[@type='password']"
-    ENTER_BUT = "//*[contains(text(),'Войти')]"
-    PASS_VISIBLE = "//span[@class='icon is-right has-text-primary is-clickable']"
 
 
 class AdminLocators:
@@ -118,7 +119,6 @@ class XbaLocators:
     PROFILES = "//*[contains(text(),'Профили')]"
     METAPROFILES = "//*[contains(text(),'Метапрофили')]"
     XBA_STATISTIC = "//*[contains(text(),'Статистика xBA')]"
-
 
 
 class RoleMiningLocators:

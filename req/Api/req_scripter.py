@@ -66,7 +66,7 @@ class Scripter(BaseReq):
         """process GET to get script's history last log"""
         return self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}/log/last")
 
-    def scripter_script_script_id_log_log_id_get(self, _script_id, _log_id):
+    def scripter_script_id_log_id_get(self, _script_id, _log_id):
         """process GET to get script log text by log history ID"""
         return self.sess.get(f"{self.host}/back/dp.scripter/script/{_script_id}/log/{_log_id}")
 
