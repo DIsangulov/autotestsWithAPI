@@ -1,7 +1,7 @@
 import json
 import random
 import datetime
-
+import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
@@ -139,6 +139,27 @@ class XbaCookCase(UserSession):
 
         return xba_profile_id.pop()
 
+    def _wait_for_profile_status(self, *, profile_id: int, expect_status_id: int = 2, timeout_sec: int = 4) -> bool:
+        """
+        # status: 1 -> запущен \n
+        # status: 2 -> выполнен \n
+        # status: 3 -> выполнен с ошибками
+        """
+
+        _wait_time_sec = abs(timeout_sec) / 4
+
+        _start_time = time.time()
+        while time.time() - _start_time < timeout_sec:
+            resp = XbaCook(self.sess, self.host).xba_cook_profiles_id_get(profile_id)
+            assert resp.status_code == 200, f"Ошибка при получении профиля, code: {resp.status_code}, {resp.text}"
+
+            _current_status_id = int(json.loads(resp.text)['res']['status'])
+            if _current_status_id == expect_status_id:
+                return True
+            else:
+                time.sleep(_wait_time_sec)
+        return False
+
     def case_xba_cook_anomalies_get(self):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_anomalies_get()
@@ -260,7 +281,7 @@ class XbaCookCase(UserSession):
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,  # 0  # 1-11
-            }
+        }
         # data = {}
         resp = req.xba_cook_dashboard_profiles_post(data)
         # print(resp.text)
@@ -275,8 +296,8 @@ class XbaCookCase(UserSession):
             "start": "2022-10-21T16:39:01Z",
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
-            "profile_category_id": 0,   # 0  # 1-11
-            }
+            "profile_category_id": 0,  # 0  # 1-11
+        }
         # data = {}
         resp = req.xba_cook_dashboard_profiles_more_post(data)
         print(resp.text)
@@ -328,13 +349,11 @@ class XbaCookCase(UserSession):
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         db_picker_tables_table_name = "ad_users_ngr"
         data = {
-            "user_settings":
-            {
+            "user_settings": {
                 "db_id": db_picker_tables,
                 # "db_name": "picker_tables",
                 "table_name": db_picker_tables_table_name,
-                "fields_mapping":
-                    {
+                "fields_mapping": {
                         "mapping_key_field": "sAMAccountName",
                         "full_name": "name",
                         "position": "description",
@@ -675,6 +694,9 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
 
+        assert self._wait_for_profile_status(profile_id=prof_id), \
+            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+
         data = _get_sample_xba_profile_data(self)
         data.update({"name": API_AUTO_TEST_ + "changed_" + get_str_random_num()})
 
@@ -687,6 +709,9 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         prof_id = self._get_xba_profile_id()
+
+        assert self._wait_for_profile_status(profile_id=prof_id), \
+            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
 
         xba_db_name = f"XBA_{prof_id}"
         # выдать права на изменение хранилища 'xba_db_name'
@@ -753,10 +778,13 @@ class XbaCookCase(UserSession):
         str_random_num = str(random.randint(100, 999))
         prof_id = self._get_xba_profile_id()
 
+        assert self._wait_for_profile_status(profile_id=prof_id), \
+            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+
         data = {"data": API_AUTO_TEST_ + str_random_num}
         resp = req.xba_cook_profiles_id_whitelist_element_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # fixme: # {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
+        # {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
 
     def case_xba_cook_profiles_id_zones_post(self):
         # DAT-5276
