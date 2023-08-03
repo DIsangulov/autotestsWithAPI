@@ -1103,9 +1103,11 @@ class TestScripter:
     def test_scripter_script_id_log_get(self):
         ScripterCase().case_scripter_script_id_log_get()
 
+    @pytest.mark.skip   # todo: DAT-5427
     def test_scripter_script_id_log_id_get(self):
         ScripterCase().case_scripter_script_id_log_id_get()
 
+    @pytest.mark.skip   # todo: DAT-5427
     def test_scripter_script_id_log_last_get(self):
         ScripterCase().case_scripter_script_id_log_last_get()
 

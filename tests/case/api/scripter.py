@@ -1,6 +1,5 @@
 import json
 import random
-import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_scripter import Scripter
@@ -237,7 +236,8 @@ class ScripterCase(UserSession):
         start_r = req.scripter_script_start_post(start_data)
         assert start_r.status_code == 200, f"1..Ошибка, code: {start_r.status_code}, start_r.text: {start_r.text}"
 
-        time.sleep(1)   # ожидание отработки скрипта и когда положится в базу лог
+        # fixme -> убрать
+        # time.sleep(1)   # ожидание отработки скрипта и когда положится в базу лог
 
         resp = req.scripter_script_id_log_last_get(_script_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -269,6 +269,7 @@ class ScripterCase(UserSession):
         req = Scripter(self.sess, self.host)
         _script_id = self._get_script_id()
         _log_id = self._get_script_log_id(_script_id)
+        # print(f"_log_id: {_log_id}")
         resp = req.scripter_script_id_log_id_get(_script_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"error":{"code":400,"description":"sql: Scan error on column index 0, name \"log\": converting NULL to string is unsupported","msg":"Ошибка выборки из бд"}}

@@ -423,7 +423,14 @@ class PermitterCase(UserSession):
         req.sess.headers.update({'ui': "2"})
         resp = req.permitter_roles_editor_roles_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+
+        # DAT-4766
+        # Проверка наличия поля в ответе
+        resp_res_list = json.loads(resp.text)['res']
+        for _row in resp_res_list:
+            _row: dict
+            _search_field = "user_count"
+            assert _search_field in _row, f"Нет поля '{_search_field}' в 'res': [{_row}, ...]"
 
     def case_permitter_roles_editor_roles_post(self):
         req = Permitter(self.sess, self.host)
