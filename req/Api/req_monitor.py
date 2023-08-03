@@ -5,13 +5,17 @@ from req.Helpers.base_req import BaseReq
 
 class Monitor(BaseReq):
 
-    def monitor_anomals_flag_post(self, flag, data) -> requests.Response:
-        """process POST req for getting anomalies (not used)"""
-        return self.sess.post(f"{self.host}/back/dp.monitor/anomals/{flag}", json=data)
-
     def monitor_dump_what_post(self, what, data) -> requests.Response:
         """process POST req for getting detailed dump with usage data"""
         return self.sess.post(f"{self.host}/back/dp.monitor/dump/{what}", json=data)
+
+    def monitor_fast_graph_post(self, data):
+        """get fast common system state graph (for main dashboard)"""
+        return self.sess.post(f"{self.host}/back/dp.monitor/fast_graph", json=data)
+
+    def monitor_fast_info_get(self):
+        """get fast common system state (for main dashboard)"""
+        return self.sess.get(f"{self.host}/back/dp.monitor/fast_info")
 
     def monitor_nodes_graphs_what_metric_post(self, what, metric, data) -> requests.Response:
         """process POST req for getting nodes current usage graph data"""

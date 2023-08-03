@@ -956,26 +956,19 @@ class TestXbaCook:
 
 class TestMonitor:
 
-    def test_monitor_anomals_flag_0_post(self):
-        MonitorCase().case_monitor_anomals_flag_0_post()
-
-    def test_monitor_anomals_flag_1_post(self):
-        MonitorCase().case_monitor_anomals_flag_1_post()
-
-    def test_monitor_anomals_flag_2_post(self):
-        MonitorCase().case_monitor_anomals_flag_2_post()
-
-    def test_monitor_anomals_flag_3_post(self):
-        MonitorCase().case_monitor_anomals_flag_3_post()
-
-    def test_monitor_anomals_flag_4_post(self):
-        MonitorCase().case_monitor_anomals_flag_4_post()
-
     def test_monitor_dump_server_post(self):
         MonitorCase().case_monitor_dump_server_post()
 
     def test_monitor_dump_nodes_post(self):
         MonitorCase().case_monitor_dump_nodes_post()
+
+    # DAT-5416
+    def test_monitor_fast_graph_post(self):
+        MonitorCase().case_monitor_fast_graph_post()
+
+    # DAT-5416
+    def test_monitor_fast_info_get(self):
+        MonitorCase().case_monitor_fast_info_get()
 
     def test_monitor_nodes_graphs_ml_metrics_post(self):
         MonitorCase().case_monitor_nodes_graphs_ml_metrics_post()

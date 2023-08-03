@@ -1,3 +1,5 @@
+import json
+
 from req.Helpers.user_session import UserSession
 from req.Api.req_monitor import Monitor
 
@@ -13,51 +15,6 @@ def _get_sample_data() -> dict:
 
 
 class MonitorCase(UserSession):
-
-    def case_monitor_anomals_flag_0_post(self):
-        req = Monitor(self.sess, self.host)
-
-        flag = "0"
-        data = _get_sample_data()
-        resp = req.monitor_anomals_flag_post(flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-    def case_monitor_anomals_flag_1_post(self):
-        req = Monitor(self.sess, self.host)
-
-        flag = "1"
-        data = _get_sample_data()
-        resp = req.monitor_anomals_flag_post(flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-    def case_monitor_anomals_flag_2_post(self):
-        req = Monitor(self.sess, self.host)
-
-        flag = "2"
-        data = _get_sample_data()
-        resp = req.monitor_anomals_flag_post(flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-    def case_monitor_anomals_flag_3_post(self):
-        req = Monitor(self.sess, self.host)
-
-        flag = "3"
-        data = _get_sample_data()
-        resp = req.monitor_anomals_flag_post(flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
-
-    def case_monitor_anomals_flag_4_post(self):
-        req = Monitor(self.sess, self.host)
-
-        flag = "4"
-        data = _get_sample_data()
-        resp = req.monitor_anomals_flag_post(flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_monitor_dump_server_post(self):
         req = Monitor(self.sess, self.host)
@@ -76,6 +33,51 @@ class MonitorCase(UserSession):
         resp = req.monitor_dump_what_post(what, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    def case_monitor_fast_graph_post(self):
+        req = Monitor(self.sess, self.host)
+
+        _time_flags = [
+            "0",    # Сегодня
+            "1",    # Вчера
+            "2",    # Неделя
+            "3",    # Месяц
+            "4",    # Год
+        ]
+
+        resp = None
+        for t_flag in _time_flags:
+            # ? отсутствие ключа 'timeFlag' возвращает 3549 значений
+            data = {
+                "timeFlag": t_flag,
+                "timezone": "UTC"
+            }
+
+            resp = req.monitor_fast_graph_post(data)
+            assert resp.status_code == 200, f"Ошибка, код: {resp.status_code}, post_data:{data}, resp.text: {resp.text}"
+
+    def case_monitor_fast_info_get(self):
+        req = Monitor(self.sess, self.host)
+
+        resp = req.monitor_fast_info_get()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+        resp_res = json.loads(resp.text)['res']
+        keys = [
+            "cpu",
+            "event_count",
+            "koef",
+            "ram",
+            "session_count",
+            "source_count",
+            "state",
+            "table_count",
+            "user_count",
+        ]
+        assert len(resp_res) == len(keys), \
+            f"Число ключей в ответе 'res':{{...}}: {len(resp_res)}, Ожидаемое число: {len(keys)}"
+        for _key in keys:
+            assert _key in resp_res, f"Нет ключа: {_key} в ответе 'res':{resp_res}"
 
     def case_monitor_nodes_graphs_ml_metrics_post(self):
         req = Monitor(self.sess, self.host)
