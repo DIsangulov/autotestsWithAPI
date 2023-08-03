@@ -147,6 +147,8 @@ class XbaCookCase(UserSession):
         """
 
         _wait_time_sec = abs(timeout_sec) / 4
+        if _wait_time_sec > 5:
+            _wait_time_sec = 5
 
         _start_time = time.time()
         while time.time() - _start_time < timeout_sec:
@@ -157,6 +159,12 @@ class XbaCookCase(UserSession):
             if _current_status_id == expect_status_id:
                 return True
             else:
+                time_rest = timeout_sec - (time.time() - _start_time)
+                if time_rest < 0:
+                    break
+                if _wait_time_sec > time_rest:
+                    time.sleep(time_rest)
+                    continue
                 time.sleep(_wait_time_sec)
         return False
 
@@ -590,9 +598,9 @@ class XbaCookCase(UserSession):
         prof_id = self._get_xba_profile_id()
         prof_id_data_resp = req.xba_cook_profiles_id_get(prof_id)
         assert prof_id_data_resp.status_code == 200, \
-            f"2.Ошибка при получении данных профиля, code: {prof_id_data_resp.status_code}, text: {prof_id_data_resp.text}"
-        prof_id_data: dict = json.loads(prof_id_data_resp.text)['res']
+            f"3.Ошибка при получении данных профиля, code: {prof_id_data_resp.status_code}, text: {prof_id_data_resp.text}"
 
+        prof_id_data: dict = json.loads(prof_id_data_resp.text)['res']
         # Привязать метапрофиль 'group_id' к профилю 'prof_id'
         prof_id_data.update({
             "group_info": [
@@ -603,6 +611,10 @@ class XbaCookCase(UserSession):
                 },
             ]
         })
+
+        assert self._wait_for_profile_status(profile_id=prof_id, timeout_sec=30), \
+            f"2.Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+
         prof_change_resp = req.xba_cook_profiles_id_post(prof_id, prof_id_data)
         assert prof_change_resp.status_code == 200, \
             f"1.Ошибка при изменении профиля, code: {prof_change_resp.status_code}, text: {prof_change_resp.text}"
