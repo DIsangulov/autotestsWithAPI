@@ -799,15 +799,17 @@ class XbaCookCase(UserSession):
         # {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
 
     def case_xba_cook_profiles_id_zones_post(self):
-        # DAT-5276
+        # фильтрация по зонам риска
+        zone = ["red", "green", "yellow"]
+
         req = XbaCook(self.sess, self.host)
 
-        prof_id = self._get_xba_profile_id()
         data = {
             "start": "2022-02-09T00:00:00Z",
             "end": get_datetime_now_z(),
-            # "entity_group": "other",  # str(int)
-            # "zone": "red",     # todo: red|green|yellow
+            # todo: проверку на entity_group > отдельным кейсом
+            # "entity_group": "other",  # str(int)  # optional
+            "zone": "all",
             # "zones": {
             #     "red_high": 3,
             #     "red_low": 3,
@@ -817,9 +819,27 @@ class XbaCookCase(UserSession):
             #     "green_low": 1,
             # }
         }
+
+        prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_id_zones_post(prof_id, data)
-        # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200, f"1.Ошибка, код {resp.status_code}, {resp.text}"
+        # 400: {"error":{"code":0,"msg":"Code: 81, Message: Database XBA_$prof_id doesn't exist"}}
+
+        resp_res = json.loads(resp.text)['res']
+
+        for _z in zone:
+            data.update({"zone": _z})
+
+            assert f"{_z}_count" in resp_res, f"Отсутствует поле '{_z}_count' в 'res':{resp_res}"
+
+            resp = req.xba_cook_profiles_id_zones_post(prof_id, data)
+            assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+            resp_res_entities = json.loads(resp.text)['res']['entities']
+            if resp_res[f"{_z}_count"] > 0:
+                assert _z in resp_res_entities, f"Отсутствует поле '{_z}' в 'res':'entities':{resp_res_entities}"
+            else:
+                assert resp_res_entities is None, f"Фильтрация возвращает больше значений чем ожидалось | post_data = {data}, resp: {resp.text}"
 
     def case_xba_cook_profiles_id_string_whitelist_get(self):
         req = XbaCook(self.sess, self.host)

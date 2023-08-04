@@ -912,7 +912,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_graph_post(self):
         XbaCookCase().case_xba_cook_profiles_id_graph_post()
 
-    # todo: DAT-5276
+    # DAT-5276
     def test_xba_cook_profiles_id_zones_post(self):
         XbaCookCase().case_xba_cook_profiles_id_zones_post()
 
