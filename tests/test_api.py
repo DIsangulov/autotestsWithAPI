@@ -906,6 +906,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_get(self):
         XbaCookCase().case_xba_cook_profiles_id_get()
 
+    # DAT-5211
     def test_xba_cook_profiles_id_summary_post(self):
         XbaCookCase().case_xba_cook_profiles_id_summary_post()
 

@@ -151,7 +151,7 @@ class XbaCookCase(UserSession):
             _wait_time_sec = 5
 
         _start_time = time.time()
-        while time.time() - _start_time < timeout_sec:
+        while True:
             resp = XbaCook(self.sess, self.host).xba_cook_profiles_id_get(profile_id)
             assert resp.status_code == 200, f"Ошибка при получении профиля, code: {resp.status_code}, {resp.text}"
 
@@ -164,7 +164,7 @@ class XbaCookCase(UserSession):
                     break
                 if _wait_time_sec > time_rest:
                     time.sleep(time_rest)
-                    continue
+                    continue    # последняя итерация
                 time.sleep(_wait_time_sec)
         return False
 
@@ -338,6 +338,7 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_entity_info_post(self):
         req = XbaCook(self.sess, self.host)
+        # entity_name <- summary <- xba_prof_id
         data = {
             "name": "user",
             "type": ""
@@ -737,6 +738,8 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         prof_id = self._get_xba_profile_id()    # status: запущен | выполнен
+
+        # entity <- [post] /summary <- prof_id
         data = {
             "start": "2022-10-21T16:39:01Z",
             "end": get_datetime_now_z(),
@@ -754,12 +757,12 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_id_summary_post(self):
-        # DAT-5211
+
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
         data = {
-            "entity_group": "user",
-            "start": "2023-02-09T00:00:00Z",
+            # "entity_group": "string", # optional,
+            "start": "2022-10-09T00:00:00Z",    # <- get| graph/max_min
             "end": get_datetime_now_z()
         }
         # data = {}
