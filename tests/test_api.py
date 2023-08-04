@@ -818,6 +818,7 @@ class TestXbaCook:
     def test_xba_cook_entity_details_post(self):
         XbaCookCase().case_xba_cook_entity_details_post()
 
+    # DAT-5186
     def test_xba_cook_entity_info_post(self):
         XbaCookCase().case_xba_cook_entity_info_post()
 
@@ -910,6 +911,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_summary_post(self):
         XbaCookCase().case_xba_cook_profiles_id_summary_post()
 
+    # DAT-5230
     def test_xba_cook_profiles_id_graph_post(self):
         XbaCookCase().case_xba_cook_profiles_id_graph_post()
 

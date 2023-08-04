@@ -336,16 +336,18 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
+    # todo: пока возвращает заглушку DAT-5186, пункт 6
+    # type"user" > возвращает {"res":{"name":"","type":""}}
     def case_xba_cook_entity_info_post(self):
         req = XbaCook(self.sess, self.host)
         # entity_name <- summary <- xba_prof_id
         data = {
-            "name": "user",
-            "type": ""
+            "name": "Ефремов Максим",
+            "type": "user"
         }
         resp = req.xba_cook_entity_info_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_info_settings_get(self):
         req = XbaCook(self.sess, self.host)
@@ -734,7 +736,6 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_id_graph_post(self):
-        # DAT-5230
         req = XbaCook(self.sess, self.host)
 
         prof_id = self._get_xba_profile_id()    # status: запущен | выполнен
