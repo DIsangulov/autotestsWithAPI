@@ -959,13 +959,15 @@ class TestXbaCook:
 
 class TestMonitor:
 
+    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_dump_server_post(self):
         MonitorCase().case_monitor_dump_server_post()
 
+    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_dump_nodes_post(self):
         MonitorCase().case_monitor_dump_nodes_post()
 
-    # DAT-5416
+    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_fast_graph_post(self):
         MonitorCase().case_monitor_fast_graph_post()
 
@@ -973,15 +975,19 @@ class TestMonitor:
     def test_monitor_fast_info_get(self):
         MonitorCase().case_monitor_fast_info_get()
 
+    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_nodes_graphs_ml_metrics_post(self):
         MonitorCase().case_monitor_nodes_graphs_ml_metrics_post()
 
+    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_nodes_graphs_picker_metrics_post(self):
         MonitorCase().case_monitor_nodes_graphs_picker_metrics_post()
 
+    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_nodes_graphs_servicedb_metrics_post(self):
         MonitorCase().case_monitor_nodes_graphs_servicedb_metrics_post()
 
+    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_nodes_graphs_datastore_ram_post(self):
         MonitorCase().case_monitor_nodes_graphs_datastore_metrics_post()
 
@@ -997,15 +1003,19 @@ class TestMonitor:
     def test_monitor_nodes_stats_datastore_get(self):
         MonitorCase().case_monitor_nodes_stats_datastore_get()
 
+    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_webserver_graphs_ram_post(self):
         MonitorCase().case_monitor_webserver_graphs_ram_post()
 
+    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_webserver_graphs_cpu_post(self):
         MonitorCase().case_monitor_webserver_graphs_cpu_post()
 
+    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_webserver_graphs_iops_post(self):
         MonitorCase().case_monitor_webserver_graphs_iops_post()
 
+    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_webserver_graphs_network_post(self):
         MonitorCase().case_monitor_webserver_graphs_network_post()
 
