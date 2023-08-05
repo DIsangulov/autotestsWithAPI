@@ -1,5 +1,3 @@
-import time
-
 from pages.Helpers.base_page import BasePage
 from resourses.locators import AnalyticsLocators, MainLocators, AdminLocators
 

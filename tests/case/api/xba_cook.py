@@ -139,7 +139,7 @@ class XbaCookCase(UserSession):
 
         return xba_profile_id.pop()
 
-    def _wait_for_profile_status(self, *, profile_id: int, expect_status_id: int = 2, timeout_sec: int = 4) -> bool:
+    def _wait_for_profile_status(self, *, profile_id: int, expect_status_id: int = 2, timeout_sec: int = 15) -> bool:
         """
         # status: 1 -> запущен \n
         # status: 2 -> выполнен \n
@@ -784,9 +784,13 @@ class XbaCookCase(UserSession):
         # print(f"cur_wl: {cur_whitelist}") # print(type(cur_whitelist)) >> list
         cur_whitelist.append({"name": API_AUTO_TEST_ + str_rand_num})
 
+        assert self._wait_for_profile_status(profile_id=prof_id), \
+            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+
         data = {"data": cur_whitelist}
         resp = req.xba_cook_profiles_id_whitelist_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 400: {"error":{"code":102,"msg":"Запущен перерасчёт профиля, изменение состояния недоступно"}}
 
     def case_xba_cook_profiles_id_whitelist_element_post(self):
         req = XbaCook(self.sess, self.host)
