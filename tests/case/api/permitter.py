@@ -38,17 +38,17 @@ class PermitterCase(UserSession):
     def _get_element_id_by_type(self, element_type) -> int:
         match element_type:
             case ElementType.query:
-                return VisualisationCase()._get_query_id()
+                return VisualisationCase().get_query_id()
             case ElementType.visualisation:
-                return VisualisationCase()._get_visualisation_id()
+                return VisualisationCase().get_visualisation_id()
             case ElementType.report:
-                return VisualisationCase()._get_report_id()
+                return VisualisationCase().get_report_id()
             case ElementType.mailing:
-                return ReporterCase()._get_mailing_id()
+                return ReporterCase().get_mailing_id()
             case ElementType.script:
-                return ScripterCase()._get_script_id()
+                return ScripterCase().get_script_id()
             case ElementType.script_sequence:
-                return ScripterCase()._get_sequence_id()
+                return ScripterCase().get_sequence_id()
             case _:
                 assert False, f"Неверно выбран тип для {self.__class__.__name__}::{self._get_element_id_by_type.__name__}, element_type: {element_type}"
 

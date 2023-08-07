@@ -10,7 +10,7 @@ class TaskplanCase(UserSession):
         req = Taskplan(self.sess, self.host)
 
         sched_type = "mailing"      # todo: какие ещё типы
-        mailing_id = ReporterCase()._get_mailing_id()
+        mailing_id = ReporterCase().get_mailing_id()
 
         data = {
             "sched_type": sched_type,
@@ -23,23 +23,23 @@ class TaskplanCase(UserSession):
                     "val": "30",
                     "str": "min"
                 },
-                "day": {
-                    "val": "",
-                    "hhmm": "00:00"
-                },
-                "week": {
-                    "days": None,
-                    "hhmm": "00:00"
-                },
-                "month": {
-                    "var": 0,
-                    "day": "",
-                    "val": "",
-                    "val2": "",
-                    "wday": "",
-                    "wnum": "",
-                    "hhmm": "00:00"
-                }
+                # "day": {
+                #     "val": "",
+                #     "hhmm": "00:00"
+                # },
+                # "week": {
+                #     "days": None,
+                #     "hhmm": "00:00"
+                # },
+                # "month": {
+                #     "var": 0,
+                #     "day": "",
+                #     "val": "",
+                #     "val2": "",
+                #     "wday": "",
+                #     "wnum": "",
+                #     "hhmm": "00:00"
+                # }
             },
             "timezone": "Europe/Moscow"
         }
@@ -62,7 +62,7 @@ class TaskplanCase(UserSession):
         req = Taskplan(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         sched_type = "mailing"
-        mailing_id = ReporterCase()._get_mailing_id()
+        mailing_id = ReporterCase().get_mailing_id()
         data = {
             "sched_type": sched_type,
             "timezone": "Europe/Moscow",

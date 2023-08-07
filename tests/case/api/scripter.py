@@ -23,7 +23,7 @@ class ScripterCase(UserSession):
                 script_id.add(_row['id'])    # global: script_id
         # print(f"script_id list: {script_id}")
 
-    def _get_script_id(self) -> int:
+    def get_script_id(self) -> int:
         """get from global script_id: API_AUTO_TEST_x"""
         if len(script_id) == 0:
             self._collect_script_id()
@@ -47,7 +47,7 @@ class ScripterCase(UserSession):
                 sequence_id.add(_row['id'])     # global: sequence_id
         # print(f"sequence_id list: {sequence_id}")
 
-    def _get_sequence_id(self) -> int:
+    def get_sequence_id(self) -> int:
         """get from global sequence_id: API_AUTO_TEST_x"""
         if len(sequence_id) == 0:
             self._collect_sequence_id()
@@ -82,7 +82,7 @@ class ScripterCase(UserSession):
     def case_scripter_script_put(self):
         req = Scripter(self.sess, self.host)
 
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         str_rand_num = str(random.randint(100, 999))
         data = {
             "type": True,
@@ -138,7 +138,7 @@ class ScripterCase(UserSession):
 
     def case_scripter_script_start_post(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         data = {
             "id": str(_script_id),
             "node": 0,
@@ -155,7 +155,7 @@ class ScripterCase(UserSession):
     def case_scripter_script_stop_id_get(self):
         req = Scripter(self.sess, self.host)
 
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
 
         resp = req.scripter_script_stop_id_get(_script_id)
         if resp.status_code == 400:
@@ -166,28 +166,28 @@ class ScripterCase(UserSession):
 
     def case_scripter_script_id_get(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         resp = req.scripter_script_id_get(_script_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_scripter_script_id_delete(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         resp = req.scripter_script_id_delete(_script_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_scripter_script_id_files_get(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         resp = req.scripter_script_id_files_get(_script_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_scripter_script_id_files_put(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         data = {
             "additional_files": [
                 {
@@ -207,14 +207,14 @@ class ScripterCase(UserSession):
 
     def case_scripter_script_id_log_get(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         resp = req.scripter_script_id_log_get(_script_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)    # если скрипт '_script_id' не запускался >> {"res":null}
 
     def case_scripter_script_id_log_delete(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
 
         # Запускаю скрипт '_script_id', чтобы появилась строка логов
         start_data = {"id": _script_id}
@@ -226,7 +226,7 @@ class ScripterCase(UserSession):
 
     def case_scripter_script_id_log_last_get(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
 
         # нет лога, если скрипт не запускался
         # лог ещё не сформирован, если скрипт был только-что запущен
@@ -267,7 +267,7 @@ class ScripterCase(UserSession):
 
     def case_scripter_script_id_log_id_get(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         _log_id = self._get_script_log_id(_script_id)
         # print(f"_log_id: {_log_id}")
         resp = req.scripter_script_id_log_id_get(_script_id, _log_id)
@@ -276,7 +276,7 @@ class ScripterCase(UserSession):
 
     def case_scripter_script_script_id_log_log_id_delete(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         _log_id = self._get_script_log_id(_script_id)
         resp = req.scripter_script_script_id_log_log_id_delete(_script_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -308,8 +308,8 @@ class ScripterCase(UserSession):
         req = Scripter(self.sess, self.host)
 
         str_random_num = str(random.randint(100, 999))
-        _script_id = self._get_script_id()
-        _seq_id = self._get_sequence_id()
+        _script_id = self.get_script_id()
+        _seq_id = self.get_sequence_id()
         data = {
             "name": API_AUTO_TEST_ + "changed" + str_random_num,
             "description": API_AUTO_TEST_ + "changed" + str_random_num,
@@ -340,7 +340,7 @@ class ScripterCase(UserSession):
 
     def case_scripter_sequence_post(self):
         req = Scripter(self.sess, self.host)
-        _script_id = self._get_script_id()
+        _script_id = self.get_script_id()
         str_random_num = str(random.randint(100, 999))
 
         data = {
@@ -366,14 +366,14 @@ class ScripterCase(UserSession):
 
     def case_scripter_sequence_log_id_get(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         resp = req.scripter_sequence_log_id_get(_seq_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_scripter_sequence_start_post(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         data = {
             "id": str(_seq_id),
             "node": 0,
@@ -390,7 +390,7 @@ class ScripterCase(UserSession):
     def case_scripter_sequence_stop_id_get(self):
         req = Scripter(self.sess, self.host)
 
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
 
         resp = req.scripter_sequence_stop_id_get(_seq_id)
         if resp.status_code == 400:
@@ -401,21 +401,21 @@ class ScripterCase(UserSession):
 
     def case_scripter_sequence_id_get(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         resp = req.scripter_sequence_id_get(_seq_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_scripter_sequence_id_delete(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         resp = req.scripter_sequence_id_delete(_seq_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_scripter_sequence_id_log_delete(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
 
         # Запускаю последовательнось '_seq_id', чтобы появилась строка логов
         start_data = {"id": _seq_id}
@@ -428,7 +428,7 @@ class ScripterCase(UserSession):
     # fixme: может не быть лога > запускать последовательность перед запросом?
     def case_scripter_sequence_sequence_id_log_last_get(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         resp = req.scripter_sequence_sequence_id_log_last_get(_seq_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -458,14 +458,14 @@ class ScripterCase(UserSession):
 
     def case_scripter_sequence_sequence_id_log_log_id_get(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         _log_id = self._get_sequence_log_id(_seq_id)
         resp = req.scripter_sequence_sequence_id_log_log_id_get(_seq_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_scripter_sequence_sequence_id_log_log_id_delete(self):
         req = Scripter(self.sess, self.host)
-        _seq_id = self._get_sequence_id()
+        _seq_id = self.get_sequence_id()
         _log_id = self._get_sequence_log_id(_seq_id)
         resp = req.scripter_sequence_sequence_id_log_log_id_delete(_seq_id, _log_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
