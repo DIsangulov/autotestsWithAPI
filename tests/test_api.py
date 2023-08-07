@@ -959,65 +959,26 @@ class TestXbaCook:
 
 class TestMonitor:
 
-    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_dump_server_post(self):
         MonitorCase().case_monitor_dump_server_post()
 
-    @pytest.mark.skip   # fixme: DAT-5416
     def test_monitor_dump_nodes_post(self):
         MonitorCase().case_monitor_dump_nodes_post()
 
-    @pytest.mark.skip  # fixme: DAT-5416
     def test_monitor_fast_graph_post(self):
         MonitorCase().case_monitor_fast_graph_post()
 
-    # DAT-5416
     def test_monitor_fast_info_get(self):
         MonitorCase().case_monitor_fast_info_get()
 
-    @pytest.mark.skip   # fixme: DAT-5416
-    def test_monitor_nodes_graphs_ml_metrics_post(self):
-        MonitorCase().case_monitor_nodes_graphs_ml_metrics_post()
+    def test_monitor_nodes_graphs_what_metric_post(self):
+        MonitorCase().case_monitor_nodes_graphs_what_metric_post()
 
-    @pytest.mark.skip   # fixme: DAT-5416
-    def test_monitor_nodes_graphs_picker_metrics_post(self):
-        MonitorCase().case_monitor_nodes_graphs_picker_metrics_post()
+    def test_monitor_nodes_stats_what_get(self):
+        MonitorCase().case_monitor_nodes_stats_what_get()
 
-    @pytest.mark.skip   # fixme: DAT-5416
-    def test_monitor_nodes_graphs_servicedb_metrics_post(self):
-        MonitorCase().case_monitor_nodes_graphs_servicedb_metrics_post()
-
-    @pytest.mark.skip  # fixme: DAT-5416
-    def test_monitor_nodes_graphs_datastore_ram_post(self):
-        MonitorCase().case_monitor_nodes_graphs_datastore_metrics_post()
-
-    def test_monitor_nodes_stats_ml_get(self):
-        MonitorCase().case_monitor_nodes_stats_ml_get()
-
-    def test_monitor_nodes_stats_picker_get(self):
-        MonitorCase().case_monitor_nodes_stats_picker_get()
-
-    def test_monitor_nodes_stats_servicedb_get(self):
-        MonitorCase().case_monitor_nodes_stats_servicedb_get()
-
-    def test_monitor_nodes_stats_datastore_get(self):
-        MonitorCase().case_monitor_nodes_stats_datastore_get()
-
-    @pytest.mark.skip  # fixme: DAT-5416
-    def test_monitor_webserver_graphs_ram_post(self):
-        MonitorCase().case_monitor_webserver_graphs_ram_post()
-
-    @pytest.mark.skip  # fixme: DAT-5416
-    def test_monitor_webserver_graphs_cpu_post(self):
-        MonitorCase().case_monitor_webserver_graphs_cpu_post()
-
-    @pytest.mark.skip  # fixme: DAT-5416
-    def test_monitor_webserver_graphs_iops_post(self):
-        MonitorCase().case_monitor_webserver_graphs_iops_post()
-
-    @pytest.mark.skip  # fixme: DAT-5416
-    def test_monitor_webserver_graphs_network_post(self):
-        MonitorCase().case_monitor_webserver_graphs_network_post()
+    def test_monitor_webserver_graphs_metric_post(self):
+        MonitorCase().case_monitor_webserver_graphs_metric_post()
 
     def test_monitor_webserver_groups_get(self):
         MonitorCase().case_monitor_webserver_groups_get()
