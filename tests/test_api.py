@@ -818,6 +818,7 @@ class TestXbaCook:
     def test_xba_cook_entity_details_post(self):
         XbaCookCase().case_xba_cook_entity_details_post()
 
+    # DAT-5186
     def test_xba_cook_entity_info_post(self):
         XbaCookCase().case_xba_cook_entity_info_post()
 
@@ -906,13 +907,15 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_get(self):
         XbaCookCase().case_xba_cook_profiles_id_get()
 
+    # DAT-5211
     def test_xba_cook_profiles_id_summary_post(self):
         XbaCookCase().case_xba_cook_profiles_id_summary_post()
 
+    # DAT-5230
     def test_xba_cook_profiles_id_graph_post(self):
         XbaCookCase().case_xba_cook_profiles_id_graph_post()
 
-    # todo: DAT-5276
+    # DAT-5276
     def test_xba_cook_profiles_id_zones_post(self):
         XbaCookCase().case_xba_cook_profiles_id_zones_post()
 
@@ -956,62 +959,26 @@ class TestXbaCook:
 
 class TestMonitor:
 
-    def test_monitor_anomals_flag_0_post(self):
-        MonitorCase().case_monitor_anomals_flag_0_post()
-
-    def test_monitor_anomals_flag_1_post(self):
-        MonitorCase().case_monitor_anomals_flag_1_post()
-
-    def test_monitor_anomals_flag_2_post(self):
-        MonitorCase().case_monitor_anomals_flag_2_post()
-
-    def test_monitor_anomals_flag_3_post(self):
-        MonitorCase().case_monitor_anomals_flag_3_post()
-
-    def test_monitor_anomals_flag_4_post(self):
-        MonitorCase().case_monitor_anomals_flag_4_post()
-
     def test_monitor_dump_server_post(self):
         MonitorCase().case_monitor_dump_server_post()
 
     def test_monitor_dump_nodes_post(self):
         MonitorCase().case_monitor_dump_nodes_post()
 
-    def test_monitor_nodes_graphs_ml_metrics_post(self):
-        MonitorCase().case_monitor_nodes_graphs_ml_metrics_post()
+    def test_monitor_fast_graph_post(self):
+        MonitorCase().case_monitor_fast_graph_post()
 
-    def test_monitor_nodes_graphs_picker_metrics_post(self):
-        MonitorCase().case_monitor_nodes_graphs_picker_metrics_post()
+    def test_monitor_fast_info_get(self):
+        MonitorCase().case_monitor_fast_info_get()
 
-    def test_monitor_nodes_graphs_servicedb_metrics_post(self):
-        MonitorCase().case_monitor_nodes_graphs_servicedb_metrics_post()
+    def test_monitor_nodes_graphs_what_metric_post(self):
+        MonitorCase().case_monitor_nodes_graphs_what_metric_post()
 
-    def test_monitor_nodes_graphs_datastore_ram_post(self):
-        MonitorCase().case_monitor_nodes_graphs_datastore_metrics_post()
+    def test_monitor_nodes_stats_what_get(self):
+        MonitorCase().case_monitor_nodes_stats_what_get()
 
-    def test_monitor_nodes_stats_ml_get(self):
-        MonitorCase().case_monitor_nodes_stats_ml_get()
-
-    def test_monitor_nodes_stats_picker_get(self):
-        MonitorCase().case_monitor_nodes_stats_picker_get()
-
-    def test_monitor_nodes_stats_servicedb_get(self):
-        MonitorCase().case_monitor_nodes_stats_servicedb_get()
-
-    def test_monitor_nodes_stats_datastore_get(self):
-        MonitorCase().case_monitor_nodes_stats_datastore_get()
-
-    def test_monitor_webserver_graphs_ram_post(self):
-        MonitorCase().case_monitor_webserver_graphs_ram_post()
-
-    def test_monitor_webserver_graphs_cpu_post(self):
-        MonitorCase().case_monitor_webserver_graphs_cpu_post()
-
-    def test_monitor_webserver_graphs_iops_post(self):
-        MonitorCase().case_monitor_webserver_graphs_iops_post()
-
-    def test_monitor_webserver_graphs_network_post(self):
-        MonitorCase().case_monitor_webserver_graphs_network_post()
+    def test_monitor_webserver_graphs_metric_post(self):
+        MonitorCase().case_monitor_webserver_graphs_metric_post()
 
     def test_monitor_webserver_groups_get(self):
         MonitorCase().case_monitor_webserver_groups_get()

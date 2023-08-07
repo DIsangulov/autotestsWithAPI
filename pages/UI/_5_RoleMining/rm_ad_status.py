@@ -1,7 +1,4 @@
 import time
-from selenium.webdriver import Keys
-import pytest
-from selenium.webdriver.common.by import By
 
 from pages.Helpers.base_page import BasePage
 from resourses.locators import RoleMiningLocators, MainLocators, AdminLocators

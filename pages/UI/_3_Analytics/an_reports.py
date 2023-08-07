@@ -1,15 +1,10 @@
 import time
 
-from playwright.async_api import expect
 
 from pages.Helpers.base_page import BasePage
 from resourses.locators import AnalyticsLocators, MainLocators, AdminLocators
-# from faker import Faker
 
-# fake = Faker()
-# name = fake.sentence(nb_words=3)  # генерация случайного названия из 2 слов
 name = "Два слова"
-# description = fake.sentence(nb_words=20)  # генерация случайного описания из 20 слов
 description = "Неслучайное описание из пяти слов"
 saved_report_name = None
 
