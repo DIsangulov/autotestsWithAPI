@@ -11,3 +11,6 @@ class Navigation:
         self.PB_SIGN_OUT = self.page.locator("//*[contains(text(),'Выйти')]")
 
         self.SIDE_BAR = self.page.locator("//div[@class='n-app-navigation__button']")
+
+        self.SB_DATA = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Данные')]][1]")
+        self.SB_DATA_SOURCES = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Источники')]][1]")

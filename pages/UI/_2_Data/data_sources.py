@@ -1,14 +1,32 @@
+from playwright.sync_api import Page
+
 from pages.Helpers.base_page import BasePage
-from resourses.locators import DataLocators, AdminLocators
 
 
-class Sources(BasePage):
-    def open_data_sources(self):
-        self.page.click(DataLocators.DATAS)
-        self.page.click(DataLocators.SOURCES)
+class SourcesPage(BasePage):
 
-    def should_enter_data_sources_be_successful(self):
-        self.wait_for_page_load(AdminLocators.TITLE_MSG_NEW)
-        assert "Источники данных" in self.is_element_present(AdminLocators.TITLE_MSG_NEW).inner_text(), \
-            "Найдено несовпадение ожидаемого результата с фактическим"
-        assert self.page.url == self.host + "/datasource", "URL's do not match"
+    page_path = "/datasource"
+
+    def __init__(self, page: Page):
+        super().__init__(page)
+        self.page_path = SourcesPage.page_path
+
+    # todo: кнопка перейти в библиотеку шаблонов
+    # todo: кнопка импорт драйвера
+    # todo: импорт файла паттернов
+    # todo: кнопка подключить источник
+    # > Из коннектора
+    # > В редакторе
+
+    # todo: локатор на поле ввода "Источник"
+    # > тип подключения
+    # > статус
+    # > изменено
+
+    # todo: на кнопки в поле "Действие
+    # > редактировать
+    # > Удалить
+    # > Детали
+    # >> Модальное окно детали поля
+    # >> МОД > Статус получения данных раскрывашка
+    # >> МОД > Закрыть МОД

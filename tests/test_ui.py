@@ -15,7 +15,7 @@ from pages.UI._1_Administration.adm_settings import Settings
 from pages.UI._1_Administration.adm_update import Update
 from pages.UI._1_Administration.adm_users import Users
 from pages.UI._2_Data.data_scripts import Scripts
-from pages.UI._2_Data.data_sources import Sources
+from pages.UI._2_Data.data_sources import SourcesPage
 from pages.UI._2_Data.data_storage import Storage
 from pages.UI._3_Analytics.an_mailing_lists import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
@@ -29,6 +29,8 @@ from pages.UI._5_RoleMining.rm_ad_status import AdStatus
 
 from tests.case.ui.administration_ui import AdministrationCase
 from tests.case.ui.auth_ui import AuthCase
+from tests.case.ui.m2_data.sources_ui import DataSourcesCase
+
 
 # from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
 # from pages.UI._5_RoleMining.rm_role_model import RoleModel
@@ -119,20 +121,20 @@ class TestAuth:
 
     # tit 708
     @allure.title("Авторизация | Выход из профиля пользователя")
-    @allure.description(f"Выход по кнопке 'Выйти'")
+    @allure.description("Выход по кнопке 'Выйти'")
     @pytest.mark.parametrize('auth_data', [TestUsers.DpQaaLocal])
     def test_log_out(self, browser_without_auth, auth_data):
         AuthCase(browser_without_auth).log_out(auth_data)
 
 
-@pytest.mark.skip
-class TestAdministration1:
+@allure.suite("Данные > Источники")
+@allure.issue("https://tasks.ngrsoftlab.ru/browse/QA-200")
+class TestDataSources:
 
-    def test_open_adm_roles(self, browser):
-        AdministrationCase(browser).open_adm_roles()
-
-    def test_open_adm_roles1(self, browser):
-        AdministrationCase(browser).another_case()
+    @allure.title("Открыть страницу 'Источники'")
+    @allure.description("Открыть страницу через боковое меню")
+    def test_open_page_by_steps(self, browser):
+        DataSourcesCase(browser).open_page_by_steps()
 
 
 @pytest.mark.skip
@@ -286,14 +288,6 @@ class TestData:  # Данные
         page = AuthPage(browser)
         page.open()
         page.enter_as_user()
-
-    def test_open_data_sources(self, browser):
-        page = Sources(browser)
-        page.open_data_sources()
-
-    def test_should_enter_data_sources_be_successful(self, browser):
-        page = Sources(browser)
-        page.should_enter_data_sources_be_successful()
 
     def test_open_data_scripts(self, browser):
         page = Scripts(browser)
