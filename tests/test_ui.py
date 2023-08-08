@@ -15,7 +15,6 @@ from pages.UI._1_Administration.adm_settings import Settings
 from pages.UI._1_Administration.adm_update import Update
 from pages.UI._1_Administration.adm_users import Users
 from pages.UI._2_Data.data_scripts import Scripts
-from pages.UI._2_Data.data_sources import SourcesPage
 from pages.UI._2_Data.data_storage import Storage
 from pages.UI._3_Analytics.an_mailing_lists import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
@@ -135,6 +134,16 @@ class TestDataSources:
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
         DataSourcesCase(browser).open_page_by_steps()
+
+    @allure.title("Открыть модальное окно 'Детали'")
+    @allure.description("""
+        На странице 'Источники' в колонке 'Действие',
+        при нажатии на кнопку 'Детали' должно раскрываться модальное окно
+        с информацией по источнику
+    """)
+    @allure.link("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
+    def test_open_modal_w_actions_details(self, browser):
+        DataSourcesCase(browser).open_modal_w_actions_details()
 
 
 @pytest.mark.skip
