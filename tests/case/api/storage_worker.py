@@ -1,3 +1,4 @@
+import datetime
 import json
 import random
 
@@ -9,6 +10,11 @@ from tests.case.api.permitter import PermitterCase
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 reg_pid = set()        # список, содержащий id новосозданных регулярных выражений
+
+
+def get_datetime_now_z() -> str:
+    # 2023-07-20T17:04:16Z
+    return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
 
 
 class StorageWorkerCase(UserSession):
@@ -109,16 +115,23 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_statistics_db_event_stats_db_name_flag_post(self):
+        # flag == | 0 - сегодня | 1 - вчера | 2 - неделя | 3 - месяц | 4 - год
+        flag_keys = (0, 1, 2, 3, 4)
+
         req = StorageWorker(self.sess, self.host)
 
         db_name = DbName.picker_tables
 
-        # flag == | 0 - сегодня | 1 - вчера | 2 - неделя | 3 - месяц | 4 - год
-        flag = 0    # todo: прогнать в цикле все флаги
-        data = {"timezone": "Europe/Moscow"}
-        resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post(db_name, flag, data)
-        # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        data = {
+            # "start": "2023-08-13T00:00:00Z",
+            # "end": get_datetime_now_z(),
+            "offset": 0,
+            "timeFlag": 0   # todo:? flag и в data, и в post-пути
+        }
+        for flag in flag_keys:
+            resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post(db_name, flag, data)
+            # print(resp.text)
+            assert resp.status_code == 200, f"Ошибка, code: {resp.status_code}, flag: {flag}, resp: {resp.text}"
 
     def case_storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self):
         req = StorageWorker(self.sess, self.host)
@@ -147,15 +160,24 @@ class StorageWorkerCase(UserSession):
         # print(resp.text)
 
     def case_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
+        # flag == | 0 - сегодня | 1 - вчера | 2 - неделя | 3 - месяц | 4 - год
+        flag_keys = (0, 1, 2, 3, 4)
+
         req = StorageWorker(self.sess, self.host)
 
         db_name = DbName.picker_tables
         tab_name = "ad_groups_ngr"
-        # flag == | 0 - сегодня | 1 - вчера | 2 - неделя | 3 - месяц | 4 - год
-        flag = 0    # todo: прогнать в цикле все флаги
-        data = {"timezone": "Europe/Moscow"}
-        resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(db_name, tab_name, flag, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        data = {
+            # "start": "2023-08-13T00:00:00Z",
+            # "end": get_datetime_now_z(),
+            "offset": 0,
+            "timeFlag": 0   # todo: ?flag и в data, и в post-пути
+        }
+
+        for flag in flag_keys:
+            resp = req.storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(db_name, tab_name, flag, data)
+            # print(resp.text)
+            assert resp.status_code == 200, f"Ошибка, code: {resp.status_code}, flag: {flag}, resp: {resp.text}"
 
     def case_storage_worker_statistics_db_tabs_stats_dbname_get(self):
         req = StorageWorker(self.sess, self.host)

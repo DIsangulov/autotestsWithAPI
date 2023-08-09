@@ -38,6 +38,7 @@ class BasePage(Navigation):
 
     def open(self):
         self.page.goto(self.host + self.page_path)
+        self.page.wait_for_url(self.host + self.page_path)
 
     def goto_page(self, page_path: str):
         self.page.goto(self.host + page_path)

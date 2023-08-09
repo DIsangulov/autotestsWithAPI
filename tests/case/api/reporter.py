@@ -3,6 +3,7 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_reporter import Reporter
+from tests.case.api.visualisation import VisualisationCase
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 
@@ -11,7 +12,8 @@ mailing_id = set()     # 'id' рассылок
 
 class ReporterCase(UserSession):
 
-    # TODO: _get_report_id
+    def get_report_id(self):
+        return VisualisationCase().get_report_id()
 
     def _collect_mailing_id(self):
         resp = Reporter(self.sess, self.host).reporter_mailing_get()
@@ -24,7 +26,7 @@ class ReporterCase(UserSession):
                     mailing_id.add(int(_row['id']))
         # print(f"mailing_id is now: {mailing_id}")
 
-    def _get_mailing_id(self) -> int:
+    def get_mailing_id(self) -> int:
         if len(mailing_id) == 0:
             self._collect_mailing_id()
 
@@ -43,7 +45,7 @@ class ReporterCase(UserSession):
     def case_reporter_mailing_put(self):
         req = Reporter(self.sess, self.host)
         str_random_num = str(random.randint(100, 999))
-        _mailing_id = self._get_mailing_id()
+        _mailing_id = self.get_mailing_id()
         self_user_id = self.get_self_user_id()
         data = {
             "id": _mailing_id,
@@ -84,7 +86,7 @@ class ReporterCase(UserSession):
                 # 282
             ],
             "receivers": [
-                # 1212
+                4870    # "s.yezhov@ngrsoftlab.ru"
             ]
         }
         resp = req.reporter_mailing_put(data)
@@ -99,8 +101,8 @@ class ReporterCase(UserSession):
             # "id":           435,                              # 'id' самой рассылки
             "name":         API_AUTO_TEST_ + str_random_num,            # имя рассылки
             "description":  "описание рассылки",                # описание рассылки
-            "published":    False,
-            "opened":       False,
+            "published":    True,
+            "opened":       True,
             "author_id":    self_user_id,                       # 'id' автора
             # "author_name":  "Владимир Даль",                  # >> по идее, имя автора
             # "editor_id":    self_user_id,                     # 'id' редактора >> 'id' автора
@@ -112,7 +114,7 @@ class ReporterCase(UserSession):
             "syslog":       False,
             "email":        True,
             "db_id":        None,
-            # "report_id":    526,                            # 'id' отчета, из которой делается рассылка >> выпадающий список "Отчет"
+            "report_id":    self.get_report_id(),               # 'id' отчета, из которой делается рассылка >> выпадающий список "Отчет"
             "settings":
                 {
                     "sampled":          False,
@@ -126,7 +128,7 @@ class ReporterCase(UserSession):
                 },
             "elements": None,   # >> видимо 'Элементы отчета' >> int
             "receivers": [      # 'id' получателей
-                # 1234
+                4870    # "s.yezhov@ngrsoftlab.ru"
             ]
         }
         resp = req.reporter_mailing_post(data)
@@ -136,8 +138,7 @@ class ReporterCase(UserSession):
 
     def case_reporter_mailing_sample_post(self):
         req = Reporter(self.sess, self.host)
-        _report_id = 525    # FIXME: хардкод
-        # _report_id = self._get_report_id()    # TODO: реализовать
+        _report_id = self.get_mailing_id()
         data = {
             "settings": {
                 "report_settings": {
@@ -146,13 +147,12 @@ class ReporterCase(UserSession):
                 "text": API_AUTO_TEST_ + "text",
                 "topic": API_AUTO_TEST_ + "topic"
             },
-            "type": 0,
+            "type": 0,  # 0 - report by schedule 1 - report by criterion 2 - new data mailing 3 - mailing by trigger
             "name": API_AUTO_TEST_ + "name",
             "report_id": _report_id,
             "elements": [
                 # 282
             ],
-            # "editor_id": 4870
             "editor_id": self.get_self_user_id()
         }
         resp = req.reporter_mailing_sample_post(data)
@@ -175,14 +175,14 @@ class ReporterCase(UserSession):
 
     def case_reporter_mailing_id_get(self):
         req = Reporter(self.sess, self.host)
-        _mailing_id = self._get_mailing_id()
+        _mailing_id = self.get_mailing_id()
         resp = req.reporter_mailing_id_get(_mailing_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
     def case_reporter_mailing_id_delete(self):
         req = Reporter(self.sess, self.host)
-        _mailing_id = self._get_mailing_id()
+        _mailing_id = self.get_mailing_id()
 
         resp = req.reporter_mailing_id_delete(_mailing_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

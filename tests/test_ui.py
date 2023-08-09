@@ -14,9 +14,6 @@ from pages.UI._1_Administration.adm_sessions import Sessions
 from pages.UI._1_Administration.adm_settings import Settings
 from pages.UI._1_Administration.adm_update import Update
 from pages.UI._1_Administration.adm_users import Users
-from pages.UI._2_Data.data_scripts import Scripts
-from pages.UI._2_Data.data_sources import Sources
-from pages.UI._2_Data.data_storage import Storage
 from pages.UI._3_Analytics.an_mailing_lists import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
 from pages.UI._3_Analytics.an_requests import Requests
@@ -29,6 +26,10 @@ from pages.UI._5_RoleMining.rm_ad_status import AdStatus
 
 from tests.case.ui.administration_ui import AdministrationCase
 from tests.case.ui.auth_ui import AuthCase
+from tests.case.ui.m2_data.scripts_ui import DataScriptsCase
+from tests.case.ui.m2_data.sources_ui import DataSourcesCase
+from tests.case.ui.m2_data.storage_ui import DataStorageCase
+
 
 # from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
 # from pages.UI._5_RoleMining.rm_role_model import RoleModel
@@ -119,29 +120,101 @@ class TestAuth:
 
     # tit 708
     @allure.title("Авторизация | Выход из профиля пользователя")
-    @allure.description(f"Выход по кнопке 'Выйти'")
+    @allure.description("Выход по кнопке 'Выйти'")
     @pytest.mark.parametrize('auth_data', [TestUsers.DpQaaLocal])
     def test_log_out(self, browser_without_auth, auth_data):
         AuthCase(browser_without_auth).log_out(auth_data)
 
 
-@pytest.mark.skip
-class TestAdministration1:
+@allure.suite("Данные > Источники")
+@allure.link("https://tasks.ngrsoftlab.ru/browse/QA-200")
+class TestDataSources:
 
-    def test_open_adm_roles(self, browser):
-        AdministrationCase(browser).open_adm_roles()
+    @allure.suite("Навигация")
+    @allure.title("Открыть страницу 'Источники'")
+    @allure.description("Открыть страницу через боковое меню")
+    def test_open_page_by_steps(self, browser):
+        DataSourcesCase(browser).open_page_by_steps()
 
-    def test_open_adm_roles1(self, browser):
-        AdministrationCase(browser).another_case()
+    @allure.title("Открыть модальное окно 'Детали'")
+    @allure.description("""
+    На странице 'Источники' в колонке 'Действие',
+    при нажатии на кнопку 'Детали' должно раскрываться модальное окно
+    с информацией по источнику
+    """)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
+    def test_open_modal_w_actions_details(self, browser):
+        DataSourcesCase(browser).open_modal_w_actions_details()
+
+    # todo: 301
+    # todo: 316
+    # todo: 459
+    # todo: 549
+    # todo: 159
+    # todo: 531 ?
+
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Создание источника в редакторе'")
+    def test_open_new_source_editor_by_steps(self, browser):
+        DataSourcesCase(browser).open_new_source_editor_by_steps()
+
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Подключение источника'")
+    @allure.description("Подключить источник из коннектора")
+    def test_open_new_source_connector_by_steps(self, browser):
+        DataSourcesCase(browser).open_new_source_connector_by_steps()
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Навигация")
+    @allure.title("Элементы навигации библиотека Шаблонов/Коннекторов")
+    @allure.description("""
+    Переход на страницу 'Библиотека коннекторов' используя UI элементы, со страницы 'Источники данных';
+    Работа вкладок 'Коннекторы', 'Логотипы';
+    Работа кнопок 'Создать коннектор', 'Создать логотип'
+    Работа кнопки '<- Возврат', ( вернуться к Источникам данных )
+    """)
+    def test_library_connectors_navigation(self, browser):
+        DataSourcesCase(browser).library_connectors_navigation()
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Новый Источник")
+    @allure.title("Создание источника в редакторе")
+    @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
+    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
+    def test_source_create_editor_syslog(self, browser):
+        DataSourcesCase(browser).source_create_editor_syslog()
+
+    # https://team-6wwm.testit.software/projects/3/tests?isolatedSection=1ab5e96c-fcad-4238-bd9f-bb78f7d0e094
+
+
+@allure.suite("Данные > Скрипты")
+class TestDataScripts:
+
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Скрипты'")
+    @allure.description("Открыть страницу через боковое меню")
+    def test_open_page_by_steps(self, browser):
+        DataScriptsCase(browser).open_page_by_steps()
+
+
+@allure.suite("Данные > Хранилище")
+class TestDataStorage:
+
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Хранилище'")
+    def test_open_page_by_steps(self, browser):
+        DataStorageCase(browser).open_page_by_steps()
+
+    @allure.suite("Навигация")
+    @allure.title("Хранилище > переход по вкладкам")
+    @allure.description("Проверка работы верхних вкладок \
+    [Структура, Статистика, Поиск в Хранилище|по содержимому|по столбцам, Правила импорта]")
+    def test_storage_navigation_tabs(self, browser):
+        DataStorageCase(browser).storage_navigation_tabs()
 
 
 @pytest.mark.skip
 class TestAdministration:  # Администрирование
-
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_adm_roles(self, browser):
         page = Roles(browser)
@@ -281,76 +354,7 @@ class TestAdministration:  # Администрирование
 
 
 @pytest.mark.skip
-class TestData:  # Данные
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-
-    def test_open_data_sources(self, browser):
-        page = Sources(browser)
-        page.open_data_sources()
-
-    def test_should_enter_data_sources_be_successful(self, browser):
-        page = Sources(browser)
-        page.should_enter_data_sources_be_successful()
-
-    def test_open_data_scripts(self, browser):
-        page = Scripts(browser)
-        page.open_data_scripts()
-
-    def test_should_enter_data_scripts_be_successful(self, browser):
-        page = Scripts(browser)
-        page.should_enter_data_scripts_be_successful()
-
-    def test_open_data_storage_structure(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_structure()
-
-    def test_should_enter_data_storage_structure_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_structure_be_successful()
-
-    def test_open_data_storage_statistic(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_statistics()
-
-    def test_should_enter_data_storage_statistic_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_statistics_be_successful()
-
-    def test_open_data_storage_saerch_content(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_search_content()
-
-    def test_should_enter_data_storage_search_content_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_search_content_be_successful()
-
-    def test_open_data_storage_saerch_column(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_search_column()
-
-    def test_should_enter_data_storage_search_column_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_search_column_be_successful()
-
-    def test_open_data_storage_import_rules(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_import_rules()
-
-    def test_should_enter_data_storage_import_rules_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_import_rules_be_successful()
-
-
-@pytest.mark.skip
 class TestAnalytics:  # Аналитика
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
         page.open_an_mailing_lists_reports()
@@ -386,11 +390,6 @@ class TestAnalytics:  # Аналитика
 
 @pytest.mark.skip
 class TestXBA:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-        page.should_enter_be_successful()
 
     def test_open_xba_profiles(self, browser):
         page = Profiles(browser)
@@ -419,11 +418,6 @@ class TestXBA:
 
 @pytest.mark.skip
 class TestRoleMining:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-        page.should_enter_be_successful()
 
     def test_open_rm_ad_status_statistic(self, browser):
         page = AdStatus(browser)
@@ -445,12 +439,6 @@ class TestRoleMining:
 @pytest.mark.skip
 class TestRoleMiningSettingsSources:
 
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-        page.should_enter_be_successful()
-
     def test_role_mining_settings_page(self, browser):
         page = RmSettings(browser)
         page.open_rm_settings_sources()
@@ -466,12 +454,6 @@ class TestRoleMiningSettingsSources:
 
 @pytest.mark.skip
 class TestRoleMiningActiveDirectory:
-
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-        page.should_enter_be_successful()
 
     def test_mailing_anomaly_rm_tcp(self, browser):
         page = AdStatus(browser)
@@ -501,11 +483,6 @@ class TestRoleMiningActiveDirectory:
 @pytest.mark.skip
 @allure.title('Отчеты - проверка отображения отчета со статусом "Не опубликован+Закрыт"')
 class TestAnalyticsReportsNotPublishedClosed:  # Отчеты - проверка отображения отчета со статусом "Не опубликован+Закрыт"
-
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -547,11 +524,6 @@ class TestAnalyticsReportsNotPublishedClosed:  # Отчеты - проверка
 @pytest.mark.skip
 @allure.title('Отчеты - проверка отображения отчета со статусом "Опубликован+Закрыт"')
 class TestAnalyticsReportsPublishedClosed:  # Отчеты - проверка отображения отчета со статусом "Опубликован+Закрыт"
-
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -609,11 +581,6 @@ class TestAnalyticsReportsPublishedClosed:  # Отчеты - проверка о
 @pytest.mark.skip
 @allure.title('Отчеты - проверка отображения отчета со статусом "Опубликован+Открыт"')
 class TestAnalyticsReportsPublishedOpen:  # Отчеты - проверка отображения отчета со статусом "Опубликован+Открыт"
-
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -675,10 +642,6 @@ class TestAnalyticsReportsPublishedOpen:  # Отчеты - проверка от
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для роли на "Чтение"')
 class TestSettingReportAccessForRoleToRead:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -740,10 +703,6 @@ class TestSettingReportAccessForRoleToRead:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для роли на "Запись"')
 class TestSettingReportAccessForRoleToWrite:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -805,10 +764,6 @@ class TestSettingReportAccessForRoleToWrite:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для роли на "Выполнение"')
 class TestSettingReportAccessForRoleToExecute:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -870,10 +825,6 @@ class TestSettingReportAccessForRoleToExecute:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для роли на "Настройка доступа"')
 class TestSettingReportAccessForRoleToAccessSettings:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -935,10 +886,6 @@ class TestSettingReportAccessForRoleToAccessSettings:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Чтение"')
 class TestSettingReportAccessForUserToRead:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -1004,10 +951,6 @@ class TestSettingReportAccessForUserToRead:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Запись"')
 class TestSettingReportAccessForUserToWrite:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -1073,10 +1016,6 @@ class TestSettingReportAccessForUserToWrite:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Выполнение"')
 class TestSettingReportAccessForUserToExecute:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -1142,10 +1081,6 @@ class TestSettingReportAccessForUserToExecute:
 @pytest.mark.skip
 @allure.title('Отчеты - установка доступа к отчету для пользователя на "Настройку доступа"')
 class TestSettingReportAccessForUserToAccessSettings:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -1211,11 +1146,6 @@ class TestSettingReportAccessForUserToAccessSettings:
 @pytest.mark.skip
 @allure.title('Отчеты - удаление доступа к отчету для пользователя, роль которого имеет доступ на "Выполнение"')
 class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
-
-    def test_valid_auth_by_main_user(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)
@@ -1283,14 +1213,10 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
         page.log_out()
         time.sleep(3)
 
-    def test_valid_auth_second_iteration_by_main_user(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-
-    def test_open_side_bar(self, browser):
-        page = AuthPage(browser)
-        page.open_side_bar()
+    # def test_valid_auth_second_iteration_by_main_user(self, browser):
+    #     page = AuthPage(browser)
+    #     page.open()
+    #     page.enter_as_user()
 
     def test_open_an_mailing_lists_reports_second_iteration(self, browser):
         page = MailingLists(browser)
@@ -1342,10 +1268,6 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
 @pytest.mark.skip
 @allure.title('Отчеты - проверка доступа к детализации, фильтрам и настройкам визуализации в отчете (для роли на ''Чтение)')
 class TestCheckingReportElements:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists(self, browser):
         page = MailingLists(browser)
@@ -1372,10 +1294,6 @@ class TestCheckingReportElements:
 @pytest.mark.skip
 @allure.title('Отчеты - Удаление последнего отчета')
 class TestAnalyticsReportsDeleteLast:
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
 
     def test_open_an_mailing_lists_reports(self, browser):
         page = MailingLists(browser)

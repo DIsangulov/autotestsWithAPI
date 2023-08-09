@@ -25,18 +25,6 @@ class AuthPage(BasePage):
         # self.REGISTER_LINK = page.locator()   # todo:
 
     # FIXME: зависимости
-    def enter_as_user(self):
-        self.page.fill(AuthLocators.LOGIN_INPUT, TestUsers.DpQaa.get("username"))
-        self.page.fill(AuthLocators.PASSWORD_INPUT, TestUsers.DpQaa.get("password"))
-        self.page.click(AuthLocators.PASS_VISIBLE)
-        self.page.click(AuthLocators.ENTER_BUTTON)
-        self.page.click(MainLocators.SIDE_BAR)
-
-    # FIXME: зависимости
-    def should_enter_be_successful(self):
-        assert self.is_element_present(MainLocators.SUCCESS_ENTER), "Unsuccessful enter"
-
-    # FIXME: зависимости
     def log_out(self):
         self.page.mouse.click(0, 0)
         self.page.click(MainLocators.HUMAN_ICON)
@@ -49,7 +37,3 @@ class AuthPage(BasePage):
         self.page.click(AuthLocators.PASS_VISIBLE)
         self.page.click(AuthLocators.CHECKBOX_LOCAL)
         self.page.click(AuthLocators.ENTER_BUTTON)
-
-    # FIXME: зависимости -> C_SideBar
-    def open_side_bar(self):  # открытие бокового меню
-        self.page.click(MainLocators.SIDE_BAR)
