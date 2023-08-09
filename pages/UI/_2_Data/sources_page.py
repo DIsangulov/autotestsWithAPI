@@ -1,5 +1,4 @@
 from playwright.sync_api import Page
-
 from pages.Helpers.base_page import BasePage
 
 
@@ -13,10 +12,13 @@ class SourcesPage(BasePage):
 
         # todo: кнопка перейти в библиотеку шаблонов
         # todo: кнопка импорт драйвера
+        # todo: модалка импорт драйвера
         # todo: импорт файла паттернов
-        # todo: кнопка подключить источник
-        # > Из коннектора
-        # > В редакторе
+        # todo: модалка импорт паттернов
+
+        self.NEW_SOURCE_BUTTON = page.locator("//div[contains(@class, 'ngr-button-dropdown') and ./*/button//text()='Подключить источник']")
+        self.NSB_FROM_CONNECTOR = page.locator("//div[contains(@class, 'ngr-button-dropdown__options') and ./div/div/text()='Из коннектора']")
+        self.NSB_IN_EDITOR = page.locator("//div[contains(@class, 'ngr-button-dropdown__options') and ./div/div/text()='В редакторе']")
 
         # todo: локатор на поле ввода "Источник"
         # > тип подключения

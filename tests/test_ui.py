@@ -14,8 +14,6 @@ from pages.UI._1_Administration.adm_sessions import Sessions
 from pages.UI._1_Administration.adm_settings import Settings
 from pages.UI._1_Administration.adm_update import Update
 from pages.UI._1_Administration.adm_users import Users
-from pages.UI._2_Data.data_scripts import Scripts
-from pages.UI._2_Data.data_storage import Storage
 from pages.UI._3_Analytics.an_mailing_lists import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
 from pages.UI._3_Analytics.an_requests import Requests
@@ -127,9 +125,10 @@ class TestAuth:
 
 
 @allure.suite("Данные > Источники")
-@allure.issue("https://tasks.ngrsoftlab.ru/browse/QA-200")
+@allure.link("https://tasks.ngrsoftlab.ru/browse/QA-200")
 class TestDataSources:
 
+    @allure.suite("Навигация")
     @allure.title("Открыть страницу 'Источники'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
@@ -141,9 +140,82 @@ class TestDataSources:
         при нажатии на кнопку 'Детали' должно раскрываться модальное окно
         с информацией по источнику
     """)
-    @allure.link("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
     def test_open_modal_w_actions_details(self, browser):
         DataSourcesCase(browser).open_modal_w_actions_details()
+
+    # todo: 301
+    # todo: 316
+    # todo: 459
+    # todo: 549
+    # todo: 159
+    # todo: 531 ?
+
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Создание источника в редакторе'")
+    def test_open_new_source_editor_by_steps(self, browser):
+        DataSourcesCase(browser).open_new_source_editor_by_steps()
+
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Подключение источника'")
+    @allure.description("Подключить источник из коннектора")
+    def test_open_new_source_connector_by_steps(self, browser):
+        DataSourcesCase(browser).open_new_source_connector_by_steps()
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Библиотека коннекторов'")
+    @allure.description("Переход на страницу использую UI элементы, со страницы 'Источники данных'")
+    def test_open_library_connectors_by_steps(self, browser):
+        DataSourcesCase(browser).open_library_connectors_by_steps()
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Библиотека логотипов'")
+    @allure.description("Переход на страницу использую UI элементы, со страницы 'Источники данных'")
+    def test_open_library_logo_by_steps(self, browser):
+        DataSourcesCase(browser).open_library_logo_by_steps()
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Новый Источник")
+    @allure.title("Создание источника в редакторе")
+    @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
+    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
+    def test_source_create_editor_syslog(self, browser):
+        DataSourcesCase(browser).source_create_editor_syslog()
+
+    # https://team-6wwm.testit.software/projects/3/tests?isolatedSection=1ab5e96c-fcad-4238-bd9f-bb78f7d0e094
+
+
+@pytest.mark.skip
+@allure.suite("Данные > Скрипты")
+class TestDataScripts:
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Скрипты'")
+    @allure.description("Открыть страницу через боковое меню")
+    def test_open_page_by_steps(self, browser):
+        pass
+
+
+@pytest.mark.skip
+@allure.suite("Данные > Хранилище")
+class TestDataStorage:
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Навигация")
+    @allure.title("Переход на страницу 'Хранилище'")
+    def test_open_page_by_steps(self, browser):
+        pass
+
+    @pytest.mark.skip   # todo: сделать
+    @allure.suite("Навигация")
+    @allure.title("Хранилище > переход по вкладкам")
+    @allure.description("Проверка работы верхних вкладок \
+    [Структура, Статистика, Поиск в Хранилище|по содержимому|по столбцам, Правила импорта]")
+    def test_open_storage_navigation_tabs(self, browser):
+        pass
 
 
 @pytest.mark.skip
@@ -289,62 +361,6 @@ class TestAdministration:  # Администрирование
     def test_should_enter_adm_settings_secrets_be_successful(self, browser):
         page = Settings(browser)
         page.should_enter_adm_settings_secrets_be_successful()
-
-
-@pytest.mark.skip
-class TestData:  # Данные
-    def test_valid_auth(self, browser):
-        page = AuthPage(browser)
-        page.open()
-        page.enter_as_user()
-
-    def test_open_data_scripts(self, browser):
-        page = Scripts(browser)
-        page.open_data_scripts()
-
-    def test_should_enter_data_scripts_be_successful(self, browser):
-        page = Scripts(browser)
-        page.should_enter_data_scripts_be_successful()
-
-    def test_open_data_storage_structure(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_structure()
-
-    def test_should_enter_data_storage_structure_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_structure_be_successful()
-
-    def test_open_data_storage_statistic(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_statistics()
-
-    def test_should_enter_data_storage_statistic_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_statistics_be_successful()
-
-    def test_open_data_storage_saerch_content(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_search_content()
-
-    def test_should_enter_data_storage_search_content_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_search_content_be_successful()
-
-    def test_open_data_storage_saerch_column(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_search_column()
-
-    def test_should_enter_data_storage_search_column_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_search_column_be_successful()
-
-    def test_open_data_storage_import_rules(self, browser):
-        page = Storage(browser)
-        page.open_data_storage_import_rules()
-
-    def test_should_enter_data_storage_import_rules_be_successful(self, browser):
-        page = Storage(browser)
-        page.should_enter_data_storage_import_rules_be_successful()
 
 
 @pytest.mark.skip
