@@ -51,20 +51,6 @@ class AdminLocators:
     SECRETS = "(//li[@class='ngr-tabs__item'])[8]"
 
 
-class DataLocators:
-    DATAS = "//*[contains(text(),'Данные')]"
-    SOURCES = "//*[contains(text(),'Источники')]"
-    REGEX = "//*[contains(text(),'Регулярные выражения')]"
-    SCRIPTS = "//*[contains(text(),'Скрипты')]"
-    STORAGE = "//*[contains(text(),'Хранилище')]"
-    STRUCTURE = "(//*[contains(text(),'Структура')])[2]"
-    STATISTICS = "(//li[@class='ngr-tabs__item'])[1]"
-    STORAGE_SEARCH = "(//li[@class='ngr-tabs__item'])[2]"
-    STORAGE_SEARCH_CONTENT = "//*[contains(text(),'По содержимому')]"
-    STORAGE_SEARCH_COLUMN = "//*[contains(text(),'По столбцам')]"
-    IMPORT_RULES = "(//li[@class='ngr-tabs__item'])[3]"
-
-
 class AnalyticsLocators:
     ANALYTICS = "//*[contains(text(),'Аналитика')]"
     MAILING_LISTS = "//*[contains(text(),'Рассылки')]"

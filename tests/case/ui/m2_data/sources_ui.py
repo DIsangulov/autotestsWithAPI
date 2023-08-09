@@ -4,8 +4,7 @@ import allure
 from playwright.sync_api import expect
 
 from pages.Helpers.base_case import BaseCase
-from pages.UI._2_Data.sources_editor_page import SourcesEditorPage
-from pages.UI._2_Data.sources_page import SourcesPage
+from pages.UI._2_Data.sources_page import SourcesPage, SourcesEditorPage
 
 UI_AUTO_TEST_ = "UI_AUTO_TEST_"
 
@@ -85,7 +84,7 @@ class DataSourcesCase(BaseCase):
             page.NSB_IN_EDITOR.click()
 
         with allure.step("Открылась страница создания источника в редакторе"):
-            page.page.wait_for_url(page.host + "/datasource/create/editor")
+            page.page.wait_for_url(page.host + SourcesEditorPage.page_path)
 
     def open_new_source_connector_by_steps(self):
         page = SourcesPage(self._page)
@@ -103,12 +102,8 @@ class DataSourcesCase(BaseCase):
         with allure.step("Открылась страница 'Подключение источника'"):
             page.page.wait_for_url(page.host + "/datasource/create/connector")
 
-    def open_library_connectors_by_steps(self):
+    def library_connectors_navigation(self):
         # todo: остальные шаги
-        pass
-
-    def open_library_logo_by_steps(self):
-        # todo: other steps
         pass
 
     def source_create_editor_syslog(self):
