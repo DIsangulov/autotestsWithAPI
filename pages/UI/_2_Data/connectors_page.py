@@ -41,6 +41,9 @@ class ConnectorsCreatePage(BasePage):
         super().__init__(page)
         self.page_path = self.__class__.page_path
 
+        self.YES_BUTTON = page.locator("(//button[contains(@class,'ngr-button ngr-promt__btn')])[2]")
+        self.NAME_FILED = page.locator("//input[contains(@class,'ngr-input__input ngr-field__input')]")
+
         # todo:
 
 

@@ -142,10 +142,21 @@ class DataSourcesCase(BaseCase):
         with allure.step("Открылась страница 'Создание коннектора'"):
             page.page.wait_for_url(page.host + ConnectorsCreatePage.page_path)
 
-        # fixme: вы уверены что хотите выйти без сохранения?
+        page = ConnectorsCreatePage(self._page)
+
+        with allure.step("Ввод текста в инпут для появления 'Вы уверенны?'"):
+            page.NAME_FILED.fill("Текст")
 
         with allure.step("Клик по кнопке <- назад"):
             page.BACK_BUTTON.click()
+
+        with allure.step("Появилось модальное окно:'Вы уверенны?'"):
+            expect(page.YES_BUTTON).to_be_visible()
+        with allure.step("В модалке 'Вы точно уверены?' Клик по кнопке ДА"):
+            page.YES_BUTTON.click()
+
+        page = ConnectorsPage(self._page)
+
         with allure.step("Открылась страница 'Библиотека коннекторов'"):
             page.page.wait_for_url(page.host + ConnectorsPage.page_path)
 

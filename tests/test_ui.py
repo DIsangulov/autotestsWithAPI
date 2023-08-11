@@ -167,7 +167,6 @@ class TestDataSources:
     def test_open_new_source_connector_by_steps(self, browser):
         DataSourcesCase(browser).open_new_source_connector_by_steps()
 
-    @pytest.mark.skip   # fixme
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Элементы навигации библиотека Шаблонов/Коннекторов")
     @allure.description("""
