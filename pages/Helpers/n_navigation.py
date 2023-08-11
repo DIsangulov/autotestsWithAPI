@@ -19,9 +19,11 @@ class Navigation:
         self.SB_DATA_SCRIPTS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Скрипты')]][1]")
         self.SD_DATA_STORAGE = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Хранилище')]][1]")
 
-        # todo: toolbar>
-        # todo: tb > reload
-        # todo: tb > закрепить на главной
-        # todo: tb > скачать PDF
+        self.BACK_BUTTON = page.locator("//div[@class='back-button__icon']")
+
+        self.TOOLBAR_REFRESH = self.page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'Обновить')]]")
+        self.TOOLBAR_SAVE_PDF = self.page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'Скачать PDF')]]")
+
+        self.TOOLBAR_PIN_BUTTON = self.page.locator("//div[contains(@class, 'main-toolbar__buttons')]/div/div[div[contains(text(), 'Закрепить на Главной')]]")
         # todo: Закрепить на главной дропдавн 2 кнопки
         # todo: Закрепить на главной модалка

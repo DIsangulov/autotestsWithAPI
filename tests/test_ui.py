@@ -1,5 +1,3 @@
-import time
-
 import allure
 import pytest
 
@@ -33,6 +31,10 @@ from tests.case.ui.m2_data.storage_ui import DataStorageCase
 
 # from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
 # from pages.UI._5_RoleMining.rm_role_model import RoleModel
+
+
+class SuiteName:
+    NAVIGATION = "Навигация"
 
 
 @allure.suite("Страница Авторизации")
@@ -130,8 +132,8 @@ class TestAuth:
 @allure.link("https://tasks.ngrsoftlab.ru/browse/QA-200")
 class TestDataSources:
 
-    @allure.suite("Навигация")
-    @allure.title("Открыть страницу 'Источники'")
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Источники'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
         DataSourcesCase(browser).open_page_by_steps()
@@ -143,6 +145,7 @@ class TestDataSources:
     с информацией по источнику
     """)
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
+    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/2866")
     def test_open_modal_w_actions_details(self, browser):
         DataSourcesCase(browser).open_modal_w_actions_details()
 
@@ -153,19 +156,19 @@ class TestDataSources:
     # todo: 159
     # todo: 531 ?
 
-    @allure.suite("Навигация")
+    @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Создание источника в редакторе'")
     def test_open_new_source_editor_by_steps(self, browser):
         DataSourcesCase(browser).open_new_source_editor_by_steps()
 
-    @allure.suite("Навигация")
+    @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Подключение источника'")
     @allure.description("Подключить источник из коннектора")
     def test_open_new_source_connector_by_steps(self, browser):
         DataSourcesCase(browser).open_new_source_connector_by_steps()
 
-    @pytest.mark.skip   # todo: сделать
-    @allure.suite("Навигация")
+    @pytest.mark.skip   # fixme
+    @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Элементы навигации библиотека Шаблонов/Коннекторов")
     @allure.description("""
     Переход на страницу 'Библиотека коннекторов' используя UI элементы, со страницы 'Источники данных';
@@ -177,7 +180,6 @@ class TestDataSources:
         DataSourcesCase(browser).library_connectors_navigation()
 
     @pytest.mark.skip   # todo: сделать
-    @allure.suite("Новый Источник")
     @allure.title("Создание источника в редакторе")
     @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
     @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
@@ -190,7 +192,7 @@ class TestDataSources:
 @allure.suite("Данные > Скрипты")
 class TestDataScripts:
 
-    @allure.suite("Навигация")
+    @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Скрипты'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
@@ -200,12 +202,12 @@ class TestDataScripts:
 @allure.suite("Данные > Хранилище")
 class TestDataStorage:
 
-    @allure.suite("Навигация")
+    @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Хранилище'")
     def test_open_page_by_steps(self, browser):
         DataStorageCase(browser).open_page_by_steps()
 
-    @allure.suite("Навигация")
+    @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Хранилище > переход по вкладкам")
     @allure.description("Проверка работы верхних вкладок \
     [Структура, Статистика, Поиск в Хранилище|по содержимому|по столбцам, Правила импорта]")
@@ -1211,7 +1213,6 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
     def test_log_out_by_local_user(self, browser):
         page = AuthPage(browser)
         page.log_out()
-        time.sleep(3)
 
     # def test_valid_auth_second_iteration_by_main_user(self, browser):
     #     page = AuthPage(browser)
@@ -1258,7 +1259,6 @@ class TestDeleteAccessReportForUserWhoseRoleHasAccessExecute:
     def test_open_an_reports_as_local_user_second_iteration(self, browser):
         page = Reports(browser)
         page.open_an_reports()
-        time.sleep(3)
 
     def test_should_report_not_visible(self, browser):
         page = Reports(browser)
