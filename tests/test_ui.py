@@ -4,14 +4,6 @@ import pytest
 from resourses.credentials import TestUsers
 
 from pages.UI._0_Auth.auth_page import AuthPage
-from pages.UI._1_Administration.adm_licenses import Licenses
-from pages.UI._1_Administration.adm_monitoring import Monitoring
-from pages.UI._1_Administration.adm_notification_log import NotificationLog
-from pages.UI._1_Administration.adm_roles import Roles
-from pages.UI._1_Administration.adm_sessions import Sessions
-from pages.UI._1_Administration.adm_settings import Settings
-from pages.UI._1_Administration.adm_update import Update
-from pages.UI._1_Administration.adm_users import Users
 from pages.UI._3_Analytics.an_mailing_lists import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
 from pages.UI._3_Analytics.an_requests import Requests
@@ -22,15 +14,18 @@ from pages.UI._4_xBA.xba_statistic import Statistic
 from pages.UI._5_RoleMining.rm_settings import RmSettings
 from pages.UI._5_RoleMining.rm_ad_status import AdStatus
 
-from tests.case.ui.administration_ui import AdministrationCase
 from tests.case.ui.auth_ui import AuthCase
+from tests.case.ui.m1_administration.roles_ui import RolesCase
+from tests.case.ui.m1_administration.sessions_ui import SessionsCase
+from tests.case.ui.m1_administration.users_ui import UsersCase
+from tests.case.ui.m1_administration.monitoring_ui import MonitoringCase
+from tests.case.ui.m1_administration.license_ui import LicenseCase
+from tests.case.ui.m1_administration.updates_ui import UpdatesCase
+from tests.case.ui.m1_administration.adm_notification_list_ui import AdmNotificationListCase
+from tests.case.ui.m1_administration.adm_settings_ui import AdmSettingsCase
 from tests.case.ui.m2_data.scripts_ui import DataScriptsCase
 from tests.case.ui.m2_data.sources_ui import DataSourcesCase
 from tests.case.ui.m2_data.storage_ui import DataStorageCase
-
-
-# from pages.UI._5_RoleMining.rm_groups_and_users import GroupsAndUsers
-# from pages.UI._5_RoleMining.rm_role_model import RoleModel
 
 
 class SuiteName:
@@ -128,8 +123,75 @@ class TestAuth:
         AuthCase(browser_without_auth).log_out(auth_data)
 
 
+@allure.title("Администрирование > Роли")
+class TestAdministrationRoles:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Роли'")
+    def test_open_page_by_steps(self, browser):
+        RolesCase(browser).open_page_by_steps()
+
+
+@allure.title("Администрирование > Пользователи")
+class TestAdministrationUsers:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Пользователи'")
+    def test_open_page_by_steps(self, browser):
+        UsersCase(browser).open_page_by_steps()
+
+
+@allure.title("Администрирование > Сессии")
+class TestAdministrationSessions:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Сессии'")
+    def test_open_page_by_steps(self, browser):
+        SessionsCase(browser).open_page_by_steps()
+
+
+@allure.title("Администрирование > Мониторинг")
+class TestAdministrationMonitoring:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Мониторинг'")
+    def test_open_page_by_steps(self, browser):
+        MonitoringCase(browser).open_page_by_steps()
+
+
+@allure.title("Администрирование > Лицензии")
+class TestAdministrationLicense:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Лицензии'")
+    def test_open_page_by_steps(self, browser):
+        LicenseCase(browser).open_page_by_steps()
+
+
+@allure.title("Администрирование > Обновление")
+class TestAdministrationUpdates:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Обновление'")
+    def test_open_page_by_steps(self, browser):
+        UpdatesCase(browser).open_page_by_steps()
+
+    # todo: работа вкладок
+
+
+@allure.title("Администрирование > Журнал уведомлений")
+class TestAdministrationNotificationList:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Журнал уведомлений'")
+    def test_open_page_by_steps(self, browser):
+        AdmNotificationListCase(browser).open_page_by_steps()
+
+
+@allure.title("Администрирование > Настройки")
+class TestAdministrationSettings:
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Настройки'")
+    def test_open_page_by_steps(self, browser):
+        AdmSettingsCase(browser).open_page_by_steps()
+
+    # todo: работа вкладок
+
+
 @allure.suite("Данные > Источники")
-@allure.link("https://tasks.ngrsoftlab.ru/browse/QA-200")
 class TestDataSources:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -212,146 +274,6 @@ class TestDataStorage:
     [Структура, Статистика, Поиск в Хранилище|по содержимому|по столбцам, Правила импорта]")
     def test_storage_navigation_tabs(self, browser):
         DataStorageCase(browser).storage_navigation_tabs()
-
-
-@pytest.mark.skip
-class TestAdministration:  # Администрирование
-
-    def test_open_adm_roles(self, browser):
-        page = Roles(browser)
-        page.open_adm_roles()
-
-    def test_should_enter_adm_roles_be_successful(self, browser):
-        page = Roles(browser)
-        page.should_enter_adm_roles_be_successful()
-
-    def test_open_adm_users(self, browser):
-        page = Users(browser)
-        page.open_adm_users()
-
-    def test_should_enter_adm_users_be_successful(self, browser):
-        page = Users(browser)
-        page.should_enter_adm_users_be_successful()
-
-    def test_open_adm_sessions(self, browser):
-        page = Sessions(browser)
-        page.open_adm_sessions()
-
-    def test_should_enter_adm_sessions_be_successful(self, browser):
-        page = Sessions(browser)
-        page.should_enter_adm_sessions_be_successful()
-
-    def test_open_adm_monitoring(self, browser):
-        page = Monitoring(browser)
-        page.open_adm_monitoring()
-
-    def test_should_enter_adm_monitoring_be_successful(self, browser):
-        page = Monitoring(browser)
-        page.should_enter_adm_monitoring_be_successful()
-
-    def test_open_adm_licenses(self, browser):
-        page = Licenses(browser)
-        page.open_adm_licenses()
-
-    def test_should_enter_adm_licenses_be_successful(self, browser):
-        page = Licenses(browser)
-        page.should_enter_adm_licenses_be_successful()
-
-    def test_open_adm_update(self, browser):
-        page = Update(browser)
-        page.open_adm_update()
-
-    def test_should_enter_adm_update_be_successful(self, browser):
-        page = Update(browser)
-        page.should_enter_adm_update_be_successful()
-
-    def test_open_adm_notification_log_user(self, browser):
-        page = NotificationLog(browser)
-        page.open_adm_notification_log_user()
-
-    def test_should_enter_adm_notification_log_user_be_successful(self, browser):
-        page = NotificationLog(browser)
-        page.should_enter_adm_notification_log_user_be_successful()
-
-    def test_open_adm_notification_log_admin(self, browser):
-        page = NotificationLog(browser)
-        page.open_adm_notification_log_admin()
-
-    def test_should_enter_adm_notification_log_admin_be_successful(self, browser):
-        page = NotificationLog(browser)
-        page.should_enter_adm_notification_log_admin_be_successful()
-
-    def test_open_adm_settings_admin_node(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_admin_node()
-
-    def test_should_enter_adm_settings_admin_node_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_admin_node_be_successful()
-
-    def test_open_adm_settings_domain_controller(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_domain_controller()
-
-    def test_should_enter_adm_settings_domain_controller_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_domain_controller_be_successful()
-
-    def test_open_adm_settings_service_db_controller(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_service_db()
-
-    def test_should_enter_adm_settings_service_db_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_service_db_be_successful()
-
-    def test_open_adm_settings_storage(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_storage()
-
-    def test_should_enter_adm_settings_storage_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_storage_be_successful()
-
-    def test_open_adm_settings_data_collection(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_data_collection()
-
-    def test_should_enter_adm_settings_data_collection_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_data_collection_be_successful()
-
-    def test_open_adm_settings_data_analysis(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_data_analysis()
-
-    def test_should_enter_adm_settings_data_analysis_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_data_analysis_be_successful()
-
-    def test_open_adm_settings_post(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_post()
-
-    def test_should_enter_adm_settings_post_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_post_be_successful()
-
-    def test_open_adm_settings_syslog(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_syslog()
-
-    def test_should_enter_adm_settings_syslog_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_syslog_be_successful()
-
-    def test_open_adm_settings_secrets(self, browser):
-        page = Settings(browser)
-        page.open_adm_settings_secrets()
-
-    def test_should_enter_adm_settings_secrets_be_successful(self, browser):
-        page = Settings(browser)
-        page.should_enter_adm_settings_secrets_be_successful()
 
 
 @pytest.mark.skip

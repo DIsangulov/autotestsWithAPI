@@ -9,12 +9,6 @@ class AuthLocators:
 
 class MainLocators:
     HEADER_LOGO = "//div[@class='n-app-navigation__header']"
-    PRE_ENTER = "//*[contains(text(),'Дополнительные')]"
-    PRE_ENTER_AGREE = "//*[contains(text(),'Перейти на сайт')]"
-    SUCCESS_ENTER = "//a[@class='n-app-navigation__logo router-link-exact-active router-link-active']"
-    VISIBLE_PASS = "//input[@type='password']"
-    LOCAL_CHECK_BOX = "//span[@class='check']"
-    SIDE_BAR = "//div[@class='n-app-navigation__button']"
     DROPDOWN1 = "//div[@class='options visible']/ul/li[1]"
     DROPDOWN2 = "//div[@class='options visible']/ul/li[2]"
     X_BUTTON = "//span[@class='ngr-icon icon-close ngr-icon_none']"
@@ -22,33 +16,12 @@ class MainLocators:
     SAVE_BUTTON = "//*[contains(text(),'Сохранить')]"
     HUMAN_ICON = "//button[@class='n-app-profile__ny n-app-button']"
     SIGN_OUT = "//*[contains(text(),'Выйти')]"
-    OPTIONS_VISIBLE = "//div[@class='options visible']"
     ADD_BUTTON = "//*[text()='Добавить']"
 
 
 class AdminLocators:
-    ADMINISTRATION = "//*[contains(text(),'Администрирование')]"
-    ROLES = "//*[contains(text(),'Роли')]"
-    USERS = "//*[contains(text(),'Пользователи')]"
-    SESSIONS = "//*[contains(text(),'Сессии')]"
-    MONITORING = "//*[contains(text(),'Мониторинг')]"
-    LICENSES = "//*[contains(text(),'Лицензии')]"
-    UPDATE = "//*[contains(text(),'Обновление')]"
-    NOTIFICATION_LOG = "//*[contains(text(),'Журнал уведомлений')]"
-    NOTIFICATION_LOG_USER = "//*[contains(text(),'Пользовательские')]"
-    NOTIFICATION_LOG_ADMIN = "//*[contains(text(),'Административные')]"
-    SETTINGS = "//*[contains(text(),'Настройки')]"
     TITLE_MSG_OLD = "//div[@class='title-main']"
     TITLE_MSG_NEW = "//div[@class='main-toolbar-left__text-title']"
-    ADMIN_NODE = "//*[contains(text(),'Административный узел')]"
-    DOMAIN_CONTROLLER = "//*[contains(text(),'Контроллер домена')]"
-    SERVICE_DB = "//*[contains(text(),'Служебная БД')]"
-    STORAGE = "(//li[@class='ngr-tabs__item'])[3]"
-    DATA_COLLECTION = "(//li[@class='ngr-tabs__item'])[4]"
-    DATA_ANALYSIS = "(//li[@class='ngr-tabs__item'])[5]"
-    POST = "(//li[@class='ngr-tabs__item'])[6]"
-    SYSLOG = "(//li[@class='ngr-tabs__item'])[7]"
-    SECRETS = "(//li[@class='ngr-tabs__item'])[8]"
 
 
 class AnalyticsLocators:
