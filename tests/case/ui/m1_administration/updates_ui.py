@@ -4,7 +4,7 @@ import allure
 from playwright.sync_api import expect
 
 from pages.Helpers.base_case import BaseCase
-from pages.UI._1_Administration.adm_update_page import UpdatesPage
+from pages.UI._1_Administration.adm_update_page import UpdatesPage, UpdatesAdditionsPage, UpdatesVersionsPage
 
 
 class UpdatesCase(BaseCase):
@@ -25,4 +25,13 @@ class UpdatesCase(BaseCase):
             page.SB_ADM_UPDATES.click()
 
         with allure.step("Открылась страница 'Обновление'"):
-            page.page.wait_for_url(page.host + UpdatesPage.page_path)
+            page.page.wait_for_url(page.host + UpdatesVersionsPage.page_path)
+
+        with allure.step("Клик по вкладке 'Дополнения'"):
+            page.TAB_ADDITIONS.click()
+        with allure.step("Открылась вкладка 'Дополнения'"):
+            page.page.wait_for_url(page.host + UpdatesAdditionsPage.page_path)
+        with allure.step("Клик по вкладке 'Версии компонентов'"):
+            page.TAB_VERSIONS.click()
+        with allure.step("Открылась вкладка 'Версии компонентов'"):
+            page.page.wait_for_url(page.host + UpdatesVersionsPage.page_path)

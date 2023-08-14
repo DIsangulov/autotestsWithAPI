@@ -10,4 +10,27 @@ class UpdatesPage(BasePage):
         super().__init__(page)
         self.page_path = self.__class__.page_path
 
+        self.TAB_VERSIONS = self.page.locator("//ul[contains(@class, 'ngr-tabs-ul')]/li/div[contains(text(), 'Версии компонентов')]")
+        self.TAB_ADDITIONS = self.page.locator("//ul[contains(@class, 'ngr-tabs-ul')]/li/div[contains(text(), 'Дополнения')]")
+
+
+class UpdatesVersionsPage(UpdatesPage):
+
+    page_path = "/system-update/versions"
+
+    def __init__(self, page: Page):
+        super().__init__(page)
+        self.page_path = self.__class__.page_path
+
+        # todo:
+
+
+class UpdatesAdditionsPage(UpdatesPage):
+
+    page_path = "/system-update/additions"
+
+    def __init__(self, page: Page):
+        super().__init__(page)
+        self.page_path = self.__class__.page_path
+
         # todo:

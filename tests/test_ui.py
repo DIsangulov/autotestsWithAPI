@@ -167,10 +167,13 @@ class TestAdministrationLicense:
 class TestAdministrationUpdates:
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Обновление'")
+    @allure.description("""
+    Переход на страницу, используя UI элементы;
+    Работа вкладки 'Версии компонентов';
+    Работа вкладки 'Дополнения'
+    """)
     def test_open_page_by_steps(self, browser):
         UpdatesCase(browser).open_page_by_steps()
-
-    # todo: работа вкладок
 
 
 @allure.title("Администрирование > Журнал уведомлений")
@@ -185,10 +188,12 @@ class TestAdministrationNotificationList:
 class TestAdministrationSettings:
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Настройки'")
+    @allure.description("""
+    Переход на страницу, используя UI элементы;
+    Работа вкладок;
+    """)
     def test_open_page_by_steps(self, browser):
         AdmSettingsCase(browser).open_page_by_steps()
-
-    # todo: работа вкладок
 
 
 @allure.suite("Данные > Источники")

@@ -144,13 +144,13 @@ class DataSourcesCase(BaseCase):
 
         page = ConnectorsCreatePage(self._page)
 
-        with allure.step("Ввод текста в инпут для появления 'Вы уверенны?'"):
+        with allure.step("Ввод текста в инпут для появления 'Вы уверены?'"):
             page.NAME_FILED.fill("Текст")
 
         with allure.step("Клик по кнопке <- назад"):
             page.BACK_BUTTON.click()
 
-        with allure.step("Появилось модальное окно:'Вы уверенны?'"):
+        with allure.step("Появилось модальное окно:'Вы уверены?'"):
             expect(page.YES_BUTTON).to_be_visible()
         with allure.step("В модалке 'Вы точно уверены?' Клик по кнопке ДА"):
             page.YES_BUTTON.click()
