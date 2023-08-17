@@ -621,9 +621,8 @@ class TestRmCook:
     def test_rm_cook_rm_roles_id_alias_post(self):
         RmCookCase().case_rm_cook_rm_roles_id_alias_post()
 
-    @pytest.mark.skip   # fixme
-    def test_rm_cook_rm_roles_id_alias_get(self):
-        RmCookCase().case_rm_cook_rm_roles_id_alias_get()
+    def test_rm_cook_rm_roles_id_alias_ts_get(self):
+        RmCookCase().case_rm_cook_rm_roles_id_alias_ts_get()
 
     def test_rm_status_get(self):
         RmCookCase().case_rm_cook_rm_status_get()
@@ -652,11 +651,9 @@ class TestRmCook:
     def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):  # Не используется
         RmCookCase().case_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get()
 
-    @pytest.mark.skip  # fixme
     def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
         RmCookCase().case_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get()
 
-    @pytest.mark.skip   # fixme
     def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
         RmCookCase().case_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get1()
 

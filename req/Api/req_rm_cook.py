@@ -50,9 +50,13 @@ class RmCook(BaseReq):
         """
         return self.sess.post(f"{self.host}/back/dp.rm_cook/rm/roles/{_id}/alias", json=data)
 
-    # FIXME: /back/dp.rm_cook/rm/roles/{id}/alias/{ts}      << без {ts} писания нет
-    def rm_cook_rm_roles_id_alias_get(self, _id):
-        return self.sess.get(f"{self.host}/back/dp.rm_cook/rm/roles/{_id}/alias")
+    def rm_cook_rm_roles_id_alias_ts_get(self, _id, ts):
+        """
+        process GET req to get role alias.
+        :param _id: role ID
+        :param ts: role (creation) timestamp
+        """
+        return self.sess.get(f"{self.host}/back/dp.rm_cook/rm/roles/{_id}/alias/{ts}")
 
     def rm_cook_rm_status_get(self):
         """process GET req to get RM calculation status"""
