@@ -4,10 +4,8 @@ import pytest
 from resourses.credentials import TestUsers
 
 from pages.UI._0_Auth.auth_page import AuthPage
-from pages.UI._3_Analytics.an_mailing_lists import MailingLists
+from pages.UI._3_Analytics.mailings_page import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
-from pages.UI._3_Analytics.an_requests import Requests
-from pages.UI._3_Analytics.an_visualization import Visualisation
 from pages.UI._4_xBA.xba_metaprofiles import Metaprofiles
 from pages.UI._4_xBA.xba_profiles import Profiles
 from pages.UI._4_xBA.xba_statistic import Statistic
@@ -26,6 +24,10 @@ from tests.case.ui.m1_administration.adm_settings_ui import AdmSettingsCase
 from tests.case.ui.m2_data.scripts_ui import DataScriptsCase
 from tests.case.ui.m2_data.sources_ui import DataSourcesCase
 from tests.case.ui.m2_data.storage_ui import DataStorageCase
+from tests.case.ui.m3_analytics.mailing_ui import MailingsCase
+from tests.case.ui.m3_analytics.report_ui import ReportsCase
+from tests.case.ui.m3_analytics.visualisation_ui import VisualisationCase
+from tests.case.ui.m3_analytics.query_ui import QueriesCase
 
 
 class SuiteName:
@@ -33,7 +35,6 @@ class SuiteName:
 
 
 @allure.suite("Страница Авторизации")
-@allure.issue("https://tasks.ngrsoftlab.ru/browse/QA-198")
 class TestAuth:
 
     @allure.title("Авторизация valid")
@@ -281,39 +282,45 @@ class TestDataStorage:
         DataStorageCase(browser).storage_navigation_tabs()
 
 
-@pytest.mark.skip
-class TestAnalytics:  # Аналитика
-    def test_open_an_mailing_lists_reports(self, browser):
-        page = MailingLists(browser)
-        page.open_an_mailing_lists_reports()
+@allure.suite("Аналитика > Рассылки")
+class TestAnalyticsMailing:
 
-    def test_should_enter_an_mailing_lists_reports_be_successful(self, browser):
-        page = MailingLists(browser)
-        page.should_enter_an_mailing_lists_reports_be_successful()
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Рассылки'")
+    @allure.description("""
+    Переход на страницу, используя UI элементы;
+    Работа вкладки 'Отчетов';
+    Работа вкладки 'Новых данных'
+    """)
+    def test_open_page_by_steps(self, browser):
+        MailingsCase(browser).open_page_by_steps()
 
-    def test_open_an_reports(self, browser):
-        page = Reports(browser)
-        page.open_an_reports()
 
-    def test_should_enter_an_reports_be_successful(self, browser):
-        page = Reports(browser)
-        page.should_enter_an_reports_be_successful()
+@allure.suite("Аналитика > Отчеты")
+class TestAnalyticsReports:
 
-    def test_open_an_visualisation(self, browser):
-        page = Visualisation(browser)
-        page.open_an_visualisation()
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Отчеты'")
+    def test_open_page_by_steps(self, browser):
+        ReportsCase(browser).open_page_by_steps()
 
-    def test_should_enter_an_visualisation_be_successful(self, browser):
-        page = Visualisation(browser)
-        page.should_enter_an_visualisation_be_successful()
 
-    def test_open_an_requests(self, browser):
-        page = Requests(browser)
-        page.open_an_requests()
+@allure.suite("Аналитика > Визуализации")
+class TestAnalyticsVisualisation:
 
-    def test_should_enter_an_requests_be_successful(self, browser):
-        page = Requests(browser)
-        page.should_enter_an_requests_be_successful()
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Визуализации'")
+    def test_open_page_by_steps(self, browser):
+        VisualisationCase(browser).open_page_by_steps()
+
+
+@allure.suite("Аналитика > Запросы")
+class TestAnalyticsQuery:
+
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Запросы'")
+    def test_open_page_by_steps(self, browser):
+        QueriesCase(browser).open_page_by_steps()
 
 
 @pytest.mark.skip

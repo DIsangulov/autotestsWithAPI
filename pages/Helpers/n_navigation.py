@@ -27,7 +27,13 @@ class Navigation:
         self.SB_DATA = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Данные')]][1]")
         self.SB_DATA_SOURCES = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Источники')]][1]")
         self.SB_DATA_SCRIPTS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Скрипты')]][1]")
-        self.SD_DATA_STORAGE = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Хранилище')]][1]")
+        self.SB_DATA_STORAGE = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Хранилище')]][1]")
+
+        self.SB_ANALYTICS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Аналитика')]][1]")
+        self.SB_ANALYTICS_MAILINGS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Рассылки')]][1]")
+        self.SB_ANALYTICS_REPORTS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Отчеты')]][1]")
+        self.SB_ANALYTICS_VISUALISATIONS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Визуализации')]][1]")
+        self.SB_ANALYTICS_QUERIES = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Запросы')]][1]")
 
         self.BACK_BUTTON = page.locator("//div[@class='back-button__icon']")
 

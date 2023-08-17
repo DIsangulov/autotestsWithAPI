@@ -188,7 +188,6 @@ class ReporterCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # fixme: медленный кейс
     def case_reporter_screener_fast_png_post(self):
         req = Reporter(self.sess, self.host)
         data = {
@@ -197,8 +196,8 @@ class ReporterCase(UserSession):
             "need_page": "/report"
         }
         resp = req.reporter_screener_fast_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_reporter_screener_fast_pdf_post(self):
         req = Reporter(self.sess, self.host)
@@ -208,8 +207,8 @@ class ReporterCase(UserSession):
             "need_page": "/report"
         }
         resp = req.reporter_screener_fast_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # __del__
     def all_api_auto_test_mailing_delete(self):

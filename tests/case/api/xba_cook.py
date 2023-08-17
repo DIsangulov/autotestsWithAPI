@@ -308,7 +308,7 @@ class XbaCookCase(UserSession):
         }
         # data = {}
         resp = req.xba_cook_dashboard_profiles_more_post(data)
-        print(resp.text)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"res":{"top_profiles_table":null}}
 
