@@ -28,14 +28,7 @@ class AnalyticsLocators:
     ANALYTICS = "//*[contains(text(),'Аналитика')]"
     MAILING_LISTS = "//*[contains(text(),'Рассылки')]"
     MAILING_LISTS_REPORTS = "//*[contains(text(),'Отчетов')]"
-    MAILING_LISTS_NEW_DATA = "//*[contains(text(),'Новых данных')]"
     REPORTS = "//*[contains(text(),'Отчеты')]"
-    VISUALIZATIONS = "//*[contains(text(),'Визуализации')]"
-    REQUESTS = "//*[contains(text(),'Запросы')]"
-    CREATE_MAILING_LIST = "//*[contains(text(),'Создать рассылку')]"
-    INPUT_MAILING_NAME = "//input[@placeholder='Введите название рассылки']"
-    DROPDOWN_MAILING_TYPE = "//span[@class='ngr-dropdown__input-selected']"
-    NEXT_BUTTON = "//*[contains(text(),'Далее')]"
 
     ADD_REPORT_BUTTON = "(//span[@class='icon btn-icon'])[2]"  # создание отчета и сохранение отчета
     REPORT_NAME_AREA_IN = "//input[@placeholder='Введите имя отчета']"
@@ -71,13 +64,6 @@ class AnalyticsLocators:
     CONFIRM_TRASH = "//*[contains(text(),'Удалить отчет')]"
 
     USERS_TAB = "(//*[contains(text(),'Пользователи')])[2]"
-
-
-class XbaLocators:
-    XBA = "//*[contains(text(),'xBA')][1]"
-    PROFILES = "//*[contains(text(),'Профили')]"
-    METAPROFILES = "//*[contains(text(),'Метапрофили')]"
-    XBA_STATISTIC = "//*[contains(text(),'Статистика xBA')]"
 
 
 class RoleMiningLocators:

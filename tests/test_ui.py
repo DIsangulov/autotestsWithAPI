@@ -6,9 +6,6 @@ from resourses.credentials import TestUsers
 from pages.UI._0_Auth.auth_page import AuthPage
 from pages.UI._3_Analytics.mailings_page import MailingLists
 from pages.UI._3_Analytics.an_reports import Reports
-from pages.UI._4_xBA.xba_metaprofiles import Metaprofiles
-from pages.UI._4_xBA.xba_profiles import Profiles
-from pages.UI._4_xBA.xba_statistic import Statistic
 from pages.UI._5_RoleMining.rm_settings import RmSettings
 from pages.UI._5_RoleMining.rm_ad_status import AdStatus
 
@@ -28,6 +25,9 @@ from tests.case.ui.m3_analytics.mailing_ui import MailingsCase
 from tests.case.ui.m3_analytics.report_ui import ReportsCase
 from tests.case.ui.m3_analytics.visualisation_ui import VisualisationCase
 from tests.case.ui.m3_analytics.query_ui import QueriesCase
+from tests.case.ui.m4_xba.xba_profiles_ui import XbaProfilesCase
+from tests.case.ui.m4_xba.xba_metaprofiles_ui import XbaMetaprofilesCase
+from tests.case.ui.m4_xba.xba_statistics_ui import XbaStatisticsCase
 
 
 class SuiteName:
@@ -323,32 +323,31 @@ class TestAnalyticsQuery:
         QueriesCase(browser).open_page_by_steps()
 
 
-@pytest.mark.skip
-class TestXBA:
+@allure.suite("xBA > Профили")
+class TestXbaProfiles:
 
-    def test_open_xba_profiles(self, browser):
-        page = Profiles(browser)
-        page.open_xba_profiles()
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Профили xBA'")
+    def test_open_page_by_steps(self, browser):
+        XbaProfilesCase(browser).open_page_by_steps()
 
-    def test_should_enter_xba_profiles_be_successful(self, browser):
-        page = Profiles(browser)
-        page.should_enter_xba_profiles_be_successful()
 
-    def test_open_xba_metaprofiles(self, browser):
-        page = Metaprofiles(browser)
-        page.open_xba_metaprofiles()
+@allure.suite("xBA > Метапрофили")
+class TestXbaMetaprofiles:
 
-    def test_should_enter_xba_metaprofiles_be_successful(self, browser):
-        page = Metaprofiles(browser)
-        page.should_enter_xba_metaprofiles_be_successful()
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Метапрофили'")
+    def test_open_page_by_steps(self, browser):
+        XbaMetaprofilesCase(browser).open_page_by_steps()
 
-    def test_open_xba_statistic(self, browser):
-        page = Statistic(browser)
-        page.open_xba_statistic()
 
-    def test_should_enter_xba_statistic_be_successful(self, browser):
-        page = Statistic(browser)
-        page.should_enter_xba_statistic_be_successful()
+@allure.suite("xBA > Статистика xBA")
+class TestXbaStatistics:
+
+    @allure.suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Статистика xBA'")
+    def test_open_page_by_steps(self, browser):
+        XbaStatisticsCase(browser).open_page_by_steps()
 
 
 @pytest.mark.skip

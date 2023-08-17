@@ -35,6 +35,11 @@ class Navigation:
         self.SB_ANALYTICS_VISUALISATIONS = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Визуализации')]][1]")
         self.SB_ANALYTICS_QUERIES = self.page.locator("//*[@class='n-app-navigation__menu']//*[*[contains(text(), 'Запросы')]][1]")
 
+        self.SB_XBA = self.page.locator("//*[contains(@class, 'n-app-navigation__firstlvl') and ./../div/span[contains(text(), 'xBA')]]")
+        self.SB_XBA_PROFILES = self.page.locator("//*[contains(@class, 'n-app-navigation__secondlvl') and ./../div/span[contains(text(), 'Профили')]]")
+        self.SB_XBA_METAPROFILES = self.page.locator("//*[contains(@class, 'n-app-navigation__secondlvl') and ./../div/span[contains(text(), 'Метапрофили')]]")
+        self.SB_XBA_STATISTICS = self.page.locator("//*[contains(@class, 'n-app-navigation__secondlvl') and ./../div/span[contains(text(), 'Статистика xBA')]]")
+
         self.BACK_BUTTON = page.locator("//div[@class='back-button__icon']")
 
         self.TOOLBAR_REFRESH = self.page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'Обновить')]]")
