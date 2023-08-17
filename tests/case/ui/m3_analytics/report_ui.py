@@ -13,9 +13,9 @@ class ReportsCase(BaseCase):
     def open_page_by_steps(self):
         page = ReportsPage(self._page)
 
-        with allure.step("Перейти в 'Профиль пользователя'"):
-            page.goto_page("/personal")
-            page.page.wait_for_url(page.host + "/personal")
+        with allure.step("Перейти в 'Настройки уведомлений'"):
+            page.goto_page("/notification-center")
+            page.page.wait_for_url(page.host + "/notification-center")
 
         with allure.step("Клик в боковом меню 'Аналитика'"):
             page.SB_ANALYTICS.click()
