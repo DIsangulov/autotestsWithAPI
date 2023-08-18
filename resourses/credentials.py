@@ -1,13 +1,21 @@
+import os
+
+# TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.0.22")
+TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.5.16")
+
+
 class TestUsers:
     # /login  #  auth_data
+
     DpQaa = {
-        "username": "dataplan_qaa@ngrsoftlab.ru",
-        "password": "fHNHQBc7jEKfaO0kywZz!!",
+        "username": os.environ.get('TARGET_API_USER', "dataplan_qaa@ngrsoftlab.ru"),
+        "password": os.environ.get('TARGET_API_PASSWORD', "fHNHQBc7jEKfaO0kywZz!!"),
         "local": False
     }
+
     DpQaaLocal = {
-        "username": "dataplan_qaa_local",
-        "password": "so@you_came_back_to@me_again@@DdwIf991",
+        "username": os.environ.get('TARGET_LOCAL_USER', "dataplan_qaa_local"),
+        "password": os.environ.get('TARGET_LOCAL_PASSWORD', "so@you_came_back_to@me_again@@DdwIf991"),
         "local": True
     }
     # user0 = {}
@@ -15,6 +23,9 @@ class TestUsers:
 
 
 class DbName:
+    """
+    todo:deprecated --> use constants.DbName instead
+    """
     picker_tables = "picker_tables"
     API_TEST_DB1 = "API_TEST_DB1"
     API_TEST_DB2 = "API_TEST_DB2"

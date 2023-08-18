@@ -20,6 +20,9 @@ class VisualisationCase(UserSession):
         resp = Visualisation(self.sess, self.host).visualisation_query_get()
         assert resp.status_code == 200, f"assert::visualisation_query_get, failed. status_code: {resp.status_code}, text: {resp.text}"
 
+        if resp.text == '{"res":null}\n':
+            return None
+
         query_info_rows = json.loads(resp.text)
         for _row in query_info_rows['res']:
             if str(_row['name']).startswith(API_AUTO_TEST_):
@@ -39,6 +42,9 @@ class VisualisationCase(UserSession):
     def _collect_report_id(self):
         resp = Visualisation(self.sess, self.host).visualisation_reports_get()
         assert resp.status_code == 200, f"assert::visualisation_reports_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        if resp.text == '{"res":null}\n':
+            return None
 
         report_id_info_rows = json.loads(resp.text)['res']
         for _row in report_id_info_rows:
@@ -60,6 +66,9 @@ class VisualisationCase(UserSession):
         resp = Visualisation(self.sess, self.host).visualisation_visualisation_get()
         assert resp.status_code == 200, f"assert::visualisation_visualisation_get, failed. status_code: {resp.status_code}, text: {resp.text}"
 
+        if resp.text == '{"res":null}\n':
+            return None
+
         vis_info_rows = json.loads(resp.text)['res']
         for _row in vis_info_rows:
             if str(_row['name']).startswith(API_AUTO_TEST_):
@@ -79,6 +88,7 @@ class VisualisationCase(UserSession):
     def case_visualisation_query_get(self):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_query_get()
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_visualisation_query_do_query_id_post(self):
@@ -155,6 +165,7 @@ class VisualisationCase(UserSession):
     def case_visualisation_reports_get(self):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_reports_get()
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_visualisation_reports_post(self):

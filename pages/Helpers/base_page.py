@@ -1,26 +1,19 @@
 from playwright.sync_api import Page
 
 from pages.Helpers.n_navigation import Navigation
-from resourses.credentials import TestUsers
+from resourses.credentials import TestUsers, TARGET_URL
 from resourses.locators import AuthLocators, MainLocators
 
 
 class BasePage(Navigation):
 
-    HOST: str = None
-
-    @staticmethod
-    def set_host(new_host: str):
-        BasePage.HOST = new_host
-
-    # def __init__(self, page: Page, host: str, timeout: int = 10):
     def __init__(self, page: Page):
         super().__init__(page)
         self.page = page
 
         self.username = None
 
-        self.host = BasePage.HOST
+        self.host = TARGET_URL
         self.page_path = "/"
 
         self.page.set_default_timeout(10000)

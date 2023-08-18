@@ -1,10 +1,9 @@
 import json
-import os
 
 import requests
 
 from req.Api.req_auth import AuthApi
-from resourses.credentials import TestUsers
+from resourses.credentials import TestUsers, TARGET_URL
 
 _session_instance = {}
 
@@ -19,11 +18,11 @@ class UserSession:
 
     def __init__(self, *, auth_data: dict = TestUsers.DpQaa, with_auth: bool = True):
 
-        self.host = os.environ.get('TARGET_URL', "https://10.130.0.22")
+        self.host = TARGET_URL
 
-        self.username = os.environ.get('TARGET_API_USER', auth_data.get("username"))
-        self._password = os.environ.get('TARGET_API_PASSWORD', auth_data.get("password"))
-        self._local = os.environ.get('TARGET_API_USER_IS_LOCAL', auth_data.get("local"))
+        self.username = auth_data.get("username")
+        self._password = auth_data.get("password")
+        self._local = auth_data.get("local")
 
         self.sess = _get_session_instance(self.username)
         # self.sess.headers.update({'token': self.token})
@@ -54,7 +53,6 @@ class UserSession:
     def get_self_user_id(self) -> int:
         """Возвращает 'user_id' текущего пользователя"""
         if self.user_id is None:
-            # header = {'token': self.token}
             resp = self.sess.get(f"{self.host}/back/dp.peopler/profile")
             assert resp.status_code == 200, f"Ошибка при получении профиля пользователя {resp.status_code}, {resp.text}"
 
@@ -64,7 +62,6 @@ class UserSession:
 
     def get_db_id_by_name(self, db_name: str) -> int:
         """Возвращает 'id' хранилища с указанным именем"""
-        # header = {'token': self.token}
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db")
         assert resp.status_code == 200, f"Ошибка при получении списка хранилищ {resp.status_code}, {resp.text}"
 
