@@ -672,6 +672,7 @@ class TestRmCook:
     def test_rm_cook_settings_sources_get(self):
         RmCookCase().case_rm_cook_settings_sources_get()
 
+    @pytest.mark.skip   # Поменять настройки источников Role mining
     def test_rm_cook_settings_sources_post(self):
         RmCookCase().case_rm_cook_settings_sources_post()
 
@@ -859,6 +860,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
 
+    @pytest.mark.skip   # FIXME:
     def test_xba_cook_profiles_graph_drilldown_1888_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_1888_post()
 

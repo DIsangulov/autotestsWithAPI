@@ -16,12 +16,13 @@ class ScripterCase(UserSession):
         resp = Scripter(self.sess, self.host).scripter_script_get()
         assert resp.status_code == 200, f"assert::scripter_script_get, failed. status_code: {resp.status_code}, resp.text: {resp.text}"
 
-        script_info_rows = json.loads(resp.text)['res']
+        if resp.text == '{"res":null}\n':
+            return None
 
+        script_info_rows = json.loads(resp.text)['res']
         for _row in script_info_rows:
             if str(_row["name"]).startswith(API_AUTO_TEST_):
-                script_id.add(_row['id'])    # global: script_id
-        # print(f"script_id list: {script_id}")
+                script_id.add(_row['id'])
 
     def get_script_id(self) -> int:
         """get from global script_id: API_AUTO_TEST_x"""
@@ -40,12 +41,13 @@ class ScripterCase(UserSession):
         resp = Scripter(self.sess, self.host).scripter_sequence_get()
         assert resp.status_code == 200, f"assert::scripter_sequence_get, failed. status_code: {resp.status_code}, resp.text: {resp.text}"
 
-        sequence_info_rows = json.loads(resp.text)['res']
+        if resp.text == '{"res":null}\n':
+            return None
 
+        sequence_info_rows = json.loads(resp.text)['res']
         for _row in sequence_info_rows:
             if str(_row["name"]).startswith(API_AUTO_TEST_):
-                sequence_id.add(_row['id'])     # global: sequence_id
-        # print(f"sequence_id list: {sequence_id}")
+                sequence_id.add(_row['id'])
 
     def get_sequence_id(self) -> int:
         """get from global sequence_id: API_AUTO_TEST_x"""

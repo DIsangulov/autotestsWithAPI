@@ -18,6 +18,7 @@ class RmCookCase(UserSession):
             assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
             rm_users_rows = json.loads(resp.text)['res']
+            assert rm_users_rows != 0, f"Ошибка при получении /users_by_role: количество пользователей == 0: resp {resp.text}"
             return int(random.choice(rm_users_rows)['id'])
         else:
             # получить запрос со списком rm_пользователей
@@ -25,6 +26,8 @@ class RmCookCase(UserSession):
             assert resp.status_code == 200, f"Ошибка при получении списка AD users {resp.status_code}, {resp.text}"
 
             rm_users_info_rows = json.loads(resp.text)['res']['users']    # получить из запроса список пользователей
+            assert len(rm_users_info_rows) != 0, f"Ошибка при получении списка AD users: количество пользователей == 0: resp: {resp.text}"
+
             rm_user_info = random.choice(rm_users_info_rows)              # получить случайную строку из списка
             return int(rm_user_info['id'])
 
@@ -34,6 +37,7 @@ class RmCookCase(UserSession):
             assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
             rm_groups_rows = json.loads(resp.text)['res']
+            assert rm_groups_rows != 0, f"Ошибка при получении /groups_by_role: количество групп == 0: resp {resp.text}"
             return int(random.choice(rm_groups_rows)['id'])
         else:
             # получить запрос со списком rm_групп
@@ -41,6 +45,8 @@ class RmCookCase(UserSession):
             assert resp.status_code == 200, f"Ошибка при получении списка AD groups {resp.status_code}, {resp.text}"
 
             rm_groups_info_rows = json.loads(resp.text)['res']['groups']  # получить из запроса список групп
+            assert len(rm_groups_info_rows) != 0, f"Ошибка при получении списка AD groups: количество групп == 0: resp: {resp.text}"
+
             rm_group_info = random.choice(rm_groups_info_rows)            # получить случайную строку из списка
             return int(rm_group_info['id'])
 
@@ -53,8 +59,8 @@ class RmCookCase(UserSession):
         req = RmCook(self.sess, self.host)
         _rm_group_id = self._get_random_rm_group_id()
         resp = req.rm_cook_active_directory_groups_id_get(_rm_group_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_rm_cook_active_directory_state_get(self):
         req = RmCook(self.sess, self.host)
@@ -276,6 +282,8 @@ class RmCookCase(UserSession):
 
     def case_rm_cook_settings_sources_post(self):
         req = RmCook(self.sess, self.host)
+
+        # fixme: убедиться в наличии и доступе к строкам таблицы
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         body = [{"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 1, "table_name": "ad_groups_ngr"},
                 {"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 2, "table_name": "ad_users_ngr"}]

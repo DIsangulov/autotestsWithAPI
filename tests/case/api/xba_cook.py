@@ -29,6 +29,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
 
     self_user_id = u_session.get_self_user_id()
 
+    # fixme: проверить наличие и доступ к таблицам, если нет доступа, то не создаст
     db_picker_tables = u_session.get_db_id_by_name(DbName.picker_tables)
     db_picker_tables_table_name = "ad_users_ngr"
     db_picker_tables_time_column = "badPasswordTime"
