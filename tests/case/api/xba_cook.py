@@ -182,11 +182,21 @@ class XbaCookCase(UserSession):
 
         return xba_profile_id.pop()
 
-    def _wait_for_profile_status(self, *, profile_id: int, expect_status_id: int = 2, timeout_sec: int = 15) -> bool:
+    def _wait_for_profile_status(self,
+                                 *,
+                                 profile_id: int,
+                                 not_equal: bool = False,       # Передать 'True' для ожидания другого статуса, кроме expect_status_id
+                                 expect_status_id: int = 2,     #
+                                 timeout_sec: int = 15
+                                 ) -> bool:
         """
-        # status: 1 -> запущен \n
-        # status: 2 -> выполнен \n
-        # status: 3 -> выполнен с ошибками
+        status: 1 -> запущен \n
+        status: 2 -> выполнен \n
+        status: 3 -> выполнен с ошибками\n
+        :param profile_id xba_profile_id
+        :param not_equal Передать 'True' для ожидания статуса не равного expect_status_id
+        :param expect_status_id Ожидаемый статус профиля:
+        :param timeout_sec сколько времени ждать
         """
 
         _wait_time_sec = abs(timeout_sec) / 4
@@ -199,7 +209,7 @@ class XbaCookCase(UserSession):
             assert resp.status_code == 200, f"Ошибка при получении профиля, code: {resp.status_code}, {resp.text}"
 
             _current_status_id = int(json.loads(resp.text)['res']['status'])
-            if _current_status_id == expect_status_id:
+            if not_equal ^ (_current_status_id == expect_status_id):
                 return True
             else:
                 time_rest = timeout_sec - (time.time() - _start_time)
@@ -753,8 +763,8 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
 
-        assert self._wait_for_profile_status(profile_id=prof_id), \
-            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+        assert self._wait_for_profile_status(profile_id=prof_id, not_equal=True, expect_status_id=1), \
+            "Профиль не вышел из статуса 'запущен' за отведенное время"
 
         data = _get_sample_xba_profile_data(self)
         data.update({"name": API_AUTO_TEST_ + "changed_" + get_str_random_num()})
@@ -842,8 +852,8 @@ class XbaCookCase(UserSession):
         str_random_num = str(random.randint(100, 999))
         prof_id = self._get_xba_profile_id()
 
-        assert self._wait_for_profile_status(profile_id=prof_id), \
-            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+        assert self._wait_for_profile_status(profile_id=prof_id, not_equal=True, expect_status_id=1), \
+            "Статус профиля 'запущен' и не изменился за отведенное время"
 
         data = {"data": API_AUTO_TEST_ + str_random_num}
         resp = req.xba_cook_profiles_id_whitelist_element_post(prof_id, data)
