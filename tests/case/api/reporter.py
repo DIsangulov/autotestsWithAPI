@@ -86,7 +86,7 @@ class ReporterCase(UserSession):
                 # 282
             ],
             "receivers": [
-                4870    # "s.yezhov@ngrsoftlab.ru"
+                # 4870    # "s.yezhov@ngrsoftlab.ru"
             ]
         }
         resp = req.reporter_mailing_put(data)
@@ -128,7 +128,7 @@ class ReporterCase(UserSession):
                 },
             "elements": None,   # >> видимо 'Элементы отчета' >> int
             "receivers": [      # 'id' получателей
-                4870    # "s.yezhov@ngrsoftlab.ru"
+                # 4870    # "s.yezhov@ngrsoftlab.ru"
             ]
         }
         resp = req.reporter_mailing_post(data)
@@ -158,6 +158,7 @@ class ReporterCase(UserSession):
         resp = req.reporter_mailing_sample_post(data)
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 400: {"error":{"code":400,"description":"set email server settings","msg":"Невозможно прочитать текущие настройки"}}
 
     def case_reporter_mailing_typed_0_1_get(self):
         req = Reporter(self.sess, self.host)

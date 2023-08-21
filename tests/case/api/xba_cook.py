@@ -5,7 +5,7 @@ import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
-from resourses.credentials import DbName
+from resourses.constants import DbName
 from tests.case.api.permitter import PermitterCase
 
 _QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
@@ -24,20 +24,70 @@ def get_str_random_num(length: int = 4) -> str:
     return str(random.randint(int(10**(length-1)), int(10**length-1)))
 
 
+class EntityCategory:
+    user = "user"
+    host = "host"
+    process = "process"
+    department = "department"
+    other = "other"
+
+
+class XbaIdFunction:
+    """Функция построения профиля"""
+    count = 1
+    count_distinct = 2
+
+    min_log_time = 5
+    max_log_time = 6
+    delta_log_time = 7
+    len_distinct_hour = 8
+    avg = 9
+    min = 10
+    max = 11
+    sum = 12
+    avg_not_zero = 13
+    min_not_zero = 14
+    max_not_zero = 15
+    sum_not_zero = 16
+    log_avg = 17
+    log_min = 18
+    log_max = 19
+    log_sum = 20
+    novelty = 21
+    chi_squared_distance = 22
+
+
+"""
+    xBA profile: id_category:
+    
+    "id": 1,"name": "Другое"
+    "id": 2,"name": "Выявление инсайдера"
+    "id": 3,"name": "Выявление компрометации"
+    "id": 4,"name": "Нецелевое использование ресурсов"
+    "id": 5,"name": "Ошибки конфигурации"
+    "id": 6,"name": "Нарушение политик ИБ"
+    "id": 7,"name": "Работа вредоносного ПО"
+    "id": 8,"name": "Эффективность ИС"
+    "id": 9,"name": "Непрерывность бизнес-процессов"
+    "id": 10,"name": "Прогнозирование загрузки"
+    "id": 11,"name": "Эффективность персонала"
+"""
+
+
 def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
-    # todo: сделать "более" живые профили
 
     self_user_id = u_session.get_self_user_id()
 
     # fixme: проверить наличие и доступ к таблицам, если нет доступа, то не создаст
-    db_picker_tables = u_session.get_db_id_by_name(DbName.picker_tables)
-    db_picker_tables_table_name = "ad_users_ngr"
-    db_picker_tables_time_column = "badPasswordTime"
-    db_es_entity_column = "department"
-    db_es_entity_type = "lastLogoff"
+    db_id = u_session.get_db_id_by_name(DbName.picker_tables)
+    db_table_name = DbName.DB_picker_tables.tab_Weather_all_online
+    db_time_column = DbName.DB_picker_tables.col_TimeStamp
+
+    db_es_entity_column = DbName.DB_picker_tables.col_Gorod
+    # db_es_entity_type = "lastLogoff"
+    db_es_additional_column = DbName.DB_picker_tables.col_TemnepaTypa
 
     sample_data = {
-        # "id": ???
         "name": API_AUTO_TEST_ + get_str_random_num(),
         # "description": None,
         "published": False,
@@ -48,29 +98,32 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         # "editor": "self_user_id",
         # "created": "2023-02-15T07:55:02.631066Z",
         # "modified": "2023-02-15T07:55:02.631066Z",
-        "db_id": db_picker_tables,
+        "db_id": db_id,
         "db_name": DbName.picker_tables,
-        "table_name": db_picker_tables_table_name,
+        "table_name": db_table_name,
+        # >> status: 1 -> запущен
+        # >> status: 2 -> выполнен
+        # >> status: 3 -> выполнен с ошибками
         # "status": 3,
         "profile_type": "median",
-        "id_function": 6,  # << [get] /profiles/functions
-        "id_category": 1,  # todo: описание
+        "id_function": XbaIdFunction.avg,
+        "id_category": 5,
         "time_settings":
             {
-                "time_column": db_picker_tables_time_column,
-                "time_start": "1971-01-01T00:00:00Z",
-                "time_end": "2022-12-06T08:36:09Z",
-                "discretization_period": "minute",
+                "time_column": db_time_column,
+                "time_start": "2023-08-18T12:37:00Z",
+                "time_end": "2023-08-21T00:00:00Z",
+                "discretization_period": "hour",    # "minute",
                 # "stat_period": ""
             },
         "entity_settings":
             {
                 "entity_column": db_es_entity_column,
                 "entity_column_name": "other",  # Категория сущности ( user|..|other
-                "entity_type": db_es_entity_type,
+                # "entity_type": db_es_entity_type,
                 "obj_column": "",
                 "obj_column_name": "",
-                "additional_column": "",
+                "additional_column": db_es_additional_column,
                 "levels":
                     {
                         "level1": 2,
@@ -86,14 +139,6 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
     }
 
     return sample_data.copy()
-
-
-class EntityCategory:
-    user = "user"
-    host = "host"
-    process = "process"
-    department = "department"
-    other = "other"
 
 
 class XbaCookCase(UserSession):

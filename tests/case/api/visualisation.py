@@ -180,7 +180,7 @@ class VisualisationCase(UserSession):
             "author_id": self_user_id,
             "editor": self.username,
             "editor_id": self_user_id,
-            "published": False
+            "published": True
         }
         resp = req.visualisation_reports_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"

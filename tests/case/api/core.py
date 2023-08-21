@@ -735,6 +735,7 @@ class CoreCase(UserSession):
         # print(resp.text)
         return resp
 
+    # fixme: не перебить настройки
     def case_core_syslog_post(self):
         req = Core(self.sess, self.host)
 
