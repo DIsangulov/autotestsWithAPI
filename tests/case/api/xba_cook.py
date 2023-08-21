@@ -227,12 +227,14 @@ class XbaCookCase(UserSession):
         # print(resp.text)
 
     def case_xba_cook_check_entity_type_post(self):
+        # todo: "column": неверные параметры/null в поле, возвращают неочевидный тип ошибки
+        # {"error":{"code":400,"description":"too many distinct values in column","msg":"Неверные параметры"}}
+
         req = XbaCook(self.sess, self.host)
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
-            "db_id": db_picker_tables,
-            "table": "ad_users_ngr",
-            "column": "Enabled",  # TODO: задача на валидацию данных в полях
+            "db_id": self.get_db_id_by_name(DbName.picker_tables),
+            "table": DbName.DB_picker_tables.tab_Weather_all_online,
+            "column": DbName.DB_picker_tables.col_Gorod
         }
         resp = req.xba_cook_check_entity_type_post(data)
         # print(resp.text)
@@ -298,7 +300,7 @@ class XbaCookCase(UserSession):
 
             resp = req.xba_cook_dashboard_groups_post(data)
             # print(resp.text)
-            assert resp.status_code == 200, f"c.key: {key}. Ошибка, код {resp.status_code}, {resp.text}"
+            assert resp.status_code == 200, f"c.key: {key}\npost_data:{data}\n Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_dashboard_groups_more_post(self):
         # DAT-5252
@@ -398,13 +400,13 @@ class XbaCookCase(UserSession):
     def case_xba_cook_entity_info_settings_get(self):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_entity_info_settings_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_info_settings_post(self):
         req = XbaCook(self.sess, self.host)
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
-        db_picker_tables_table_name = "ad_users_ngr"
+        db_picker_tables_table_name = DbName.DB_picker_tables.tab_Weather_all_online
         data = {
             "user_settings": {
                 "db_id": db_picker_tables,
@@ -422,9 +424,9 @@ class XbaCookCase(UserSession):
             }
         }
         resp = req.xba_cook_entity_info_settings_post(data)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа {resp.text}"
-        # print(resp.text)
 
     def case_xba_cook_entity_info_settings_entity_type_delete(self):
         req = XbaCook(self.sess, self.host)
@@ -453,14 +455,13 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_max_min_post(self):
         req = XbaCook(self.sess, self.host)
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
-            "column": "1",
-            # "db_id": pt_id,
-            "db_id": db_picker_tables,
-            "table": "ad_users_ngr"
+            "db_id": self.get_db_id_by_name(DbName.picker_tables),
+            "table": DbName.DB_picker_tables.tab_Weather_all_online,
+            "column": DbName.DB_picker_tables.col_TemnepaTypa
         }
         resp = req.xba_cook_max_min_post(data)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_get(self):
@@ -520,22 +521,22 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_profiles_graph_drilldown_1888_post(self):
+    def case_xba_cook_profiles_graph_drilldown_34_post(self):
         # DAT-5184
         # Проверка наличия ключа "description" в ответе
         req = XbaCook(self.sess, self.host)
 
         # FIXME: хардкод
         # нужны конкретные данные, для получения ответа иначе: {"error":{"code":400,"msg":"Нет данных"}}
-        prof_id = 1888
+        prof_id = 34
         data = {
-            "name": "Кривошеин Сергей",
-            "time": "2023-05-23",
+            "name": "saint petersburg",
+            "time": "2023-08-20",
             "columns":
                 [
-                    "calc_time",
-                    "name",
-                    "risk"
+                    "TimeStamp",
+                    "Gorod",
+                    "TemnepaTypa"
                 ]
         }
         resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)

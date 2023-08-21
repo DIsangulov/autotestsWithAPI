@@ -861,9 +861,8 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
 
-    @pytest.mark.skip   # FIXME:
-    def test_xba_cook_profiles_graph_drilldown_1888_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_drilldown_1888_post()
+    def test_xba_cook_profiles_graph_drilldown_34_post(self):
+        XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
 
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
