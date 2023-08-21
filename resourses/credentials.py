@@ -20,12 +20,3 @@ class TestUsers:
     }
     # user0 = {}
     # user1 = {}
-
-
-class DbName:
-    """
-    todo:deprecated --> use constants.DbName instead
-    """
-    picker_tables = "picker_tables"
-    API_TEST_DB1 = "API_TEST_DB1"
-    API_TEST_DB2 = "API_TEST_DB2"

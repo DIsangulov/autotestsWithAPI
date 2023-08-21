@@ -3,8 +3,8 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_peopler import Peopler
+from resourses.constants import API_AUTO_TEST_
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 officer_role_id = 3
 
 auto_user_id = set()   # список для пользователей, созданных автоматически

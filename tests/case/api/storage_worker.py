@@ -4,10 +4,9 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_storage_worker import StorageWorker
-from resourses.credentials import DbName
+from resourses.constants import DbName, API_AUTO_TEST_
 from tests.case.api.permitter import PermitterCase
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 reg_pid = set()        # список, содержащий id новосозданных регулярных выражений
 

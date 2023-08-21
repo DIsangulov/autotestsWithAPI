@@ -3,9 +3,9 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_reporter import Reporter
+from resourses.constants import API_AUTO_TEST_
 from tests.case.api.visualisation import VisualisationCase
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 mailing_id = set()     # 'id' рассылок
 

@@ -3,8 +3,8 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_scripter import Scripter
+from resourses.constants import API_AUTO_TEST_
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 script_id = set()          # 'id' скрипта  # предполагается, что будут использоваться только скрипты с именем .startswith(API_AUTO_TEST_%)
 sequence_id = set()        # 'id' последовательности

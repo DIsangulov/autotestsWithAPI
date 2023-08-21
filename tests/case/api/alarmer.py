@@ -1,8 +1,6 @@
 from req.Helpers.user_session import UserSession
 from req.Api.req_alarmer import Alarmer
-
-_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
-API_AUTO_TEST_ = "API_AUTO_TEST_"
+from resourses.constants import QA_SPAM_EMAIL, API_AUTO_TEST_
 
 
 class AlarmerCase(UserSession):
@@ -132,7 +130,7 @@ class AlarmerCase(UserSession):
         body = {
             # "link": "https://10.130.0.22/",  # нужно?
             # "msg": "TestAPI",                # нужно?
-            "to": _QA_SPAM_EMAIL,
+            "to": QA_SPAM_EMAIL,
             # "user_id": 4870
         }
         resp = req.alarmer_send_invitation_post(body)
@@ -145,7 +143,7 @@ class AlarmerCase(UserSession):
             # "link": "https://10.130.0.22/",     # нужно?
             # "msg": "TestAPI",                   # нужно?
             "to": [
-                _QA_SPAM_EMAIL
+                QA_SPAM_EMAIL
             ],
             # "user_id": 4870
         }
@@ -164,7 +162,7 @@ class AlarmerCase(UserSession):
             "host": "NGR-Exchange01.ngrsoftlab.ru",
             "port": 587,
             "protocol": "smpt",
-            "to": _QA_SPAM_EMAIL,
+            "to": QA_SPAM_EMAIL,
             # "send_user": DpQaa.USER,
             "send_user": "Владимир Даль",   # ??: Имя отправителя в полученном сообщении
             "psw": self._password,          # пароль для аунтефикации

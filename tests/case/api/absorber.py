@@ -5,9 +5,7 @@ import base64
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_absorber import Absorber
-from resourses.credentials import DbName
-
-API_AUTO_TEST_ = "API_AUTO_TEST_"
+from resourses.constants import DbName, API_AUTO_TEST_
 
 logo_id = set()
 source_id = set()      # 'id' источника данных

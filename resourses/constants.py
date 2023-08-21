@@ -1,4 +1,4 @@
-_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
+QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 
 API_AUTO_TEST_ = "API_AUTO_TEST_"
 UI_AUTO_TEST_ = "UI_AUTO_TEST_"

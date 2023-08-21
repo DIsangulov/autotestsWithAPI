@@ -3,9 +3,8 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_rm_cook import RmCook
-from resourses.credentials import DbName
+from resourses.constants import DbName, QA_SPAM_EMAIL
 
-_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
 SYSLOG_HOST = "107.130.0.16"
 SYSLOG_PORT = 514
 
@@ -261,7 +260,7 @@ class RmCookCase(UserSession):
                     "disable_syslog": False,
                     "disable_email": True,
                 }, {
-                    "email": _QA_SPAM_EMAIL,
+                    "email": QA_SPAM_EMAIL,
                     # "syslog_host": "",
                     # "syslog_port": 0,
                     "syslog_protocol": "",

@@ -5,11 +5,8 @@ import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
-from resourses.constants import DbName
+from resourses.constants import DbName, QA_SPAM_EMAIL, API_AUTO_TEST_
 from tests.case.api.permitter import PermitterCase
-
-_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
@@ -939,7 +936,7 @@ class XbaCookCase(UserSession):
             "destinations":
                 [
                     {
-                        "email": _QA_SPAM_EMAIL,
+                        "email": QA_SPAM_EMAIL,
                         # "syslog_host": "",
                         # "syslog_port": "",
                         "syslog_protocol": "TCP",

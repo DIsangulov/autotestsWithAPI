@@ -3,11 +3,10 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_permitter import Permitter
+from resourses.constants import API_AUTO_TEST_
 from tests.case.api.reporter import ReporterCase
 from tests.case.api.scripter import ScripterCase
 from tests.case.api.visualisation import VisualisationCase
-
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 
 def _get_sample_data() -> dict:

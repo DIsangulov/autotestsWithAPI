@@ -3,9 +3,8 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_visualisation import Visualisation
-from resourses.credentials import DbName
+from resourses.constants import DbName, API_AUTO_TEST_
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 query_id = set()           # 'id' sql запроса
 report_id = set()          # 'id' отчета

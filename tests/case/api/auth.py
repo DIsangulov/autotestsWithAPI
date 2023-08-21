@@ -4,8 +4,7 @@ import string
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_auth import AuthApi
-
-API_AUTO_TEST_ = "API_AUTO_TEST_"
+from resourses.constants import API_AUTO_TEST_
 
 
 class AuthApiCase(UserSession):
