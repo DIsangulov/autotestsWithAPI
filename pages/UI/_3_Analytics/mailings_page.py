@@ -1,6 +1,5 @@
 from playwright.sync_api import Page
 from pages.Helpers.base_page import BasePage
-from resourses.locators import AnalyticsLocators, AdminLocators
 
 
 class MailingsPage(BasePage):
@@ -37,11 +36,3 @@ class MailingNewData(MailingsPage):
         self.page_path = self.__class__.page_path
 
         # todo:
-
-
-# fixme: зависимости
-class MailingLists(BasePage):
-    def open_an_mailing_lists_reports(self):
-        self.page.click(AnalyticsLocators.ANALYTICS)
-        self.page.click(AnalyticsLocators.MAILING_LISTS)
-        self.page.click(AnalyticsLocators.MAILING_LISTS_REPORTS)

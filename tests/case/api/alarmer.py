@@ -128,10 +128,7 @@ class AlarmerCase(UserSession):
         req = Alarmer(self.sess, self.host)
 
         body = {
-            # "link": "https://10.130.0.22/",  # нужно?
-            # "msg": "TestAPI",                # нужно?
             "to": QA_SPAM_EMAIL,
-            # "user_id": 4870
         }
         resp = req.alarmer_send_invitation_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -140,8 +137,6 @@ class AlarmerCase(UserSession):
         req = Alarmer(self.sess, self.host)
 
         body = {
-            # "link": "https://10.130.0.22/",     # нужно?
-            # "msg": "TestAPI",                   # нужно?
             "to": [
                 QA_SPAM_EMAIL
             ],

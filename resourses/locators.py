@@ -13,57 +13,10 @@ class MainLocators:
     DROPDOWN2 = "//div[@class='options visible']/ul/li[2]"
     X_BUTTON = "//span[@class='ngr-icon icon-close ngr-icon_none']"
     CLOSE_BUTTON = "//*[contains(text(),'Закрыть')]"
-    SAVE_BUTTON = "//*[contains(text(),'Сохранить')]"
-    HUMAN_ICON = "//button[@class='n-app-profile__ny n-app-button']"
-    SIGN_OUT = "//*[contains(text(),'Выйти')]"
-    ADD_BUTTON = "//*[text()='Добавить']"
 
 
 class AdminLocators:
-    TITLE_MSG_OLD = "//div[@class='title-main']"
     TITLE_MSG_NEW = "//div[@class='main-toolbar-left__text-title']"
-
-
-class AnalyticsLocators:
-    ANALYTICS = "//*[contains(text(),'Аналитика')]"
-    MAILING_LISTS = "//*[contains(text(),'Рассылки')]"
-    MAILING_LISTS_REPORTS = "//*[contains(text(),'Отчетов')]"
-    REPORTS = "//*[contains(text(),'Отчеты')]"
-
-    ADD_REPORT_BUTTON = "(//span[@class='icon btn-icon'])[2]"  # создание отчета и сохранение отчета
-    REPORT_NAME_AREA_IN = "//input[@placeholder='Введите имя отчета']"
-    REPORT_DESCRIPTION_IN = "//textarea[@placeholder='Введите описание отчета']"
-    ACCESS_SETTINGS = "(//span[@class='icon btn-icon'])[1]"
-    PUBLESHED_TOGLER_ON = "//*[contains(text(),'Не опубликован')]"
-    PUBLESHED_TOGLER_OFF = "//*[contains(text(),'Опубликован')]"
-    REPORT_CLOSED_TOGLER = "//*[contains(text(),'Закрыт')]"
-    LAST_REPORT_IN_LIST = "//td[@data-label='Отчет']"
-
-    ROLE = "//input[@placeholder='Выберите роль']"
-    USERS = "//input[@placeholder='Выберите пользователя']"
-    ACCESS = "(//div[@class='ngr-dropdown__dropdown-popover dropdown-container'])[2]"
-
-    ROLE_SYSOP = "//*[contains(text(),'sysop')]"
-    USER_DATAPLAN_QAA = "(//*[contains(text(),'dataplan_qaa')])[1]"
-
-    ACCESS_READ = "//*[contains(text(),'Чтение')]"
-    ACCESS_WRITE = "//*[contains(text(),'Запись')]"
-    ACCESS_EXECUTE = "(//*[contains(text(),'Выполнение')])[1]"
-    ACCESS_ACCESS_SETTINGS = "(//*[contains(text(),'Настройка доступа')])[2]"
-    CHECKBOX_READ = "(//input[@type='checkbox'])[7]"
-    CHECKBOX_WRITE = "(//input[@type='checkbox'])[8]"
-    CHECKBOX_EXECUTE = "(//input[@type='checkbox'])[9]"
-    CHECKBOX_ACCESS_SETTINGS = "(//input[@type='checkbox'])[10]"
-
-    CHECKBOX_READ_FOR_USERS_TAB = "(//input[@type='checkbox'])[11]"
-    CHECKBOX_WRITE_FOR_USERS_TAB = "(//input[@type='checkbox'])[12]"
-    CHECKBOX_EXECUTE_FOR_USERS_TAB = "(//input[@type='checkbox'])[13]"
-    CHECKBOX_ACCESS_SETTINGS_FOR_USERS_TAB = "(//input[@type='checkbox'])[14]"
-
-    TRASH = "(//span[@class='icon btn-icon'])[6]"
-    CONFIRM_TRASH = "//*[contains(text(),'Удалить отчет')]"
-
-    USERS_TAB = "(//*[contains(text(),'Пользователи')])[2]"
 
 
 class RoleMiningLocators:

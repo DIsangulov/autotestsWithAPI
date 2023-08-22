@@ -23,17 +23,3 @@ class AuthPage(BasePage):
         self.WRONG_LOGPASS_ALERT = page.locator(AuthLocators.WRONG_LOG_PASS_ALERT)
 
         # self.REGISTER_LINK = page.locator()   # todo:
-
-    # FIXME: зависимости
-    def log_out(self):
-        self.page.mouse.click(0, 0)
-        self.page.click(MainLocators.HUMAN_ICON)
-        self.page.click(MainLocators.SIGN_OUT)
-
-    # FIXME: зависимости
-    def enter_as_local_user(self):
-        self.page.fill(AuthLocators.LOGIN_INPUT, TestUsers.DpQaaLocal.get("username"))
-        self.page.fill(AuthLocators.PASSWORD_INPUT, TestUsers.DpQaaLocal.get("password"))
-        self.page.click(AuthLocators.PASS_VISIBLE)
-        self.page.click(AuthLocators.CHECKBOX_LOCAL)
-        self.page.click(AuthLocators.ENTER_BUTTON)
