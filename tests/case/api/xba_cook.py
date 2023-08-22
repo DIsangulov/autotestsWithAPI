@@ -185,8 +185,8 @@ class XbaCookCase(UserSession):
     def _wait_for_profile_status(self,
                                  *,
                                  profile_id: int,
-                                 not_equal: bool = False,       # Передать 'True' для ожидания другого статуса, кроме expect_status_id
-                                 expect_status_id: int = 2,     #
+                                 not_equal: bool = False,
+                                 expect_status_id: int = 2,
                                  timeout_sec: int = 15
                                  ) -> bool:
         """
