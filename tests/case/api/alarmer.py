@@ -5,6 +5,52 @@ from resourses.constants import QA_SPAM_EMAIL, API_AUTO_TEST_
 
 class AlarmerCase(UserSession):
 
+    def case_alarmer_alert_service_names_get(self):
+        req = Alarmer(self.sess, self.host)
+        resp = req.alarmer_alert_service_names_get()
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # todo: front:? use data
+    def case_alarmer_email_server_post(self):
+        req = Alarmer(self.sess, self.host)
+
+        data = {
+            "email": "string",
+            "id": 0,
+            "last_date": "string",
+            "message_id": "string"
+        }
+        resp = req.alarmer_email_server_post(data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_alarmer_email_server_get(self):
+        req = Alarmer(self.sess, self.host)
+        resp = req.alarmer_email_server_get()
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_alarmer_email_server_id_get(self):
+        req = Alarmer(self.sess, self.host)
+
+        # ?receiver_id, получить можно из alarmer_email_server_get
+        magic_id = 1
+
+        resp = req.alarmer_email_server_id_get(magic_id)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    # look: возвращает 200 при любом _id, это не ок
+    def case_alarmer_email_server_id_delete(self):
+        req = Alarmer(self.sess, self.host)
+
+        # ?receiver_id, получить можно из alarmer_email_server_get
+        magic_id = 1
+
+        resp = req.alarmer_email_server_id_delete(magic_id)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     def case_alarmer_notification_admin_all_get(self):
         req = Alarmer(self.sess, self.host)
 
@@ -26,11 +72,11 @@ class AlarmerCase(UserSession):
     def case_alarmer_notification_read_type_admin_post(self):
         req = Alarmer(self.sess, self.host)
 
-        _type = "admin"     # FIXME: какие ещё типы
+        _type = "admin"     # todo: admin|user
         body = {
             "id": 5590483   # FIXME: magic?
         }
-        resp = req.alarmer_notification_read_type_admin_post(_type, body)
+        resp = req.alarmer_notification_read_type_post(_type, body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # print(resp.text)
@@ -112,19 +158,46 @@ class AlarmerCase(UserSession):
         # print(resp.text)
         return resp
 
-    # TODO: parametrize? type = user, type = admin
     def case_alarmer_notification_user_get(self):
         req = Alarmer(self.sess, self.host)
 
-        _type = "user"      # TODO: add also 'admin'
+        _type = "user"      # TODO: user|admin
         resp = req.alarmer_notification_type_get(_type)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # print(resp.text)
         return resp
 
+    def case_alarmer_notification_type_read_post(self):
+        req = Alarmer(self.sess, self.host)
+
+        _type = "list"      # TODO: list|all
+
+        data = {
+            "admin": [
+                0
+            ],
+            "user": [
+                0
+            ]
+        }
+        resp = req.alarmer_notification_type_read_post(_type, data)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self):
+        req = Alarmer(self.sess, self.host)
+
+        page_size = 1
+        notify_type = "all"  # todo: all|warning|error|announcement
+        page = 1    # page id
+
+        resp = req.alarmer_notifications_page_size_x_read_notify_type_page_x_get(page_size, notify_type, page)
+        # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
     def case_alarmer_send_invitation_post(self):
-        # "user_id" > https://tasks.ngrsoftlab.ru/browse/DAT-5291
+        # "user_id" > DAT-5291
         req = Alarmer(self.sess, self.host)
 
         body = {
@@ -134,6 +207,7 @@ class AlarmerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_alarmer_send_invitations_post(self):
+        # DAT-5291
         req = Alarmer(self.sess, self.host)
 
         body = {

@@ -2,11 +2,6 @@ import requests
 
 from req.Helpers.base_req import BaseReq
 
-act_dir_pass = "d8hELYed9L809RB9FkSO!"
-ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
-# ssh_pass = "nCNmqNT<)>Bsr3c]"  # 16
-mail_pass = "8327kHLHsfohn;hksjkfou!"
-
 
 class Core(BaseReq):
 
@@ -26,11 +21,15 @@ class Core(BaseReq):
         """process POST req with new settings for domain active directory to test and save (if ok)"""
         return self.sess.post(f"{self.host}/back/dp.core/active_directory/test_settings", json=body)
 
-    # TODO: [GET] /back/dp.core/backups
+    def core_backups_get(self):
+        """process GET req for getting list of service DB backups"""
+        return self.sess.get(f"{self.host}/back/dp.core/backups")
 
     # TODO: [POST] /back/dp.core/backups
 
-    # TODO: [GET] /back/dp.core/backups/last
+    def core_backups_last_get(self):
+        """process GET req for getting status of the last service DB backup/restore job"""
+        return self.sess.get(f"{self.host}/back/dp.core/backups/last")
 
     # TODO: [GET] /back/dp.core/backups/{id}
 

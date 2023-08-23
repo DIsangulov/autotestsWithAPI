@@ -124,6 +124,24 @@ class TestAbsorber:
 
 class TestAlarmer:
 
+    def test_alarmer_alert_service_names_get(self):
+        AlarmerCase().case_alarmer_alert_service_names_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_alarmer_email_server_post(self):
+        AlarmerCase().case_alarmer_email_server_post()
+
+    def test_alarmer_email_server_get(self):
+        AlarmerCase().case_alarmer_email_server_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_alarmer_email_server_id_get(self):
+        AlarmerCase().case_alarmer_email_server_id_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_alarmer_email_server_id_delete(self):
+        AlarmerCase().case_alarmer_email_server_id_delete()
+
     def test_alarmer_notification_admin_all_get(self):
         AlarmerCase().case_alarmer_notification_admin_all_get()
 
@@ -157,6 +175,12 @@ class TestAlarmer:
     def test_alarmer_notification_user_get(self):
         AlarmerCase().case_alarmer_notification_user_get()
 
+    def test_alarmer_notification_type_read_post(self):
+        AlarmerCase().case_alarmer_notification_type_read_post()
+
+    def test_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self):
+        AlarmerCase().case_alarmer_notifications_page_size_x_read_notify_type_page_x_get()
+
     def test_alarmer_send_invitation_post(self):
         AlarmerCase().case_alarmer_send_invitation_post()
 
@@ -180,6 +204,12 @@ class TestCore:
 
     def test_core_active_directory_test_settings_post(self):
         CoreCase().case_core_active_directory_test_settings_post()
+
+    def test_core_backups_get(self):
+        CoreCase().case_core_backups_get()
+
+    def test_core_backups_last_get(self):
+        CoreCase().case_core_backups_last_get()
 
     def test_core_check_get(self):
         CoreCase().case_core_check_get()

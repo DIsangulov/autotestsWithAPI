@@ -5,15 +5,25 @@ from req.Helpers.base_req import BaseReq
 
 class Alarmer(BaseReq):
 
-    # TODO: [GET] /back/dp.alarmer/alert/service/names
+    def alarmer_alert_service_names_get(self):
+        """process GET req with e-mail data for sending"""
+        return self.sess.get(f"{self.host}/back/dp.alarmer/alert/service/names")
 
-    # TODO: [POST] /back/dp.alarmer/email_serve     # serve > server (c) swagger
+    def alarmer_email_server_post(self, data):
+        """process POST to edit mail server receivers list (add new receiver)"""
+        return self.sess.post(f"{self.host}/back/dp.alarmer/email_server", json=data)
 
-    # TODO: [GET] /back/dp.alarmer/email_server
+    def alarmer_email_server_get(self):
+        """process GET to get all mail server receivers list"""
+        return self.sess.get(f"{self.host}/back/dp.alarmer/email_server")
 
-    # TODO: [GET] /back/dp.alarmer/email_server/{id}
+    def alarmer_email_server_id_get(self, _id):
+        """process GET to get mail server receivers by ID"""
+        return self.sess.get(f"{self.host}/back/dp.alarmer/email_server/{_id}")
 
-    # TODO: [DELETE] /back/dp.alarmer/email_server/{id}
+    def alarmer_email_server_id_delete(self, _id):
+        """process DELETE to remove mail server receiver by ID"""
+        return self.sess.delete(f"{self.host}/back/dp.alarmer/email_server/{_id}")
 
     def alarmer_notification_admin_all_get(self) -> requests.Response:
         """process GET to get all system notifications journal for all users"""
@@ -24,7 +34,7 @@ class Alarmer(BaseReq):
         # исп: Перейти к Ленте уведомлений
         return self.sess.get(f"{self.host}/back/dp.alarmer/notification/read/admin")
 
-    def alarmer_notification_read_type_admin_post(self, _type, body) -> requests.Response:
+    def alarmer_notification_read_type_post(self, _type, body) -> requests.Response:
         """process POST to save and send new notification"""
         return self.sess.post(f"{self.host}/back/dp.alarmer/notification/read/{_type}", json=body)
 
@@ -61,18 +71,20 @@ class Alarmer(BaseReq):
         """process GET to get all notifications for user or admin"""
         return self.sess.get(f"{self.host}/back/dp.alarmer/notification/{_type}")
 
-    # TODO: [POST] /back/dp.alarmer/notification/{type}/read
+    def alarmer_notification_type_read_post(self, _type, data):
+        """process POST to save and send new notification"""
+        return self.sess.post(f"{self.host}//back/dp.alarmer/notification/{_type}/read", json=data)
 
-    # TODO: [GET] /back/dp.alarmer/notifications/pagi-size/{page_size}/read/{notify_type}/page/{page}
+    def alarmer_notifications_page_size_x_read_notify_type_page_x_get(self, page_size, notify_type, page):
+        """process GET to get not read notifications page"""
+        return self.sess.get(f"{self.host}/back/dp.alarmer/notifications/page-size/{page_size}/read/{notify_type}/page/{page}")
 
     def alarmer_send_invitation_post(self, body) -> requests.Response:
         """process POST req with invitational list for sending"""
-        # https://tasks.ngrsoftlab.ru/browse/DAT-5291
         return self.sess.post(f"{self.host}/back/dp.alarmer/send_invitation", json=body)
 
     def alarmer_send_invitations_post(self, body) -> requests.Response:
         """process POST req with data for sending invitational mailing"""
-        # https://tasks.ngrsoftlab.ru/browse/DAT-5291
         return self.sess.post(f"{self.host}/back/dp.alarmer/send_invitations", json=body)
 
     def alarmer_send_msg_post(self, body) -> requests.Response:
