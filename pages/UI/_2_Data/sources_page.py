@@ -10,10 +10,10 @@ class SourcesPage(BasePage):
         super().__init__(page)
         self.page_path = self.__class__.page_path
 
-        # todo: кнопка перейти в библиотеку шаблонов
-        # todo: кнопка импорт драйвера
+        self.TOOLBAR_GOTO_CONNECTORS_LIBRARY = page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'библиотеку шаблонов')]]")
+        self.TOOLBAR_IMPORT_DRIVER = page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'Импорт драйвера')]]")
         # todo: модалка импорт драйвера
-        # todo: импорт файла паттернов
+        self.TOOLBAR_IMPORT_PATTERN_FILE = page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'Импорт файла паттернов')]]")
         # todo: модалка импорт паттернов
 
         self.NEW_SOURCE_BUTTON = page.locator("//div[contains(@class, 'ngr-button-dropdown') and ./*/button//text()='Подключить источник']")
@@ -59,7 +59,7 @@ class SourcesEditorPage(BasePage):
     def new_source(self):
         self.open()
 
-    def edit_source(self, source_id):
+    def edit_source(self, source_id: int):
         target_path = f"/datasource/{source_id}/editor"
         self.goto_page(target_path)
         self.page.wait_for_url(self.host + target_path)

@@ -3,11 +3,10 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_permitter import Permitter
+from resourses.constants import API_AUTO_TEST_
 from tests.case.api.reporter import ReporterCase
 from tests.case.api.scripter import ScripterCase
 from tests.case.api.visualisation import VisualisationCase
-
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 
 def _get_sample_data() -> dict:
@@ -18,7 +17,7 @@ def _get_sample_data() -> dict:
         {"ui_part": "xba", "read": False, "write": False},
         {"ui_part": "rm", "read": False, "write": False}
     ]}
-    return s_data
+    return s_data.copy()
 
 
 role_id = set()
@@ -231,8 +230,8 @@ class PermitterCase(UserSession):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         data = {
-            "opened": True,
-            "published": True
+            "opened": False,
+            "published": False
         }
         resp = req.permitter_element_flags_element_type_element_id_post(element_type, element_id, data)
         # print(f"e_type: {element_type}, e_id: {element_id}, rtext: {resp.text}")
@@ -276,8 +275,8 @@ class PermitterCase(UserSession):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
         resp = req.permitter_element_rules_all_element_type_element_id_get(element_type, element_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_permitter_element_rules_all_query_id_get(self):
         element_type = ElementType.query
@@ -311,7 +310,8 @@ class PermitterCase(UserSession):
     # <><><> <><><>
 
     # <><><> <><><>
-    # FIXME: 200 or 400; add other element_type's
+    # FIXME: 200 or 400;
+    # TODO: add other element_type's
     def _permitter_element_rules_delete_element_type_element_id_post(self, element_type, element_id):
         pass
 
@@ -323,8 +323,8 @@ class PermitterCase(UserSession):
         # FIXME: id -> в post-url и в data; who_id << ??
         data = {"access": True, "exec": True, "id": element_id, "is_user": True, "read": True, "who_id": 5, "write": True}
         resp = req.permitter_element_rules_delete_element_type_element_id_post(element_type, element_id, data)
-        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200 or 400, f"Ошибка, код {resp.status_code}, {resp.text}"
     # <><><> <><><>
 
     # <><><> <><><>
@@ -372,11 +372,12 @@ class PermitterCase(UserSession):
     def _permitter_element_rules_element_type_element_id_post(self, element_type, element_id):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
-        # FIXME: who is 'who_id' ; who_name; id || (c) swagger
+        # who_id: user or role id
+        # who_name: user or role name
         data = {
             "access": True,
             "exec": True,
-            # "id":0
+            # "id":0,
             "is_user": False,
             "read": True,
             "who_id": 5,
@@ -384,8 +385,15 @@ class PermitterCase(UserSession):
             "write": True
         }
         resp = req.permitter_element_rules_element_type_element_id_post(element_type, element_id, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, \
+            f"""
+            status_code: {resp.status_code}
+            element_type: {element_type}
+            element_id: {element_id}
+            post_data = {data};
+            resp = {resp.text}
+            """
 
     def case_permitter_element_rules_query_id_post(self):
         element_type = ElementType.query
@@ -437,6 +445,7 @@ class PermitterCase(UserSession):
         req.sess.headers.update({'ui': "2"})
 
         data = _get_sample_data()  # "name": f"API_AUTO_TEST_{random_num}"
+
         resp = req.permitter_roles_editor_roles_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -444,7 +453,7 @@ class PermitterCase(UserSession):
 
     def case_permitter_roles_editor_roles_edit_id_get(self):
         req = Permitter(self.sess, self.host)
-        # req.sess.headers.update({'ui': "2"})
+        req.sess.headers.update({'ui': "2"})
         _role_id = self._get_temp_role_id()
         resp = req.permitter_roles_editor_roles_edit_id_get(_role_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -452,12 +461,19 @@ class PermitterCase(UserSession):
 
     def case_permitter_roles_editor_roles_id_put(self):
         req = Permitter(self.sess, self.host)
-        # req.sess.headers.update({'ui': "2"})
+        req.sess.headers.update({'ui': "2"})
         _role_id = self._get_temp_role_id()
+
         data = _get_sample_data()
+        # data.update({"id": _role_id})   # todo: role_id в теле и в адресе
+
         resp = req.permitter_roles_editor_roles_id_put(_role_id, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+        assert resp.status_code == 200, f"""
+        status_code: {resp.status_code}
+        role_id: {_role_id}
+        post_data = {data}
+        resp = {resp.text}
+        """
 
     def case_permitter_roles_editor_roles_id_delete(self):
         req = Permitter(self.sess, self.host)
@@ -506,11 +522,11 @@ class PermitterCase(UserSession):
     def case_permitter_role_rules_who_id_get(self):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
-        who = "role"
-        who_id = 123    # fixme:<
+        who = "role"    # user or role
+        who_id = 123    # user or role id   # fixme: хк
         resp = req.permitter_who_rules_who_id_get(who, who_id)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # __del__
     def all_temp_roles_delete(self):

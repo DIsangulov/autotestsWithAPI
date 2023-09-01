@@ -75,10 +75,22 @@ class CoreCase(UserSession):
             "user": "dataplan@ngrsoftlab.ru"
         }
         resp = req.core_active_directory_test_settings_post(body)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def case_core_backups_get(self):
+        req = Core(self.sess, self.host)
+        resp = req.core_backups_get()
+        # print(f"sc: {resp.status_code}, text: {resp.text}")
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 200: text: {"res":[]}
+
+    def case_core_backups_last_get(self):
+        req = Core(self.sess, self.host)
+        resp = req.core_backups_last_get()
         # print(resp.text)
-        return resp
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 200: {"res":{"ID":0,"startTime":"","status":"","type":"","log":""}}
 
     def case_core_check_get(self):
         req = Core(self.sess, self.host)
@@ -735,6 +747,7 @@ class CoreCase(UserSession):
         # print(resp.text)
         return resp
 
+    # fixme: не перебить настройки
     def case_core_syslog_post(self):
         req = Core(self.sess, self.host)
 

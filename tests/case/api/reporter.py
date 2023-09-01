@@ -3,9 +3,9 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_reporter import Reporter
+from resourses.constants import API_AUTO_TEST_
 from tests.case.api.visualisation import VisualisationCase
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 mailing_id = set()     # 'id' рассылок
 
@@ -86,7 +86,7 @@ class ReporterCase(UserSession):
                 # 282
             ],
             "receivers": [
-                4870    # "s.yezhov@ngrsoftlab.ru"
+                # 4870    # "s.yezhov@ngrsoftlab.ru"
             ]
         }
         resp = req.reporter_mailing_put(data)
@@ -128,7 +128,7 @@ class ReporterCase(UserSession):
                 },
             "elements": None,   # >> видимо 'Элементы отчета' >> int
             "receivers": [      # 'id' получателей
-                4870    # "s.yezhov@ngrsoftlab.ru"
+                # 4870    # "s.yezhov@ngrsoftlab.ru"
             ]
         }
         resp = req.reporter_mailing_post(data)
@@ -158,6 +158,7 @@ class ReporterCase(UserSession):
         resp = req.reporter_mailing_sample_post(data)
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # 400: {"error":{"code":400,"description":"set email server settings","msg":"Невозможно прочитать текущие настройки"}}
 
     def case_reporter_mailing_typed_0_1_get(self):
         req = Reporter(self.sess, self.host)
@@ -188,7 +189,6 @@ class ReporterCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # fixme: медленный кейс
     def case_reporter_screener_fast_png_post(self):
         req = Reporter(self.sess, self.host)
         data = {
@@ -197,8 +197,8 @@ class ReporterCase(UserSession):
             "need_page": "/report"
         }
         resp = req.reporter_screener_fast_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_reporter_screener_fast_pdf_post(self):
         req = Reporter(self.sess, self.host)
@@ -208,8 +208,8 @@ class ReporterCase(UserSession):
             "need_page": "/report"
         }
         resp = req.reporter_screener_fast_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     # __del__
     def all_api_auto_test_mailing_delete(self):

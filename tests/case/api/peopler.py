@@ -3,9 +3,9 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_peopler import Peopler
+from resourses.constants import API_AUTO_TEST_
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
-sys_api_test = 76   # fixme?
+officer_role_id = 3
 
 auto_user_id = set()   # список для пользователей, созданных автоматически
 
@@ -43,20 +43,25 @@ class PeoplerCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: работа ключей | name, rolename | под вопросом ещё (c) Swagger
+    # LOOK: работа ключей | name, rolename | под вопросом ещё (c) Swagger
     # на фронте оно только меняет "роль" группе?
     def case_peopler_many_users_put(self):
         req = Peopler(self.sess, self.host)
         # FIXME: может дважды выпасть один и тот же user_id
         auto_user_id_1 = self._get_auto_user_id()
         auto_user_id_2 = self._get_auto_user_id()
-        body = {"users":
-            [
-                {"id": auto_user_id_1},
-                {"id": auto_user_id_2}
+        body = {
+            "users": [
+                {
+                    "id": auto_user_id_1
+                },
+                {
+                    "id": auto_user_id_2
+                }
             ],
-            "role_id": sys_api_test,
+            "role_id": officer_role_id,
         }
+
         resp = req.peopler_many_users_put(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -66,17 +71,17 @@ class PeoplerCase(UserSession):
 
         random_num = random.randint(1500, 1996)
         body = {
-            # "role_id": 76,  # sys_api_test
+            # "role_id": 76,
             "users": [
                 {
-                    "role_id": sys_api_test,
+                    "role_id": officer_role_id,
                     "name": API_AUTO_TEST_ + f"many_users_{random_num}",
                     # "is_admin":     True,
                     # "is_system":    True,
                     # "is_tech":      True
                 },
                 {
-                    "role_id": sys_api_test,
+                    "role_id": officer_role_id,
                     "name": API_AUTO_TEST_ + f"many_users_{random_num + 1}",
                 },
             ]
@@ -140,11 +145,11 @@ class PeoplerCase(UserSession):
 
         # todo: user / role
         subject_type = "user"
-        # subject_type = "role" # id 5 == sysop
+        # subject_type = "role"
 
         data = {
-            # "obj_id": 0,
-            # "obj_type": "metaprofiles",
+            "obj_id": 0,                  # look: закрепление конкретной сущности
+            "obj_type": "metaprofiles",   # look: тип этой сущности
             "path": "/metaprofiles",
             "subject_id": self.get_self_user_id()
         }
@@ -205,7 +210,7 @@ class PeoplerCase(UserSession):
         str_random_num = str(random.randint(1000, 1500))
         body = {
             "name": API_AUTO_TEST_ + str_random_num,
-            "role_id": sys_api_test,
+            "role_id": officer_role_id,
             # "is_admin":     True,
             # "is_system":    True,
             # "is_tech":      True
@@ -226,7 +231,8 @@ class PeoplerCase(UserSession):
         req = Peopler(self.sess, self.host)
         user_id = self._get_auto_user_id()
         body = {
-                "role_id":     sys_api_test,
+                "id": user_id,
+                "role_id":     officer_role_id,
                 "is_admin":    False,
                 "is_system":   False,
                 "is_tech":     False

@@ -5,11 +5,8 @@ import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
-from resourses.credentials import DbName
+from resourses.constants import DbName, QA_SPAM_EMAIL, API_AUTO_TEST_
 from tests.case.api.permitter import PermitterCase
-
-_QA_SPAM_EMAIL = "s.yezhov@ngrsoftlab.ru"
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
@@ -24,21 +21,72 @@ def get_str_random_num(length: int = 4) -> str:
     return str(random.randint(int(10**(length-1)), int(10**length-1)))
 
 
+class EntityCategory:
+    user = "user"
+    host = "host"
+    process = "process"
+    department = "department"
+    other = "other"
+
+
+class XbaIdFunction:
+    """Функция построения профиля"""
+    count = 1
+    count_distinct = 2
+
+    min_log_time = 5
+    max_log_time = 6
+    delta_log_time = 7
+    len_distinct_hour = 8
+    avg = 9
+    min = 10
+    max = 11
+    sum = 12
+    avg_not_zero = 13
+    min_not_zero = 14
+    max_not_zero = 15
+    sum_not_zero = 16
+    log_avg = 17
+    log_min = 18
+    log_max = 19
+    log_sum = 20
+    novelty = 21
+    chi_squared_distance = 22
+
+
+"""
+    xBA profile: id_category:
+    
+    "id": 1,"name": "Другое"
+    "id": 2,"name": "Выявление инсайдера"
+    "id": 3,"name": "Выявление компрометации"
+    "id": 4,"name": "Нецелевое использование ресурсов"
+    "id": 5,"name": "Ошибки конфигурации"
+    "id": 6,"name": "Нарушение политик ИБ"
+    "id": 7,"name": "Работа вредоносного ПО"
+    "id": 8,"name": "Эффективность ИС"
+    "id": 9,"name": "Непрерывность бизнес-процессов"
+    "id": 10,"name": "Прогнозирование загрузки"
+    "id": 11,"name": "Эффективность персонала"
+"""
+
+
 def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
-    # todo: сделать "более" живые профили
 
     self_user_id = u_session.get_self_user_id()
 
-    db_picker_tables = u_session.get_db_id_by_name(DbName.picker_tables)
-    db_picker_tables_table_name = "ad_users_ngr"
-    db_picker_tables_time_column = "badPasswordTime"
-    db_es_entity_column = "department"
-    db_es_entity_type = "lastLogoff"
+    # fixme: проверить наличие и доступ к таблицам, если нет доступа, то не создаст
+    db_id = u_session.get_db_id_by_name(DbName.picker_tables)
+    db_table_name = DbName.DB_picker_tables.tab_Weather_all_online
+    db_time_column = DbName.DB_picker_tables.col_TimeStamp
+
+    db_es_entity_column = DbName.DB_picker_tables.col_Gorod
+    # db_es_entity_type = "lastLogoff"
+    db_es_additional_column = DbName.DB_picker_tables.col_TemnepaTypa
 
     sample_data = {
-        # "id": ???
         "name": API_AUTO_TEST_ + get_str_random_num(),
-        # "description": None,
+        # "description": "xba_profile_desc",
         "published": False,
         "opened": False,
         "author_id": self_user_id,
@@ -47,29 +95,32 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         # "editor": "self_user_id",
         # "created": "2023-02-15T07:55:02.631066Z",
         # "modified": "2023-02-15T07:55:02.631066Z",
-        "db_id": db_picker_tables,
+        "db_id": db_id,
         "db_name": DbName.picker_tables,
-        "table_name": db_picker_tables_table_name,
+        "table_name": db_table_name,
+        # >> status: 1 -> запущен
+        # >> status: 2 -> выполнен
+        # >> status: 3 -> выполнен с ошибками
         # "status": 3,
         "profile_type": "median",
-        "id_function": 6,  # << [get] /profiles/functions
-        "id_category": 1,  # todo: описание
+        "id_function": XbaIdFunction.avg,
+        "id_category": 5,
         "time_settings":
             {
-                "time_column": db_picker_tables_time_column,
-                "time_start": "1971-01-01T00:00:00Z",
-                "time_end": "2022-12-06T08:36:09Z",
-                "discretization_period": "minute",
+                "time_column": db_time_column,
+                "time_start": "2023-08-18T12:37:00Z",
+                "time_end": "2023-08-21T00:00:00Z",
+                "discretization_period": "hour",    # "minute",
                 # "stat_period": ""
             },
         "entity_settings":
             {
                 "entity_column": db_es_entity_column,
                 "entity_column_name": "other",  # Категория сущности ( user|..|other
-                "entity_type": db_es_entity_type,
+                # "entity_type": db_es_entity_type,
                 "obj_column": "",
                 "obj_column_name": "",
-                "additional_column": "",
+                "additional_column": db_es_additional_column,
                 "levels":
                     {
                         "level1": 2,
@@ -85,14 +136,6 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
     }
 
     return sample_data.copy()
-
-
-class EntityCategory:
-    user = "user"
-    host = "host"
-    process = "process"
-    department = "department"
-    other = "other"
 
 
 class XbaCookCase(UserSession):
@@ -139,11 +182,21 @@ class XbaCookCase(UserSession):
 
         return xba_profile_id.pop()
 
-    def _wait_for_profile_status(self, *, profile_id: int, expect_status_id: int = 2, timeout_sec: int = 15) -> bool:
+    def _wait_for_profile_status(self,
+                                 *,
+                                 profile_id: int,
+                                 not_equal: bool = False,
+                                 expect_status_id: int = 2,
+                                 timeout_sec: int = 15
+                                 ) -> bool:
         """
-        # status: 1 -> запущен \n
-        # status: 2 -> выполнен \n
-        # status: 3 -> выполнен с ошибками
+        status: 1 -> запущен \n
+        status: 2 -> выполнен \n
+        status: 3 -> выполнен с ошибками\n
+        :param profile_id xba_profile_id
+        :param not_equal Передать 'True' для ожидания статуса не равного expect_status_id
+        :param expect_status_id Ожидаемый статус профиля:
+        :param timeout_sec сколько времени ждать
         """
 
         _wait_time_sec = abs(timeout_sec) / 4
@@ -156,7 +209,7 @@ class XbaCookCase(UserSession):
             assert resp.status_code == 200, f"Ошибка при получении профиля, code: {resp.status_code}, {resp.text}"
 
             _current_status_id = int(json.loads(resp.text)['res']['status'])
-            if _current_status_id == expect_status_id:
+            if not_equal ^ (_current_status_id == expect_status_id):
                 return True
             else:
                 time_rest = timeout_sec - (time.time() - _start_time)
@@ -181,12 +234,14 @@ class XbaCookCase(UserSession):
         # print(resp.text)
 
     def case_xba_cook_check_entity_type_post(self):
+        # todo: "column": неверные параметры/null в поле, возвращают неочевидный тип ошибки
+        # {"error":{"code":400,"description":"too many distinct values in column","msg":"Неверные параметры"}}
+
         req = XbaCook(self.sess, self.host)
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
-            "db_id": db_picker_tables,
-            "table": "ad_users_ngr",
-            "column": "Enabled",  # TODO: задача на валидацию данных в полях
+            "db_id": self.get_db_id_by_name(DbName.picker_tables),
+            "table": DbName.DB_picker_tables.tab_Weather_all_online,
+            "column": DbName.DB_picker_tables.col_Gorod
         }
         resp = req.xba_cook_check_entity_type_post(data)
         # print(resp.text)
@@ -252,7 +307,7 @@ class XbaCookCase(UserSession):
 
             resp = req.xba_cook_dashboard_groups_post(data)
             # print(resp.text)
-            assert resp.status_code == 200, f"c.key: {key}. Ошибка, код {resp.status_code}, {resp.text}"
+            assert resp.status_code == 200, f"c.key: {key}\npost_data:{data}\n Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_dashboard_groups_more_post(self):
         # DAT-5252
@@ -308,7 +363,7 @@ class XbaCookCase(UserSession):
         }
         # data = {}
         resp = req.xba_cook_dashboard_profiles_more_post(data)
-        print(resp.text)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"res":{"top_profiles_table":null}}
 
@@ -352,13 +407,13 @@ class XbaCookCase(UserSession):
     def case_xba_cook_entity_info_settings_get(self):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_entity_info_settings_get()
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_info_settings_post(self):
         req = XbaCook(self.sess, self.host)
         db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
-        db_picker_tables_table_name = "ad_users_ngr"
+        db_picker_tables_table_name = DbName.DB_picker_tables.tab_Weather_all_online
         data = {
             "user_settings": {
                 "db_id": db_picker_tables,
@@ -376,9 +431,9 @@ class XbaCookCase(UserSession):
             }
         }
         resp = req.xba_cook_entity_info_settings_post(data)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа {resp.text}"
-        # print(resp.text)
 
     def case_xba_cook_entity_info_settings_entity_type_delete(self):
         req = XbaCook(self.sess, self.host)
@@ -407,14 +462,13 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_max_min_post(self):
         req = XbaCook(self.sess, self.host)
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
         data = {
-            "column": "1",
-            # "db_id": pt_id,
-            "db_id": db_picker_tables,
-            "table": "ad_users_ngr"
+            "db_id": self.get_db_id_by_name(DbName.picker_tables),
+            "table": DbName.DB_picker_tables.tab_Weather_all_online,
+            "column": DbName.DB_picker_tables.col_TemnepaTypa
         }
         resp = req.xba_cook_max_min_post(data)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_get(self):
@@ -474,22 +528,23 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_profiles_graph_drilldown_1888_post(self):
+    def case_xba_cook_profiles_graph_drilldown_34_post(self):
         # DAT-5184
         # Проверка наличия ключа "description" в ответе
         req = XbaCook(self.sess, self.host)
 
         # FIXME: хардкод
         # нужны конкретные данные, для получения ответа иначе: {"error":{"code":400,"msg":"Нет данных"}}
-        prof_id = 1888
+        prof_id = 34
         data = {
-            "name": "Кривошеин Сергей",
-            "time": "2023-05-23",
+            "name": "saint petersburg",
+            # "time": "2023-08-20",
+            "time": "2023-08-20T00:00:00Z",
             "columns":
                 [
-                    "calc_time",
-                    "name",
-                    "risk"
+                    "TimeStamp",
+                    "Gorod",
+                    "TemnepaTypa"
                 ]
         }
         resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
@@ -709,8 +764,8 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         prof_id = self._get_xba_profile_id()
 
-        assert self._wait_for_profile_status(profile_id=prof_id), \
-            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+        assert self._wait_for_profile_status(profile_id=prof_id, not_equal=True, expect_status_id=1), \
+            "Профиль не вышел из статуса 'запущен' за отведенное время"
 
         data = _get_sample_xba_profile_data(self)
         data.update({"name": API_AUTO_TEST_ + "changed_" + get_str_random_num()})
@@ -798,8 +853,8 @@ class XbaCookCase(UserSession):
         str_random_num = str(random.randint(100, 999))
         prof_id = self._get_xba_profile_id()
 
-        assert self._wait_for_profile_status(profile_id=prof_id), \
-            "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
+        assert self._wait_for_profile_status(profile_id=prof_id, not_equal=True, expect_status_id=1), \
+            "Статус профиля 'запущен' и не изменился за отведенное время"
 
         data = {"data": API_AUTO_TEST_ + str_random_num}
         resp = req.xba_cook_profiles_id_whitelist_element_post(prof_id, data)
@@ -892,7 +947,7 @@ class XbaCookCase(UserSession):
             "destinations":
                 [
                     {
-                        "email": _QA_SPAM_EMAIL,
+                        "email": QA_SPAM_EMAIL,
                         # "syslog_host": "",
                         # "syslog_port": "",
                         "syslog_protocol": "TCP",

@@ -21,9 +21,9 @@ class DataStorageCase(BaseCase):
             page.SB_DATA.click()
 
         with allure.step("Клик в меню 'Хранилище'"):
-            page.SD_DATA_STORAGE.click()
+            page.SB_DATA_STORAGE.click()
 
-        with allure.step("Переход на страницу 'Хранилище'"):
+        with allure.step("Открылась страница 'Хранилище'"):
             page.page.wait_for_url(page.host + StorageStructurePage.page_path)
 
     def storage_navigation_tabs(self):

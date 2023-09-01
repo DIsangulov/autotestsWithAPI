@@ -3,15 +3,14 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_visualisation import Visualisation
-from resourses.credentials import DbName
+from resourses.constants import DbName, API_AUTO_TEST_
 
-API_AUTO_TEST_ = "API_AUTO_TEST_"
 
 query_id = set()           # 'id' sql запроса
 report_id = set()          # 'id' отчета
 visualisation_id = set()   # 'id' визуализации
 
-# TODO: есть подозрения, что бек не отрабатывает иногда запросы со значением smth_id = None
+# look: есть подозрения, что бек не отрабатывает иногда запросы со значением smth_id = None
 
 
 class VisualisationCase(UserSession):
@@ -19,6 +18,9 @@ class VisualisationCase(UserSession):
     def _collect_query_id(self):
         resp = Visualisation(self.sess, self.host).visualisation_query_get()
         assert resp.status_code == 200, f"assert::visualisation_query_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+
+        if resp.text == '{"res":null}\n':
+            return None
 
         query_info_rows = json.loads(resp.text)
         for _row in query_info_rows['res']:
@@ -40,6 +42,9 @@ class VisualisationCase(UserSession):
         resp = Visualisation(self.sess, self.host).visualisation_reports_get()
         assert resp.status_code == 200, f"assert::visualisation_reports_get, failed. status_code: {resp.status_code}, text: {resp.text}"
 
+        if resp.text == '{"res":null}\n':
+            return None
+
         report_id_info_rows = json.loads(resp.text)['res']
         for _row in report_id_info_rows:
             if str(_row['name']).startswith(API_AUTO_TEST_):
@@ -60,6 +65,9 @@ class VisualisationCase(UserSession):
         resp = Visualisation(self.sess, self.host).visualisation_visualisation_get()
         assert resp.status_code == 200, f"assert::visualisation_visualisation_get, failed. status_code: {resp.status_code}, text: {resp.text}"
 
+        if resp.text == '{"res":null}\n':
+            return None
+
         vis_info_rows = json.loads(resp.text)['res']
         for _row in vis_info_rows:
             if str(_row['name']).startswith(API_AUTO_TEST_):
@@ -79,6 +87,7 @@ class VisualisationCase(UserSession):
     def case_visualisation_query_get(self):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_query_get()
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_visualisation_query_do_query_id_post(self):
@@ -94,20 +103,23 @@ class VisualisationCase(UserSession):
 
         str_random_num = str(random.randint(100, 999))
         self_user_id = self.get_self_user_id()                              # Получить свой 'user_id'
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)     # Получить 'id' хранилища 'picker_tables'
+        # todo: проверить доступ к бд, перед созданием!
+        db_id = self.get_db_id_by_name(DbName.picker_tables)     # Получить 'id' хранилища 'picker_tables'
+        db_tab_name = DbName.DB_picker_tables.tab_Weather_all_online
+        db_col_name = DbName.DB_picker_tables.col_Gorod
 
         data = {
-            "db_id": db_picker_tables,
+            "db_id": db_id,
             "name": API_AUTO_TEST_ + str_random_num,
             "description": API_AUTO_TEST_ + str_random_num,
-            "published": False,
-            "opened": False,
+            # "published": True,
+            # "opened": True,
             "settings": {
-                "base_id": None,
-                "tab_name": "ad_groups_ngr",            # FIXME:    ?
+                "base_id": db_id,
+                "tab_name": db_tab_name,
                 "columns": [
                     {
-                        "name": "canonicalName",
+                        "name": db_col_name,
                         "type": "String"
                     }
                 ],
@@ -121,14 +133,14 @@ class VisualisationCase(UserSession):
             "auto": True,
             "editor_id": self_user_id,
             "editor": self.username,
-            "created": "2023-03-09T06:37:20Z",        # FIXME: дата устанавливается > подцепать 'текущую дату'
-            "modified": "2023-03-09T06:37:20Z",       # FIXME: дата устанавливается
+            # "created": "2023-03-09T06:37:20Z",
+            # "modified": "2023-03-09T06:37:20Z",
             "author_id": self_user_id,
             "author": self.username
         }
         resp = req.visualisation_query_save_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         return resp
 
     def case_visualisation_query_usage_id_get(self):
@@ -155,6 +167,7 @@ class VisualisationCase(UserSession):
     def case_visualisation_reports_get(self):
         req = Visualisation(self.sess, self.host)
         resp = req.visualisation_reports_get()
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_visualisation_reports_post(self):
@@ -164,12 +177,12 @@ class VisualisationCase(UserSession):
         data = {
             "name": f"{API_AUTO_TEST_}report_{random_num}",
             "description": f"{API_AUTO_TEST_}report_description",
-            # "created": "2034-03-09T07:20:34.318Z",    # fixme: 01.01.0001, 02:30
-            # "modified": "2023-03-09T07:20:34.318Z",   # fixme:
+            # "created": "2034-03-09T07:20:34.318Z",    # look: 01.01.0001, 02:30
+            # "modified": "2023-03-09T07:20:34.318Z",
             "author_id": self_user_id,
             "editor": self.username,
             "editor_id": self_user_id,
-            "published": False
+            "published": True
         }
         resp = req.visualisation_reports_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -207,8 +220,8 @@ class VisualisationCase(UserSession):
             "editor_id": self_user_id,
             "author": self.username,
             "editor": self.username,
-            "created": "2023-03-09T07:42:21.722Z",  # FIXME: ??
-            "modified": "2023-03-09T07:42:21.722Z",
+            # "created": "2023-03-09T07:42:21.722Z",
+            # "modified": "2023-03-09T07:42:21.722Z",
             "grid": [],
             "snapshot": "",
             "base_image": "",

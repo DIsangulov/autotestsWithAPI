@@ -5,6 +5,7 @@ from playwright.sync_api import expect
 
 from pages.Helpers.base_case import BaseCase
 from pages.UI._2_Data.sources_page import SourcesPage, SourcesEditorPage
+from pages.UI._2_Data.connectors_page import ConnectorsPage, LogoPage, ConnectorsCreatePage
 
 UI_AUTO_TEST_ = "UI_AUTO_TEST_"
 
@@ -65,7 +66,7 @@ class DataSourcesCase(BaseCase):
         with allure.step("Есть строки в раскрытом списке 'Статус получения данных'"):
             expect(page.MW_SD_ROW).not_to_have_count(0)
 
-        with allure.step("Модальное окно закрывается по нажатию [X]"):
+        with allure.step("Модальное окно закрывается по клику [X]"):
             expect(page.MW_CLOSE).to_be_visible()
             page.MW_CLOSE.click()
             expect(page.MODAL_WINDOW).not_to_be_visible()
@@ -103,8 +104,66 @@ class DataSourcesCase(BaseCase):
             page.page.wait_for_url(page.host + "/datasource/create/connector")
 
     def library_connectors_navigation(self):
-        # todo: остальные шаги
-        pass
+        page = SourcesPage(self._page)
+
+        with allure.step("Открыть страницу 'Источники Данных'"):
+            page.open()
+
+        with allure.step("toolbar: Клик по кнопке 'Перейти в библиотеку шаблонов'"):
+            page.TOOLBAR_GOTO_CONNECTORS_LIBRARY.click()
+        with allure.step("Открылась страница Библиотека коннекторов"):
+            page.page.wait_for_url(ConnectorsPage.page_path)
+
+        page = LogoPage(self._page)
+
+        with allure.step("Клик по вкладке 'Логотипы'"):
+            page.TAB_LOGOS.click()
+        with allure.step("Открылась страница 'Библиотека логотипов'"):
+            page.page.wait_for_url(page.host + LogoPage.page_path)
+
+        with allure.step("Клик по кнопке 'Создать логотип'"):
+            page.CREATE_LOGO_BUTTON.click()
+        with allure.step("Открылось модальное окно 'Создать новый логотип'"):
+            expect(page.MODAL_WINDOW).to_be_visible()
+        with allure.step("[МО] Клик по [X]"):
+            page.MW_CLOSE.click()
+        with allure.step("Модальное окно закрылось"):
+            expect(page.MODAL_WINDOW).not_to_be_visible()
+
+        page = ConnectorsPage(self._page)
+
+        with allure.step("Клик по вкладке 'Коннекторы'"):
+            page.TAB_CONNECTORS.click()
+        with allure.step("Открылась страница 'Библиотека коннекторов'"):
+            page.page.wait_for_url(page.host + ConnectorsPage.page_path)
+
+        with allure.step("Клик по кнопке 'Создать коннектор'"):
+            page.CREATE_CONNECTOR_BUTTON.click()
+        with allure.step("Открылась страница 'Создание коннектора'"):
+            page.page.wait_for_url(page.host + ConnectorsCreatePage.page_path)
+
+        page = ConnectorsCreatePage(self._page)
+
+        with allure.step("Ввод текста в инпут для появления 'Вы уверены?'"):
+            page.NAME_FILED.fill("Текст")
+
+        with allure.step("Клик по кнопке <- назад"):
+            page.BACK_BUTTON.click()
+
+        with allure.step("Появилось модальное окно:'Вы уверены?'"):
+            expect(page.YES_BUTTON).to_be_visible()
+        with allure.step("В модалке 'Вы точно уверены?' Клик по кнопке ДА"):
+            page.YES_BUTTON.click()
+
+        page = ConnectorsPage(self._page)
+
+        with allure.step("Открылась страница 'Библиотека коннекторов'"):
+            page.page.wait_for_url(page.host + ConnectorsPage.page_path)
+
+        with allure.step("Клик по кнопке <- назад"):
+            page.BACK_BUTTON.click()
+        with allure.step("Открылась страница 'Источники данных'"):
+            page.page.wait_for_url(page.host + SourcesPage.page_path)
 
     def source_create_editor_syslog(self):
         page = SourcesEditorPage(self._page)

@@ -1,20 +1,22 @@
+import os
+
+TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.5.16")
+# TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.5.17")
+
+
 class TestUsers:
     # /login  #  auth_data
+
     DpQaa = {
-        "username": "dataplan_qaa@ngrsoftlab.ru",
-        "password": "fHNHQBc7jEKfaO0kywZz!!",
+        "username": os.environ.get('TARGET_API_USER', "dataplan_qaa@ngrsoftlab.ru"),
+        "password": os.environ.get('TARGET_API_PASSWORD', "fHNHQBc7jEKfaO0kywZz!!"),
         "local": False
     }
+
     DpQaaLocal = {
-        "username": "dataplan_qaa_local",
-        "password": "so@you_came_back_to@me_again@@DdwIf991",
+        "username": os.environ.get('TARGET_LOCAL_USER', "dataplan_qaa_local"),
+        "password": os.environ.get('TARGET_LOCAL_PASSWORD', "so@you_came_back_to@me_again@@DdwIf991"),
         "local": True
     }
     # user0 = {}
     # user1 = {}
-
-
-class DbName:
-    picker_tables = "picker_tables"
-    API_TEST_DB1 = "API_TEST_DB1"
-    API_TEST_DB2 = "API_TEST_DB2"

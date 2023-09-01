@@ -124,6 +124,24 @@ class TestAbsorber:
 
 class TestAlarmer:
 
+    def test_alarmer_alert_service_names_get(self):
+        AlarmerCase().case_alarmer_alert_service_names_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_alarmer_email_server_post(self):
+        AlarmerCase().case_alarmer_email_server_post()
+
+    def test_alarmer_email_server_get(self):
+        AlarmerCase().case_alarmer_email_server_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_alarmer_email_server_id_get(self):
+        AlarmerCase().case_alarmer_email_server_id_get()
+
+    @pytest.mark.skip   # todo: new
+    def test_alarmer_email_server_id_delete(self):
+        AlarmerCase().case_alarmer_email_server_id_delete()
+
     def test_alarmer_notification_admin_all_get(self):
         AlarmerCase().case_alarmer_notification_admin_all_get()
 
@@ -157,6 +175,12 @@ class TestAlarmer:
     def test_alarmer_notification_user_get(self):
         AlarmerCase().case_alarmer_notification_user_get()
 
+    def test_alarmer_notification_type_read_post(self):
+        AlarmerCase().case_alarmer_notification_type_read_post()
+
+    def test_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self):
+        AlarmerCase().case_alarmer_notifications_page_size_x_read_notify_type_page_x_get()
+
     def test_alarmer_send_invitation_post(self):
         AlarmerCase().case_alarmer_send_invitation_post()
 
@@ -172,14 +196,23 @@ class TestCore:
     def test_core_active_directory_get(self):
         CoreCase().case_core_active_directory_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_post(self):
         CoreCase().case_core_active_directory_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_structure_post(self):
         CoreCase().case_core_active_directory_structure_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_test_settings_post(self):
         CoreCase().case_core_active_directory_test_settings_post()
+
+    def test_core_backups_get(self):
+        CoreCase().case_core_backups_get()
+
+    def test_core_backups_last_get(self):
+        CoreCase().case_core_backups_last_get()
 
     def test_core_check_get(self):
         CoreCase().case_core_check_get()
@@ -187,9 +220,11 @@ class TestCore:
     def test_core_common_get(self):
         CoreCase().case_core_common_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_post(self):
         CoreCase().case_core_common_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_test_post(self):
         CoreCase().case_core_common_test_post()
 
@@ -210,9 +245,11 @@ class TestCore:
     def test_core_download_settings_get(self):
         CoreCase().case_core_download_settings_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_import_cert_post(self):
         CoreCase().case_core_email_import_cert_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_send_test_post(self):
         CoreCase().case_core_email_send_test_post()
 
@@ -222,9 +259,11 @@ class TestCore:
     def test_core_email_out_get(self):
         CoreCase().case_core_email_out_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_in_post(self):
         CoreCase().case_core_email_in_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_out_post(self):
         CoreCase().case_core_email_out_post()
 
@@ -353,6 +392,7 @@ class TestCore:
     def test_core_syslog_get(self):
         CoreCase().case_core_syslog_get()
 
+    @pytest.mark.skip  # fixme: изменение настроек
     def test_core_syslog_post(self):
         CoreCase().case_core_syslog_post()
 
@@ -551,6 +591,7 @@ class TestPermitter:
     def test_permitter_element_rules_script_sequence_id_post(self):
         PermitterCase().case_permitter_element_rules_script_sequence_id_post()
 
+    # todo: 200 -> в сообщении 400 статус код
     def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
         PermitterCase().case_permitter_element_rules_delete_query_id_post()
 
@@ -621,9 +662,8 @@ class TestRmCook:
     def test_rm_cook_rm_roles_id_alias_post(self):
         RmCookCase().case_rm_cook_rm_roles_id_alias_post()
 
-    @pytest.mark.skip   # fixme
-    def test_rm_cook_rm_roles_id_alias_get(self):
-        RmCookCase().case_rm_cook_rm_roles_id_alias_get()
+    def test_rm_cook_rm_roles_id_alias_ts_get(self):
+        RmCookCase().case_rm_cook_rm_roles_id_alias_ts_get()
 
     def test_rm_status_get(self):
         RmCookCase().case_rm_cook_rm_status_get()
@@ -652,11 +692,9 @@ class TestRmCook:
     def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):  # Не используется
         RmCookCase().case_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get()
 
-    @pytest.mark.skip  # fixme
     def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
         RmCookCase().case_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get()
 
-    @pytest.mark.skip   # fixme
     def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
         RmCookCase().case_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get1()
 
@@ -675,6 +713,7 @@ class TestRmCook:
     def test_rm_cook_settings_sources_get(self):
         RmCookCase().case_rm_cook_settings_sources_get()
 
+    @pytest.mark.skip   # Поменять настройки источников Role mining
     def test_rm_cook_settings_sources_post(self):
         RmCookCase().case_rm_cook_settings_sources_post()
 
@@ -758,7 +797,6 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
-    @pytest.mark.skip
     def test_storage_worker_storage_table_db_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
 
@@ -862,8 +900,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
 
-    def test_xba_cook_profiles_graph_drilldown_1888_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_drilldown_1888_post()
+    @pytest.mark.skip   # fixme: хк
+    def test_xba_cook_profiles_graph_drilldown_34_post(self):
+        XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
 
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
