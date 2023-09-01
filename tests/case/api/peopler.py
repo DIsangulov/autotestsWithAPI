@@ -43,20 +43,25 @@ class PeoplerCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: работа ключей | name, rolename | под вопросом ещё (c) Swagger
+    # LOOK: работа ключей | name, rolename | под вопросом ещё (c) Swagger
     # на фронте оно только меняет "роль" группе?
     def case_peopler_many_users_put(self):
         req = Peopler(self.sess, self.host)
         # FIXME: может дважды выпасть один и тот же user_id
         auto_user_id_1 = self._get_auto_user_id()
         auto_user_id_2 = self._get_auto_user_id()
-        body = {"users":
-            [
-                {"id": auto_user_id_1},
-                {"id": auto_user_id_2}
+        body = {
+            "users": [
+                {
+                    "id": auto_user_id_1
+                },
+                {
+                    "id": auto_user_id_2
+                }
             ],
             "role_id": officer_role_id,
         }
+
         resp = req.peopler_many_users_put(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
@@ -140,11 +145,11 @@ class PeoplerCase(UserSession):
 
         # todo: user / role
         subject_type = "user"
-        # subject_type = "role" # id 5 == sysop
+        # subject_type = "role"
 
         data = {
-            # "obj_id": 0,
-            # "obj_type": "metaprofiles",
+            "obj_id": 0,                  # look: закрепление конкретной сущности
+            "obj_type": "metaprofiles",   # look: тип этой сущности
             "path": "/metaprofiles",
             "subject_id": self.get_self_user_id()
         }
@@ -226,6 +231,7 @@ class PeoplerCase(UserSession):
         req = Peopler(self.sess, self.host)
         user_id = self._get_auto_user_id()
         body = {
+                "id": user_id,
                 "role_id":     officer_role_id,
                 "is_admin":    False,
                 "is_system":   False,

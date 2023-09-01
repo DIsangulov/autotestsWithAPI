@@ -191,6 +191,7 @@ class TestAlarmer:
         AlarmerCase().case_alarmer_send_msg_post()
 
 
+@pytest.mark.skip   # fixme: настройки почты и суслог
 class TestCore:
 
     def test_core_active_directory_get(self):
@@ -582,6 +583,7 @@ class TestPermitter:
     def test_permitter_element_rules_script_sequence_id_post(self):
         PermitterCase().case_permitter_element_rules_script_sequence_id_post()
 
+    # todo: 200 -> в сообщении 400 статус код
     def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
         PermitterCase().case_permitter_element_rules_delete_query_id_post()
 
@@ -787,7 +789,6 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
-    @pytest.mark.skip
     def test_storage_worker_storage_table_db_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
 

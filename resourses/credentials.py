@@ -1,7 +1,7 @@
 import os
 
-# TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.0.22")
 TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.5.16")
+# TARGET_URL = os.environ.get('TARGET_URL', "https://10.130.5.17")
 
 
 class TestUsers:

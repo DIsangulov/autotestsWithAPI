@@ -86,7 +86,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
 
     sample_data = {
         "name": API_AUTO_TEST_ + get_str_random_num(),
-        # "description": None,
+        # "description": "xba_profile_desc",
         "published": False,
         "opened": False,
         "author_id": self_user_id,
@@ -538,7 +538,8 @@ class XbaCookCase(UserSession):
         prof_id = 34
         data = {
             "name": "saint petersburg",
-            "time": "2023-08-20",
+            # "time": "2023-08-20",
+            "time": "2023-08-20T00:00:00Z",
             "columns":
                 [
                     "TimeStamp",
