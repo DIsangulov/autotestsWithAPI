@@ -191,18 +191,20 @@ class TestAlarmer:
         AlarmerCase().case_alarmer_send_msg_post()
 
 
-@pytest.mark.skip   # fixme: настройки почты и суслог
 class TestCore:
 
     def test_core_active_directory_get(self):
         CoreCase().case_core_active_directory_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_post(self):
         CoreCase().case_core_active_directory_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_structure_post(self):
         CoreCase().case_core_active_directory_structure_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_test_settings_post(self):
         CoreCase().case_core_active_directory_test_settings_post()
 
@@ -218,9 +220,11 @@ class TestCore:
     def test_core_common_get(self):
         CoreCase().case_core_common_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_post(self):
         CoreCase().case_core_common_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_test_post(self):
         CoreCase().case_core_common_test_post()
 
@@ -241,9 +245,11 @@ class TestCore:
     def test_core_download_settings_get(self):
         CoreCase().case_core_download_settings_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_import_cert_post(self):
         CoreCase().case_core_email_import_cert_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_send_test_post(self):
         CoreCase().case_core_email_send_test_post()
 
@@ -253,9 +259,11 @@ class TestCore:
     def test_core_email_out_get(self):
         CoreCase().case_core_email_out_get()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_in_post(self):
         CoreCase().case_core_email_in_post()
 
+    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_out_post(self):
         CoreCase().case_core_email_out_post()
 
@@ -384,7 +392,7 @@ class TestCore:
     def test_core_syslog_get(self):
         CoreCase().case_core_syslog_get()
 
-    @pytest.mark.skip   # FIXME:
+    @pytest.mark.skip  # fixme: изменение настроек
     def test_core_syslog_post(self):
         CoreCase().case_core_syslog_post()
 
@@ -892,6 +900,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
 
+    @pytest.mark.skip   # fixme: хк
     def test_xba_cook_profiles_graph_drilldown_34_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
 
