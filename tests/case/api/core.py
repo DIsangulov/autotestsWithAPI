@@ -42,6 +42,7 @@ class CoreCase(UserSession):
         return resp
 
     def case_core_active_directory_structure_post(self):
+        # front: /settings/domain   # [контроллер домена]
         req = Core(self.sess, self.host)
 
         req.sess.headers.update({'skey': "ANGARA"})
@@ -85,12 +86,78 @@ class CoreCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: text: {"res":[]}
 
+    # TODO: [POST] /back/dp.core/backups
+    def case_core_backups_post(self):
+        req = Core(self.sess, self.host)
+
+        data = {}
+
+        resp = req.core_backups_post(data)
+        print(resp.text)
+        assert False
+
     def case_core_backups_last_get(self):
         req = Core(self.sess, self.host)
         resp = req.core_backups_last_get()
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: {"res":{"ID":0,"startTime":"","status":"","type":"","log":""}}
+
+    # TODO: [GET] /back/dp.core/backups/{id}
+    def case_core_backups_id_get(self):
+        req = Core(self.sess, self.host)
+
+        _id = 0     # todo: what of id?
+
+        resp = req.core_backups_id_get(_id)
+        print(resp.text)
+        assert False
+
+    # TODO: [DELETE] /back/dp.core/backups
+    def case_core_backups_id_delete(self):
+        req = Core(self.sess, self.host)
+
+        _id = 0     # todo: what of id?
+
+        resp = req.core_backups_id_delete(_id)
+        print(resp.text)
+        assert False
+
+    # TODO: [POST] /back/dp.core/backups/{id}/restore
+    def case_core_backups_id_restore_post(self):
+        req = Core(self.sess, self.host)
+
+        _id = 0     # todo: what of id?
+
+        data = {}
+
+        resp = req.core_backups_id_restore_post(_id, data)
+        print(resp.text)
+        assert False
+
+    # TODO: [POST] /back/dp.core/backups/{type}/upload
+    def case_core_backups_type_upload_post(self):
+        req = Core(self.sess, self.host)
+
+        _type = "servicedb"     # todo: servicedb|storagedb
+
+        data = {}
+
+        resp = req.core_backups_type_upload_post(_type, data)
+        print(resp.text)
+        assert False
+
+    # TODO: [GET] /back/dp.core/backups/{type}/{id}/download
+    def case_core_backups_type_id_download_get(self):
+        req = Core(self.sess, self.host)
+
+        _type = "servicedb"     # todo: servicedb|storagedb
+
+        _id = 0                 # todo: what id
+
+        resp = req.core_backups_type_id_download_get(_type, _id)
+        print(resp.text)
+        assert False
 
     def case_core_check_get(self):
         req = Core(self.sess, self.host)
@@ -327,6 +394,18 @@ class CoreCase(UserSession):
         # print(resp.text)
         return resp
 
+    # TODO: [POST] /back/dp.core/nodes/delete/{what}
+    def case_core_nodes_delete_what_post(self):
+        req = Core(self.sess, self.host)
+
+        what = "ml"     # todo: ml/picker/servicedb/datastore
+
+        data = {}
+
+        resp = req.core_nodes_delete_what_post(what, data)
+        print(resp.text)
+        assert False
+
     def case_core_nodes_list_ml_get(self):
         req = Core(self.sess, self.host)
 
@@ -371,6 +450,17 @@ class CoreCase(UserSession):
         # print(resp.text)
         return resp
 
+    # TODO: empty
+    def case_core_nodes_test_what_post(self):
+        req = Core(self.sess, self.host)
+
+        what = "ml"     # TODO: ml/picker/servicedb/datastore
+        data = {}
+
+        resp = req.core_nodes_test_what_post(data)
+        print(resp.text)
+        assert False
+
     # TODO:
     # def core_nodes_test_datastore_post(self):  # здесь нужны данные
     #     body = {"active": 0,
@@ -391,7 +481,7 @@ class CoreCase(UserSession):
     def case_core_nodes_ml_get(self):
         req = Core(self.sess, self.host)
         what = "ml"
-        resp = req.core_nodes_what(what)
+        resp = req.core_nodes_what_get(what)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # print(resp.text)
@@ -400,7 +490,7 @@ class CoreCase(UserSession):
     def case_core_nodes_picker_get(self):
         req = Core(self.sess, self.host)
         what = "picker"
-        resp = req.core_nodes_what(what)
+        resp = req.core_nodes_what_get(what)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # print(resp.text)
@@ -409,7 +499,7 @@ class CoreCase(UserSession):
     def case_core_nodes_servicedb_get(self):
         req = Core(self.sess, self.host)
         what = "servicedb"
-        resp = req.core_nodes_what(what)
+        resp = req.core_nodes_what_get(what)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # print(resp.text)
@@ -418,11 +508,23 @@ class CoreCase(UserSession):
     def case_core_nodes_datastore_get(self):
         req = Core(self.sess, self.host)
         what = "datastore"
-        resp = req.core_nodes_what(what)
+        resp = req.core_nodes_what_get(what)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # print(resp.text)
         return resp
+
+    # TODO: [POST] /back/dp.core/nodes/{what}
+    def case_core_nodes_what_post(self):
+        req = Core(self.sess, self.host)
+
+        what = "ml"     # todo: ml/picker/servicedb/datastore
+
+        data = {}
+
+        resp = req.core_nodes_what_post(what, data)
+        print(resp.text)
+        assert False
 
     # TODO:
     # def case_core_nodes_datastore_post(self):  # здесь нужны данные
@@ -447,6 +549,62 @@ class CoreCase(UserSession):
     #         ]
     #     }
     #     resp = req.core_nodes_what_post(what, body)
+
+    # TODO: [GET] /back/dp.core/save
+    def case_core_save_get(self):
+        req = Core(self.sess, self.host)
+        resp = req.core_save_get()
+        print(resp.text)
+        assert False
+
+    # TODO: [GET] /back/dp.core/secrets
+    def case_core_secrets_get(self):
+        req = Core(self.sess, self.host)
+        resp = req.core_secrets_get()
+        print(resp.text)
+        assert False
+
+    # TODO: [POST] /back/dp.core/secrets
+    def case_core_secrets_post(self):
+        req = Core(self.sess, self.host)
+
+        data = {}
+
+        resp = req.core_secrets_post(data)
+        print(resp.text)
+        assert False
+
+    # TODO: [GET] /back/dp.core/secrets/{id}
+    def case_core_secrets_id_get(self):
+        req = Core(self.sess, self.host)
+
+        _id = 0
+
+        resp = req.core_secrets_id_get(_id)
+        print(resp.text)
+        assert False
+
+    # TODO: [PUT] /back/dp.core/secrets/{id}
+    def case_core_secrets_id_put(self):
+        req = Core(self.sess, self.host)
+
+        _id = 0
+
+        data = {}
+
+        resp = req.core_secrets_id_put(_id, data)
+        print(resp.text)
+        assert False
+
+    # TODO: [DELETE] /back/dp.core/secrets/{id}
+    def case_core_secrets_id_delete(self):
+        req = Core(self.sess, self.host)
+
+        _id = 0
+
+        resp = req.core_secrets_id_delete(_id)
+        print(resp.text)
+        assert False
 
     def case_core_service_dp_alarmer_restart_get(self):
         req = Core(self.sess, self.host)
@@ -720,7 +878,7 @@ class CoreCase(UserSession):
 
     def case_core_service_all_restart_get(self):  # стенд не тянет этот метод
         req = Core(self.sess, self.host)
-        action = "restart"
+        action = "restart"      # todo: restart|stop
         resp = req.core_services_all_action_get(action)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 

@@ -211,8 +211,32 @@ class TestCore:
     def test_core_backups_get(self):
         CoreCase().case_core_backups_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_post(self):
+        CoreCase().case_core_backups_post()
+
     def test_core_backups_last_get(self):
         CoreCase().case_core_backups_last_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_id_get(self):
+        CoreCase().case_core_backups_id_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_id_delete(self):
+        CoreCase().case_core_backups_id_delete()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_id_restore_post(self):
+        CoreCase().case_core_backups_id_restore_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_type_upload_post(self):
+        CoreCase().case_core_backups_type_upload_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_type_id_download_get(self):
+        CoreCase().case_core_backups_type_id_download_get()
 
     def test_core_check_get(self):
         CoreCase().case_core_check_get()
@@ -273,6 +297,10 @@ class TestCore:
     def test_core_ip_get(self):
         CoreCase().case_core_ip_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_core_nodes_delete_what_post(self):
+        CoreCase().case_core_nodes_delete_what_post()
+
     def test_core_nodes_list_ml_get(self):
         CoreCase().case_core_nodes_list_ml_get()
 
@@ -285,6 +313,10 @@ class TestCore:
     def test_core_nodes_list_datastore_get(self):
         CoreCase().case_core_nodes_list_datastore_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_core_nodes_test_what_post(self):
+        CoreCase().case_core_nodes_test_what_post()
+
     def test_core_nodes_ml_get(self):
         CoreCase().case_core_nodes_ml_get()
 
@@ -296,6 +328,34 @@ class TestCore:
 
     def test_core_nodes_datastore_get(self):
         CoreCase().case_core_nodes_datastore_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_nodes_what_post(self):
+        CoreCase().case_core_nodes_what_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_save_get(self):
+        CoreCase().case_core_save_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_get(self):
+        CoreCase().case_core_secrets_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_post(self):
+        CoreCase().case_core_secrets_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_id_get(self):
+        CoreCase().case_core_secrets_id_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_id_put(self):
+        CoreCase().case_core_secrets_id_put()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_id_delete(self):
+        CoreCase().case_core_secrets_id_delete()
 
     def test_core_service_dp_alarmer_restart_get(self):
         CoreCase().case_core_service_dp_alarmer_restart_get()
