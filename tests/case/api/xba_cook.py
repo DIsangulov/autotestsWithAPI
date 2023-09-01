@@ -936,6 +936,17 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_xba_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def case_xba_cook_set_log_level_xba_py_mode_post(self):
+        req = XbaCook(self.sess, self.host)
+
+        mode = "prod"   # todo: prod or dev
+
+        data = {}
+
+        resp = req.xba_cook_set_log_level_xba_py_mode_post(mode, data)
+        print(resp.text)
+        assert False
+
     def case_xba_cook_xba_post(self):
         req = XbaCook(self.sess, self.host)
         data = {

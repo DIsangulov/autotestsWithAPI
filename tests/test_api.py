@@ -1,6 +1,7 @@
 import pytest
 import urllib3
 
+from tests.case.api._internalService import InternalServiceCase
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -21,6 +22,13 @@ from tests.case.api.visualisation import VisualisationCase
 from tests.case.api.xba_cook import XbaCookCase
 
 urllib3.disable_warnings()
+
+
+@pytest.mark.skip       # TODO: DAT-5566
+class TestInternalService:
+
+    def test_dat_5566(self):
+        InternalServiceCase().case_dat_5566()
 
 
 class TestAuth:
@@ -471,8 +479,16 @@ class TestLicenser:
     def test_licenser_activate_post(self):
         LicenserCase().case_licenser_activate_post()
 
+    @pytest.mark.skip       # TODO: empty
+    def test_licenser_file_activate_post(self):
+        LicenserCase().case_licenser_file_activate_post()
+
     def test_licenser_license_info_get(self):
         LicenserCase().case_licenser_license_info_get()
+
+    @pytest.mark.skip       # TODO: empty
+    def test_licenser_set_company_post(self):
+        LicenserCase().case_licenser_set_company_post()
 
 
 class TestLogEater:
@@ -1040,6 +1056,10 @@ class TestXbaCook:
     def test_xba_cook_xba_get(self):
         XbaCookCase().case_xba_cook_xba_get()
 
+    @pytest.mark.skip   # TODO: empty
+    def case_xba_cook_set_log_level_xba_py_mode_post(self):
+        XbaCookCase().case_xba_cook_set_log_level_xba_py_mode_post()
+
     def test_xba_cook_xba_post(self):
         XbaCookCase().case_xba_cook_xba_post()
 
@@ -1240,7 +1260,7 @@ class TestTaskplan:
     def test_taskplan_add_task_post(self):
         TaskplanCase().case_taskplan_add_task_post()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # TODO: check
     def test_taskplan_delete_task(self):
         TaskplanCase().case_taskplan_delete_task()
 
@@ -1253,14 +1273,22 @@ class TestUpdater:
     def test_updater_additions_get(self):
         UpdaterCase().case_updater_additions_get()
 
-    def test_updater_additions_addition_delete(self):
-        UpdaterCase().case_updater_additions_addition_delete()
-
     def test_updater_additions_addition_post(self):
         UpdaterCase().case_updater_additions_addition_post()
 
+    def test_updater_additions_addition_delete(self):
+        UpdaterCase().case_updater_additions_addition_delete()
+
     def test_updater_check_updates_get(self):
         UpdaterCase().case_updater_check_updates_get()
+
+    @pytest.mark.skip   # todo: check
+    def test_updater_update_post(self):
+        UpdaterCase().case_updater_update_post()
+
+    @pytest.mark.skip   # todo: check
+    def test_updater_update_from_archive_post(self):
+        UpdaterCase().case_updater_update_from_archive_post()
 
     def test_updater_versions_get(self):
         UpdaterCase().case_updater_versions_get()

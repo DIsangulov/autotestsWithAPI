@@ -19,9 +19,13 @@ class Updater(BaseReq):
         """process GET req to get info 'product can be updated'"""
         return self.sess.get(f"{self.host}/back/dp.updater/check_updates")
 
-    # TODO: def [POST] /back/dp.updater/update
+    def updater_update_post(self, data):
+        """process POST req to update product by internet (future)"""
+        return self.sess.post(f"{self.host}/back/dp.updater/update", json=data)
 
-    # TODO: def [POST] /back/dp.updater/update_from_archive
+    def updater_update_from_archive_post(self, data):
+        """process POST req to update product from archive"""
+        return self.sess.post(f"{self.host}/back/dp.updater/update_from_archive", json=data)
 
     def updater_versions_get(self):
         """process GET req to get list {component-version-version state} list"""

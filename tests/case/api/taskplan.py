@@ -49,7 +49,6 @@ class TaskplanCase(UserSession):
         # \u003c (<)    # \u003e (>)
         # {"error":{"code":400,"description":"can not identify type of object: \u003cnil\u003e","msg":"Неверные параметры"}}
 
-    # TODO: [DELETE] /back/dp.taskplan/delete_task
     def case_taskplan_delete_task(self):
         req = Taskplan(self.sess, self.host)
         data = None

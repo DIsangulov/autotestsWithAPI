@@ -7,7 +7,6 @@ class Taskplan(BaseReq):
         """process POST req to add new task"""
         return self.sess.post(f"{self.host}/back/dp.taskplan/add_task", json=data)
 
-    # TODO: check
     def taskplan_delete_task(self, data):
         """process DELETE req to delete task"""
         return self.sess.post(f"{self.host}/back/dp.taskplan/delete_task", json=data)
