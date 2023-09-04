@@ -11,19 +11,33 @@ class StorageWorker(BaseReq):
         """process POST req with "plain-constructed" sql ask params for executing it"""
         return self.sess.post(f"{self.host}/back/dp.storage_worker/ask_plain_sql", json=data)
 
-    # TODO: [GET] /back/dp.storage_worker/backups
+    def storage_worker_backups_get(self):
+        """process GET req for getting list of storage DB backups"""
+        return self.sess.get(f"{self.host}/back/dp.storage_worker/backups")
 
-    # TODO: [POST] /back/dp.storage_worker/backups/table/{db_name}/{table_name}
+    def storage_worker_backups_table_db_name_table_name_post(self, db_name, table_name, data):
+        """process POST req for creating a storage DB table backup"""
+        return self.sess.post(f"{self.host}/back/dp.storage_worker/backups/table/{db_name}/{table_name}", json=data)
 
-    # TODO: [GET] /back/dp.storage_worker/backups/{id}
+    def storage_worker_backups_id_get(self, _id):
+        """process GET req for getting list of storage DB backups"""
+        return self.sess.get(f"{self.host}/back/dp.storage_worker/backups/{_id}")
 
-    # TODO: [DELETE] /back/dp.storage_worker/backups/{id}
+    def storage_worker_backups_id_delete(self, _id):
+        """process DELETE req for deleting the storage DB backup"""
+        return self.sess.delete(f"{self.host}/back/dp.storage_worker/backups/{_id}")
 
-    # TODO: [GET] /back/dp.storage_worker/backups/{id}/download
+    def storage_worker_backups_id_download_get(self, _id):
+        """process GET req to download backup file by ID"""
+        return self.sess.get(f"{self.host}/back/dp.storage_worker/backups/{_id}/download")
 
-    # TODO: [POST] /back/dp.storage_worker/backups/{id}/restore
+    def storage_worker_backups_id_restore_post(self, _id, data):
+        """process POST req for restoring the storage DB table backup"""
+        return self.sess.post(f"{self.host}/back/dp.storage_worker/backups/{_id}/restore", json=data)
 
-    # TODO: [POST] /back/dp.storage_worker/backups/{type}/upload
+    def storage_worker_backups_type_upload_post(self, _type, data):
+        """process POST req for importing external backup file"""
+        return self.sess.post(f"{self.host}/back/dp.storage_worker/backups/{_type}/upload", json=data)
 
     def storage_worker_import_rules_get(self):
         """process GET to return db and tables import restrictions info"""
@@ -37,15 +51,17 @@ class StorageWorker(BaseReq):
         """process POST req for creating new regexp"""
         return self.sess.post(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs", json=data)
 
-    def storage_worker_psevdo_namer_regs_pid_get(self, _reg_pid):
+    def storage_worker_psevdo_namer_regs_pid_get(self, reg_pid):
         """process GET req for getting regexp with id=pid"""
-        return self.sess.get(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/{_reg_pid}")
+        return self.sess.get(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/{reg_pid}")
 
-    # TODO: [PUT] /back/dp.storage_worker/psevdo_namer/regs/{pid}
+    def storage_worker_psevdo_namer_regs_pid_put(self, reg_pid, data):
+        """process PUT req for editing pid regexp"""
+        return self.sess.put(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/{reg_pid}", json=data)
 
-    def storage_worker_psevdo_namer_regs_pid_delete(self, _reg_pid):
+    def storage_worker_psevdo_namer_regs_pid_delete(self, reg_pid):
         """process DELETE req for deleting pid regexp"""
-        return self.sess.delete(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/{_reg_pid}")
+        return self.sess.delete(f"{self.host}/back/dp.storage_worker/psevdo_namer/regs/{reg_pid}")
 
     def storage_worker_show_base_db_name_get(self, db_name):
         """process GET req for getting the DB structure"""
@@ -127,20 +143,30 @@ class StorageWorker(BaseReq):
         """process POST to create storage DB table (if not exists)"""
         return self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}", json=data)
 
-    # TODO: [POST] /back/dp.storage_worker/storage/table/{db_name}/{table_name}
+    def storage_worker_storage_table_db_name_table_name_post(self, db_name, table_name, data):
+        """process POST to create storage DB column (if not exists)"""
+        return self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}/{table_name}", json=data)
 
-    # TODO: [DELETE] /back/dp.storage_worker/storage/table/{db_name}/{table_name}
+    def storage_worker_storage_table_db_name_table_name_delete(self, db_name, table_name):
+        """process DELETE to delete storage DB table (if already exists)"""
+        return self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}/{table_name}")
 
     def storage_worker_storage_table_db_name_table_name_ttl_get(self, db_name, table_name):
         """returns TTL settings for a table"""
         return self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}/{table_name}/ttl")
 
-    # TODO: [PUT] /back/dp.storage_worker/storage/table/{db_name}/{table_name}/ttl
+    def storage_worker_storage_table_db_name_table_name_ttl_put(self, db_name, table_name, data):
+        """process PUT to set or remove TTL for a table"""
+        return self.sess.put(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}/{table_name}/ttl", json=data)
 
-    # TODO: [DELETE] /back/dp.storage_worker/storage/table/{db_name}/{table_name}/{column_name}
+    def storage_worker_storage_table_db_name_table_name_column_name_delete(self, db_name, table_name, column_name):
+        """process DELETE to delete storage DB column (if exists)"""
+        return self.sess.delete(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}/{table_name}/{column_name}")
 
     def storage_worker_storage_table_db_name_table_name_count_get(self, db_name, table_name, count):
         """process GET to return to client a part of data from table"""
         return self.sess.get(f"{self.host}/back/dp.storage_worker/storage/table/{db_name}/{table_name}/{count}")
 
-    # TODO: [POST] /back/dp.storage_worker/storage/view/{db_name}
+    def storage_worker_storage_view_db_name_post(self, db_name, data):
+        """process POST to create storage DB view (if not exists)"""
+        return self.sess.post(f"{self.host}/back/dp.storage_worker/storage/view/{db_name}", json=data)

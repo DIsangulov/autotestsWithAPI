@@ -1,7 +1,6 @@
 import pytest
 import urllib3
 
-from tests.case.api._internalService import InternalServiceCase
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -22,13 +21,6 @@ from tests.case.api.visualisation import VisualisationCase
 from tests.case.api.xba_cook import XbaCookCase
 
 urllib3.disable_warnings()
-
-
-@pytest.mark.skip       # TODO: DAT-5566
-class TestInternalService:
-
-    def test_dat_5566(self):
-        InternalServiceCase().case_dat_5566()
 
 
 class TestAuth:
@@ -413,7 +405,7 @@ class TestCore:
     def test_core_service_dp_storage_worker_restart_get(self):
         CoreCase().case_core_service_dp_storage_worker_restart_get()
 
-    def test_core_service_dp_ml_get(self):
+    def test_core_service_dp_ml_restart_get(self):
         CoreCase().case_core_service_dp_ml_restart_get()
 
     def test_core_service_dp_scripter_restart_get(self):
@@ -802,6 +794,34 @@ class TestStorageWorker:
     def test_storage_worker_ask_plain_sql_post(self):
         StorageWorkerCase().case_storage_worker_ask_plain_sql_post()
 
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_get(self):
+        StorageWorkerCase().case_storage_worker_backups_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_table_db_name_table_name_post(self):
+        StorageWorkerCase().case_storage_worker_backups_table_db_name_table_name_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_get(self):
+        StorageWorkerCase().case_storage_worker_backups_id_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_delete(self):
+        StorageWorkerCase().case_storage_worker_backups_id_delete()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_download_get(self):
+        StorageWorkerCase().case_storage_worker_backups_id_download_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_restore_post(self):
+        StorageWorkerCase().case_storage_worker_backups_id_restore_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_type_upload_post(self):
+        StorageWorkerCase().case_storage_worker_backups_type_upload_post()
+
     def test_storage_worker_import_rules_get(self):
         StorageWorkerCase().case_storage_worker_import_rules_get()
 
@@ -813,6 +833,10 @@ class TestStorageWorker:
 
     def test_storage_worker_psevdo_namer_regs_pid_get(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_psevdo_namer_regs_pid_put(self):
+        StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_put()
 
     def test_storage_worker_psevdo_namer_regs_pid_delete(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_delete()
@@ -876,6 +900,14 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_db_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
 
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_post(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_view_db_name_post(self):
+        StorageWorkerCase().case_storage_worker_storage_view_db_name_post()
+
     @pytest.mark.skip   # fixme: неверно передаются параметры
     def test_storage_worker_storage_table_columns_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_table_name_post()
@@ -883,8 +915,20 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_db_name_table_name_ttl_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_ttl_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_ttl_put(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_ttl_put()
+
     def test_storage_worker_storage_table_db_name_table_name_count_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_count_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_column_name_delete(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_column_name_delete()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_delete(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_delete()
 
 
 class TestXbaCook:
@@ -1320,6 +1364,10 @@ class TestVisualisation:
     def test_visualisation_reports_get(self):
         VisualisationCase().case_visualisation_reports_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_visualisation_reports_params_report_id_post(self):
+        VisualisationCase().case_visualisation_reports_params_report_id_post()
+
     def test_visualisation_reports_report_id_get(self):
         VisualisationCase().case_visualisation_reports_report_id_get()
 
@@ -1334,6 +1382,10 @@ class TestVisualisation:
 
     def test_visualisation_visualisation_dataseries_visualisation_id_post(self):
         VisualisationCase().case_visualisation_visualisation_dataseries_visualisation_id_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(self):
+        VisualisationCase().case_visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete()
 
     def test_visualisation_visualisation_types_get(self):
         VisualisationCase().case_visualisation_visualisation_types_get()

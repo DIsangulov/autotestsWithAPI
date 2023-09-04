@@ -8,25 +8,25 @@ class Visualisation(BaseReq):
         # front: при создании визуализации > добавить серию > источник данных
         return self.sess.get(f"{self.host}/back/dp.visualisation/query")
 
-    def visualisation_query_do_query_id_post(self, _query_id, data):
+    def visualisation_query_do_query_id_post(self, query_id, data):
         """process POST req with filters for executing query with id = query_id."""
-        return self.sess.post(f"{self.host}/back/dp.visualisation/query/do/{_query_id}", json=data)
+        return self.sess.post(f"{self.host}/back/dp.visualisation/query/do/{query_id}", json=data)
 
     def visualisation_query_save_post(self, data):
         """process POST req for creating/editing query by id"""
         return self.sess.post(f"{self.host}/back/dp.visualisation/query/save", json=data)
 
-    def visualisation_query_usage_id_get(self, _query_id):
+    def visualisation_query_usage_id_get(self, query_id):
         """process GET req for getting query usage in visualisations by id"""
-        return self.sess.get(f"{self.host}/back/dp.visualisation/query/usage/{_query_id}")
+        return self.sess.get(f"{self.host}/back/dp.visualisation/query/usage/{query_id}")
 
-    def visualisation_query_query_id_get(self, _query_id):
+    def visualisation_query_query_id_get(self, query_id):
         """process GET req for getting query by id"""
-        return self.sess.get(f"{self.host}/back/dp.visualisation/query/{_query_id}")
+        return self.sess.get(f"{self.host}/back/dp.visualisation/query/{query_id}")
 
-    def visualisation_query_id_delete(self, _query_id):
+    def visualisation_query_id_delete(self, query_id):
         """process DELETE req for deleting query by id"""
-        return self.sess.delete(f"{self.host}/back/dp.visualisation/query/{_query_id}")
+        return self.sess.delete(f"{self.host}/back/dp.visualisation/query/{query_id}")
 
     def visualisation_reports_get(self):
         """process GET req for getting reports list"""
@@ -39,15 +39,17 @@ class Visualisation(BaseReq):
         """
         return self.sess.post(f"{self.host}/back/dp.visualisation/reports", json=data)
 
-    # TODO: [POST] /back/dp.visualisation/reports/params/{report_id}
+    def visualisation_reports_params_report_id_post(self, report_id, data):
+        """process POST req for saving report params (for linked report)"""
+        return self.sess.post(f"{self.host}/back/dp.visualisation/reports/params/{report_id}", json=data)
 
-    def visualisation_reports_report_id_get(self, _rep_id):
+    def visualisation_reports_report_id_get(self, report_id):
         """process GET req for getting report by id"""
-        return self.sess.get(f"{self.host}/back/dp.visualisation/reports/{_rep_id}")
+        return self.sess.get(f"{self.host}/back/dp.visualisation/reports/{report_id}")
 
-    def visualisation_reports_report_id_delete(self, _rep_id):
+    def visualisation_reports_report_id_delete(self, report_id):
         """process DELETE req for deleting report by id"""
-        return self.sess.delete(f"{self.host}/back/dp.visualisation/reports/{_rep_id}")
+        return self.sess.delete(f"{self.host}/back/dp.visualisation/reports/{report_id}")
 
     def visualisation_visualisation_get(self):
         """process GET req for getting visualisations list"""
@@ -64,7 +66,9 @@ class Visualisation(BaseReq):
         """
         return self.sess.post(f"{self.host}/back/dp.visualisation/visualisation/dataseries/{visualisation_id}", json=data)
 
-    # TODO: [DELETE] /back/dp.visualisation/visualisation/dataseries/{visualisation_id}/{dataseries_id}
+    def visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(self, vis_id, dataseries_id, data):
+        """process DELETE req for deleting dataseries (by id) from visualisation element"""
+        return self.sess.delete(f"{self.host}/back/dp.visualisation/visualisation/dataseries/{vis_id}/{dataseries_id}", json=data)
 
     def visualisation_visualisation_types_get(self):
         """process GET req for getting visual elements type list"""

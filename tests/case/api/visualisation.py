@@ -189,6 +189,17 @@ class VisualisationCase(UserSession):
         # print(resp.text)
         return resp
 
+    def case_visualisation_reports_params_report_id_post(self):
+        req = Visualisation(self.sess, self.host)
+
+        _report_id = 0
+
+        data = {}
+
+        resp = req.visualisation_reports_params_report_id_post(_report_id, data)
+        print(resp.text)
+        assert False
+
     def case_visualisation_reports_report_id_get(self):
         req = Visualisation(self.sess, self.host)
         _rep_id = self.get_report_id()
@@ -276,6 +287,18 @@ class VisualisationCase(UserSession):
         resp = req.visualisation_visualisation_dataseries_visualisation_id_post(_vis_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    def case_visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(self):
+        req = Visualisation(self.sess, self.host)
+
+        vis_id = 0
+        dataseries_id = 0
+
+        data = {}
+
+        resp = req.visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(vis_id, dataseries_id, data)
+        print(resp.text)
+        assert False
 
     def case_visualisation_visualisation_types_get(self):
         req = Visualisation(self.sess, self.host)

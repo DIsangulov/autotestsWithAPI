@@ -89,6 +89,73 @@ class StorageWorkerCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def case_storage_worker_backups_get(self):
+        req = StorageWorker(self.sess, self.host)
+        resp = req.storage_worker_backups_get()
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_backups_table_db_name_table_name_post(self):
+        req = StorageWorker(self.sess, self.host)
+
+        db_name = ""
+        tab_name = ""
+
+        data = {}
+
+        resp = req.storage_worker_backups_table_db_name_table_name_post(db_name, tab_name, data)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_backups_id_get(self):
+        req = StorageWorker(self.sess, self.host)
+
+        _backup_id = 0
+
+        resp = req.storage_worker_backups_id_get(_backup_id)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_backups_id_delete(self):
+        req = StorageWorker(self.sess, self.host)
+
+        _backup_id = 0
+
+        resp = req.storage_worker_backups_id_delete(_backup_id)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_backups_id_download_get(self):
+        req = StorageWorker(self.sess, self.host)
+
+        _backup_id = 0
+
+        resp = req.storage_worker_backups_id_download_get(_backup_id)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_backups_id_restore_post(self):
+        req = StorageWorker(self.sess, self.host)
+
+        _backup_id = 0
+
+        data = {}
+
+        resp = req.storage_worker_backups_id_restore_post(_backup_id, data)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_backups_type_upload_post(self):
+        req = StorageWorker(self.sess, self.host)
+
+        _type = "storagedb"
+
+        data = {}
+
+        resp = req.storage_worker_backups_type_upload_post(_type, data)
+        print(resp.text)
+        assert False
+
     def case_storage_worker_import_rules_get(self):
         req = StorageWorker(self.sess, self.host)
         resp = req.storage_worker_import_rules_get()
@@ -126,6 +193,17 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
+    def case_storage_worker_psevdo_namer_regs_pid_put(self):
+        req = StorageWorker(self.sess, self.host)
+
+        _reg_pid = 0
+
+        data = {}
+
+        resp = req.storage_worker_psevdo_namer_regs_pid_put(_reg_pid, data)
+        print(resp.text)
+        assert False
+
     def case_storage_worker_psevdo_namer_regs_pid_delete(self):
         req = StorageWorker(self.sess, self.host)
 
@@ -152,7 +230,7 @@ class StorageWorkerCase(UserSession):
             # "start": "2023-08-13T00:00:00Z",
             # "end": get_datetime_now_z(),
             "offset": 0,
-            "timeFlag": 0   # todo:? flag и в data, и в post-пути
+            "timeFlag": 0   # look:? flag и в data, и в post-пути
         }
         for flag in flag_keys:
             resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post(db_name, flag, data)
@@ -199,7 +277,7 @@ class StorageWorkerCase(UserSession):
             # "start": "2023-08-13T00:00:00Z",
             # "end": get_datetime_now_z(),
             "offset": 0,
-            "timeFlag": 0   # todo: ?flag и в data, и в post-пути
+            "timeFlag": 0   # look: ?flag и в data, и в post-пути
         }
 
         for flag in flag_keys:
@@ -319,6 +397,7 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
+    # todo: check tab_name
     def case_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         req = StorageWorker(self.sess, self.host)
         db_name = DbName.picker_tables
@@ -382,12 +461,34 @@ class StorageWorkerCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # def storage_worker_storage_table_table_db_name_table_name(self):
-    #     header = {'token': self.token}
-    #     data = {"name": "five", "type": "Int8"}
-    #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1/API_TEST_TABLE",
-    #                           headers=header, json=data, verify=False)
-    #     return resp
+    def case_storage_worker_storage_table_db_name_table_name_post(self):
+        # def storage_worker_storage_table_table_db_name_table_name(self):
+        #     header = {'token': self.token}
+        #     data = {"name": "five", "type": "Int8"}
+        #     resp = self.sess.post(f"{self.host}/back/dp.storage_worker/storage/table/API_TEST_DB1/API_TEST_TABLE",
+        #                           headers=header, json=data, verify=False)
+        #     return resp
+
+        req = StorageWorker(self.sess, self.host)
+
+        db_name = ""
+        table_name = ""
+
+        data = {}
+
+        resp = req.storage_worker_storage_table_db_name_table_name_post(db_name, table_name, data)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_storage_table_db_name_table_name_delete(self):
+        req = StorageWorker(self.sess, self.host)
+
+        db_name = ""
+        table_name = ""
+
+        resp = req.storage_worker_storage_table_db_name_table_name_delete(db_name, table_name)
+        print(resp.text)
+        assert False
 
     def case_storage_worker_storage_table_db_name_table_name_ttl_get(self):
         req = StorageWorker(self.sess, self.host)
@@ -399,6 +500,29 @@ class StorageWorkerCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    def case_storage_worker_storage_table_db_name_table_name_ttl_put(self):
+        req = StorageWorker(self.sess, self.host)
+
+        db_name = ""
+        table_name = ""
+
+        data = {}
+
+        resp = req.storage_worker_storage_table_db_name_table_name_ttl_put(db_name, table_name, data)
+        print(resp.text)
+        assert False
+
+    def case_storage_worker_storage_table_db_name_table_name_column_name_delete(self):
+        req = StorageWorker(self.sess, self.host)
+
+        db_name = ""
+        table_name = ""
+        column_name = ""
+
+        resp = req.storage_worker_storage_table_db_name_table_name_column_name_delete(db_name, table_name, column_name)
+        print(resp.text)
+        assert False
+
     def case_storage_worker_storage_table_db_name_table_name_count_get(self):
         req = StorageWorker(self.sess, self.host)
 
@@ -408,6 +532,17 @@ class StorageWorkerCase(UserSession):
         resp = req.storage_worker_storage_table_db_name_table_name_count_get(db_name, db_table_name, count)
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+    def case_storage_worker_storage_view_db_name_post(self):
+        req = StorageWorker(self.sess, self.host)
+
+        db_name = ""
+
+        data = {}
+
+        resp = req.storage_worker_storage_view_db_name_post(db_name, data)
+        print(resp.text)
+        assert False
 
     def all_api_auto_test_regs_delete(self):
         delete_req = StorageWorker(self.sess, self.host)
