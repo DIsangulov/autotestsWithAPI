@@ -15,10 +15,6 @@ class XbaCook(BaseReq):
         """process POST for checking if entity type column contains not more distinct values than 20 & no nulls"""
         return self.sess.post(f"{self.host}/back/dp.xba_cook/check_entity_type", json=data)
 
-    def xba_cook_dashboard_post(self, data):
-        """process POST req to get xba dashboard data"""
-        return self.sess.post(f"{self.host}/back/dp.xba_cook/dashboard", json=data)
-
     def xba_cook_dashboard_entities_post(self, data):
         """process POST for get data for entities statistics"""
         return self.sess.post(f"{self.host}/back/dp.xba_cook/dashboard/entities", json=data)

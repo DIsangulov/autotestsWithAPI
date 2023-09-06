@@ -5,7 +5,7 @@ import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
-from resourses.constants import DbName, QA_SPAM_EMAIL, API_AUTO_TEST_
+from resourses.constants import QA_SPAM_EMAIL, DB_picker_tables, API_AUTO_TEST_
 from tests.case.api.permitter import PermitterCase
 
 xba_profile_id = set()  # 'id' профиля xBA
@@ -76,13 +76,13 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
     self_user_id = u_session.get_self_user_id()
 
     # fixme: проверить наличие и доступ к таблицам, если нет доступа, то не создаст
-    db_id = u_session.get_db_id_by_name(DbName.picker_tables)
-    db_table_name = DbName.DB_picker_tables.tab_Weather_all_online
-    db_time_column = DbName.DB_picker_tables.col_TimeStamp
+    db_id = u_session.get_db_id_by_name(DB_picker_tables.name)
+    db_table_name = DB_picker_tables.tab_Weather_all_online
+    db_time_column = DB_picker_tables.col_TimeStamp
 
-    db_es_entity_column = DbName.DB_picker_tables.col_Gorod
+    db_es_entity_column = DB_picker_tables.col_Gorod
     # db_es_entity_type = "lastLogoff"
-    db_es_additional_column = DbName.DB_picker_tables.col_TemnepaTypa
+    db_es_additional_column = DB_picker_tables.col_TemnepaTypa
 
     sample_data = {
         "name": API_AUTO_TEST_ + get_str_random_num(),
@@ -96,7 +96,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         # "created": "2023-02-15T07:55:02.631066Z",
         # "modified": "2023-02-15T07:55:02.631066Z",
         "db_id": db_id,
-        "db_name": DbName.picker_tables,
+        "db_name": DB_picker_tables.name,
         "table_name": db_table_name,
         # >> status: 1 -> запущен
         # >> status: 2 -> выполнен
@@ -239,23 +239,13 @@ class XbaCookCase(UserSession):
 
         req = XbaCook(self.sess, self.host)
         data = {
-            "db_id": self.get_db_id_by_name(DbName.picker_tables),
-            "table": DbName.DB_picker_tables.tab_Weather_all_online,
-            "column": DbName.DB_picker_tables.col_Gorod
+            "db_id": self.get_db_id_by_name(DB_picker_tables.name),
+            "table": DB_picker_tables.tab_Weather_all_online,
+            "column": DB_picker_tables.col_Gorod
         }
         resp = req.xba_cook_check_entity_type_post(data)
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def case_xba_cook_dashboard_post(self):
-        req = XbaCook(self.sess, self.host)
-        data = {
-            "start_datetime": "2023-02-01T00:00:00.000Z",
-            "time_zone": "Europe/Moscow"
-        }
-        resp = req.xba_cook_dashboard_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_xba_cook_dashboard_entities_post(self):
         # DAT-5251
@@ -412,8 +402,8 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_entity_info_settings_post(self):
         req = XbaCook(self.sess, self.host)
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
-        db_picker_tables_table_name = DbName.DB_picker_tables.tab_Weather_all_online
+        db_picker_tables = self.get_db_id_by_name(DB_picker_tables.name)
+        db_picker_tables_table_name = DB_picker_tables.tab_Weather_all_online
         data = {
             "user_settings": {
                 "db_id": db_picker_tables,
@@ -463,9 +453,9 @@ class XbaCookCase(UserSession):
     def case_xba_cook_max_min_post(self):
         req = XbaCook(self.sess, self.host)
         data = {
-            "db_id": self.get_db_id_by_name(DbName.picker_tables),
-            "table": DbName.DB_picker_tables.tab_Weather_all_online,
-            "column": DbName.DB_picker_tables.col_TemnepaTypa
+            "db_id": self.get_db_id_by_name(DB_picker_tables.name),
+            "table": DB_picker_tables.tab_Weather_all_online,
+            "column": DB_picker_tables.col_TemnepaTypa
         }
         resp = req.xba_cook_max_min_post(data)
         # print(resp.text)

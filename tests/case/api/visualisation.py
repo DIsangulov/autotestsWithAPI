@@ -3,8 +3,7 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_visualisation import Visualisation
-from resourses.constants import DbName, API_AUTO_TEST_
-
+from resourses.constants import DB_picker_tables, API_AUTO_TEST_
 
 query_id = set()           # 'id' sql запроса
 report_id = set()          # 'id' отчета
@@ -104,9 +103,9 @@ class VisualisationCase(UserSession):
         str_random_num = str(random.randint(100, 999))
         self_user_id = self.get_self_user_id()                              # Получить свой 'user_id'
         # todo: проверить доступ к бд, перед созданием!
-        db_id = self.get_db_id_by_name(DbName.picker_tables)     # Получить 'id' хранилища 'picker_tables'
-        db_tab_name = DbName.DB_picker_tables.tab_Weather_all_online
-        db_col_name = DbName.DB_picker_tables.col_Gorod
+        db_id = self.get_db_id_by_name(DB_picker_tables.name)     # Получить 'id' хранилища 'picker_tables'
+        db_tab_name = DB_picker_tables.tab_Weather_all_online
+        db_col_name = DB_picker_tables.col_Gorod
 
         data = {
             "db_id": db_id,
@@ -128,7 +127,7 @@ class VisualisationCase(UserSession):
                 "agregators": [],
                 "limit": 50
             },
-            "db_name": DbName.picker_tables,
+            "db_name": DB_picker_tables.name,
             "query": "",
             "auto": True,
             "editor_id": self_user_id,

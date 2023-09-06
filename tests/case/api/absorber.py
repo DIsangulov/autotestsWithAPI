@@ -5,7 +5,7 @@ import base64
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_absorber import Absorber
-from resourses.constants import DbName, API_AUTO_TEST_
+from resourses.constants import DB_picker_tables, API_AUTO_TEST_
 
 logo_id = set()
 source_id = set()      # 'id' источника данных
@@ -331,7 +331,7 @@ class AbsorberCase(UserSession):
         str_rand_num = str(random.randint(1000, 9999))
         _source_id = self._get_source_id()
         self_user_id = self.get_self_user_id()
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DB_picker_tables.name)
 
         file_path = os.path.dirname(__file__) + "/../../Files/img/d_01.jpg"
         with open(file_path, 'rb') as f:
@@ -388,7 +388,7 @@ class AbsorberCase(UserSession):
 
         str_rand_num = str(random.randint(100, 999))
         self_user_id = self.get_self_user_id()
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DB_picker_tables.name)
 
         file_path = os.path.dirname(__file__) + "/../../Files/img/d_01.jpg"
         with open(file_path, 'rb') as f:

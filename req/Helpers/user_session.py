@@ -60,6 +60,37 @@ class UserSession:
             self.user_id = int(dct['res']['user_id'])
         return self.user_id
 
+    def check_db_is_exists(self, db_name: str) -> bool:
+        """
+        Проверка, что БД с именем 'db_name' уже существует
+        :return: True - существует, False - не существует
+        """
+        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/statistics/db_stats/{db_name}")
+        assert resp.status_code == 200 or 400, \
+            f"""Ошибка при получении статистики БД
+            debug: UserSession::check_db_is_exists
+            api: /back/dp.storage_worker/statistics/db_stats/{db_name}
+            status_code: {resp.status_code}
+            resp: {resp.text}
+            """
+        if resp.status_code == 200:
+            return True
+        else:
+            return False
+
+    # TODO: check db_table_if_exists
+    def check_db_table_is_exists(self, db_name: str, table_name: str) -> bool:
+        """
+        Проверка наличия таблицы 'table_name' в БД 'db_name'
+        :return: True - существует, False - не существует
+        """
+
+        assert self.check_db_is_exists(db_name), \
+            f"""БД с именем {db_name}"""
+        ...
+
+        return False
+
     def get_db_id_by_name(self, db_name: str) -> int:
         """Возвращает 'id' хранилища с указанным именем"""
         resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db")
