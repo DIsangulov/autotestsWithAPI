@@ -337,10 +337,10 @@ class CoreCase(UserSession):
 
         _type = "in"
         body = {
-            "description": "TestAPICore",
+            "description": "Test_NGR_description",
             "disable_tls": False,
             "host": "NGR-Exchange01.ngrsoftlab.ru",
-            "name": "TestAPI",
+            "name": "Test_NGR",
             "port": 587,
             "protocol": "smtp",
             "psw": mail_pass,
@@ -358,10 +358,10 @@ class CoreCase(UserSession):
 
         _type = "out"
         body = {
-            "description": "TestAPICore",
+            "description": "Test_NGR_description",
             "disable_tls": False,
             "host": "NGR-Exchange01.ngrsoftlab.ru",
-            "name": "TestAPI",
+            "name": "Test_NGR",
             "port": 587,
             "protocol": "smtp",
             "psw": mail_pass,

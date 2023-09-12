@@ -13,6 +13,12 @@ API_TEST_DB_BLINKING = "API_TEST_DB_BLINKING"
 # Предполагается, что хранилище удаляться не будет
 API_TEST_DB_STABLE = "Shallow"
 
+# todo: добавить в предусловия проверку выполнения условий:
+# Предполагается, что таблица находится в БД: API_TEST_DB_STABLE
+# Предполагается, что таблица существует
+# Предполагается, что таблица наполнена данными
+API_TEST_TABLE_STABLE = "Boulder_general"
+
 
 reg_pid = set()        # список, содержащий id новосозданных регулярных выражений
 
@@ -55,6 +61,8 @@ class StorageWorkerCase(UserSession):
         db_id = self.get_db_id_by_name(db_name)
         db_table = DB_picker_tables.tab_Weather_all_online
 
+        self.asserts_check_db_and_table_is_exists(db_name, db_table)
+
         data = {
             "base_id": db_id,
             "base_name": db_name,
@@ -73,6 +81,8 @@ class StorageWorkerCase(UserSession):
         db_name = DB_picker_tables.name
         db_id = self.get_db_id_by_name(db_name)
         db_table = DB_picker_tables.tab_Weather_all_online
+
+        self.asserts_check_db_and_table_is_exists(db_name, db_table)
 
         data = {
             "base_name": db_name,
@@ -105,11 +115,12 @@ class StorageWorkerCase(UserSession):
         # Shallow.Stones_1516_1693848250431_... | db_name.table_name+backup_id_...
         req = StorageWorker(self.sess, self.host)
 
-        # todo: проверить наличие БД и таблицы!
         db_name = API_TEST_DB_STABLE
-        tab_name = ""
+        tab_name = API_TEST_TABLE_STABLE
 
-        data = {}
+        self.asserts_check_db_and_table_is_exists(db_name, tab_name)
+
+        data = {}   # look: swagger description looks unfinished
 
         resp = req.storage_worker_backups_table_db_name_table_name_post(db_name, tab_name, data)
         # print(resp.text)    # {"res":{"id":1693848451839,"result":"accepted"}}
@@ -168,13 +179,11 @@ class StorageWorkerCase(UserSession):
         req = StorageWorker(self.sess, self.host)
         resp = req.storage_worker_import_rules_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_psevdo_namer_regs_get(self):
         req = StorageWorker(self.sess, self.host)
         resp = req.storage_worker_psevdo_namer_regs_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_psevdo_namer_regs_post(self):
         req = StorageWorker(self.sess, self.host)
@@ -191,7 +200,6 @@ class StorageWorkerCase(UserSession):
 
         resp = req.storage_worker_psevdo_namer_regs_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
         return resp
 
     def case_storage_worker_psevdo_namer_regs_pid_get(self):
@@ -199,7 +207,6 @@ class StorageWorkerCase(UserSession):
         _reg_pid = self._get_reg_pid()
         resp = req.storage_worker_psevdo_namer_regs_pid_get(_reg_pid)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_psevdo_namer_regs_pid_put(self):
         req = StorageWorker(self.sess, self.host)
@@ -233,6 +240,7 @@ class StorageWorkerCase(UserSession):
         req = StorageWorker(self.sess, self.host)
 
         db_name = DB_picker_tables.name
+        assert self.check_db_is_exists(db_name), f"Не удалось найти БД с именем {db_name}"
 
         data = {
             # "start": "2023-08-13T00:00:00Z",
@@ -246,31 +254,38 @@ class StorageWorkerCase(UserSession):
             assert resp.status_code == 200, f"Ошибка, code: {resp.status_code}, flag: {flag}, resp: {resp.text}"
 
     def case_storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(self):
+        # front: Данные>Хранилище>Статистика
+        # Выбрать БД > Клик "Посмотреть таблицы" > Выбрать Таблицу
+        # /storage/statistic/{db_name}/table/{table_name}
         req = StorageWorker(self.sess, self.host)
 
         db_name = DB_picker_tables.name
         db_tab_name = DB_picker_tables.tab_Weather_all_online
 
+        self.asserts_check_db_and_table_is_exists(db_name, db_tab_name)
+
         resp = req.storage_worker_statistics_db_one_tab_stats_db_name_tab_name_get(db_name, db_tab_name)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_statistics_db_search_post(self):
         req = StorageWorker(self.sess, self.host)
+
+        db_name = DB_picker_tables.name
+        assert self.check_db_is_exists(db_name), f"Не удалось найти БД с именем {db_name}"
+
         data = {
-            "database_name": DB_picker_tables.name,
+            "database_name": db_name,
             # "pattern": "pattern"      # fixme
             "use_regexps": True
         }
         resp = req.storage_worker_statistics_db_search_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_statistics_db_stats_dbname_get(self):
         req = StorageWorker(self.sess, self.host)
-        dbname = DB_picker_tables.name
-        resp = req.storage_worker_statistics_db_stats_dbname_get(dbname)
-        # print(resp.text)
+        db_name = DB_picker_tables.name
+        assert self.check_db_is_exists(db_name), f"Не удалось найти БД с именем {db_name}"
+        resp = req.storage_worker_statistics_db_stats_dbname_get(db_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_statistics_db_tabs_event_stats_db_name_tab_name_flag_post(self):
@@ -280,7 +295,9 @@ class StorageWorkerCase(UserSession):
         req = StorageWorker(self.sess, self.host)
 
         db_name = DB_picker_tables.name
-        tab_name = "ad_groups_ngr"
+        tab_name = DB_picker_tables.tab_Weather_all_online    # fixme: хк Weather_all_online
+        self.asserts_check_db_and_table_is_exists(db_name, tab_name)
+
         data = {
             # "start": "2023-08-13T00:00:00Z",
             # "end": get_datetime_now_z(),
@@ -296,20 +313,20 @@ class StorageWorkerCase(UserSession):
     def case_storage_worker_statistics_db_tabs_stats_dbname_get(self):
         req = StorageWorker(self.sess, self.host)
 
-        self.sess.headers.update({
-            "ui": "1",
-        })
-        dbname = DB_picker_tables.name
+        # self.sess.headers.update({
+        #     "ui": "1",
+        # })
+        db_name = DB_picker_tables.name
+        assert self.check_db_is_exists(db_name), f"Не удалось найти БД с именем {db_name}"
 
-        resp = req.storage_worker_statistics_db_tabs_stats_dbname_get(dbname)
+        resp = req.storage_worker_statistics_db_tabs_stats_dbname_get(db_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_statistics_storage_search_post(self):
         req = StorageWorker(self.sess, self.host)
 
         db_name = DB_picker_tables.name
-        db_tab_name = DB_picker_tables.tab_Weather_all_online
+        db_tab_name = DB_picker_tables.tab_Weather_all_online   # fixme: хк Weather_all_online
         db_col_name = DB_picker_tables.col_Gorod
 
         data = {
@@ -325,10 +342,11 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_statistics_test_selection_post(self):
+        # todo: front usage
         req = StorageWorker(self.sess, self.host)
 
         db_name = DB_picker_tables.name
-        db_tab_name = DB_picker_tables.tab_Weather_all_online
+        db_tab_name = DB_picker_tables.tab_Weather_all_online    # fixme: хк Weather_all_online
         db_col_name = DB_picker_tables.col_Gorod
 
         data = {
@@ -344,7 +362,6 @@ class StorageWorkerCase(UserSession):
         req = StorageWorker(self.sess, self.host)
         resp = req.storage_worker_storage_db_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_storage_db_put(self):
         req = StorageWorker(self.sess, self.host)
@@ -354,7 +371,6 @@ class StorageWorkerCase(UserSession):
         }
         resp = req.storage_worker_storage_db_put(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_storage_db_post(self):
         req = StorageWorker(self.sess, self.host)

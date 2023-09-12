@@ -523,21 +523,48 @@ class XbaCookCase(UserSession):
         # Проверка наличия ключа "description" в ответе
         req = XbaCook(self.sess, self.host)
 
-        # FIXME: хардкод
         # нужны конкретные данные, для получения ответа иначе: {"error":{"code":400,"msg":"Нет данных"}}
-        prof_id = 34
+        # prof_id = 34
+        # data = {
+        #     "name": "saint petersburg",
+        #     "time": "2023-08-20",
+        #     # "time": "2023-08-20T00:00:00Z",
+        #     "columns":
+        #         [
+        #             "TimeStamp",
+        #             "Gorod",
+        #             "TemnepaTypa"
+        #         ]
+        # }
+
+        # prof_id = 200
+        #
+        # data = {
+        #     "name": "al_kushbakov@yandex.ru",
+        #     "time": "2022-07-05 00:00:00Z",
+        #     "columns":
+        #         [
+        #             "create_time",
+        #             "destination_address",
+        #             "event_description"
+        #         ]
+        # }
+
+        prof_id = 200
+
         data = {
-            "name": "saint petersburg",
-            # "time": "2023-08-20",
-            "time": "2023-08-20T00:00:00Z",
-            "columns":
-                [
-                    "TimeStamp",
-                    "Gorod",
-                    "TemnepaTypa"
-                ]
+            "name": "ir_ivanova@gmail.com",
+            "time": "2022-07-05",
+            "columns": [
+                "create_time",
+                "destination_address",
+                "event_description"
+            ]
         }
+
         resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
+        print(resp.text)
+        print("=="*42)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         try:

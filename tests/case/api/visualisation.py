@@ -101,9 +101,9 @@ class VisualisationCase(UserSession):
         req = Visualisation(self.sess, self.host)
 
         str_random_num = str(random.randint(100, 999))
-        self_user_id = self.get_self_user_id()                              # Получить свой 'user_id'
+        self_user_id = self.get_self_user_id()
         # todo: проверить доступ к бд, перед созданием!
-        db_id = self.get_db_id_by_name(DB_picker_tables.name)     # Получить 'id' хранилища 'picker_tables'
+        db_id = self.get_db_id_by_name(DB_picker_tables.name)
         db_tab_name = DB_picker_tables.tab_Weather_all_online
         db_col_name = DB_picker_tables.col_Gorod
 

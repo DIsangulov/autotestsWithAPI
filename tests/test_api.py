@@ -1,6 +1,7 @@
 import pytest
 import urllib3
 
+from resourses.credentials import TARGET_URL
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -21,6 +22,14 @@ from tests.case.api.visualisation import VisualisationCase
 from tests.case.api.xba_cook import XbaCookCase
 
 urllib3.disable_warnings()
+
+
+@pytest.fixture(autouse=True, scope='session')
+def _print_debug_info():
+    print("\n" + "="*42)
+    print(f"TARGET_URL: {TARGET_URL}")
+    print("="*42 + "\n")
+    yield
 
 
 class TestAuth:
@@ -269,11 +278,11 @@ class TestCore:
     def test_core_download_settings_get(self):
         CoreCase().case_core_download_settings_get()
 
-    @pytest.mark.skip   # fixme: изменение настроек
+    # @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_import_cert_post(self):
         CoreCase().case_core_email_import_cert_post()
 
-    @pytest.mark.skip   # fixme: изменение настроек
+    # @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_send_test_post(self):
         CoreCase().case_core_email_send_test_post()
 
@@ -283,11 +292,11 @@ class TestCore:
     def test_core_email_out_get(self):
         CoreCase().case_core_email_out_get()
 
-    @pytest.mark.skip   # fixme: изменение настроек
+    # @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_in_post(self):
         CoreCase().case_core_email_in_post()
 
-    @pytest.mark.skip   # fixme: изменение настроек
+    # @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_out_post(self):
         CoreCase().case_core_email_out_post()
 
@@ -1344,6 +1353,7 @@ class TestVisualisation:
     def test_visualisation_query_do_query_id_post(self):
         VisualisationCase().case_visualisation_query_do_query_id_post()
 
+    # fixme: хк Weather_all_online
     def test_visualisation_query_save_post(self):
         VisualisationCase().case_visualisation_query_save_post()
 

@@ -3,6 +3,7 @@ import json
 import requests
 
 from req.Api.req_auth import AuthApi
+from req.Api.req_storage_worker import StorageWorker
 from resourses.credentials import TestUsers, TARGET_URL
 
 _session_instance = {}
@@ -60,47 +61,73 @@ class UserSession:
             self.user_id = int(dct['res']['user_id'])
         return self.user_id
 
+    def _get_db_info_row_by_name(self, db_name: str) -> dict | None:
+        """Получение всех БД, возвращает первое вхождение по 'name' в виде:
+        {
+          "id": int,
+          "name": str,
+          "tables_count": int,
+          "description": str
+        }
+        """
+        resp = StorageWorker(self.sess, self.host).storage_worker_storage_db_get()
+        # resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db")
+        assert resp.status_code == 200, \
+            f"""Ошибка при получении списка хранилищ
+            debug:  {UserSession.__name__}::{self._get_db_info_row_by_name.__name__}
+            status_code: {resp.status_code},
+            resp:   {resp.text}
+            """
+        dct = json.loads(resp.text)
+        db_info_rows = dct['res']
+        return next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
+
+    def get_db_id_by_name(self, db_name: str) -> int:
+        """Возвращает 'id' хранилища с указанным именем"""
+        # resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db")
+        # assert resp.status_code == 200, f"Ошибка при получении списка хранилищ {resp.status_code}, {resp.text}"
+        #
+        # dct = json.loads(resp.text)
+        # db_info_rows = dct['res']
+        # db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
+        db_info_row = self._get_db_info_row_by_name(db_name)
+        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
+        return db_info_row['id']
+
     def check_db_is_exists(self, db_name: str) -> bool:
         """
         Проверка, что БД с именем 'db_name' уже существует
         :return: True - существует, False - не существует
         """
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/statistics/db_stats/{db_name}")
-        assert resp.status_code == 200 or 400, \
-            f"""Ошибка при получении статистики БД
-            debug: UserSession::check_db_is_exists
-            api: /back/dp.storage_worker/statistics/db_stats/{db_name}
-            status_code: {resp.status_code}
-            resp: {resp.text}
-            """
-        if resp.status_code == 200:
-            return True
-        else:
+        ch_db = self._get_db_info_row_by_name(db_name)
+        if ch_db is None:
             return False
+        else:
+            return True
 
-    # TODO: check db_table_if_exists
-    def check_db_table_is_exists(self, db_name: str, table_name: str) -> bool:
+    def asserts_check_db_and_table_is_exists(self, db_name: str, table_name: str) -> None:
         """
-        Проверка наличия таблицы 'table_name' в БД 'db_name'
-        :return: True - существует, False - не существует
+        Проверка наличия БД 'db_name'\n
+        Проверка наличия таблицы 'table_name' в БД 'db_name'\n
+        :raise AssertionError
         """
 
-        assert self.check_db_is_exists(db_name), \
-            f"""БД с именем {db_name}"""
-        ...
+        assert self.check_db_is_exists(db_name), f"""Не удалось найти базу данных с именем {db_name}"""
 
-        return False
+        resp = StorageWorker(self.sess, self.host).storage_worker_show_base_db_name_get(db_name)
+        assert resp.status_code == 200, \
+            f"""Ошибка при получении структуры БД
+            debug:  {UserSession.__name__}::{self.asserts_check_db_and_table_is_exists.__name__}
+            status_code: {resp.status_code}
+            resp:   {resp.text}
+            """
 
-    def get_db_id_by_name(self, db_name: str) -> int:
-        """Возвращает 'id' хранилища с указанным именем"""
-        resp = self.sess.get(f"{self.host}/back/dp.storage_worker/storage/db")
-        assert resp.status_code == 200, f"Ошибка при получении списка хранилищ {resp.status_code}, {resp.text}"
-
-        dct = json.loads(resp.text)
-        db_info_rows = dct['res']
-        db_info_row = next((db_info for db_info in db_info_rows if db_info['name'] == db_name), None)
-        assert db_info_row is not None, f"Не удалось найти базу данных с именем {db_name}"
-
-        db_id = db_info_row['id']
-
-        return db_id
+        resp_json = json.loads(resp.text)
+        tables_info_rows = resp_json["res"]["tables"]
+        tab_info = next((tab_info for tab_info in tables_info_rows if tab_info['tab_name'] == table_name), None)
+        assert tab_info is not None, \
+            f"""Не удалось найти таблицу с именем {table_name}
+            debug:  {UserSession.__name__}::{self.asserts_check_db_and_table_is_exists.__name__}
+            db_name: {db_name}
+            table_name: {table_name}
+            """
