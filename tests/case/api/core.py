@@ -3,43 +3,50 @@ import os
 from req.Helpers.user_session import UserSession
 from req.Api.req_core import Core
 
+# active directory creds
+AD_USER = "dataplan@ngrsoftlab.ru"
+AD_PASS = "d8hELYed9L809RB9FkSO!"
+AD_HOST = "192.168.189.2"
+AD_PORT_TLS = 636
+AD_base_dn = "OU=Employees,DC=ngrsoftlab,DC=ru"
 
-act_dir_pass = "d8hELYed9L809RB9FkSO!"
-ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"  # 22
-# ssh_pass = "nCNmqNT<)>Bsr3c]"  # 16
-mail_pass = "8327kHLHsfohn;hksjkfou!"
+# ssh creds # .5.16
+ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"   # fixme: wrong
+
+# post mailing creds
+MAIL_USER = "svc_ngr_mail@ngrsoftlab.ru"
+MAIL_PASS = "8327kHLHsfohn;hksjkfou!"
+MAIL_HOST = "NGR-Exchange01.ngrsoftlab.ru"
+MAIL_PORT = 587
 
 
 class CoreCase(UserSession):
 
     def case_core_active_directory_get(self):
         req = Core(self.sess, self.host)
-
         resp = req.core_active_directory_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_active_directory_post(self):
+        # front: /settings/domain
+        # !Установка новых настроек для "Контроллер домена"
         req = Core(self.sess, self.host)
+
+        # Тестовое соединение, для проверки корректности настроек, перед применением
+        self.case_core_active_directory_test_settings_post()
 
         req.sess.headers.update({'skey': "ANGARA"})
         body = {
-            "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
-            "host": "192.168.189.2",
+            "user": AD_USER,
+            "password": AD_PASS,
+            "base_dn": AD_base_dn,
+            "host": AD_HOST,
+            "port": AD_PORT_TLS,
             "open_ldap": False,
-            "password": act_dir_pass,
-            "port": 636,
-            "tls": True,
-            "user": "dataplan@ngrsoftlab.ru"
+            "tls": True
         }
-
         resp = req.core_active_directory_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_active_directory_structure_post(self):
         # front: /settings/domain   # [контроллер домена]
@@ -47,36 +54,31 @@ class CoreCase(UserSession):
 
         req.sess.headers.update({'skey': "ANGARA"})
         body = {
-            "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
-            "host": "192.168.189.2",
+            "user": AD_USER,
+            "password": AD_PASS,
+            "base_dn": AD_base_dn,
+            "host": AD_HOST,
+            "port": AD_PORT_TLS,
             "open_ldap": False,
-            "password": act_dir_pass,
-            "port": 636,
-            "tls": True,
-            "user": "dataplan@ngrsoftlab.ru"
+            "tls": True
         }
-
         resp = req.core_active_directory_structure_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_active_directory_test_settings_post(self):
         req = Core(self.sess, self.host)
 
         req.sess.headers.update({'skey': "ANGARA"})
         body = {
-            "base_dn": "OU=Employees,DC=ngrsoftlab,DC=ru",
-            "host": "192.168.189.2",
+            "user": AD_USER,
+            "password": AD_PASS,
+            "base_dn": AD_base_dn,
+            "host": AD_HOST,
+            "port": AD_PORT_TLS,
             "open_ldap": False,
-            "password": act_dir_pass,
-            "port": 636,
-            "tls": True,
-            "user": "dataplan@ngrsoftlab.ru"
+            "tls": True
         }
         resp = req.core_active_directory_test_settings_post(body)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_core_backups_get(self):
@@ -86,7 +88,6 @@ class CoreCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: text: {"res":[]}
 
-    # TODO: [POST] /back/dp.core/backups
     def case_core_backups_post(self):
         req = Core(self.sess, self.host)
 
@@ -103,31 +104,28 @@ class CoreCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: {"res":{"ID":0,"startTime":"","status":"","type":"","log":""}}
 
-    # TODO: [GET] /back/dp.core/backups/{id}
     def case_core_backups_id_get(self):
         req = Core(self.sess, self.host)
 
-        _id = 0     # todo: what of id?
+        _id = 0     # what of id?
 
         resp = req.core_backups_id_get(_id)
         print(resp.text)
         assert False
 
-    # TODO: [DELETE] /back/dp.core/backups
     def case_core_backups_id_delete(self):
         req = Core(self.sess, self.host)
 
-        _id = 0     # todo: what of id?
+        _id = 0     # what of id?
 
         resp = req.core_backups_id_delete(_id)
         print(resp.text)
         assert False
 
-    # TODO: [POST] /back/dp.core/backups/{id}/restore
     def case_core_backups_id_restore_post(self):
         req = Core(self.sess, self.host)
 
-        _id = 0     # todo: what of id?
+        _id = 0     # what of id?
 
         data = {}
 
@@ -135,11 +133,10 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    # TODO: [POST] /back/dp.core/backups/{type}/upload
     def case_core_backups_type_upload_post(self):
         req = Core(self.sess, self.host)
 
-        _type = "servicedb"     # todo: servicedb|storagedb
+        _type = "servicedb"     # servicedb|storagedb
 
         data = {}
 
@@ -147,13 +144,12 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    # TODO: [GET] /back/dp.core/backups/{type}/{id}/download
     def case_core_backups_type_id_download_get(self):
         req = Core(self.sess, self.host)
 
-        _type = "servicedb"     # todo: servicedb|storagedb
+        _type = "servicedb"     # servicedb|storagedb
 
-        _id = 0                 # todo: what id
+        _id = 0                 # ?what id
 
         resp = req.core_backups_type_id_download_get(_type, _id)
         print(resp.text)
@@ -166,9 +162,6 @@ class CoreCase(UserSession):
         resp = req.core_check_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_common_get(self):
         req = Core(self.sess, self.host)
 
@@ -176,16 +169,16 @@ class CoreCase(UserSession):
         resp = req.core_common_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_common_post(self):
-        req = Core(self.sess, self.host)
+        # front: /settings/common
+        # Изменение настроек "Административный узел"
 
+        req = Core(self.sess, self.host)
         req.sess.headers.update({'skey': "ANGARA"})
+
         body = {
             "XMLName": {"Space": "", "Local": "common"},
-            "sessions": "7|day",
+            "sessions": "7|day",        # todo: формат отправки
             "ml": "",
             "query": "",
             "diagram": "",
@@ -196,9 +189,6 @@ class CoreCase(UserSession):
         }
         resp = req.core_common_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_common_test_post(self):
         req = Core(self.sess, self.host)
@@ -218,9 +208,6 @@ class CoreCase(UserSession):
         resp = req.core_common_test_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_component_ml_restart_get(self):
         req = Core(self.sess, self.host)
 
@@ -229,9 +216,6 @@ class CoreCase(UserSession):
         node = "0"
         resp = req.core_component_what_action_node(what, action, node)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_component_picker_restart_get(self):
         req = Core(self.sess, self.host)
@@ -242,9 +226,6 @@ class CoreCase(UserSession):
         resp = req.core_component_what_action_node(what, action, node)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_component_servicedb_restart_get(self):
         req = Core(self.sess, self.host)
 
@@ -253,9 +234,6 @@ class CoreCase(UserSession):
         node = "0"
         resp = req.core_component_what_action_node(what, action, node)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def core_component_datastore_restart_get(self):
         req = Core(self.sess, self.host)
@@ -266,17 +244,11 @@ class CoreCase(UserSession):
         resp = req.core_component_what_action_node(what, action, node)
         assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_download_settings_get(self):
         req = Core(self.sess, self.host)
 
         resp = req.core_download_settings_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_email_import_cert_post(self):
         req = Core(self.sess, self.host)
@@ -287,112 +259,69 @@ class CoreCase(UserSession):
             cert_text = f.read()
         body = {"data": cert_text}
         resp = req.core_email_import_cert_post(body)
+        # print(resp.text)    {"res":"ok"}
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_email_send_test_post(self):
         req = Core(self.sess, self.host)
 
         body = {
-            "description": "TestAPICore",
-            "disable_tls": False,
-            "host": "NGR-Exchange01.ngrsoftlab.ru",
-            "name": "TestAPI",
-            "port": 587,
+            "user": MAIL_USER,
+            "send_user": MAIL_USER,
+            "psw": MAIL_PASS,
+            "host": MAIL_HOST,
+            "port": MAIL_PORT,
             "protocol": "smtp",
-            "psw": mail_pass,
-            "send_user": "svc_ngr_mail@ngrsoftlab.ru",
-            "user": "svc_ngr_mail@ngrsoftlab.ru"
+            "name": "Test_API",
+            "description": "Test_API_description",
+            "disable_tls": False,
         }
         resp = req.core_email_send_test_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
+    def case_core_email_type_get(self, email_type):
+        req = Core(self.sess, self.host)
+        resp = req.core_email_type_get(email_type)
+        assert resp.status_code == 200, \
+            f"""Ошибка, email_type: '{email_type}'
+            status_code: {resp.status_code},
+            resp: {resp.text}
+            """
 
-    def case_core_email_in_get(self):
+    def case_core_email_type_post(self, email_type):
+        # front: /settings/ms
+        # !Изменение настроек "Почта"
         req = Core(self.sess, self.host)
 
-        _type = "in"
-        resp = req.core_email_type_get(_type)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_email_out_get(self):
-        req = Core(self.sess, self.host)
-
-        _type = "out"
-        resp = req.core_email_type_get(_type)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_email_in_post(self):
-        req = Core(self.sess, self.host)
-
-        _type = "in"
         body = {
-            "description": "Test_NGR_description",
-            "disable_tls": False,
-            "host": "NGR-Exchange01.ngrsoftlab.ru",
-            "name": "Test_NGR",
-            "port": 587,
+            "user": MAIL_USER,
+            "send_user": MAIL_USER,
+            "psw": MAIL_PASS,
+            "host": MAIL_HOST,
+            "port": MAIL_PORT,
             "protocol": "smtp",
-            "psw": mail_pass,
-            "send_user": "svc_ngr_mail@ngrsoftlab.ru",
-            "user": "svc_ngr_mail@ngrsoftlab.ru"
-        }
-        resp = req.core_email_type_post(_type, body)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_email_out_post(self):
-        req = Core(self.sess, self.host)
-
-        _type = "out"
-        body = {
-            "description": "Test_NGR_description",
-            "disable_tls": False,
-            "host": "NGR-Exchange01.ngrsoftlab.ru",
             "name": "Test_NGR",
-            "port": 587,
-            "protocol": "smtp",
-            "psw": mail_pass,
-            "send_user": "svc_ngr_mail@ngrsoftlab.ru",
-            "user": "svc_ngr_mail@ngrsoftlab.ru"
+            "description": "Test_NGR_description",
+            "disable_tls": False
         }
-        resp = req.core_email_type_post(_type, body)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
+        resp = req.core_email_type_post(email_type, body)
+        assert resp.status_code == 200, \
+            f"""Ошибка, email_type: '{email_type}'
+            status_code: {resp.status_code},
+            resp: {resp.text}
+            """
 
     def case_core_flag_get(self):
         req = Core(self.sess, self.host)
-
         req.sess.headers.update({'skey': "ANGARA"})
         resp = req.core_flag_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
     def case_core_ip_get(self):
         req = Core(self.sess, self.host)
-
         req.sess.headers.update({'skey': "ANGARA"})
         resp = req.core_ip_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     # TODO: [POST] /back/dp.core/nodes/delete/{what}
     def case_core_nodes_delete_what_post(self):
@@ -406,49 +335,11 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    def case_core_nodes_list_ml_get(self):
+    def case_core_nodes_list_what_get(self, what):
         req = Core(self.sess, self.host)
-
         req.sess.headers.update({'skey': "ANGARA"})
-        what = "ml"
         resp = req.core_nodes_list_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_nodes_list_picker_get(self):
-        req = Core(self.sess, self.host)
-
-        req.sess.headers.update({'skey': "ANGARA"})
-        what = "picker"
-        resp = req.core_nodes_list_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_nodes_list_servicedb_get(self):
-        req = Core(self.sess, self.host)
-
-        req.sess.headers.update({'skey': "ANGARA"})
-        what = "servicedb"
-        resp = req.core_nodes_list_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_nodes_list_datastore_get(self):
-        req = Core(self.sess, self.host)
-
-        req.sess.headers.update({'skey': "ANGARA"})
-        what = "datastore"
-        resp = req.core_nodes_list_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
+        assert resp.status_code == 200, f"Ошибка, what: {what} код: {resp.status_code}, {resp.text}"
 
     # TODO: empty
     def case_core_nodes_test_what_post(self):
@@ -478,47 +369,13 @@ class CoreCase(UserSession):
     #     resp = self.sess.post(f"{self.host}/back/dp.core/nodes/test/datastore", headers=header, json=body, verify=False)
     #     return resp
 
-    def case_core_nodes_ml_get(self):
+    def case_core_nodes_what_get(self, what):
         req = Core(self.sess, self.host)
-        what = "ml"
         resp = req.core_nodes_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200, f"Ошибка, what: '{what}', код: {resp.status_code}, {resp.text}"
 
-        # print(resp.text)
-        return resp
-
-    def case_core_nodes_picker_get(self):
+    def case_core_nodes_what_post(self, what):
         req = Core(self.sess, self.host)
-        what = "picker"
-        resp = req.core_nodes_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_nodes_servicedb_get(self):
-        req = Core(self.sess, self.host)
-        what = "servicedb"
-        resp = req.core_nodes_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_nodes_datastore_get(self):
-        req = Core(self.sess, self.host)
-        what = "datastore"
-        resp = req.core_nodes_what_get(what)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    # TODO: [POST] /back/dp.core/nodes/{what}
-    def case_core_nodes_what_post(self):
-        req = Core(self.sess, self.host)
-
-        what = "ml"     # todo: ml/picker/servicedb/datastore
 
         data = {}
 
@@ -550,21 +407,18 @@ class CoreCase(UserSession):
     #     }
     #     resp = req.core_nodes_what_post(what, body)
 
-    # TODO: [GET] /back/dp.core/save
     def case_core_save_get(self):
         req = Core(self.sess, self.host)
         resp = req.core_save_get()
         print(resp.text)
         assert False
 
-    # TODO: [GET] /back/dp.core/secrets
     def case_core_secrets_get(self):
         req = Core(self.sess, self.host)
         resp = req.core_secrets_get()
         print(resp.text)
         assert False
 
-    # TODO: [POST] /back/dp.core/secrets
     def case_core_secrets_post(self):
         req = Core(self.sess, self.host)
 
@@ -574,7 +428,6 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    # TODO: [GET] /back/dp.core/secrets/{id}
     def case_core_secrets_id_get(self):
         req = Core(self.sess, self.host)
 
@@ -584,7 +437,6 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    # TODO: [PUT] /back/dp.core/secrets/{id}
     def case_core_secrets_id_put(self):
         req = Core(self.sess, self.host)
 
@@ -596,7 +448,6 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    # TODO: [DELETE] /back/dp.core/secrets/{id}
     def case_core_secrets_id_delete(self):
         req = Core(self.sess, self.host)
 
@@ -606,304 +457,33 @@ class CoreCase(UserSession):
         print(resp.text)
         assert False
 
-    def case_core_service_dp_alarmer_restart_get(self):
+    def case_core_service_what_action_get(self, what, action):
         req = Core(self.sess, self.host)
-        what = "dp_alarmer"
-        action = "restart"
         resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200, \
+            f"""Ошибка, 
+            what: {what}
+            action: {action}
+            status_code: {resp.status_code}
+            resp: {resp.text}
+            """
 
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_auth_restart_get(self):
+    def case_core_service_all_restart_get(self, action):
         req = Core(self.sess, self.host)
-        what = "dp_auth"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_core_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_core"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_licenser_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_licenser"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_log_eater_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_log_eater"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_monitor_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_monitor"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_peopler_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_peopler"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_permitter_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_permitter"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_postgres_single_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_postgres_single"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_taskplan_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_taskplan"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_updater_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_updater"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_absorber_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_absorber"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_picker_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_picker"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_storage_single_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_storage_single"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_storage_worker_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_storage_worker"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_ml_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_ml"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_scripter_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_scripter"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_datapie_baker_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_datapie_baker"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_elements_eater_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_elements_eater"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_frontend_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_frontend"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_reporter_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_reporter"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_rm_cook_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_rm_cook"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_rm_ml_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_rm_ml"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_screener_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_screener"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_visualisation_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_visualisation"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_xba_cook_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_xba_cook"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_dp_xba_py_restart_get(self):
-        req = Core(self.sess, self.host)
-        what = "dp_xba_py"
-        action = "restart"
-        resp = req.core_service_what_action_get(what, action)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
-
-    def case_core_service_all_restart_get(self):  # стенд не тянет этот метод
-        req = Core(self.sess, self.host)
-        action = "restart"      # todo: restart|stop
         resp = req.core_services_all_action_get(action)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_sid_get(self):
         req = Core(self.sess, self.host)
         req.sess.headers.update({'skey': "ANGARA"})
-
         resp = req.core_sid_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     def case_core_syslog_get(self):
         req = Core(self.sess, self.host)
         req.sess.headers.update({'skey': "ANGARA"})
-
         resp = req.core_syslog_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp
 
     # fixme: не перебить настройки
     def case_core_syslog_post(self):
@@ -935,6 +515,3 @@ class CoreCase(UserSession):
         }
         resp = req.core_syslog_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        # print(resp.text)
-        return resp

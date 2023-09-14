@@ -102,10 +102,13 @@ class VisualisationCase(UserSession):
 
         str_random_num = str(random.randint(100, 999))
         self_user_id = self.get_self_user_id()
-        # todo: проверить доступ к бд, перед созданием!
-        db_id = self.get_db_id_by_name(DB_picker_tables.name)
+
+        db_name = DB_picker_tables.name
+        db_id = self.get_db_id_by_name(db_name)
         db_tab_name = DB_picker_tables.tab_Weather_all_online
         db_col_name = DB_picker_tables.col_Gorod
+
+        self.asserts_check_db_and_table_is_exists(db_name, db_tab_name)
 
         data = {
             "db_id": db_id,
