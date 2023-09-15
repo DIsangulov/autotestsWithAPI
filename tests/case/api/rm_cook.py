@@ -3,7 +3,7 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_rm_cook import RmCook
-from resourses.constants import DbName, QA_SPAM_EMAIL
+from resourses.constants import QA_SPAM_EMAIL, DB_picker_tables
 
 SYSLOG_HOST = "107.130.0.16"
 SYSLOG_PORT = 514
@@ -145,10 +145,10 @@ class RmCookCase(UserSession):
     def case_rm_cook_role_model_result_export_role_model_to_excel_post(self):
         req = RmCook(self.sess, self.host)
         body = {
-            "groups_db": DbName.picker_tables,
+            "groups_db": DB_picker_tables.name,
             "groups_table": "ad_groups_ngr_2",  # fixme
             "source": 0,
-            "users_db": DbName.picker_tables,
+            "users_db": DB_picker_tables.name,
             "users_table": "ad_users_ngr_2"  # fixme
         }
         resp = req.rm_cook_role_model_result_export_role_model_to_excel_post(body)
@@ -283,7 +283,7 @@ class RmCookCase(UserSession):
         req = RmCook(self.sess, self.host)
 
         # fixme: убедиться в наличии и доступе к строкам таблицы
-        db_picker_tables = self.get_db_id_by_name(DbName.picker_tables)
+        db_picker_tables = self.get_db_id_by_name(DB_picker_tables.name)
         body = [{"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 1, "table_name": "ad_groups_ngr"},
                 {"db_name": "picker_tables", "db_id": db_picker_tables, "source_type": 2, "table_name": "ad_users_ngr"}]
         resp = req.rm_cook_settings_sources_post(body)

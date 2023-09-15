@@ -9,37 +9,49 @@ class Core(BaseReq):
         """process GET req for getting current ad settings"""
         return self.sess.get(f"{self.host}/back/dp.core/active_directory")
 
-    def core_active_directory_post(self, body) -> requests.Response:
+    def core_active_directory_post(self, data) -> requests.Response:
         """process POST req with new settings for domain active directory to test and save (if ok)"""
-        return self.sess.post(f"{self.host}/back/dp.core/active_directory", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/active_directory", json=data)
 
-    def core_active_directory_structure_post(self, body) -> requests.Response:
+    def core_active_directory_structure_post(self, data) -> requests.Response:
         """process POST req for getting domain AD struct (by root dir input)"""
-        return self.sess.post(f"{self.host}/back/dp.core/active_directory/structure", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/active_directory/structure", json=data)
 
-    def core_active_directory_test_settings_post(self, body) -> requests.Response:
+    def core_active_directory_test_settings_post(self, data) -> requests.Response:
         """process POST req with new settings for domain active directory to test and save (if ok)"""
-        return self.sess.post(f"{self.host}/back/dp.core/active_directory/test_settings", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/active_directory/test_settings", json=data)
 
     def core_backups_get(self):
         """process GET req for getting list of service DB backups"""
         return self.sess.get(f"{self.host}/back/dp.core/backups")
 
-    # TODO: [POST] /back/dp.core/backups
+    def core_backups_post(self, data):
+        """process POST req for creating a service DB backup"""
+        return self.sess.post(f"{self.host}/back/dp.core/backups", json=data)
 
     def core_backups_last_get(self):
         """process GET req for getting status of the last service DB backup/restore job"""
         return self.sess.get(f"{self.host}/back/dp.core/backups/last")
 
-    # TODO: [GET] /back/dp.core/backups/{id}
+    def core_backups_id_get(self, _id):
+        """process GET req for getting backup info by ID"""
+        return self.sess.get(f"{self.host}/back/dp.core/backups/{_id}")
 
-    # TODO: [DELETE] /back/dp.core/backups
+    def core_backups_id_delete(self, _id):
+        """process DELETE req for deleting the service DB backup"""
+        return self.sess.delete(f"{self.host}/back/dp.core/backups/{_id}")
 
-    # TODO: [POST] /back/dp.core/backups/{id}/restore
+    def core_backups_id_restore_post(self, _id, data):
+        """process POST req for restoring the service DB backup"""
+        return self.sess.post(f"{self.host}/back/dp.core/backups/{_id}/restore", json=data)
 
-    # TODO: [POST] /back/dp.core/backups/{type}/upload
+    def core_backups_type_upload_post(self, _type, data):
+        """process POST req for importing external backup file"""
+        return self.sess.post(f"{self.host}/back/dp.core/backups/{_type}/upload", json=data)
 
-    # TODO: [GET] /back/dp.core/backups/{type}/{id}/download
+    def core_backups_type_id_download_get(self, _type, _id):
+        """process GET req to download backup file by ID"""
+        return self.sess.get(f"{self.host}/back/dp.core/backups/{_type}/{_id}/download")
 
     def core_check_get(self) -> requests.Response:
         """process GET req for checking if the installation has start settings."""
@@ -49,13 +61,13 @@ class Core(BaseReq):
         """process GET req for getting current common settings"""
         return self.sess.get(f"{self.host}/back/dp.core/common")
 
-    def core_common_post(self, body) -> requests.Response:
+    def core_common_post(self, data) -> requests.Response:
         """process POST req with new common settings"""
-        return self.sess.post(f"{self.host}/back/dp.core/common", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/common", json=data)
 
-    def core_common_test_post(self, body) -> requests.Response:
+    def core_common_test_post(self, data) -> requests.Response:
         """process POST req with common settings to test"""
-        return self.sess.post(f"{self.host}/back/dp.core/common/test", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/common/test", json=data)
 
     def core_component_what_action_node(self, what, action, node) -> requests.Response:
         """process GET req for restarting/stopping node component services"""
@@ -65,21 +77,21 @@ class Core(BaseReq):
         """process GET req for getting static and dynamic settings"""
         return self.sess.get(f"{self.host}/back/dp.core/download_settings")
 
-    def core_email_import_cert_post(self, body) -> requests.Response:
+    def core_email_import_cert_post(self, data) -> requests.Response:
         """process POST req with new email cert for import"""
-        return self.sess.post(f"{self.host}/back/dp.core/email/import_cert", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/email/import_cert", json=data)
 
-    def core_email_send_test_post(self, body) -> requests.Response:
+    def core_email_send_test_post(self, data) -> requests.Response:
         """process POST req with data for testing mail settings by test send"""
-        return self.sess.post(f"{self.host}/back/dp.core/email/send_test", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/email/send_test", json=data)
 
     def core_email_type_get(self, _type) -> requests.Response:
         """process GET req for getting current email settings (type = in/out)"""
         return self.sess.get(f"{self.host}/back/dp.core/email/{_type}")
 
-    def core_email_type_post(self, _type, body) -> requests.Response:
+    def core_email_type_post(self, _type, data) -> requests.Response:
         """process POST req with new email settings (type = in/out)"""
-        return self.sess.post(f"{self.host}/back/dp.core/email/{_type}", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/email/{_type}", json=data)
 
     def core_flag_get(self) -> requests.Response:
         """process GET req with node settings to get has_nodes flag"""
@@ -89,37 +101,49 @@ class Core(BaseReq):
         """process GET req for getting installation IP (haha)"""
         return self.sess.get(f"{self.host}/back/dp.core/ip")
 
-    # TODO: [POST] /back/dp.core/nodes/delete/{what}
+    def core_nodes_delete_what_post(self, what, data):
+        """process DELETE req for deleting remote node with ip."""
+        return self.sess.post(f"{self.host}/back/dp.core/nodes/delete/{what}", json=data)
 
     def core_nodes_list_what_get(self, what) -> requests.Response:
         """process GET req for getting nodes list"""
         return self.sess.get(f"{self.host}/back/dp.core/nodes/list/{what}")
 
-    def core_nodes_test_what_post(self, what, body) -> requests.Response:
+    def core_nodes_test_what_post(self, what, data) -> requests.Response:
         """process POST req with node settings to test node connection"""
-        return self.sess.post(f"{self.host}/back/dp.core/nodes/test/{what}", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/nodes/test/{what}", json=data)
 
-    def core_nodes_what(self, what) -> requests.Response:
+    def core_nodes_what_get(self, what) -> requests.Response:
         """process GET req for getting current remote nodes settings (sys settings page)"""
         return self.sess.get(f"{self.host}/back/dp.core/nodes/{what}")
 
-    # TODO: [POST] /back/dp.core/nodes/{what}
-
-    def core_nodes_what_post(self, what, body) -> requests.Response:
+    def core_nodes_what_post(self, what, data) -> requests.Response:
         """process POST req for setting current remote nodes ml&logstash settings (sys settings page)"""
-        return self.sess.post(f"{self.host}/back/dp.core/nodes/{what}", json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/nodes/{what}", json=data)
 
-    # TODO: [GET] /back/dp.core/save
+    def core_save_get(self):
+        """process GET req for saving all start settings"""
+        return self.sess.get(f"{self.host}/back/dp.core/save")
 
-    # TODO: [GET] /back/dp.core/secrets
+    def core_secrets_get(self):
+        """process GET req for getting secrets list (with encrypted values)"""
+        return self.sess.get(f"{self.host}/back/dp.core/secrets")
 
-    # TODO: [POST] /back/dp.core/secrets
+    def core_secrets_post(self, data):
+        """process POST req for adding secret"""
+        return self.sess.post(f"{self.host}/back/dp.core/secrets", json=data)
 
-    # TODO: [GET] /back/dp.core/secrets/{id}
+    def core_secrets_id_get(self, _id):
+        """process GET req for getting secret by id (with encrypted values)"""
+        return self.sess.get(f"{self.host}/back/dp.core/secrets/{_id}")
 
-    # TODO: [PUT] /back/dp.core/secrets/{id}
+    def core_secrets_id_put(self, _id, data):
+        """process PUT req for editing secret by id"""
+        return self.sess.put(f"{self.host}/back/dp.core/secrets/{_id}", json=data)
 
-    # TODO: [DELETE] /back/dp.core/secrets/{id}
+    def core_secrets_id_delete(self, _id):
+        """process DELETE req for deleting secret by id"""
+        return self.sess.delete(f"{self.host}/back/dp.core/secrets/{_id}")
 
     def core_service_what_action_get(self, what, action) -> requests.Response:
         """process GET req for restarting/stopping one webserver service"""
@@ -139,6 +163,6 @@ class Core(BaseReq):
         """process GET req for getting current syslog settings"""
         return self.sess.get(f"{self.host}/back/dp.core/syslog")
 
-    def core_syslog_post(self, body) -> requests.Response:
+    def core_syslog_post(self, data) -> requests.Response:
         """process POST req with new syslog settings"""
-        return self.sess.post(f"{self.host}/back/dp.core/syslog",  json=body)
+        return self.sess.post(f"{self.host}/back/dp.core/syslog", json=data)

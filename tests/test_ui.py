@@ -214,13 +214,6 @@ class TestDataSources:
     def test_open_modal_w_actions_details(self, browser):
         DataSourcesCase(browser).open_modal_w_actions_details()
 
-    # todo: 301
-    # todo: 316
-    # todo: 459
-    # todo: 549
-    # todo: 159
-    # todo: 531 ?
-
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Создание источника в редакторе'")
     def test_open_new_source_editor_by_steps(self, browser):

@@ -44,6 +44,18 @@ class UpdaterCase(UserSession):
         key_to_check = "new_version"
         assert key_to_check in resp_data_keys, f"0.Ошибка, отсутствует ключ '{key_to_check}' в ответе: {resp.text}"
 
+    def case_updater_update_post(self):
+        req = Updater(self.sess, self.host)
+        data = {}
+        resp = req.updater_update_post(data)
+        assert False
+
+    def case_updater_update_from_archive_post(self):
+        req = Updater(self.sess, self.host)
+        data = {}
+        resp = req.updater_update_from_archive_post(data)
+        assert False
+
     def case_updater_versions_get(self):
         # DAT-5287
         req = Updater(self.sess, self.host)

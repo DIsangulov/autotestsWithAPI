@@ -15,10 +15,6 @@ class XbaCook(BaseReq):
         """process POST for checking if entity type column contains not more distinct values than 20 & no nulls"""
         return self.sess.post(f"{self.host}/back/dp.xba_cook/check_entity_type", json=data)
 
-    def xba_cook_dashboard_post(self, data):
-        """process POST req to get xba dashboard data"""
-        return self.sess.post(f"{self.host}/back/dp.xba_cook/dashboard", json=data)
-
     def xba_cook_dashboard_entities_post(self, data):
         """process POST for get data for entities statistics"""
         return self.sess.post(f"{self.host}/back/dp.xba_cook/dashboard/entities", json=data)
@@ -228,7 +224,9 @@ class XbaCook(BaseReq):
         """process DELETE req to delete element from profile whitelist"""
         return self.sess.delete(f"{self.host}/back/dp.xba_cook/profiles/{xba_profile_id}/whitelist/element/{element_id}")
 
-    # TODO: [POST] /back/dp.xba_cook/set_log_level_xba_py/{mode}
+    def xba_cook_set_log_level_xba_py_mode_post(self, mode, data):
+        """process POST to change level log in xba_py"""
+        return self.sess.post(f"{self.host}/back/dp.xba_cook/set_log_level_xba_py/{mode}", json=data)
 
     def xba_cook_xba_get(self):
         """process GET req to get current syslog-mailing-alert xba settings."""

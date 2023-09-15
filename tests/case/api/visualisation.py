@@ -3,8 +3,7 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_visualisation import Visualisation
-from resourses.constants import DbName, API_AUTO_TEST_
-
+from resourses.constants import DB_picker_tables, API_AUTO_TEST_
 
 query_id = set()           # 'id' sql запроса
 report_id = set()          # 'id' отчета
@@ -102,11 +101,14 @@ class VisualisationCase(UserSession):
         req = Visualisation(self.sess, self.host)
 
         str_random_num = str(random.randint(100, 999))
-        self_user_id = self.get_self_user_id()                              # Получить свой 'user_id'
-        # todo: проверить доступ к бд, перед созданием!
-        db_id = self.get_db_id_by_name(DbName.picker_tables)     # Получить 'id' хранилища 'picker_tables'
-        db_tab_name = DbName.DB_picker_tables.tab_Weather_all_online
-        db_col_name = DbName.DB_picker_tables.col_Gorod
+        self_user_id = self.get_self_user_id()
+
+        db_name = DB_picker_tables.name
+        db_id = self.get_db_id_by_name(db_name)
+        db_tab_name = DB_picker_tables.tab_Weather_all_online
+        db_col_name = DB_picker_tables.col_Gorod
+
+        self.asserts_check_db_and_table_is_exists(db_name, db_tab_name)
 
         data = {
             "db_id": db_id,
@@ -128,7 +130,7 @@ class VisualisationCase(UserSession):
                 "agregators": [],
                 "limit": 50
             },
-            "db_name": DbName.picker_tables,
+            "db_name": DB_picker_tables.name,
             "query": "",
             "auto": True,
             "editor_id": self_user_id,
@@ -188,6 +190,17 @@ class VisualisationCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
         return resp
+
+    def case_visualisation_reports_params_report_id_post(self):
+        req = Visualisation(self.sess, self.host)
+
+        _report_id = 0
+
+        data = {}
+
+        resp = req.visualisation_reports_params_report_id_post(_report_id, data)
+        print(resp.text)
+        assert False
 
     def case_visualisation_reports_report_id_get(self):
         req = Visualisation(self.sess, self.host)
@@ -276,6 +289,18 @@ class VisualisationCase(UserSession):
         resp = req.visualisation_visualisation_dataseries_visualisation_id_post(_vis_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+
+    def case_visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(self):
+        req = Visualisation(self.sess, self.host)
+
+        vis_id = 0
+        dataseries_id = 0
+
+        data = {}
+
+        resp = req.visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(vis_id, dataseries_id, data)
+        print(resp.text)
+        assert False
 
     def case_visualisation_visualisation_types_get(self):
         req = Visualisation(self.sess, self.host)

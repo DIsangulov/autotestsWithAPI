@@ -1,6 +1,7 @@
 import pytest
 import urllib3
 
+from resourses.credentials import TARGET_URL
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -21,6 +22,14 @@ from tests.case.api.visualisation import VisualisationCase
 from tests.case.api.xba_cook import XbaCookCase
 
 urllib3.disable_warnings()
+
+
+@pytest.fixture(autouse=True, scope='session')
+def _print_debug_info():
+    print("\n" + "="*42)
+    print(f"TARGET_URL: {TARGET_URL}")
+    print("="*42 + "\n")
+    yield
 
 
 class TestAuth:
@@ -196,23 +205,44 @@ class TestCore:
     def test_core_active_directory_get(self):
         CoreCase().case_core_active_directory_get()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_post(self):
         CoreCase().case_core_active_directory_post()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_structure_post(self):
         CoreCase().case_core_active_directory_structure_post()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_active_directory_test_settings_post(self):
         CoreCase().case_core_active_directory_test_settings_post()
 
     def test_core_backups_get(self):
         CoreCase().case_core_backups_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_post(self):
+        CoreCase().case_core_backups_post()
+
     def test_core_backups_last_get(self):
         CoreCase().case_core_backups_last_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_id_get(self):
+        CoreCase().case_core_backups_id_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_id_delete(self):
+        CoreCase().case_core_backups_id_delete()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_id_restore_post(self):
+        CoreCase().case_core_backups_id_restore_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_type_upload_post(self):
+        CoreCase().case_core_backups_type_upload_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_core_backups_type_id_download_get(self):
+        CoreCase().case_core_backups_type_id_download_get()
 
     def test_core_check_get(self):
         CoreCase().case_core_check_get()
@@ -220,52 +250,46 @@ class TestCore:
     def test_core_common_get(self):
         CoreCase().case_core_common_get()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_post(self):
         CoreCase().case_core_common_post()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_test_post(self):
         CoreCase().case_core_common_test_post()
 
-    def test_core_component_ml_restart_get(self):
-        CoreCase().case_core_component_ml_restart_get()
+    @pytest.mark.parametrize('what,action,node', [
+        ("ml", "stop", "0"),
+        ("ml", "restart", "0"),
 
-    def test_core_component_picker_restart_get(self):
-        CoreCase().case_core_component_picker_restart_get()
+        ("picker", "stop", "0"),
+        ("picker", "restart", "0"),
 
-    # "code":400
-    def test_core_component_servicedb_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
-        CoreCase().case_core_component_servicedb_restart_get()
+        pytest.param("servicedb", "stop", "0", marks=pytest.mark.xfail),
+        pytest.param("servicedb", "restart", "0", marks=pytest.mark.xfail),
+        # look: {"error":{"code":400,"msg":"Неверные параметры"}}
 
-    # "code":400
-    def test_core_component_datastore_restart_get(self):
-        CoreCase().core_component_datastore_restart_get()
+        pytest.param("datastore", "stop", "0", marks=pytest.mark.xfail),
+        pytest.param("datastore", "restart", "0", marks=pytest.mark.xfail),
+        # look: {"error":{"code":400,"msg":"Неверные параметры"}}
+    ])
+    def test_core_component_what_action_node_get(self, what, action, node):
+        CoreCase().case_core_component_what_action_node_get(what, action, node)
 
     def test_core_download_settings_get(self):
         CoreCase().case_core_download_settings_get()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_import_cert_post(self):
         CoreCase().case_core_email_import_cert_post()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_email_send_test_post(self):
         CoreCase().case_core_email_send_test_post()
 
-    def test_core_email_in_get(self):
-        CoreCase().case_core_email_in_get()
+    @pytest.mark.parametrize('email_type', ["in", "out"])
+    def test_core_email_type_get(self, email_type):
+        CoreCase().case_core_email_type_get(email_type)
 
-    def test_core_email_out_get(self):
-        CoreCase().case_core_email_out_get()
-
-    @pytest.mark.skip   # fixme: изменение настроек
-    def test_core_email_in_post(self):
-        CoreCase().case_core_email_in_post()
-
-    @pytest.mark.skip   # fixme: изменение настроек
-    def test_core_email_out_post(self):
-        CoreCase().case_core_email_out_post()
+    @pytest.mark.parametrize('email_type', ["in", "out"])
+    def test_core_email_type_post(self, email_type):
+        CoreCase().case_core_email_type_post(email_type)
 
     def test_core_flag_get(self):
         CoreCase().case_core_flag_get()
@@ -273,118 +297,262 @@ class TestCore:
     def test_core_ip_get(self):
         CoreCase().case_core_ip_get()
 
-    def test_core_nodes_list_ml_get(self):
-        CoreCase().case_core_nodes_list_ml_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_nodes_delete_what_post(self):
+        CoreCase().case_core_nodes_delete_what_post()
 
-    def test_core_nodes_list_picker_get(self):
-        CoreCase().case_core_nodes_list_picker_get()
+    @pytest.mark.parametrize('what', [
+        "ml",
+        "picker",
+        "servicedb",
+        "datastore"
+    ])
+    def test_core_nodes_list_what_get(self, what):
+        CoreCase().case_core_nodes_list_what_get(what)
 
-    def test_core_nodes_list_servicedb_get(self):
-        CoreCase().case_core_nodes_list_servicedb_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_nodes_test_what_post(self):
+        CoreCase().case_core_nodes_test_what_post()
 
-    def test_core_nodes_list_datastore_get(self):
-        CoreCase().case_core_nodes_list_datastore_get()
+    @pytest.mark.parametrize('what', [
+        "ml",
+        "picker",
+        "servicedb",
+        "datastore"
+    ])
+    def test_core_nodes_what_get(self, what):
+        CoreCase().case_core_nodes_what_get(what)
 
-    def test_core_nodes_ml_get(self):
-        CoreCase().case_core_nodes_ml_get()
+    @pytest.mark.skip   # todo: empty
+    @pytest.mark.parametrize('what', [
+        "ml",
+        "picker",
+        "servicedb",
+        "datastore"
+    ])
+    def test_core_nodes_what_post(self, what):
+        CoreCase().case_core_nodes_what_post(what)
 
-    def test_core_nodes_picker_get(self):
-        CoreCase().case_core_nodes_picker_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_save_get(self):
+        CoreCase().case_core_save_get()
 
-    def test_core_nodes_servicedb_get(self):
-        CoreCase().case_core_nodes_servicedb_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_get(self):
+        CoreCase().case_core_secrets_get()
 
-    def test_core_nodes_datastore_get(self):
-        CoreCase().case_core_nodes_datastore_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_post(self):
+        CoreCase().case_core_secrets_post()
 
-    def test_core_service_dp_alarmer_restart_get(self):
-        CoreCase().case_core_service_dp_alarmer_restart_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_id_get(self):
+        CoreCase().case_core_secrets_id_get()
 
-    def test_core_service_dp_auth_restart_get(self):
-        CoreCase().case_core_service_dp_auth_restart_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_id_put(self):
+        CoreCase().case_core_secrets_id_put()
 
-    # "code":400
-    def test_core_service_dp_core_restart_get(self):
-        CoreCase().case_core_service_dp_core_restart_get()
+    @pytest.mark.skip   # todo: empty
+    def test_core_secrets_id_delete(self):
+        CoreCase().case_core_secrets_id_delete()
 
-    def test_core_service_dp_licenser_restart_get(self):
-        CoreCase().case_core_service_dp_licenser_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_alarmer_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_alarmer", action)
 
-    def test_core_service_dp_log_eater_restart_get(self):
-        CoreCase().case_core_service_dp_log_eater_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_auth_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_auth", action)
 
-    def test_core_service_dp_monitor_restart_get(self):
-        CoreCase().case_core_service_dp_monitor_restart_get()
+    @pytest.mark.parametrize('action', [
+        pytest.param("stop", marks=pytest.mark.xfail),
+        pytest.param("restart", marks=pytest.mark.xfail)
+        ])
+    def test_core_service_dp_core_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_core", action)
 
-    def test_core_service_dp_peopler_restart_get(self):
-        CoreCase().case_core_service_dp_peopler_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_licenser_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_licenser", action)
 
-    # "code":400
-    def test_core_service_dp_permitter_restart_get(self):
-        CoreCase().case_core_service_dp_permitter_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_log_eater_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_log_eater", action)
 
-    # "code":400
-    def test_core_service_dp_postgres_single_restart_get(self):
-        CoreCase().case_core_service_dp_postgres_single_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_monitor_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_monitor", action)
 
-    def test_core_service_dp_taskplan_restart_get(self):
-        CoreCase().case_core_service_dp_taskplan_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_peopler_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_peopler", action)
 
-    def test_core_service_dp_updater_restart_get(self):
-        CoreCase().case_core_service_dp_updater_restart_get()
+    @pytest.mark.parametrize('action', [
+        pytest.param("stop", marks=pytest.mark.xfail),
+        pytest.param("restart", marks=pytest.mark.xfail)
+        ])
+    def test_core_service_dp_permitter_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_permitter", action)
 
-    def test_core_service_dp_absorber_restart_get(self):
-        CoreCase().case_core_service_dp_absorber_restart_get()
+    @pytest.mark.parametrize('action', [
+        pytest.param("stop", marks=pytest.mark.xfail),
+        pytest.param("restart", marks=pytest.mark.xfail)
+        ])
+    def test_core_service_dp_postgres_single_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_postgres_single", action)
 
-    def test_core_service_dp_picker_restart_get(self):
-        CoreCase().case_core_service_dp_picker_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_taskplan_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_taskplan", action)
 
-    def test_core_service_dp_storage_single_restart_get(self):
-        CoreCase().case_core_service_dp_storage_single_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_updater_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_updater", action)
 
-    def test_core_service_dp_storage_worker_restart_get(self):
-        CoreCase().case_core_service_dp_storage_worker_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_absorber_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_absorber", action)
 
-    def test_core_service_dp_ml_get(self):
-        CoreCase().case_core_service_dp_ml_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_picker_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_picker", action)
 
-    def test_core_service_dp_scripter_restart_get(self):
-        CoreCase().case_core_service_dp_scripter_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_storage_single_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_storage_single", action)
 
-    def test_core_service_dp_datapie_baker_restart_get(self):
-        CoreCase().case_core_service_dp_datapie_baker_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_storage_worker_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_storage_worker", action)
 
-    def test_core_service_dp_elements_eater_restart_get(self):
-        CoreCase().case_core_service_dp_elements_eater_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_ml_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_ml", action)
 
-    # "code":400
-    def test_core_service_dp_frontend_restart_get(self):
-        CoreCase().case_core_service_dp_frontend_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_scripter_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_scripter", action)
 
-    def test_core_service_dp_reporter_restart_get(self):
-        CoreCase().case_core_service_dp_reporter_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_datapie_baker_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_datapie_baker", action)
 
-    def test_core_service_dp_rm_cook_restart_get(self):
-        CoreCase().case_core_service_dp_rm_cook_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_elements_eater_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_elements_eater", action)
 
-    def test_core_service_dp_rm_ml_restart_get(self):
-        CoreCase().case_core_service_dp_rm_ml_restart_get()
+    @pytest.mark.parametrize('action', [
+        pytest.param("stop", marks=pytest.mark.xfail),
+        pytest.param("restart", marks=pytest.mark.xfail)
+        ])
+    def test_core_service_dp_frontend_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_frontend", action)
 
-    def test_core_service_dp_screener_restart_get(self):
-        CoreCase().case_core_service_dp_screener_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_reporter_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_reporter", action)
 
-    def test_core_service_dp_visualisation_restart_get(self):
-        CoreCase().case_core_service_dp_visualisation_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_rm_cook_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_rm_cook", action)
 
-    def test_core_service_dp_xba_cook_restart_get(self):
-        CoreCase().case_core_service_dp_xba_cook_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_rm_ml_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_rm_ml", action)
 
-    def test_core_service_dp_xba_py_restart_get(self):
-        CoreCase().case_core_service_dp_xba_py_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_screener_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_screener", action)
 
-    @pytest.mark.skip   # стенд не тянет этот метод!
-    def test_core_service_all_restart_get(self):
-        CoreCase().case_core_service_all_restart_get()
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_visualisation_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_visualisation", action)
+
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_xba_cook_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_xba_cook", action)
+
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_dp_xba_py_action_get(self, action):
+        CoreCase().case_core_service_what_action_get("dp_xba_py", action)
+
+    @pytest.mark.skip(reason="стенд не тянет этот метод!")
+    @pytest.mark.parametrize('action', [
+        "stop",
+        "restart"
+        ])
+    def test_core_service_all_restart_get(self, action):
+        CoreCase().case_core_service_all_restart_get(action)
 
     def test_core_sid_get(self):
         CoreCase().case_core_sid_get()
@@ -392,7 +560,6 @@ class TestCore:
     def test_core_syslog_get(self):
         CoreCase().case_core_syslog_get()
 
-    @pytest.mark.skip  # fixme: изменение настроек
     def test_core_syslog_post(self):
         CoreCase().case_core_syslog_post()
 
@@ -411,8 +578,16 @@ class TestLicenser:
     def test_licenser_activate_post(self):
         LicenserCase().case_licenser_activate_post()
 
+    @pytest.mark.skip       # TODO: empty
+    def test_licenser_file_activate_post(self):
+        LicenserCase().case_licenser_file_activate_post()
+
     def test_licenser_license_info_get(self):
         LicenserCase().case_licenser_license_info_get()
+
+    @pytest.mark.skip       # TODO: empty
+    def test_licenser_set_company_post(self):
+        LicenserCase().case_licenser_set_company_post()
 
 
 class TestLogEater:
@@ -726,6 +901,34 @@ class TestStorageWorker:
     def test_storage_worker_ask_plain_sql_post(self):
         StorageWorkerCase().case_storage_worker_ask_plain_sql_post()
 
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_get(self):
+        StorageWorkerCase().case_storage_worker_backups_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_table_db_name_table_name_post(self):
+        StorageWorkerCase().case_storage_worker_backups_table_db_name_table_name_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_get(self):
+        StorageWorkerCase().case_storage_worker_backups_id_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_delete(self):
+        StorageWorkerCase().case_storage_worker_backups_id_delete()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_download_get(self):
+        StorageWorkerCase().case_storage_worker_backups_id_download_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_id_restore_post(self):
+        StorageWorkerCase().case_storage_worker_backups_id_restore_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_backups_type_upload_post(self):
+        StorageWorkerCase().case_storage_worker_backups_type_upload_post()
+
     def test_storage_worker_import_rules_get(self):
         StorageWorkerCase().case_storage_worker_import_rules_get()
 
@@ -737,6 +940,10 @@ class TestStorageWorker:
 
     def test_storage_worker_psevdo_namer_regs_pid_get(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_psevdo_namer_regs_pid_put(self):
+        StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_put()
 
     def test_storage_worker_psevdo_namer_regs_pid_delete(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_delete()
@@ -797,8 +1004,17 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
+    @pytest.mark.skip   # fixme: check for DB existing
     def test_storage_worker_storage_table_db_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_post(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_view_db_name_post(self):
+        StorageWorkerCase().case_storage_worker_storage_view_db_name_post()
 
     @pytest.mark.skip   # fixme: неверно передаются параметры
     def test_storage_worker_storage_table_columns_db_name_table_name_post(self):
@@ -807,8 +1023,20 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_db_name_table_name_ttl_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_ttl_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_ttl_put(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_ttl_put()
+
     def test_storage_worker_storage_table_db_name_table_name_count_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_count_get()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_column_name_delete(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_column_name_delete()
+
+    @pytest.mark.skip   # todo: empty
+    def test_storage_worker_storage_table_db_name_table_name_delete(self):
+        StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_delete()
 
 
 class TestXbaCook:
@@ -828,9 +1056,6 @@ class TestXbaCook:
 
     def test_xba_cook_check_entity_type_post(self):
         XbaCookCase().case_xba_cook_check_entity_type_post()
-
-    def test_xba_cook_dashboard_post(self):
-        XbaCookCase().case_xba_cook_dashboard_post()
 
     def test_xba_cook_dashboard_entities_post(self):
         XbaCookCase().case_xba_cook_dashboard_entities_post()
@@ -900,7 +1125,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
 
-    @pytest.mark.skip   # fixme: хк
+    # fixme: хк
     def test_xba_cook_profiles_graph_drilldown_34_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
 
@@ -979,6 +1204,10 @@ class TestXbaCook:
 
     def test_xba_cook_xba_get(self):
         XbaCookCase().case_xba_cook_xba_get()
+
+    @pytest.mark.skip   # TODO: empty
+    def case_xba_cook_set_log_level_xba_py_mode_post(self):
+        XbaCookCase().case_xba_cook_set_log_level_xba_py_mode_post()
 
     def test_xba_cook_xba_post(self):
         XbaCookCase().case_xba_cook_xba_post()
@@ -1180,7 +1409,7 @@ class TestTaskplan:
     def test_taskplan_add_task_post(self):
         TaskplanCase().case_taskplan_add_task_post()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # TODO: check
     def test_taskplan_delete_task(self):
         TaskplanCase().case_taskplan_delete_task()
 
@@ -1193,14 +1422,22 @@ class TestUpdater:
     def test_updater_additions_get(self):
         UpdaterCase().case_updater_additions_get()
 
-    def test_updater_additions_addition_delete(self):
-        UpdaterCase().case_updater_additions_addition_delete()
-
     def test_updater_additions_addition_post(self):
         UpdaterCase().case_updater_additions_addition_post()
 
+    def test_updater_additions_addition_delete(self):
+        UpdaterCase().case_updater_additions_addition_delete()
+
     def test_updater_check_updates_get(self):
         UpdaterCase().case_updater_check_updates_get()
+
+    @pytest.mark.skip   # todo: check
+    def test_updater_update_post(self):
+        UpdaterCase().case_updater_update_post()
+
+    @pytest.mark.skip   # todo: check
+    def test_updater_update_from_archive_post(self):
+        UpdaterCase().case_updater_update_from_archive_post()
 
     def test_updater_versions_get(self):
         UpdaterCase().case_updater_versions_get()
@@ -1214,6 +1451,7 @@ class TestVisualisation:
     def test_visualisation_query_do_query_id_post(self):
         VisualisationCase().case_visualisation_query_do_query_id_post()
 
+    # fixme: хк Weather_all_online
     def test_visualisation_query_save_post(self):
         VisualisationCase().case_visualisation_query_save_post()
 
@@ -1232,6 +1470,10 @@ class TestVisualisation:
     def test_visualisation_reports_get(self):
         VisualisationCase().case_visualisation_reports_get()
 
+    @pytest.mark.skip   # todo: empty
+    def test_visualisation_reports_params_report_id_post(self):
+        VisualisationCase().case_visualisation_reports_params_report_id_post()
+
     def test_visualisation_reports_report_id_get(self):
         VisualisationCase().case_visualisation_reports_report_id_get()
 
@@ -1246,6 +1488,10 @@ class TestVisualisation:
 
     def test_visualisation_visualisation_dataseries_visualisation_id_post(self):
         VisualisationCase().case_visualisation_visualisation_dataseries_visualisation_id_post()
+
+    @pytest.mark.skip   # todo: empty
+    def test_visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete(self):
+        VisualisationCase().case_visualisation_visualisation_dataseries_visualisation_id_dataseries_id_delete()
 
     def test_visualisation_visualisation_types_get(self):
         VisualisationCase().case_visualisation_visualisation_types_get()
