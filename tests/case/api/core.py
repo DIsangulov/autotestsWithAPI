@@ -3,17 +3,16 @@ import os
 from req.Helpers.user_session import UserSession
 from req.Api.req_core import Core
 
-# active directory creds
 AD_USER = "dataplan@ngrsoftlab.ru"
 AD_PASS = "d8hELYed9L809RB9FkSO!"
 AD_HOST = "192.168.189.2"
 AD_PORT_TLS = 636
 AD_base_dn = "OU=Employees,DC=ngrsoftlab,DC=ru"
 
-# ssh creds # .5.16
-ssh_pass = "R3U7zYiyxVFtUq8QvRAJ"   # fixme: wrong
+# .5.16
+SSH_USER = "dataplan"
+SSH_PASS = "]e^hGW%k1y^t#]^rij)@"
 
-# post mailing creds
 MAIL_USER = "svc_ngr_mail@ngrsoftlab.ru"
 MAIL_PASS = "8327kHLHsfohn;hksjkfou!"
 MAIL_HOST = "NGR-Exchange01.ngrsoftlab.ru"
@@ -173,18 +172,20 @@ class CoreCase(UserSession):
         # front: /settings/common
         # Изменение настроек "Административный узел"
 
+        # Тестовое соединение, для проверки корректности настроек, перед применением
+        self.case_core_common_test_post()
+
         req = Core(self.sess, self.host)
         req.sess.headers.update({'skey': "ANGARA"})
-
         body = {
             "XMLName": {"Space": "", "Local": "common"},
-            "sessions": "7|day",        # todo: формат отправки
+            "admin_ssh_user": SSH_USER,
+            "admin_ssh_password": SSH_PASS,
+            "sessions": "7|day",    # # |day|minute|hour
             "ml": "",
             "query": "",
             "diagram": "",
             "report": "",
-            "admin_ssh_user": "dataplan",
-            "admin_ssh_password": ssh_pass,
             "msg_language": ""
         }
         resp = req.core_common_post(body)
@@ -192,57 +193,31 @@ class CoreCase(UserSession):
 
     def case_core_common_test_post(self):
         req = Core(self.sess, self.host)
-
         req.sess.headers.update({'skey': "ANGARA"})
         body = {
             "XMLName": {"Space": "", "Local": "common"},
-            "sessions": "7|day",
+            "admin_ssh_user": SSH_USER,
+            "admin_ssh_password": SSH_PASS,
+            "sessions": "7|day",    # |day|minute|hour
             "ml": "",
             "query": "",
             "diagram": "",
             "report": "",
-            "admin_ssh_user": "dataplan",
-            "admin_ssh_password": ssh_pass,
             "msg_language": ""
         }
         resp = req.core_common_test_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_core_component_ml_restart_get(self):
+    def case_core_component_what_action_node_get(self, what, action, node):
         req = Core(self.sess, self.host)
-
-        what = "ml"
-        action = "restart"
-        node = "0"
         resp = req.core_component_what_action_node(what, action, node)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def case_core_component_picker_restart_get(self):
-        req = Core(self.sess, self.host)
-
-        what = "picker"
-        action = "restart"
-        node = "0"
-        resp = req.core_component_what_action_node(what, action, node)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def case_core_component_servicedb_restart_get(self):
-        req = Core(self.sess, self.host)
-
-        what = "servicedb"
-        action = "restart"
-        node = "0"
-        resp = req.core_component_what_action_node(what, action, node)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def core_component_datastore_restart_get(self):
-        req = Core(self.sess, self.host)
-
-        what = "datastore"
-        action = "restart"
-        node = "0"
-        resp = req.core_component_what_action_node(what, action, node)
-        assert resp.status_code == 400, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200, \
+            f"""Ошибка,
+            what: {what}"
+            action: {action}"
+            node: {node}"
+            status_code: {resp.status_code}"
+            resp: {resp.text}"""
 
     def case_core_download_settings_get(self):
         req = Core(self.sess, self.host)
@@ -323,7 +298,6 @@ class CoreCase(UserSession):
         resp = req.core_ip_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # TODO: [POST] /back/dp.core/nodes/delete/{what}
     def case_core_nodes_delete_what_post(self):
         req = Core(self.sess, self.host)
 
@@ -341,14 +315,13 @@ class CoreCase(UserSession):
         resp = req.core_nodes_list_what_get(what)
         assert resp.status_code == 200, f"Ошибка, what: {what} код: {resp.status_code}, {resp.text}"
 
-    # TODO: empty
     def case_core_nodes_test_what_post(self):
         req = Core(self.sess, self.host)
 
         what = "ml"     # TODO: ml/picker/servicedb/datastore
         data = {}
 
-        resp = req.core_nodes_test_what_post(data)
+        resp = req.core_nodes_test_what_post(what, data)
         print(resp.text)
         assert False
 
@@ -485,27 +458,24 @@ class CoreCase(UserSession):
         resp = req.core_syslog_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # fixme: не перебить настройки
     def case_core_syslog_post(self):
+        # front: /settings/sys
+        # !Изменение настроект Syslog
         req = Core(self.sess, self.host)
 
         body = {
             "destinations": [
                 {
-                    "XMLName": {
-                        "Space": "",
-                        "Local": "destination"
-                    },
+                    "disable_email": False,
+                    "disable_syslog": False,
                     "email": "",
-                    "syslog_host": "10.130.0.22",
-                    "syslog_port": 6514,
+                    "syslog_host": "127.0.0.1",
+                    "syslog_port": 4445,
                     "syslog_protocol": "tcp"
                 },
                 {
-                    "XMLName": {
-                        "Space": "",
-                        "Local": "destination"
-                    },
+                    "disable_email": False,
+                    "disable_syslog": False,
                     "email": "",
                     "syslog_host": "127.0.0.1",
                     "syslog_port": 8000,

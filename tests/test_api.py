@@ -250,26 +250,29 @@ class TestCore:
     def test_core_common_get(self):
         CoreCase().case_core_common_get()
 
-    @pytest.mark.skip   # fixme: изменение настроек
     def test_core_common_post(self):
         CoreCase().case_core_common_post()
 
     def test_core_common_test_post(self):
         CoreCase().case_core_common_test_post()
 
-    def test_core_component_ml_restart_get(self):
-        CoreCase().case_core_component_ml_restart_get()
+    @pytest.mark.parametrize('what,action,node', [
+        ("ml", "stop", "0"),
+        ("ml", "restart", "0"),
 
-    def test_core_component_picker_restart_get(self):
-        CoreCase().case_core_component_picker_restart_get()
+        ("picker", "stop", "0"),
+        ("picker", "restart", "0"),
 
-    # "code":400
-    def test_core_component_servicedb_restart_get(self):  # считаем 400 ответ правильным, система не даст перезапустить
-        CoreCase().case_core_component_servicedb_restart_get()
+        pytest.param("servicedb", "stop", "0", marks=pytest.mark.xfail),
+        pytest.param("servicedb", "restart", "0", marks=pytest.mark.xfail),
+        # look: {"error":{"code":400,"msg":"Неверные параметры"}}
 
-    # "code":400
-    def test_core_component_datastore_restart_get(self):
-        CoreCase().core_component_datastore_restart_get()
+        pytest.param("datastore", "stop", "0", marks=pytest.mark.xfail),
+        pytest.param("datastore", "restart", "0", marks=pytest.mark.xfail),
+        # look: {"error":{"code":400,"msg":"Неверные параметры"}}
+    ])
+    def test_core_component_what_action_node_get(self, what, action, node):
+        CoreCase().case_core_component_what_action_node_get(what, action, node)
 
     def test_core_download_settings_get(self):
         CoreCase().case_core_download_settings_get()
@@ -543,7 +546,7 @@ class TestCore:
     def test_core_service_dp_xba_py_action_get(self, action):
         CoreCase().case_core_service_what_action_get("dp_xba_py", action)
 
-    @pytest.mark.skip   # стенд не тянет этот метод!
+    @pytest.mark.skip(reason="стенд не тянет этот метод!")
     @pytest.mark.parametrize('action', [
         "stop",
         "restart"
@@ -557,7 +560,6 @@ class TestCore:
     def test_core_syslog_get(self):
         CoreCase().case_core_syslog_get()
 
-    @pytest.mark.skip  # fixme: изменение настроек
     def test_core_syslog_post(self):
         CoreCase().case_core_syslog_post()
 
@@ -1123,7 +1125,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
 
-    @pytest.mark.skip   # fixme: хк
+    # fixme: хк
     def test_xba_cook_profiles_graph_drilldown_34_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
 
