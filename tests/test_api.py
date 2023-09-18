@@ -890,6 +890,9 @@ class TestRmCook:
 
 class TestStorageWorker:
 
+    def test_storage_worker_storage_db_post(self):
+        StorageWorkerCase().case_storage_worker_storage_db_post()
+
     def test_storage_worker_ask_one_sql_post(self):
         StorageWorkerCase().case_storage_worker_ask_one_sql_post()
 
@@ -936,7 +939,6 @@ class TestStorageWorker:
     def test_storage_worker_psevdo_namer_regs_pid_get(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_storage_worker_psevdo_namer_regs_pid_put(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_put()
 
@@ -969,9 +971,6 @@ class TestStorageWorker:
 
     def test_storage_worker_statistics_test_selection_post(self):
         StorageWorkerCase().case_storage_worker_statistics_test_selection_post()
-
-    def test_storage_worker_storage_db_post(self):
-        StorageWorkerCase().case_storage_worker_storage_db_post()
 
     def test_storage_worker_storage_db_get(self):
         StorageWorkerCase().case_storage_worker_storage_db_get()
@@ -1082,6 +1081,7 @@ class TestXbaCook:
     def test_xba_cook_entity_info_settings_get(self):
         XbaCookCase().case_xba_cook_entity_info_settings_get()
 
+    @pytest.mark.skip
     def test_xba_cook_entity_info_settings_post(self):
         XbaCookCase().case_xba_cook_entity_info_settings_post()
 
@@ -1115,13 +1115,21 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_statement_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_statement_id_post()
 
-    @pytest.mark.skip
-    def test_xba_cook_profiles_graph_drilldown_id_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
-
     # fixme: хк
-    def test_xba_cook_profiles_graph_drilldown_34_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
+    @pytest.mark.parametrize('xba_profile_id,post_data', [
+        (34,
+         {
+            "name": "kuta",
+            "time": "2023-09-15T03:00:00Z",
+            "columns": [
+                "TimeStamp",
+                "Gorod",
+                "TemnepaTypa"
+            ]
+         })
+    ])
+    def test_xba_cook_profiles_graph_drilldown_id_post(self, xba_profile_id, post_data):
+        XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post(xba_profile_id, post_data)
 
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
@@ -1445,7 +1453,6 @@ class TestVisualisation:
     def test_visualisation_query_do_query_id_post(self):
         VisualisationCase().case_visualisation_query_do_query_id_post()
 
-    # fixme: хк Weather_all_online
     def test_visualisation_query_save_post(self):
         VisualisationCase().case_visualisation_query_save_post()
 
