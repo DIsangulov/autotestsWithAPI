@@ -337,23 +337,18 @@ class TestCore:
     def test_core_save_get(self):
         CoreCase().case_core_save_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_get(self):
         CoreCase().case_core_secrets_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_post(self):
         CoreCase().case_core_secrets_post()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_id_get(self):
         CoreCase().case_core_secrets_id_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_id_put(self):
         CoreCase().case_core_secrets_id_put()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_id_delete(self):
         CoreCase().case_core_secrets_id_delete()
 
@@ -1004,7 +999,6 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
-    @pytest.mark.skip   # fixme: check for DB existing
     def test_storage_worker_storage_table_db_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
 

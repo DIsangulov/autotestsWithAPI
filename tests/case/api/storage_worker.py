@@ -430,12 +430,9 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    # FIXME: падает GL
-    # Неверный синтаксис запроса или ошибка соединения (c)
-    # .."msg": "Ошибка создания view"}}
     def case_storage_worker_storage_table_columns_db_name_table_name_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DB_picker_tables.name  # FIXME: picker_tables >> test_db
+        db_name = DB_picker_tables.name
         table_name = "ad_groups_ngr"    # FIXME: table_name rel db_name
         data = [
             {"name": "Nopt", "dtype": "DateTime", "alias": "псевдоним", "mask_it": False},
@@ -446,14 +443,16 @@ class StorageWorkerCase(UserSession):
             {"name": "type", "alias": "", "table_name": "ad_groups_ngr", "database_name": "picker_tables", "dtype": "UInt32", "mask_it": False}
         ]
         resp = req.storage_worker_storage_table_columns_db_name_table_name_post(db_name, table_name, data)
+        # Неверный синтаксис запроса или ошибка соединения (c)
+        # .."msg": "Ошибка создания view"}}
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_storage_table_db_name_post(self):
+        # Создать новую таблицу для БД
         req = StorageWorker(self.sess, self.host)
 
-        # fixme: check for DB existing
         db_name = API_TEST_DB_STABLE
+        assert self.check_db_is_exists(db_name), f"Не удалось найти БД с именем {API_TEST_DB_STABLE}\n"
 
         db_tab_name = "Stones_" + get_str_random_num()
 
