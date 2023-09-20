@@ -786,8 +786,28 @@ class TestPermitter:
     def test_permitter_users_elements_count_who_id_get(self):
         PermitterCase().case_permitter_users_elements_count_who_id_get()
 
-    def test_permitter_users_new_author_who_id(self):
-        PermitterCase().case_permitter_users_new_author_who_id_post()
+    @pytest.mark.parametrize('who_id,post_data', [
+        (PeoplerCase().get_auto_test_user_id(),
+         {
+             "delete": False,
+             "new_author": PeoplerCase().get_self_user_id()
+         }),
+
+        # DAT-5599
+        (PeoplerCase().get_auto_test_user_id(),
+         {
+             "delete": False,
+             "new_author": None
+         }),
+
+        (PeoplerCase().get_auto_test_user_id(),
+         {
+             "delete": True,
+             "new_author": None
+         }),
+    ])
+    def test_permitter_users_new_author_who_id(self, who_id, post_data):
+        PermitterCase().case_permitter_users_new_author_who_id_post(who_id, post_data)
 
     def test_permitter_user_rules_who_id_get(self):
         PermitterCase().case_permitter_user_rules_who_id_get()
