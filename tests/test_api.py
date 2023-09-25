@@ -85,11 +85,11 @@ class TestAbsorber:
     def test_absorber_library_connector_id_delete(self):
         AbsorberCase().case_absorber_library_connector_id_delete()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_absorber_library_external_driver_post(self):
         AbsorberCase().case_absorber_library_external_driver_post()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_absorber_library_external_pattern_post(self):
         AbsorberCase().case_absorber_library_external_pattern_post()
 
@@ -120,9 +120,10 @@ class TestAbsorber:
     def test_absorber_source_id_get(self):
         AbsorberCase().case_absorber_source_id_get()
 
-    @pytest.mark.skip   # fixme:
-    def test_absorber_source_id_debug_get(self):
-        AbsorberCase().case_absorber_source_id_debug_get()
+    # fixme: хк, предусловия: источник: включен режим отладки
+    @pytest.mark.parametrize('source_id', [46])
+    def test_absorber_source_id_debug_get(self, source_id):
+        AbsorberCase().case_absorber_source_id_debug_get(source_id)
 
     def test_absorber_source_id_log_get(self):
         AbsorberCase().case_absorber_source_id_log_get()
@@ -136,18 +137,18 @@ class TestAlarmer:
     def test_alarmer_alert_service_names_get(self):
         AlarmerCase().case_alarmer_alert_service_names_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_alarmer_email_server_post(self):
         AlarmerCase().case_alarmer_email_server_post()
 
     def test_alarmer_email_server_get(self):
         AlarmerCase().case_alarmer_email_server_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_alarmer_email_server_id_get(self):
         AlarmerCase().case_alarmer_email_server_id_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_alarmer_email_server_id_delete(self):
         AlarmerCase().case_alarmer_email_server_id_delete()
 
@@ -998,14 +999,11 @@ class TestStorageWorker:
     def test_storage_worker_storage_db_put(self):
         StorageWorkerCase().case_storage_worker_storage_db_put()
 
-    def test_storage_worker_storage_db_delete(self):
-        StorageWorkerCase().case_storage_worker_storage_db_delete()
-
-    @pytest.mark.skip
+    # ! Кейс не отправляет реальные данные, только смотрит, что api отзывается
     def test_storage_worker_storage_import_csv_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_import_csv_db_name_table_name_post()
 
-    @pytest.mark.skip
+    # ! Кейс не отправляет реальные данные, только смотрит, что api отзывается
     def test_storage_worker_storage_import_json_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_import_json_db_name_table_name_post()
 
@@ -1050,6 +1048,9 @@ class TestStorageWorker:
     @pytest.mark.skip   # todo: empty
     def test_storage_worker_storage_table_db_name_table_name_delete(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_delete()
+
+    def test_storage_worker_storage_db_delete(self):
+        StorageWorkerCase().case_storage_worker_storage_db_delete()
 
 
 class TestXbaCook:
@@ -1101,7 +1102,7 @@ class TestXbaCook:
     def test_xba_cook_entity_info_settings_get(self):
         XbaCookCase().case_xba_cook_entity_info_settings_get()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # todo: DAT-5679
     def test_xba_cook_entity_info_settings_post(self):
         XbaCookCase().case_xba_cook_entity_info_settings_post()
 

@@ -1,28 +1,41 @@
-import datetime
 import json
 import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_storage_worker import StorageWorker
 from resourses.constants import DB_picker_tables, DB_Shallow, API_AUTO_TEST_
+from resourses.static_methods import get_str_random_num
 from tests.case.api.permitter import PermitterCase
 
 # Предполагается, что хранилище будет создаваться и удаляться
 API_TEST_DB_BLINKING = "API_TEST_DB_BLINKING"
 
+API_TEST_TAB_PREFIX = "Stones_"
+test_db_tables = {
+    # db_name: []table_name
+    API_TEST_DB_BLINKING: [],
+    DB_Shallow.name: []
+}
+
 reg_pid = set()        # список, содержащий id новосозданных регулярных выражений
 
 
-def get_datetime_now_z() -> str:
-    # 2023-07-20T17:04:16Z
-    return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
-
-
-def get_str_random_num(length: int = 4) -> str:
-    return str(random.randint(int(10**(length-1)), int(10**length-1)))
-
-
 class StorageWorkerCase(UserSession):
+
+    def _get_random_test_table_name(self, db_name: str = DB_Shallow.name) -> str:
+        """Получение имени тестовой таблицы (в тестовой БД); либо создание новой"""
+        assert db_name in (DB_Shallow.name, API_TEST_DB_BLINKING), f"Попытка работы вне тестовой БД, db_name: {db_name}"
+
+        # TODO: сбор уже существующих таблиц # _collect
+        #   get_table_names . startswith(API_TEST_TAB_PREFIX)
+
+        if len(test_db_tables.get(db_name)) == 0:
+            # создать новую таблицу
+            new_test_table_name = API_TEST_TAB_PREFIX + get_str_random_num(5)
+            self.case_storage_worker_storage_table_db_name_post(db_name, new_test_table_name)
+            return new_test_table_name
+
+        return ""
 
     def _collect_reg_pid(self):
         resp = StorageWorker(self.sess, self.host).storage_worker_psevdo_namer_regs_get()
@@ -383,25 +396,22 @@ class StorageWorkerCase(UserSession):
         db_name = API_TEST_DB_BLINKING
         resp = req.storage_worker_storage_db_delete(db_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_storage_import_csv_db_name_table_name_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DB_picker_tables.name
-        table_name = "ad_groups_ngr"
+        db_name = DB_Shallow.name
+        table_name = DB_Shallow.tab_boulder_general
         data = {"data": None}
         resp = req.storage_worker_storage_import_csv_db_name_table_name_post(db_name, table_name, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_storage_import_json_db_name_table_name_post(self):
         req = StorageWorker(self.sess, self.host)
-        db_name = DB_picker_tables.name
-        table_name = "ad_groups_ngr"
+        db_name = DB_Shallow.name
+        table_name = DB_Shallow.tab_boulder_general
         data = {"data": None}
         resp = req.storage_worker_storage_import_json_db_name_table_name_post(db_name, table_name, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_storage_worker_storage_supported_engines_get(self):
         req = StorageWorker(self.sess, self.host)
@@ -441,14 +451,16 @@ class StorageWorkerCase(UserSession):
         # .."msg": "Ошибка создания view"}}
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_storage_worker_storage_table_db_name_post(self):
-        # Создать новую таблицу для БД
+    def case_storage_worker_storage_table_db_name_post(self,
+                                                       db_name: str = DB_Shallow.name,
+                                                       db_tab_name: str = API_TEST_TAB_PREFIX + get_str_random_num()):
+        """В хранилище 'db_name', создать новую таблицу 'db_tab_name'"""
         req = StorageWorker(self.sess, self.host)
 
-        db_name = DB_Shallow.name
+        # db_name = DB_Shallow.name
         assert self.check_db_is_exists(db_name), f"Не удалось найти БД с именем {db_name}\n"
 
-        db_tab_name = "Stones_" + get_str_random_num()
+        # db_tab_name = API_TEST_TAB_PREFIX + get_str_random_num()
 
         data = {
             "auto_read": True,
@@ -477,7 +489,7 @@ class StorageWorkerCase(UserSession):
         }
 
         resp = req.storage_worker_storage_table_db_name_post(db_name, data)
-        # print(resp.text)
+        # print(resp.text)  {"res":"ok"}
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_storage_table_db_name_table_name_post(self):
@@ -502,12 +514,14 @@ class StorageWorkerCase(UserSession):
     def case_storage_worker_storage_table_db_name_table_name_delete(self):
         req = StorageWorker(self.sess, self.host)
 
-        db_name = ""
-        table_name = ""
+        db_name = API_TEST_DB_BLINKING
+        table_name = self._get_random_test_table_name(db_name)
+
+        # TODO: добавить разрешение на удаление таблицы
 
         resp = req.storage_worker_storage_table_db_name_table_name_delete(db_name, table_name)
         print(resp.text)
-        assert False
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_storage_table_db_name_table_name_ttl_get(self):
         req = StorageWorker(self.sess, self.host)

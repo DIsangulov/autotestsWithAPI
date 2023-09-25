@@ -1,24 +1,15 @@
 import json
 import random
-import datetime
 import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
 from resourses.constants import QA_SPAM_EMAIL, DB_picker_tables, DB_Shallow, API_AUTO_TEST_
+from resourses.static_methods import get_datetime_now_z, get_str_random_num
 from tests.case.api.permitter import PermitterCase
 
 xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
-
-
-def get_datetime_now_z() -> str:
-    # 2023-07-20T17:04:16Z
-    return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
-
-
-def get_str_random_num(length: int = 4) -> str:
-    return str(random.randint(int(10**(length-1)), int(10**length-1)))
 
 
 class EntityCategory:
@@ -413,11 +404,11 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_info_settings_post(self):
-        # todo: front: usage
+        # front: /profiles > Настройка справочников
         req = XbaCook(self.sess, self.host)
 
-        db_name = ""
-        db_table = ""
+        db_name = DB_picker_tables.name
+        db_table = "TYPE_SYSNOST_Napitki_d"     # fixme:
 
         self.asserts_check_db_and_table_is_exists(db_name, db_table)
 
@@ -439,7 +430,7 @@ class XbaCookCase(UserSession):
             }
         }
         resp = req.xba_cook_entity_info_settings_post(data)
-        # print(resp.text)
+        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа {resp.text}"
 
@@ -460,13 +451,20 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_entity_risks_description_post(self):
         req = XbaCook(self.sess, self.host)
-        data = {"name": "shchetinin$@angaratech.ru",        # FIXME: хардкод
-                "type": "user",
-                "start": "2023-02-13T00:00:00Z",
-                "end": "2023-02-14T00:00:00Z"}
+        # data = {"name": "shchetinin$@angaratech.ru",        # FIXME: хардкод
+        #         "type": "user",
+        #         "start": "2023-02-13T00:00:00Z",
+        #         "end": "2023-02-14T00:00:00Z"}
+        #
+        data = {
+            "name":     "emerald",
+            "type":     "other",
+            "start":    "2023-08-21T00:00:00Z",
+            "end":      "2023-09-22T23:59:59Z"
+        }
         resp = req.xba_cook_entity_risks_description_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_max_min_post(self):
         req = XbaCook(self.sess, self.host)
@@ -792,7 +790,7 @@ class XbaCookCase(UserSession):
             # "entity_group": "?str(int)"
         }
         resp = req.xba_cook_profiles_id_graph_post(prof_id, data)
-        # print(resp.text)
+        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_id_log_last_get(self):

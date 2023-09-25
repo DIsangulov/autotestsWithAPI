@@ -1,10 +1,10 @@
 import json
 import os
-import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_core import Core
 from resourses.constants import API_AUTO_TEST_
+from resourses.static_methods import get_str_random_num
 
 AD_USER = "dataplan@ngrsoftlab.ru"
 AD_PASS = "d8hELYed9L809RB9FkSO!"
@@ -23,10 +23,6 @@ MAIL_PORT = 587
 
 # TODO: delete all TEST_ secrets
 test_secret_id = set()  # 'id' secrets  # front: /settings/secrets
-
-
-def get_str_random_num(length: int = 4) -> str:
-    return str(random.randint(int(10**(length-1)), int(10**length-1)))
 
 
 class CoreCase(UserSession):

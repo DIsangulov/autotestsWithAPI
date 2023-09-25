@@ -1,13 +1,8 @@
-import datetime
 import json
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_monitor import Monitor
-
-
-def get_datetime_now_z() -> str:
-    # 2023-07-20T17:04:16Z
-    return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
+from resourses.static_methods import get_datetime_now_z
 
 
 def _get_sample_data() -> dict:
