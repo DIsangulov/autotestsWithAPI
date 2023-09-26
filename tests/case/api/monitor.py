@@ -7,7 +7,7 @@ from resourses.static_methods import get_datetime_now_z
 
 def _get_sample_data() -> dict:
     s_data = {
-        "start": "2023-02-13T00:00:00Z",
+        "start": get_datetime_now_z(day_delta=-7),
         "end": get_datetime_now_z(),
         "offset": 0,
         "timeFlag": 0,

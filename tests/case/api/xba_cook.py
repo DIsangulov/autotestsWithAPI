@@ -103,7 +103,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         "time_settings":
             {
                 "time_column": db_time_column,
-                "time_start": "2023-08-18T12:37:00Z",
+                "time_start": get_datetime_now_z(day_delta=-3),
                 "time_end": get_datetime_now_z(),
                 "discretization_period": "hour",    # "minute",
                 # "stat_period": ""
@@ -254,9 +254,9 @@ class XbaCookCase(UserSession):
         # DAT-5251
         req = XbaCook(self.sess, self.host)
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.process    # todo: user|host|process|department|other
+            "entity_category": EntityCategory.other    # todo: user|host|process|department|other
         }
         # data = {}   # :400
         resp = req.xba_cook_dashboard_entities_post(data)
@@ -267,9 +267,9 @@ class XbaCookCase(UserSession):
         # DAT-5251
         req = XbaCook(self.sess, self.host)
         data = {
-            "start": "2023-07-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.host  # todo: user|host|process|department|other
+            "entity_category": EntityCategory.other  # todo: user|host|process|department|other
         }
         # data = {}   # :200
         resp = req.xba_cook_dashboard_entities_more_post(data)
@@ -282,7 +282,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data_keyless = {
-            "start": "2021-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
@@ -307,7 +307,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data_keyless = {
-            "start": "2021-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
@@ -333,7 +333,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,  # 0  # 1-11
@@ -349,7 +349,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,  # 0  # 1-11
@@ -784,13 +784,13 @@ class XbaCookCase(UserSession):
 
         # entity <- [post] /summary <- prof_id
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             # "entity": "?",
             # "entity_group": "?str(int)"
         }
         resp = req.xba_cook_profiles_id_graph_post(prof_id, data)
-        print(resp.text)
+        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_id_log_last_get(self):
@@ -805,7 +805,7 @@ class XbaCookCase(UserSession):
         prof_id = self._get_xba_profile_id()
         data = {
             # "entity_group": "string", # optional,
-            "start": "2022-10-09T00:00:00Z",    # <- get| graph/max_min
+            "start": get_datetime_now_z(day_delta=-1),    # <- get| graph/max_min
             "end": get_datetime_now_z()
         }
         # data = {}
@@ -855,7 +855,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "start": "2022-02-09T00:00:00Z",
+            "start": get_datetime_now_z(day_delta=-7),
             "end": get_datetime_now_z(),
             # todo: проверку на entity_group > отдельным кейсом
             # "entity_group": "other",  # str(int)  # optional
@@ -872,6 +872,7 @@ class XbaCookCase(UserSession):
 
         prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_id_zones_post(prof_id, data)
+        # print(resp.text)
         assert resp.status_code == 200, f"1.Ошибка, код {resp.status_code}, {resp.text}"
         # 400: {"error":{"code":0,"msg":"Code: 81, Message: Database XBA_$prof_id doesn't exist"}}
 

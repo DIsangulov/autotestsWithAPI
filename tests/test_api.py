@@ -609,11 +609,12 @@ class TestPeopler:
     def test_peopler_pin_page_current_user_delete(self):
         PeoplerCase().case_peopler_pin_page_current_user_delete()
 
-    def test_peopler_pin_page_list_role_post(self):
-        PeoplerCase().case_peopler_pin_page_list_role_post()
-
-    def test_peopler_pin_page_list_user_post(self):
-        PeoplerCase().case_peopler_pin_page_list_user_post()
+    @pytest.mark.parametrize('type_subject,path', [
+        ("user", "/scripts"),
+        ("role", "/scripts")
+    ])
+    def test_peopler_pin_page_list_type_subject_post(self, type_subject, path):
+        PeoplerCase().case_peopler_pin_page_list_type_subject_post(type_subject, path)
 
     def test_peopler_pin_page_type_subject_post(self):
         PeoplerCase().case_peopler_pin_page_type_subject_post()
@@ -621,8 +622,11 @@ class TestPeopler:
     def test_peopler_pin_page_type_subject_id_delete(self):
         PeoplerCase().case_peopler_pin_page_type_subject_id_delete()
 
-    def test_peopler_pinned_page_status_post(self):
-        PeoplerCase().case_peopler_pinned_page_status_post()
+    @pytest.mark.parametrize('page_path', [
+        "/scripts"
+    ])
+    def test_peopler_pinned_page_status_post(self, page_path):
+        PeoplerCase().case_peopler_pinned_page_status_post(page_path)
 
     def test_peopler_profile_get(self):
         PeoplerCase().case_peopler_profile_get()
