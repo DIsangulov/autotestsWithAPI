@@ -6,6 +6,7 @@ from resourses.credentials import TestUsers
 from pages.UI._5_RoleMining.rm_settings import RmSettings
 from pages.UI._5_RoleMining.rm_ad_status import AdStatus
 
+from resourses.credentials import TARGET_URL
 from tests.case.ui.auth_ui import AuthCase
 from tests.case.ui.m1_administration.roles_ui import RolesCase
 from tests.case.ui.m1_administration.sessions_ui import SessionsCase
@@ -25,6 +26,14 @@ from tests.case.ui.m3_analytics.query_ui import QueriesCase
 from tests.case.ui.m4_xba.xba_profiles_ui import XbaProfilesCase
 from tests.case.ui.m4_xba.xba_metaprofiles_ui import XbaMetaprofilesCase
 from tests.case.ui.m4_xba.xba_statistics_ui import XbaStatisticsCase
+
+
+@pytest.fixture(autouse=True, scope='session')
+def _print_debug_info():
+    print("\n" + "="*42)
+    print(f"TARGET_URL: {TARGET_URL}")
+    print("="*42 + "\n")
+    yield
 
 
 class SuiteName:

@@ -226,7 +226,6 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_anomalies_picker_max_min_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_xba_cook_check_entity_type_post(self):
         # look: "column": неверные параметры/null в поле, возвращают неочевидный тип ошибки
@@ -404,11 +403,11 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_info_settings_post(self):
-        # front: /profiles > Настройка справочников
+        # front: /profiles > Настройка справочников - заполнить + [сохранить]
         req = XbaCook(self.sess, self.host)
 
         db_name = DB_picker_tables.name
-        db_table = "TYPE_SYSNOST_Napitki_d"     # fixme:
+        db_table = "ad_groups_imported"
 
         self.asserts_check_db_and_table_is_exists(db_name, db_table)
 
@@ -421,49 +420,45 @@ class XbaCookCase(UserSession):
                 "fields_mapping": {
                         "mapping_key_field": "sAMAccountName",
                         "full_name": "name",
-                        "position": "description",
-                        "department": "department",
                         "phone": "mobile",
                         "email": "mail",
-                        "manager": "sn"
+                        "department": "department",
+                        "position": "description",
+                        "manager": "objectClass"
                     }
             }
         }
+
         resp = req.xba_cook_entity_info_settings_post(data)
-        print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа {resp.text}"
 
-    def case_xba_cook_entity_info_settings_entity_type_delete(self):
+    def case_xba_cook_entity_info_settings_entity_type_delete(self, entity_type):
+        # front: /profiles - настройка справочников - [очистить] + [сохранить]
+        # entity_type: user|department|process|other. 'all' to delete everything
         req = XbaCook(self.sess, self.host)
-        entity_type = "name"        # TODO: какие ещё || user|department|process|other. 'all' to delete everything
         resp = req.xba_cook_entity_info_settings_entity_type_delete(entity_type)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_picker_max_min_post(self):
+        # front: /entity/<type>/<name>  # max-min для карточки сущности
         req = XbaCook(self.sess, self.host)
         data = {
-            "name": "user",
-            "type": "user"
+            "name": "emerald",
+            "type": "other"
         }
         resp = req.xba_cook_entity_picker_max_min_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_risks_description_post(self):
         req = XbaCook(self.sess, self.host)
-        # data = {"name": "shchetinin$@angaratech.ru",        # FIXME: хардкод
-        #         "type": "user",
-        #         "start": "2023-02-13T00:00:00Z",
-        #         "end": "2023-02-14T00:00:00Z"}
-        #
         data = {
             "name":     "emerald",
             "type":     "other",
-            "start":    "2023-08-21T00:00:00Z",
-            "end":      "2023-09-22T23:59:59Z"
+            "start":    get_datetime_now_z(day_delta=-4),
+            "end":      get_datetime_now_z(day_delta=-1)
         }
         resp = req.xba_cook_entity_risks_description_post(data)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_max_min_post(self):
@@ -648,6 +643,7 @@ class XbaCookCase(UserSession):
         prof_id_data: dict = json.loads(prof_id_data_resp.text)['res']
         # Привязать метапрофиль 'group_id' к профилю 'prof_id'
         prof_id_data.update({
+            # fixme: получить group_info, потом .append into, cuz group info may be not [empty]
             "group_info": [
                 {
                     "id": group_id,
@@ -675,17 +671,17 @@ class XbaCookCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: FIXME: @mark.skip
-    # нужен профиль с метапрофилем
     def case_xba_cook_profiles_groups_id_max_min_get(self):
         req = XbaCook(self.sess, self.host)
+
+        # нужен метапрофиль с профилем
         _group_id = self._get_xba_group_id()
+
         resp = req.xba_cook_profiles_groups_id_max_min_get(_group_id)
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"error":{"code":400,"description":"no completed profiles in this group","msg":"Нет данных"}}
 
-    # TODO: [DELETE] /back/dp.xba_cook/profiles/groups/{profile_id}/{group_id}
     def case_xba_cook_profiles_groups_profile_id_group_id_delete(self):
         req = XbaCook(self.sess, self.host)
         prof_id = None
@@ -694,13 +690,14 @@ class XbaCookCase(UserSession):
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: mark.skip
     def case_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
+        # изменить вес профиля в метапрофиле
         req = XbaCook(self.sess, self.host)
-        # FIXME: хардкод
+
         prof_id = 2077
         group_id = 1553
         weight = 20
+
         resp = req.xba_cook_profiles_groups_profile_id_group_id_weight_get(prof_id, group_id, weight)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -924,10 +921,8 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_xba_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_set_log_level_xba_py_mode_post(self):
+    def case_xba_cook_set_log_level_xba_py_mode_post(self, mode):
         req = XbaCook(self.sess, self.host)
-
-        mode = "prod"   # todo: prod or dev
 
         data = {}
 

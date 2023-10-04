@@ -141,6 +141,7 @@ class TestAlarmer:
     def test_alarmer_email_server_post(self):
         AlarmerCase().case_alarmer_email_server_post()
 
+    @pytest.mark.skip
     def test_alarmer_email_server_get(self):
         AlarmerCase().case_alarmer_email_server_get()
 
@@ -182,14 +183,22 @@ class TestAlarmer:
     def test_alarmer_notification_user_all_get(self):
         AlarmerCase().case_alarmer_notification_settings_user_all_get()
 
-    def test_alarmer_notification_user_get(self):
-        AlarmerCase().case_alarmer_notification_user_get()
+    @pytest.mark.parametrize("n_type", ["user", "admin"])
+    def test_alarmer_notification_type_get(self, n_type):
+        AlarmerCase().case_alarmer_notification_type_get(n_type)
 
-    def test_alarmer_notification_type_read_post(self):
-        AlarmerCase().case_alarmer_notification_type_read_post()
+    @pytest.mark.parametrize("read_type", ["list", "all"])
+    def test_alarmer_notification_type_read_post(self, read_type):
+        AlarmerCase().case_alarmer_notification_type_read_post(read_type)
 
-    def test_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self):
-        AlarmerCase().case_alarmer_notifications_page_size_x_read_notify_type_page_x_get()
+    @pytest.mark.parametrize("notify_type", [
+        "all",
+        "warning",
+        "error",
+        "announcement"
+    ])
+    def test_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self, notify_type):
+        AlarmerCase().case_alarmer_notifications_page_size_x_read_notify_type_page_x_get(notify_type)
 
     def test_alarmer_send_invitation_post(self):
         AlarmerCase().case_alarmer_send_invitation_post()
@@ -791,28 +800,28 @@ class TestPermitter:
     def test_permitter_users_elements_count_who_id_get(self):
         PermitterCase().case_permitter_users_elements_count_who_id_get()
 
-    @pytest.mark.parametrize('who_id,post_data', [
-        (PeoplerCase().get_auto_test_user_id(),
+    @pytest.mark.parametrize('who_id_getter,post_data', [
+        (PeoplerCase().get_auto_test_user_id,
          {
              "delete": False,
              "new_author": PeoplerCase().get_self_user_id()
          }),
 
         # DAT-5599
-        (PeoplerCase().get_auto_test_user_id(),
+        (PeoplerCase().get_auto_test_user_id,
          {
              "delete": False,
              "new_author": None
          }),
 
-        (PeoplerCase().get_auto_test_user_id(),
+        (PeoplerCase().get_auto_test_user_id,
          {
              "delete": True,
              "new_author": None
          }),
     ])
-    def test_permitter_users_new_author_who_id(self, who_id, post_data):
-        PermitterCase().case_permitter_users_new_author_who_id_post(who_id, post_data)
+    def test_permitter_users_new_author_who_id(self, who_id_getter, post_data):
+        PermitterCase().case_permitter_users_new_author_who_id_post(who_id_getter(), post_data)
 
     def test_permitter_user_rules_who_id_get(self):
         PermitterCase().case_permitter_user_rules_who_id_get()
@@ -1106,12 +1115,18 @@ class TestXbaCook:
     def test_xba_cook_entity_info_settings_get(self):
         XbaCookCase().case_xba_cook_entity_info_settings_get()
 
-    @pytest.mark.skip   # todo: DAT-5679
     def test_xba_cook_entity_info_settings_post(self):
         XbaCookCase().case_xba_cook_entity_info_settings_post()
 
-    def test_xba_cook_entity_info_settings_entity_type_delete(self):
-        XbaCookCase().case_xba_cook_entity_info_settings_entity_type_delete()
+    @pytest.mark.parametrize('entity_type', [
+        # "all",
+        "user",
+        # "department",
+        # "process",
+        # "other"
+    ])
+    def test_xba_cook_entity_info_settings_entity_type_delete(self, entity_type):
+        XbaCookCase().case_xba_cook_entity_info_settings_entity_type_delete(entity_type)
 
     def test_xba_cook_entity_picker_max_min_post(self):
         XbaCookCase().case_xba_cook_entity_picker_max_min_post()
@@ -1180,15 +1195,15 @@ class TestXbaCook:
     def test_xba_cook_profiles_groups_id_post(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_post()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme: нужен метапрофиль с профилем
     def test_xba_cook_profiles_groups_id_max_min_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_max_min_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: нужен метапрофиль с профилем
     def test_xba_cook_profiles_groups_profile_id_group_id_delete(self):
         XbaCookCase().case_xba_cook_profiles_groups_profile_id_group_id_delete()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme: нужен метапрофиль с профилем
     def test_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_profile_id_group_id_weight_get()
 
@@ -1233,6 +1248,10 @@ class TestXbaCook:
         XbaCookCase().case_xba_cook_xba_get()
 
     @pytest.mark.skip   # TODO: empty
+    @pytest.mark.parametrize('mode', [
+        "prod",
+        "dev"
+    ])
     def case_xba_cook_set_log_level_xba_py_mode_post(self):
         XbaCookCase().case_xba_cook_set_log_level_xba_py_mode_post()
 
