@@ -1,3 +1,4 @@
+import re
 import time
 
 import allure
@@ -13,5 +14,16 @@ class RMGroupsAndUsersCase(BaseCase):
     def open_page_by_steps(self):
         page = RMGroupsAndUsersPage(self._page)
 
-        # todo: остальные шаги
-        ...
+        with allure.step("Перейти в 'Настройки уведомлений'"):
+            page.goto_page("/notification-center")
+            page.page.wait_for_url(page.host + "/notification-center")
+
+        with allure.step("Клик в боковом меню 'Role mining'"):
+            page.SB_ROLE_MINING.click()
+
+        with allure.step("Клик в меню 'Группы и пользователи'"):
+            page.SB_RM_GROUPS_AND_USERS.click()
+
+        with allure.step("Открыта страница 'Группы и пользователи Active Directory'"):
+            expect_reg = re.compile('^' + page.host + RMGroupsAndUsersPage.page_path + '(/.*)?$')
+            expect(page.page).to_have_url(expect_reg)

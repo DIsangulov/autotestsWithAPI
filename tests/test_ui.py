@@ -372,21 +372,19 @@ class TestXbaStatistics:
         XbaStatisticsCase(browser).open_page_by_steps()
 
 
-@pytest.mark.skip(reason="Кейс не прописан")    # TODO:
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
 class TestRoleMiningSettings:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Настройки Role mining'")
     def test_open_page_by_steps(self, browser):
         RMSettingsCase(browser).open_page_by_steps()
 
 
-@pytest.mark.skip(reason="Кейс не прописан")    # TODO:
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
 class TestRoleMiningAD:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Состояние Active Directory'")
     def test_open_page_by_steps(self, browser):
         RMStateADCase(browser).open_page_by_steps()
@@ -394,21 +392,19 @@ class TestRoleMiningAD:
     # TODO: работа вкладок Статистика | Рекомендации
 
 
-@pytest.mark.skip(reason="Кейс не прописан")    # TODO:
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
 class TestRoleMiningGroupsAndUsers:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Группы и пользователи Active Directory'")
     def test_open_page_by_steps(self, browser):
         RMGroupsAndUsersCase(browser).open_page_by_steps()
 
 
-@pytest.mark.skip(reason="Кейс не прописан")    # TODO:
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
 class TestRoleMiningRoleModel:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Ролевая модель'")
     def test_open_page_by_steps(self, browser):
         RMRoleModelCase(browser).open_page_by_steps()
