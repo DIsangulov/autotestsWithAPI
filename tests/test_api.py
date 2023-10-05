@@ -832,6 +832,10 @@ class TestPermitter:
 
 class TestRmCook:
 
+    # ! Поменять настройки источников Role mining
+    def test_rm_cook_settings_sources_post(self):
+        RmCookCase().case_rm_cook_settings_sources_post()
+
     def test_rm_cook_active_directory_groups_get(self):
         RmCookCase().case_rm_cook_active_directory_groups_get()
 
@@ -866,8 +870,11 @@ class TestRmCook:
     def test_rm_cook_rm_roles_id_alias_post(self):
         RmCookCase().case_rm_cook_rm_roles_id_alias_post()
 
-    def test_rm_cook_rm_roles_id_alias_ts_get(self):
-        RmCookCase().case_rm_cook_rm_roles_id_alias_ts_get()
+    @pytest.mark.parametrize('role_id,timestamp', [
+        (0, 0)
+    ])
+    def test_rm_cook_rm_roles_id_alias_ts_get(self, role_id, timestamp):
+        RmCookCase().case_rm_cook_rm_roles_id_alias_ts_get(role_id, timestamp)
 
     def test_rm_status_get(self):
         RmCookCase().case_rm_cook_rm_status_get()
@@ -875,32 +882,45 @@ class TestRmCook:
     def test_rm_cook_role_model_result_export_role_model_to_excel_post(self):
         RmCookCase().case_rm_cook_role_model_result_export_role_model_to_excel_post()
 
-    def test_rm_cook_role_model_result_groups_by_role_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_groups_by_role_id_get()
+    @pytest.mark.parametrize('role_id', [0])
+    def test_rm_cook_role_model_result_groups_by_role_id_get(self, role_id):
+        RmCookCase().case_rm_cook_role_model_result_groups_by_role_id_get(role_id)
 
-    @pytest.mark.skip   # fixme
+    @pytest.mark.skip(reason="Не используется")
     def test_rm_cook_role_model_result_resources_by_role_id_get(self):
         RmCookCase().case_rm_cook_role_model_result_resources_by_role_id_get()
 
-    def test_rm_cook_role_model_result_roles_by_source_source_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_roles_by_source_source_id_get()
+    @pytest.mark.parametrize('source_id', [0])
+    def test_rm_cook_role_model_result_roles_by_source_id_get(self, source_id):
+        RmCookCase().case_rm_cook_role_model_result_roles_by_source_id_get(source_id)
 
-    def test_rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_source_0_users_by_role_0_get()
+    @pytest.mark.parametrize('source_id,role_id', [
+        (0, 0)
+    ])
+    def test_rm_cook_role_model_result_source_id_users_by_role_id_get(self, source_id, role_id):
+        RmCookCase().case_rm_cook_role_model_result_source_id_users_by_role_id_get(source_id, role_id)
 
-    @pytest.mark.skip   # fixme
-    def test_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self):  # Не используется
-        RmCookCase().case_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get()
+    @pytest.mark.skip(reason="Не используется")
+    def test_rm_cook_role_model_result_table_role_id_resources_by_user_id_get(self):
+        RmCookCase().case_rm_cook_role_model_result_table_role_id_resources_by_user_id_get()
 
-    @pytest.mark.skip   # fixme
-    def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):  # Не используется
-        RmCookCase().case_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get()
+    @pytest.mark.skip(reason="Не используется")
+    def test_rm_cook_role_model_result_table_role_id_users_by_resource_id_get(self):
+        RmCookCase().case_rm_cook_role_model_result_table_role_id_users_by_resource_id_get()
 
-    def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get()
+    @pytest.mark.parametrize('form', [
+        "table",
+        "graph"
+    ])
+    def test_rm_cook_role_model_result_form_role_id_groups_by_user_id_get(self, form):
+        RmCookCase().case_rm_cook_role_model_result_form_role_id_groups_by_user_id_get(form)
 
-    def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get1()
+    @pytest.mark.parametrize('form', [
+        "table",
+        "graph"
+    ])
+    def test_rm_cook_role_model_result_form_role_id_users_by_group_id_get(self, form):
+        RmCookCase().case_rm_cook_role_model_result_form_role_id_users_by_group_id_get1(form)
 
     def test_rm_cook_settings_calc_get(self):
         RmCookCase().case_rm_cook_settings_calc_get()
@@ -916,10 +936,6 @@ class TestRmCook:
 
     def test_rm_cook_settings_sources_get(self):
         RmCookCase().case_rm_cook_settings_sources_get()
-
-    @pytest.mark.skip   # Поменять настройки источников Role mining
-    def test_rm_cook_settings_sources_post(self):
-        RmCookCase().case_rm_cook_settings_sources_post()
 
 
 class TestStorageWorker:

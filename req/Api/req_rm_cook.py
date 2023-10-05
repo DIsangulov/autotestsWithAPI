@@ -74,27 +74,27 @@ class RmCook(BaseReq):
         """process GET req to get full list of rm resource by role id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/resources_by_role/{role_id}")
 
-    def rm_cook_role_model_result_roles_by_source_source_id_get(self, _source_id):
+    def rm_cook_role_model_result_roles_by_source_id_get(self, _source_id):
         """process GET req to get full list of rm roles by source id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/roles_by_source/{_source_id}")
 
-    def rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self, source_id, role_id):
+    def rm_cook_role_model_result_source_id_users_by_role_id_get(self, source_id, role_id):
         """process GET req to get full list of rm user by role id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/source/{source_id}/users_by_role/{role_id}")
 
-    def rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self, role_id, rm_user_id):
+    def rm_cook_role_model_result_table_role_id_resources_by_user_id_get(self, role_id, rm_user_id):
         """process GET req to get full list of rm resource by username id and role id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/{role_id}/resources_by_user/{rm_user_id}")
 
-    def rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self, role_id, resource_id):
+    def rm_cook_role_model_result_table_role_id_users_by_resource_id_get(self, role_id, resource_id):
         """process GET req to get full list of rm user by resource name and role id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/table/role/{role_id}/users_by_resource/{resource_id}")
 
-    def rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self, form, role_id, user_id):
+    def rm_cook_role_model_result_form_role_id_groups_by_user_id_get(self, form, role_id, user_id):
         """process GET req to get full list of rm group by username and role id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/{form}/role/{role_id}/groups_by_user/{user_id}")
 
-    def rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self, form, role_id, group_id):
+    def rm_cook_role_model_result_form_role_id_users_by_group_id_get(self, form, role_id, group_id):
         """process GET req to get full list of rm user by group name and role id"""
         return self.sess.get(f"{self.host}/back/dp.rm_cook/role_model/result/{form}/role/{role_id}/users_by_group/{group_id}")
 
