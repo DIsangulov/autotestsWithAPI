@@ -85,11 +85,11 @@ class TestAbsorber:
     def test_absorber_library_connector_id_delete(self):
         AbsorberCase().case_absorber_library_connector_id_delete()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_absorber_library_external_driver_post(self):
         AbsorberCase().case_absorber_library_external_driver_post()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_absorber_library_external_pattern_post(self):
         AbsorberCase().case_absorber_library_external_pattern_post()
 
@@ -120,9 +120,10 @@ class TestAbsorber:
     def test_absorber_source_id_get(self):
         AbsorberCase().case_absorber_source_id_get()
 
-    @pytest.mark.skip   # fixme:
-    def test_absorber_source_id_debug_get(self):
-        AbsorberCase().case_absorber_source_id_debug_get()
+    # fixme: хк, предусловия: источник: включен режим отладки
+    @pytest.mark.parametrize('source_id', [46])
+    def test_absorber_source_id_debug_get(self, source_id):
+        AbsorberCase().case_absorber_source_id_debug_get(source_id)
 
     def test_absorber_source_id_log_get(self):
         AbsorberCase().case_absorber_source_id_log_get()
@@ -136,18 +137,19 @@ class TestAlarmer:
     def test_alarmer_alert_service_names_get(self):
         AlarmerCase().case_alarmer_alert_service_names_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_alarmer_email_server_post(self):
         AlarmerCase().case_alarmer_email_server_post()
 
+    @pytest.mark.skip
     def test_alarmer_email_server_get(self):
         AlarmerCase().case_alarmer_email_server_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_alarmer_email_server_id_get(self):
         AlarmerCase().case_alarmer_email_server_id_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: empty
     def test_alarmer_email_server_id_delete(self):
         AlarmerCase().case_alarmer_email_server_id_delete()
 
@@ -181,14 +183,22 @@ class TestAlarmer:
     def test_alarmer_notification_user_all_get(self):
         AlarmerCase().case_alarmer_notification_settings_user_all_get()
 
-    def test_alarmer_notification_user_get(self):
-        AlarmerCase().case_alarmer_notification_user_get()
+    @pytest.mark.parametrize("n_type", ["user", "admin"])
+    def test_alarmer_notification_type_get(self, n_type):
+        AlarmerCase().case_alarmer_notification_type_get(n_type)
 
-    def test_alarmer_notification_type_read_post(self):
-        AlarmerCase().case_alarmer_notification_type_read_post()
+    @pytest.mark.parametrize("read_type", ["list", "all"])
+    def test_alarmer_notification_type_read_post(self, read_type):
+        AlarmerCase().case_alarmer_notification_type_read_post(read_type)
 
-    def test_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self):
-        AlarmerCase().case_alarmer_notifications_page_size_x_read_notify_type_page_x_get()
+    @pytest.mark.parametrize("notify_type", [
+        "all",
+        "warning",
+        "error",
+        "announcement"
+    ])
+    def test_alarmer_notifications_page_size_x_read_notify_type_page_x_get(self, notify_type):
+        AlarmerCase().case_alarmer_notifications_page_size_x_read_notify_type_page_x_get(notify_type)
 
     def test_alarmer_send_invitation_post(self):
         AlarmerCase().case_alarmer_send_invitation_post()
@@ -337,23 +347,18 @@ class TestCore:
     def test_core_save_get(self):
         CoreCase().case_core_save_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_get(self):
         CoreCase().case_core_secrets_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_post(self):
         CoreCase().case_core_secrets_post()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_id_get(self):
         CoreCase().case_core_secrets_id_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_id_put(self):
         CoreCase().case_core_secrets_id_put()
 
-    @pytest.mark.skip   # todo: empty
     def test_core_secrets_id_delete(self):
         CoreCase().case_core_secrets_id_delete()
 
@@ -613,11 +618,12 @@ class TestPeopler:
     def test_peopler_pin_page_current_user_delete(self):
         PeoplerCase().case_peopler_pin_page_current_user_delete()
 
-    def test_peopler_pin_page_list_role_post(self):
-        PeoplerCase().case_peopler_pin_page_list_role_post()
-
-    def test_peopler_pin_page_list_user_post(self):
-        PeoplerCase().case_peopler_pin_page_list_user_post()
+    @pytest.mark.parametrize('type_subject,path', [
+        ("user", "/scripts"),
+        ("role", "/scripts")
+    ])
+    def test_peopler_pin_page_list_type_subject_post(self, type_subject, path):
+        PeoplerCase().case_peopler_pin_page_list_type_subject_post(type_subject, path)
 
     def test_peopler_pin_page_type_subject_post(self):
         PeoplerCase().case_peopler_pin_page_type_subject_post()
@@ -625,8 +631,11 @@ class TestPeopler:
     def test_peopler_pin_page_type_subject_id_delete(self):
         PeoplerCase().case_peopler_pin_page_type_subject_id_delete()
 
-    def test_peopler_pinned_page_status_post(self):
-        PeoplerCase().case_peopler_pinned_page_status_post()
+    @pytest.mark.parametrize('page_path', [
+        "/scripts"
+    ])
+    def test_peopler_pinned_page_status_post(self, page_path):
+        PeoplerCase().case_peopler_pinned_page_status_post(page_path)
 
     def test_peopler_profile_get(self):
         PeoplerCase().case_peopler_profile_get()
@@ -791,8 +800,28 @@ class TestPermitter:
     def test_permitter_users_elements_count_who_id_get(self):
         PermitterCase().case_permitter_users_elements_count_who_id_get()
 
-    def test_permitter_users_new_author_who_id(self):
-        PermitterCase().case_permitter_users_new_author_who_id_post()
+    @pytest.mark.parametrize('who_id_getter,post_data', [
+        (PeoplerCase().get_auto_test_user_id,
+         {
+             "delete": False,
+             "new_author": PeoplerCase().get_self_user_id()
+         }),
+
+        # DAT-5599
+        (PeoplerCase().get_auto_test_user_id,
+         {
+             "delete": False,
+             "new_author": None
+         }),
+
+        (PeoplerCase().get_auto_test_user_id,
+         {
+             "delete": True,
+             "new_author": None
+         }),
+    ])
+    def test_permitter_users_new_author_who_id(self, who_id_getter, post_data):
+        PermitterCase().case_permitter_users_new_author_who_id_post(who_id_getter(), post_data)
 
     def test_permitter_user_rules_who_id_get(self):
         PermitterCase().case_permitter_user_rules_who_id_get()
@@ -895,6 +924,9 @@ class TestRmCook:
 
 class TestStorageWorker:
 
+    def test_storage_worker_storage_db_post(self):
+        StorageWorkerCase().case_storage_worker_storage_db_post()
+
     def test_storage_worker_ask_one_sql_post(self):
         StorageWorkerCase().case_storage_worker_ask_one_sql_post()
 
@@ -941,7 +973,6 @@ class TestStorageWorker:
     def test_storage_worker_psevdo_namer_regs_pid_get(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_get()
 
-    @pytest.mark.skip   # todo: empty
     def test_storage_worker_psevdo_namer_regs_pid_put(self):
         StorageWorkerCase().case_storage_worker_psevdo_namer_regs_pid_put()
 
@@ -975,23 +1006,17 @@ class TestStorageWorker:
     def test_storage_worker_statistics_test_selection_post(self):
         StorageWorkerCase().case_storage_worker_statistics_test_selection_post()
 
-    def test_storage_worker_storage_db_post(self):
-        StorageWorkerCase().case_storage_worker_storage_db_post()
-
     def test_storage_worker_storage_db_get(self):
         StorageWorkerCase().case_storage_worker_storage_db_get()
 
     def test_storage_worker_storage_db_put(self):
         StorageWorkerCase().case_storage_worker_storage_db_put()
 
-    def test_storage_worker_storage_db_delete(self):
-        StorageWorkerCase().case_storage_worker_storage_db_delete()
-
-    @pytest.mark.skip
+    # ! Кейс не отправляет реальные данные, только смотрит, что api отзывается
     def test_storage_worker_storage_import_csv_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_import_csv_db_name_table_name_post()
 
-    @pytest.mark.skip
+    # ! Кейс не отправляет реальные данные, только смотрит, что api отзывается
     def test_storage_worker_storage_import_json_db_name_table_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_import_json_db_name_table_name_post()
 
@@ -1004,7 +1029,6 @@ class TestStorageWorker:
     def test_storage_worker_storage_table_columns_db_name_tab_name_get(self):
         StorageWorkerCase().case_storage_worker_storage_table_columns_db_name_tab_name_get()
 
-    @pytest.mark.skip   # fixme: check for DB existing
     def test_storage_worker_storage_table_db_name_post(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_post()
 
@@ -1037,6 +1061,9 @@ class TestStorageWorker:
     @pytest.mark.skip   # todo: empty
     def test_storage_worker_storage_table_db_name_table_name_delete(self):
         StorageWorkerCase().case_storage_worker_storage_table_db_name_table_name_delete()
+
+    def test_storage_worker_storage_db_delete(self):
+        StorageWorkerCase().case_storage_worker_storage_db_delete()
 
 
 class TestXbaCook:
@@ -1091,8 +1118,15 @@ class TestXbaCook:
     def test_xba_cook_entity_info_settings_post(self):
         XbaCookCase().case_xba_cook_entity_info_settings_post()
 
-    def test_xba_cook_entity_info_settings_entity_type_delete(self):
-        XbaCookCase().case_xba_cook_entity_info_settings_entity_type_delete()
+    @pytest.mark.parametrize('entity_type', [
+        # "all",
+        "user",
+        # "department",
+        # "process",
+        # "other"
+    ])
+    def test_xba_cook_entity_info_settings_entity_type_delete(self, entity_type):
+        XbaCookCase().case_xba_cook_entity_info_settings_entity_type_delete(entity_type)
 
     def test_xba_cook_entity_picker_max_min_post(self):
         XbaCookCase().case_xba_cook_entity_picker_max_min_post()
@@ -1121,13 +1155,21 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_drilldown_statement_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_drilldown_statement_id_post()
 
-    @pytest.mark.skip
-    def test_xba_cook_profiles_graph_drilldown_id_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post()
-
     # fixme: хк
-    def test_xba_cook_profiles_graph_drilldown_34_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_drilldown_34_post()
+    @pytest.mark.parametrize('xba_profile_id,post_data', [
+        (34,
+         {
+            "name": "kuta",
+            "time": "2023-09-15T03:00:00Z",
+            "columns": [
+                "TimeStamp",
+                "Gorod",
+                "TemnepaTypa"
+            ]
+         })
+    ])
+    def test_xba_cook_profiles_graph_drilldown_id_post(self, xba_profile_id, post_data):
+        XbaCookCase().case_xba_cook_profiles_graph_drilldown_id_post(xba_profile_id, post_data)
 
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
@@ -1153,15 +1195,15 @@ class TestXbaCook:
     def test_xba_cook_profiles_groups_id_post(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_post()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme: нужен метапрофиль с профилем
     def test_xba_cook_profiles_groups_id_max_min_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_id_max_min_get()
 
-    @pytest.mark.skip   # todo: new
+    @pytest.mark.skip   # todo: нужен метапрофиль с профилем
     def test_xba_cook_profiles_groups_profile_id_group_id_delete(self):
         XbaCookCase().case_xba_cook_profiles_groups_profile_id_group_id_delete()
 
-    @pytest.mark.skip
+    @pytest.mark.skip   # fixme: нужен метапрофиль с профилем
     def test_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_profile_id_group_id_weight_get()
 
@@ -1206,6 +1248,10 @@ class TestXbaCook:
         XbaCookCase().case_xba_cook_xba_get()
 
     @pytest.mark.skip   # TODO: empty
+    @pytest.mark.parametrize('mode', [
+        "prod",
+        "dev"
+    ])
     def case_xba_cook_set_log_level_xba_py_mode_post(self):
         XbaCookCase().case_xba_cook_set_log_level_xba_py_mode_post()
 
@@ -1451,7 +1497,6 @@ class TestVisualisation:
     def test_visualisation_query_do_query_id_post(self):
         VisualisationCase().case_visualisation_query_do_query_id_post()
 
-    # fixme: хк Weather_all_online
     def test_visualisation_query_save_post(self):
         VisualisationCase().case_visualisation_query_save_post()
 

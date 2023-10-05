@@ -1,24 +1,15 @@
 import json
 import random
-import datetime
 import time
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_xba_cook import XbaCook
-from resourses.constants import QA_SPAM_EMAIL, DB_picker_tables, API_AUTO_TEST_
+from resourses.constants import QA_SPAM_EMAIL, DB_picker_tables, DB_Shallow, API_AUTO_TEST_
+from resourses.static_methods import get_datetime_now_z, get_str_random_num
 from tests.case.api.permitter import PermitterCase
 
 xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
-
-
-def get_datetime_now_z() -> str:
-    # 2023-07-20T17:04:16Z
-    return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
-
-
-def get_str_random_num(length: int = 4) -> str:
-    return str(random.randint(int(10**(length-1)), int(10**length-1)))
 
 
 class EntityCategory:
@@ -75,14 +66,18 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
 
     self_user_id = u_session.get_self_user_id()
 
-    # fixme: проверить наличие и доступ к таблицам, если нет доступа, то не создаст
-    db_id = u_session.get_db_id_by_name(DB_picker_tables.name)
-    db_table_name = DB_picker_tables.tab_Weather_all_online
-    db_time_column = DB_picker_tables.col_TimeStamp
+    # fixme: доступ к таблицам, если нет доступа, то не создаст
+    db_name = DB_Shallow.name
+    db_table_name = DB_Shallow.tab_boulder_general
+    db_time_column = DB_Shallow.col_timestamp
 
-    db_es_entity_column = DB_picker_tables.col_Gorod
-    # db_es_entity_type = "lastLogoff"
-    db_es_additional_column = DB_picker_tables.col_TemnepaTypa
+    u_session.asserts_check_db_and_table_is_exists(db_name, db_table_name)
+
+    db_id = u_session.get_db_id_by_name(db_name)
+
+    db_es_entity_column = DB_Shallow.col_name
+    db_es_entity_type = DB_Shallow.col_item_group
+    db_es_additional_column = DB_Shallow.col_price
 
     sample_data = {
         "name": API_AUTO_TEST_ + get_str_random_num(),
@@ -96,20 +91,20 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         # "created": "2023-02-15T07:55:02.631066Z",
         # "modified": "2023-02-15T07:55:02.631066Z",
         "db_id": db_id,
-        "db_name": DB_picker_tables.name,
+        "db_name": db_name,
         "table_name": db_table_name,
         # >> status: 1 -> запущен
         # >> status: 2 -> выполнен
         # >> status: 3 -> выполнен с ошибками
         # "status": 3,
         "profile_type": "median",
-        "id_function": XbaIdFunction.avg,
-        "id_category": 5,
+        "id_function": XbaIdFunction.log_sum,
+        "id_category": 3,
         "time_settings":
             {
                 "time_column": db_time_column,
-                "time_start": "2023-08-18T12:37:00Z",
-                "time_end": "2023-08-21T00:00:00Z",
+                "time_start": get_datetime_now_z(day_delta=-3),
+                "time_end": get_datetime_now_z(),
                 "discretization_period": "hour",    # "minute",
                 # "stat_period": ""
             },
@@ -117,7 +112,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
             {
                 "entity_column": db_es_entity_column,
                 "entity_column_name": "other",  # Категория сущности ( user|..|other
-                # "entity_type": db_es_entity_type,
+                "entity_type": db_es_entity_type,
                 "obj_column": "",
                 "obj_column_name": "",
                 "additional_column": db_es_additional_column,
@@ -132,7 +127,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         "filter_settings": [],
         # "time_last_executed": "2023-07-20T12:50:32.074704Z",
         # "log_last_executed": "",
-        "group_info": None
+        "group_info": None  # настройка метапрофиля
     }
 
     return sample_data.copy()
@@ -231,17 +226,24 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_anomalies_picker_max_min_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_xba_cook_check_entity_type_post(self):
-        # todo: "column": неверные параметры/null в поле, возвращают неочевидный тип ошибки
+        # look: "column": неверные параметры/null в поле, возвращают неочевидный тип ошибки
         # {"error":{"code":400,"description":"too many distinct values in column","msg":"Неверные параметры"}}
+
+        db_name = DB_Shallow.name
+        db_table = DB_Shallow.tab_boulder_general
+        db_table_col = DB_Shallow.col_name
+
+        self.asserts_check_db_and_table_is_exists(db_name, db_table)
+
+        db_id = self.get_db_id_by_name(db_name)
 
         req = XbaCook(self.sess, self.host)
         data = {
-            "db_id": self.get_db_id_by_name(DB_picker_tables.name),
-            "table": DB_picker_tables.tab_Weather_all_online,
-            "column": DB_picker_tables.col_Gorod
+            "db_id": db_id,
+            "table": db_table,
+            "column": db_table_col
         }
         resp = req.xba_cook_check_entity_type_post(data)
         # print(resp.text)
@@ -251,9 +253,9 @@ class XbaCookCase(UserSession):
         # DAT-5251
         req = XbaCook(self.sess, self.host)
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.process    # todo: user|host|process|department|other
+            "entity_category": EntityCategory.other    # todo: user|host|process|department|other
         }
         # data = {}   # :400
         resp = req.xba_cook_dashboard_entities_post(data)
@@ -264,9 +266,9 @@ class XbaCookCase(UserSession):
         # DAT-5251
         req = XbaCook(self.sess, self.host)
         data = {
-            "start": "2023-07-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.host  # todo: user|host|process|department|other
+            "entity_category": EntityCategory.other  # todo: user|host|process|department|other
         }
         # data = {}   # :200
         resp = req.xba_cook_dashboard_entities_more_post(data)
@@ -279,7 +281,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data_keyless = {
-            "start": "2021-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
@@ -304,7 +306,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data_keyless = {
-            "start": "2021-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "time_zone": "Europe/Moscow"
         }
@@ -330,7 +332,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,  # 0  # 1-11
@@ -346,7 +348,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
             "profile_category_id": 0,  # 0  # 1-11
@@ -401,64 +403,81 @@ class XbaCookCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_info_settings_post(self):
+        # front: /profiles > Настройка справочников - заполнить + [сохранить]
         req = XbaCook(self.sess, self.host)
-        db_picker_tables = self.get_db_id_by_name(DB_picker_tables.name)
-        db_picker_tables_table_name = DB_picker_tables.tab_Weather_all_online
+
+        db_name = DB_picker_tables.name
+        db_table = "ad_groups_imported"
+
+        self.asserts_check_db_and_table_is_exists(db_name, db_table)
+
+        db_id = self.get_db_id_by_name(db_name)
+
         data = {
             "user_settings": {
-                "db_id": db_picker_tables,
-                # "db_name": "picker_tables",
-                "table_name": db_picker_tables_table_name,
+                "db_id": db_id,
+                "table_name": db_table,
                 "fields_mapping": {
                         "mapping_key_field": "sAMAccountName",
                         "full_name": "name",
-                        "position": "description",
-                        "department": "department",
                         "phone": "mobile",
                         "email": "mail",
-                        "manager": "sn"
+                        "department": "department",
+                        "position": "description",
+                        "manager": "objectClass"
                     }
             }
         }
+
         resp = req.xba_cook_entity_info_settings_post(data)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         assert resp.text == '{"res":"ok"}\n', f"Ошибка, текст ответа {resp.text}"
 
-    def case_xba_cook_entity_info_settings_entity_type_delete(self):
+    def case_xba_cook_entity_info_settings_entity_type_delete(self, entity_type):
+        # front: /profiles - настройка справочников - [очистить] + [сохранить]
+        # entity_type: user|department|process|other. 'all' to delete everything
         req = XbaCook(self.sess, self.host)
-        entity_type = "name"        # TODO: какие ещё || user|department|process|other. 'all' to delete everything
         resp = req.xba_cook_entity_info_settings_entity_type_delete(entity_type)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_picker_max_min_post(self):
+        # front: /entity/<type>/<name>  # max-min для карточки сущности
         req = XbaCook(self.sess, self.host)
         data = {
-            "name": "user",
-            "type": "user"
+            "name": "emerald",
+            "type": "other"
         }
         resp = req.xba_cook_entity_picker_max_min_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_risks_description_post(self):
         req = XbaCook(self.sess, self.host)
-        data = {"name": "shchetinin$@angaratech.ru",        # FIXME: хардкод
-                "type": "user",
-                "start": "2023-02-13T00:00:00Z",
-                "end": "2023-02-14T00:00:00Z"}
+        data = {
+            "name":     "emerald",
+            "type":     "other",
+            "start":    get_datetime_now_z(day_delta=-4),
+            "end":      get_datetime_now_z(day_delta=-1)
+        }
         resp = req.xba_cook_entity_risks_description_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_xba_cook_max_min_post(self):
         req = XbaCook(self.sess, self.host)
+
+        db_name = DB_Shallow.name
+        db_table = DB_Shallow.tab_boulder_general
+        db_table_col = DB_Shallow.col_timestamp
+
+        self.asserts_check_db_and_table_is_exists(db_name, db_table)
+
+        db_id = self.get_db_id_by_name(db_name)
+
         data = {
-            "db_id": self.get_db_id_by_name(DB_picker_tables.name),
-            "table": DB_picker_tables.tab_Weather_all_online,
-            "column": DB_picker_tables.col_TemnepaTypa
+            "db_id": db_id,
+            "table": db_table,
+            "column": db_table_col
         }
         resp = req.xba_cook_max_min_post(data)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_get(self):
@@ -479,7 +498,6 @@ class XbaCookCase(UserSession):
     def case_xba_cook_profiles_categories_get(self):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_profiles_categories_get()
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_export_profiles_post(self):
@@ -502,43 +520,18 @@ class XbaCookCase(UserSession):
                 ""
             ],
             "name": "",
-            "time": "2022-12-06T08:36:09Z"
+            "time": get_datetime_now_z()
         }
         resp = req.xba_cook_profiles_graph_drilldown_statement_id_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # fixme: mark.skip
-    def case_xba_cook_profiles_graph_drilldown_id_post(self):
+    def case_xba_cook_profiles_graph_drilldown_id_post(self, profile_id, post_data):
         req = XbaCook(self.sess, self.host)
-
-        prof_id = self._get_xba_profile_id()
-        data = {
-
-        }
-        resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
+        resp = req.xba_cook_profiles_graph_drilldown_id_post(profile_id, post_data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_profiles_graph_drilldown_34_post(self):
         # DAT-5184
         # Проверка наличия ключа "description" в ответе
-        req = XbaCook(self.sess, self.host)
-
-        # нужны конкретные данные, для получения ответа иначе: {"error":{"code":400,"msg":"Нет данных"}}
-        prof_id = 34
-        data = {
-            "name": "kuta",
-            "time": "2023-09-15T03:00:00Z",
-            "columns":
-                [
-                    "TimeStamp",
-                    "Gorod",
-                    "TemnepaTypa"
-                ]
-        }
-
-        resp = req.xba_cook_profiles_graph_drilldown_id_post(prof_id, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
         try:
             # отсутствие ключа на любом узле бросит ошибку "KeyError"
             json.loads(resp.text)['res']['info']['description']
@@ -650,6 +643,7 @@ class XbaCookCase(UserSession):
         prof_id_data: dict = json.loads(prof_id_data_resp.text)['res']
         # Привязать метапрофиль 'group_id' к профилю 'prof_id'
         prof_id_data.update({
+            # fixme: получить group_info, потом .append into, cuz group info may be not [empty]
             "group_info": [
                 {
                     "id": group_id,
@@ -677,17 +671,17 @@ class XbaCookCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: FIXME: @mark.skip
-    # нужен профиль с метапрофилем
     def case_xba_cook_profiles_groups_id_max_min_get(self):
         req = XbaCook(self.sess, self.host)
+
+        # нужен метапрофиль с профилем
         _group_id = self._get_xba_group_id()
+
         resp = req.xba_cook_profiles_groups_id_max_min_get(_group_id)
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"error":{"code":400,"description":"no completed profiles in this group","msg":"Нет данных"}}
 
-    # TODO: [DELETE] /back/dp.xba_cook/profiles/groups/{profile_id}/{group_id}
     def case_xba_cook_profiles_groups_profile_id_group_id_delete(self):
         req = XbaCook(self.sess, self.host)
         prof_id = None
@@ -696,13 +690,14 @@ class XbaCookCase(UserSession):
         print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: mark.skip
     def case_xba_cook_profiles_groups_profile_id_group_id_weight_get(self):
+        # изменить вес профиля в метапрофиле
         req = XbaCook(self.sess, self.host)
-        # FIXME: хардкод
+
         prof_id = 2077
         group_id = 1553
         weight = 20
+
         resp = req.xba_cook_profiles_groups_profile_id_group_id_weight_get(prof_id, group_id, weight)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -786,7 +781,7 @@ class XbaCookCase(UserSession):
 
         # entity <- [post] /summary <- prof_id
         data = {
-            "start": "2022-10-21T16:39:01Z",
+            "start": get_datetime_now_z(day_delta=-1),
             "end": get_datetime_now_z(),
             # "entity": "?",
             # "entity_group": "?str(int)"
@@ -807,7 +802,7 @@ class XbaCookCase(UserSession):
         prof_id = self._get_xba_profile_id()
         data = {
             # "entity_group": "string", # optional,
-            "start": "2022-10-09T00:00:00Z",    # <- get| graph/max_min
+            "start": get_datetime_now_z(day_delta=-1),    # <- get| graph/max_min
             "end": get_datetime_now_z()
         }
         # data = {}
@@ -857,7 +852,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         data = {
-            "start": "2022-02-09T00:00:00Z",
+            "start": get_datetime_now_z(day_delta=-7),
             "end": get_datetime_now_z(),
             # todo: проверку на entity_group > отдельным кейсом
             # "entity_group": "other",  # str(int)  # optional
@@ -874,6 +869,7 @@ class XbaCookCase(UserSession):
 
         prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_id_zones_post(prof_id, data)
+        # print(resp.text)
         assert resp.status_code == 200, f"1.Ошибка, код {resp.status_code}, {resp.text}"
         # 400: {"error":{"code":0,"msg":"Code: 81, Message: Database XBA_$prof_id doesn't exist"}}
 
@@ -925,10 +921,8 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_xba_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_set_log_level_xba_py_mode_post(self):
+    def case_xba_cook_set_log_level_xba_py_mode_post(self, mode):
         req = XbaCook(self.sess, self.host)
-
-        mode = "prod"   # todo: prod or dev
 
         data = {}
 

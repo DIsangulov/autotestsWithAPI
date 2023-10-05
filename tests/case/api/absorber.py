@@ -7,9 +7,9 @@ from req.Helpers.user_session import UserSession
 from req.Api.req_absorber import Absorber
 from resourses.constants import DB_picker_tables, API_AUTO_TEST_
 
-logo_id = set()
-source_id = set()      # 'id' источника данных
-connector_id = set()   # 'id' коннектора
+test_logo_id = set()
+test_source_id = set()      # 'id' источника данных
+test_connector_id = set()   # 'id' коннектора
 
 
 class ConnType:
@@ -32,19 +32,19 @@ class AbsorberCase(UserSession):
         source_info_rows = json.loads(resp.text)['res']
         for _row in source_info_rows:
             if str(_row['name']).startswith(API_AUTO_TEST_):
-                source_id.add(_row['id'])
+                test_source_id.add(_row['id'])
 
     def _get_source_id(self) -> int:
         """get from global source_id: API_AUTO_TEST_x"""
-        if len(source_id) == 0:
+        if len(test_source_id) == 0:
             self._collect_source_id()
 
-        if len(source_id) == 0:                                 # global source_id
+        if len(test_source_id) == 0:
             r_new_source = self.case_absorber_source_post()     # если нет источника - создай новый
             new_source_id = json.loads(r_new_source.text)['res']
             return int(new_source_id)
 
-        return source_id.pop()
+        return test_source_id.pop()
 
     def _collect_connector_id(self):
         resp = Absorber(self.sess, self.host).absorber_library_connector_get()
@@ -53,18 +53,18 @@ class AbsorberCase(UserSession):
         connector_info_rows = json.loads(resp.text)['res']
         for _row in connector_info_rows:
             if str(_row['name']).startswith(API_AUTO_TEST_):
-                connector_id.add(_row['id'])
+                test_connector_id.add(_row['id'])
 
     def _get_connector_id(self) -> int:
-        if len(connector_id) == 0:
+        if len(test_connector_id) == 0:
             self._collect_connector_id()
 
-        if len(connector_id) == 0:                                          # global connector_id
+        if len(test_connector_id) == 0:
             r_new_connector = self.case_absorber_library_connector_post()   # если нет - создай новый
             new_connector_id = json.loads(r_new_connector.text)['res']
             return int(new_connector_id)
 
-        return connector_id.pop()
+        return test_connector_id.pop()
 
     def _collect_logo_id(self):
         resp = Absorber(self.sess, self.host).absorber_library_logo_get()
@@ -73,18 +73,18 @@ class AbsorberCase(UserSession):
         logo_info_rows = json.loads(resp.text)['res']
         for _row in logo_info_rows:
             if str(_row['name']).startswith(API_AUTO_TEST_):
-                logo_id.add(_row['id'])
+                test_logo_id.add(_row['id'])
 
     def _get_logo_id(self) -> int:
-        if len(logo_id) == 0:
+        if len(test_logo_id) == 0:
             self._collect_logo_id()
 
-        if len(logo_id) == 0:                                       # global logo_id
+        if len(test_logo_id) == 0:
             r_new_logo = self.case_absorber_library_logo_post()     # если нет - создай новый
             new_logo_id = json.loads(r_new_logo.text)['res']
             return int(new_logo_id)
 
-        return logo_id.pop()
+        return test_logo_id.pop()
 
     def case_absorber_library_columns_get(self):
         req = Absorber(self.sess, self.host)
@@ -229,25 +229,23 @@ class AbsorberCase(UserSession):
         resp = req.absorber_library_connector_id_delete(con_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # TODO: [POST] /back/dp.absorber/library/external/{type}
     def case_absorber_library_external_driver_post(self):
         req = Absorber(self.sess, self.host)
 
         _type = "driver"
         file = None
         resp = req.absorber_library_external_type_post(_type, file)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # TODO: [POST] /back/dp.absorber/library/external/{type}
     def case_absorber_library_external_pattern_post(self):
         req = Absorber(self.sess, self.host)
 
         _type = "pattern"
         file = None
         resp = req.absorber_library_external_type_post(_type, file)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         print(resp.text)
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_absorber_library_logo_get(self):
         req = Absorber(self.sess, self.host)
@@ -453,15 +451,12 @@ class AbsorberCase(UserSession):
         resp = req.absorber_source_id_delete(_source_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # FIXME: код 400, {"error":{"code":400,"description":"code: 400,
-    #  message: bad ssh commands","msg":"Ошибка выполнения ssh команд"}}
-    def case_absorber_source_id_debug_get(self):
-        # {"error":{"code":400,"msg":"Режим отладки выключен"}}
+    def case_absorber_source_id_debug_get(self, source_with_debug_on: int):
+        # front: /datasource/ > редактирование источника > режим отладки
         req = Absorber(self.sess, self.host)
-
-        # _source_id = self._get_source_id()
-        _source_id = 105
+        _source_id = source_with_debug_on
         resp = req.absorber_source_id_debug_get(_source_id)
+        # {"error":{"code":400,"msg":"Режим отладки выключен"}}
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_absorber_source_id_log_get(self):
@@ -480,13 +475,13 @@ class AbsorberCase(UserSession):
     def all_api_auto_test_entity_delete(self):
         delete_req = Absorber(self.sess, self.host)
         self._collect_source_id()
-        while len(source_id) > 0:
-            delete_req.absorber_source_id_delete(source_id.pop())
+        while len(test_source_id) > 0:
+            delete_req.absorber_source_id_delete(test_source_id.pop())
 
         self._collect_connector_id()
-        while len(connector_id) > 0:
-            delete_req.absorber_library_connector_id_delete(connector_id.pop())
+        while len(test_connector_id) > 0:
+            delete_req.absorber_library_connector_id_delete(test_connector_id.pop())
 
         self._collect_logo_id()
-        while len(logo_id) > 0:
-            delete_req.absorber_library_logo_delete(logo_id.pop())
+        while len(test_logo_id) > 0:
+            delete_req.absorber_library_logo_delete(test_logo_id.pop())

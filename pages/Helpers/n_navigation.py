@@ -40,6 +40,12 @@ class Navigation:
         self.SB_XBA_METAPROFILES = self.page.locator("//*[contains(@class, 'n-app-navigation__secondlvl') and ./../div/span[contains(text(), 'Метапрофили')]]")
         self.SB_XBA_STATISTICS = self.page.locator("//*[contains(@class, 'n-app-navigation__secondlvl') and ./../div/span[contains(text(), 'Статистика xBA')]]")
 
+        self.SB_ROLE_MINING = self.page.locator("//*[contains(@class, 'n-app-navigation__firstlvl') and ./../div/span[contains(text(), 'Role mining')]]")
+        self.SB_RM_SETTINGS = self.page.locator("//a[contains(@href, '/role-mining/settings')]")
+        self.SB_RM_STATE_AD = self.page.locator("//a[contains(@href, '/role-mining/state-ad')]")
+        self.SB_RM_GROUPS_AND_USERS = self.page.locator("//a[contains(@href, '/role-mining/groups-and-users') and .//span[contains(text(), 'Группы и пользователи')]]")
+        self.SB_RM_ROLE_MODEL = self.page.locator("//a[contains(@href, '/role-mining/role-model') and .//span[contains(text(), 'Ролевая модель')]]")
+
         self.BACK_BUTTON = page.locator("//div[@class='back-button__icon']")
 
         self.TOOLBAR_REFRESH = self.page.locator("//div[contains(@class, 'main-toolbar__buttons')]/button[div[contains(text(), 'Обновить')]]")

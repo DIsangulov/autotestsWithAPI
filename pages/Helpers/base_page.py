@@ -35,7 +35,3 @@ class BasePage(Navigation):
 
     def goto_page(self, page_path: str):
         self.page.goto(self.host + page_path)
-
-    # todo: зависимости -> from playwright.sync_api import expect
-    def is_element_present(self, selector: str):
-        return self.page.query_selector(selector)

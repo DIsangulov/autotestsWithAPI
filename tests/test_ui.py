@@ -1,11 +1,8 @@
 import allure
 import pytest
 
+from resourses.credentials import TARGET_URL
 from resourses.credentials import TestUsers
-
-from pages.UI._5_RoleMining.rm_settings import RmSettings
-from pages.UI._5_RoleMining.rm_ad_status import AdStatus
-
 from tests.case.ui.auth_ui import AuthCase
 from tests.case.ui.m1_administration.roles_ui import RolesCase
 from tests.case.ui.m1_administration.sessions_ui import SessionsCase
@@ -25,13 +22,40 @@ from tests.case.ui.m3_analytics.query_ui import QueriesCase
 from tests.case.ui.m4_xba.xba_profiles_ui import XbaProfilesCase
 from tests.case.ui.m4_xba.xba_metaprofiles_ui import XbaMetaprofilesCase
 from tests.case.ui.m4_xba.xba_statistics_ui import XbaStatisticsCase
+from tests.case.ui.m5_RM.rm_settings_ui import RMSettingsCase
+from tests.case.ui.m5_RM.rm_ad_ui import RMStateADCase
+from tests.case.ui.m5_RM.rm_groups_and_users_ui import RMGroupsAndUsersCase
+from tests.case.ui.m5_RM.rm_role_model_ui import RMRoleModelCase
+
+
+@pytest.fixture(autouse=True, scope='session')
+def _print_debug_info():
+    print("\n" + "="*42)
+    print(f"TARGET_URL: {TARGET_URL}")
+    print("="*42 + "\n")
+    yield
 
 
 class SuiteName:
     NAVIGATION = "Навигация"
 
+    AUTH_PAGE = "Страница Авторизации"
 
-@allure.suite("Страница Авторизации")
+    ADMINISTRATION_COMMON = "Раздел Администрирование"
+
+    DATA_COMMON = "Раздел Данные"
+    DATA_SOURCES = "Источники"
+    DATA_SCRIPTS = "Скрипты"
+    DATA_STORAGE = "Хранилище"
+
+    ANALYTICS_COMMON = "Раздел Аналитика"
+
+    XBA_COMMON = "Раздел xBA"
+
+    ROLE_MINING_COMMON = "Раздел Role Mining"
+
+
+@allure.suite(SuiteName.AUTH_PAGE)
 class TestAuth:
 
     @allure.title("Авторизация valid")
@@ -121,48 +145,54 @@ class TestAuth:
         AuthCase(browser_without_auth).log_out(auth_data)
 
 
-@allure.title("Администрирование > Роли")
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationRoles:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Роли'")
     def test_open_page_by_steps(self, browser):
         RolesCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Пользователи")
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationUsers:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Пользователи'")
     def test_open_page_by_steps(self, browser):
         UsersCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Сессии")
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSessions:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Сессии'")
     def test_open_page_by_steps(self, browser):
         SessionsCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Мониторинг")
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationMonitoring:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Мониторинг'")
     def test_open_page_by_steps(self, browser):
         MonitoringCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Лицензии")
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationLicense:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Лицензии'")
     def test_open_page_by_steps(self, browser):
         LicenseCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Обновление")
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationUpdates:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Обновление'")
     @allure.description("""
@@ -174,16 +204,18 @@ class TestAdministrationUpdates:
         UpdatesCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Журнал уведомлений")
+@allure.title(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationNotificationList:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Журнал уведомлений'")
     def test_open_page_by_steps(self, browser):
         AdmNotificationListCase(browser).open_page_by_steps()
 
 
-@allure.title("Администрирование > Настройки")
+@allure.title(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSettings:
+
     @allure.suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Настройки'")
     @allure.description("""
@@ -194,7 +226,7 @@ class TestAdministrationSettings:
         AdmSettingsCase(browser).open_page_by_steps()
 
 
-@allure.suite("Данные > Источники")
+@allure.suite(SuiteName.DATA_SOURCES)
 class TestDataSources:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -246,7 +278,7 @@ class TestDataSources:
     # https://team-6wwm.testit.software/projects/3/tests?isolatedSection=1ab5e96c-fcad-4238-bd9f-bb78f7d0e094
 
 
-@allure.suite("Данные > Скрипты")
+@allure.suite(SuiteName.DATA_SCRIPTS)
 class TestDataScripts:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -256,7 +288,7 @@ class TestDataScripts:
         DataScriptsCase(browser).open_page_by_steps()
 
 
-@allure.suite("Данные > Хранилище")
+@allure.suite(SuiteName.DATA_STORAGE)
 class TestDataStorage:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -272,7 +304,7 @@ class TestDataStorage:
         DataStorageCase(browser).storage_navigation_tabs()
 
 
-@allure.suite("Аналитика > Рассылки")
+@allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsMailing:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -286,7 +318,7 @@ class TestAnalyticsMailing:
         MailingsCase(browser).open_page_by_steps()
 
 
-@allure.suite("Аналитика > Отчеты")
+@allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsReports:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -295,7 +327,7 @@ class TestAnalyticsReports:
         ReportsCase(browser).open_page_by_steps()
 
 
-@allure.suite("Аналитика > Визуализации")
+@allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsVisualisation:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -304,7 +336,7 @@ class TestAnalyticsVisualisation:
         VisualisationCase(browser).open_page_by_steps()
 
 
-@allure.suite("Аналитика > Запросы")
+@allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsQuery:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -313,7 +345,7 @@ class TestAnalyticsQuery:
         QueriesCase(browser).open_page_by_steps()
 
 
-@allure.suite("xBA > Профили")
+@allure.suite(SuiteName.XBA_COMMON)
 class TestXbaProfiles:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -322,7 +354,7 @@ class TestXbaProfiles:
         XbaProfilesCase(browser).open_page_by_steps()
 
 
-@allure.suite("xBA > Метапрофили")
+@allure.suite(SuiteName.XBA_COMMON)
 class TestXbaMetaprofiles:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -331,7 +363,7 @@ class TestXbaMetaprofiles:
         XbaMetaprofilesCase(browser).open_page_by_steps()
 
 
-@allure.suite("xBA > Статистика xBA")
+@allure.suite(SuiteName.XBA_COMMON)
 class TestXbaStatistics:
 
     @allure.suite(SuiteName.NAVIGATION)
@@ -340,65 +372,39 @@ class TestXbaStatistics:
         XbaStatisticsCase(browser).open_page_by_steps()
 
 
-@pytest.mark.skip
-class TestRoleMining:
+@allure.suite(SuiteName.ROLE_MINING_COMMON)
+class TestRoleMiningSettings:
 
-    def test_open_rm_ad_status_statistic(self, browser):
-        page = AdStatus(browser)
-        page.open_rm_ad_status_statistic()
-
-    def test_should_enter_rm_ad_status_statistic_be_successful(self, browser):
-        page = AdStatus(browser)
-        page.should_enter_rm_ad_status_statistic_be_successful()
-
-    def test_open_rm_ad_status_recommendation(self, browser):
-        page = AdStatus(browser)
-        page.open_rm_ad_status_recommendation()
-
-    def test_should_enter_rm_ad_status_recommendation_be_successful(self, browser):
-        page = AdStatus(browser)
-        page.should_enter_rm_ad_status_recommendation_be_successful()
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Настройки Role mining'")
+    def test_open_page_by_steps(self, browser):
+        RMSettingsCase(browser).open_page_by_steps()
 
 
-@pytest.mark.skip
-class TestRoleMiningSettingsSources:
+@allure.suite(SuiteName.ROLE_MINING_COMMON)
+class TestRoleMiningAD:
 
-    def test_role_mining_settings_page(self, browser):
-        page = RmSettings(browser)
-        page.open_rm_settings_sources()
-        page.clear_sources_rm_settings()
-        page.not_confirm_cleaning_rm_settings()
-        page.clear_sources_rm_settings()
-        page.confirm_cleaning_rm_settings()
-        page.selecting_values_from_dropdown_list()
-        page.should_sources_saved()
-        page.should_sources_recalculated()
-        page.calculation_settings()
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Состояние Active Directory'")
+    def test_open_page_by_steps(self, browser):
+        RMStateADCase(browser).open_page_by_steps()
+
+    # TODO: работа вкладок Статистика | Рекомендации
 
 
-@pytest.mark.skip
-class TestRoleMiningActiveDirectory:
+@allure.suite(SuiteName.ROLE_MINING_COMMON)
+class TestRoleMiningGroupsAndUsers:
 
-    def test_mailing_anomaly_rm_tcp(self, browser):
-        page = AdStatus(browser)
-        page.open_rm_ad_status_statistic()
-        page.should_enter_rm_ad_status_statistic_be_successful()
-        page.open_rm_ad_status_recommendation()
-        page.should_enter_rm_ad_status_recommendation_be_successful()
-        page.configuring_anomaly_distribution()
-        page.input_server_address_and_port()
-        page.select_tcp_exchange_protocol()
-        page.click_add_button()
-        page.should_tcp_distribution_protocol_save_sucsess()
-        page.delete_last_entry()
-        page.close_window()
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Группы и пользователи Active Directory'")
+    def test_open_page_by_steps(self, browser):
+        RMGroupsAndUsersCase(browser).open_page_by_steps()
 
-    def test_mailing_anomaly_rm_udp(self, browser):
-        page = AdStatus(browser)
-        page.configuring_anomaly_distribution()
-        page.input_server_address_and_port()
-        page.select_udp_exchange_protocol()
-        page.click_add_button()
-        page.should_udp_distribution_protocol_save_sucsess()
-        page.delete_last_entry()
-        page.close_window()
+
+@allure.suite(SuiteName.ROLE_MINING_COMMON)
+class TestRoleMiningRoleModel:
+
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Переход на страницу 'Ролевая модель'")
+    def test_open_page_by_steps(self, browser):
+        RMRoleModelCase(browser).open_page_by_steps()

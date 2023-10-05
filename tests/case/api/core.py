@@ -1,7 +1,10 @@
+import json
 import os
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_core import Core
+from resourses.constants import API_AUTO_TEST_
+from resourses.static_methods import get_str_random_num
 
 AD_USER = "dataplan@ngrsoftlab.ru"
 AD_PASS = "d8hELYed9L809RB9FkSO!"
@@ -18,8 +21,35 @@ MAIL_PASS = "8327kHLHsfohn;hksjkfou!"
 MAIL_HOST = "NGR-Exchange01.ngrsoftlab.ru"
 MAIL_PORT = 587
 
+# TODO: delete all TEST_ secrets
+test_secret_id = set()  # 'id' secrets  # front: /settings/secrets
+
 
 class CoreCase(UserSession):
+
+    def _collect_test_secret_id(self):
+        resp = Core(self.sess, self.host).core_secrets_get()
+        assert resp.status_code == 200, \
+            f"""assert::core_secrets_get, failed
+            status_code: {resp.status_code}
+            resp: {resp.text}"""
+        # TODO: if resp.text != '{"res":null}\n':
+
+        _secrets_id_rows = json.loads(resp.text)['res']
+        for _row in _secrets_id_rows:
+            if str(_row['name']).startswith(API_AUTO_TEST_):
+                test_secret_id.add(int(_row['id']))
+
+    def _get_test_secret_id(self) -> int:
+        if len(test_secret_id) == 0:
+            self._collect_test_secret_id()
+
+        if len(test_secret_id) == 0:
+            resp_new_test_secret_id = self.case_core_secrets_post()
+            new_secret_id = json.loads(resp_new_test_secret_id.text)['res']
+            return int(new_secret_id)
+
+        return test_secret_id.pop()
 
     def case_core_active_directory_get(self):
         req = Core(self.sess, self.host)
@@ -389,46 +419,53 @@ class CoreCase(UserSession):
     def case_core_secrets_get(self):
         req = Core(self.sess, self.host)
         resp = req.core_secrets_get()
-        print(resp.text)
-        assert False
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_core_secrets_post(self):
         req = Core(self.sess, self.host)
 
-        data = {}
+        data = {
+            "name": API_AUTO_TEST_ + get_str_random_num(),
+            "description": API_AUTO_TEST_ + "description_" + get_str_random_num(),
+            "value": get_str_random_num(8),
+            # "hidden": False   # doesn't work
+        }
 
         resp = req.core_secrets_post(data)
-        print(resp.text)
-        assert False
+        # {"res":int}
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        return resp
 
     def case_core_secrets_id_get(self):
         req = Core(self.sess, self.host)
 
-        _id = 0
+        _id = self._get_test_secret_id()
 
         resp = req.core_secrets_id_get(_id)
-        print(resp.text)
-        assert False
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_core_secrets_id_put(self):
         req = Core(self.sess, self.host)
 
-        _id = 0
+        _id = self._get_test_secret_id()
 
-        data = {}
+        data = {
+            "name": API_AUTO_TEST_ + "changed_" + get_str_random_num(),
+            "description": API_AUTO_TEST_ + "desc_changed_" + get_str_random_num(),
+            "value": get_str_random_num(8),
+            # "hidden": False   # doesn't work
+        }
 
         resp = req.core_secrets_id_put(_id, data)
-        print(resp.text)
-        assert False
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_core_secrets_id_delete(self):
         req = Core(self.sess, self.host)
 
-        _id = 0
+        _id = self._get_test_secret_id()
 
         resp = req.core_secrets_id_delete(_id)
-        print(resp.text)
-        assert False
+        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_core_service_what_action_get(self, what, action):
         req = Core(self.sess, self.host)

@@ -40,7 +40,6 @@ class Alarmer(BaseReq):
 
     def alarmer_notification_settings_admin_get(self) -> requests.Response:
         """process GET req to get admin user notify settings"""
-        # исп: Настройки уведомлений
         return self.sess.get(f"{self.host}/back/dp.alarmer/notification/settings/admin")
 
     def alarmer_notification_settings_common_get(self) -> requests.Response:

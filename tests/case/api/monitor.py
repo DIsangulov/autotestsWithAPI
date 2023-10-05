@@ -1,18 +1,13 @@
-import datetime
 import json
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_monitor import Monitor
-
-
-def get_datetime_now_z() -> str:
-    # 2023-07-20T17:04:16Z
-    return datetime.datetime.today().replace(microsecond=0).isoformat() + "Z"
+from resourses.static_methods import get_datetime_now_z
 
 
 def _get_sample_data() -> dict:
     s_data = {
-        "start": "2023-02-13T00:00:00Z",
+        "start": get_datetime_now_z(day_delta=-7),
         "end": get_datetime_now_z(),
         "offset": 0,
         "timeFlag": 0,
@@ -49,7 +44,7 @@ class MonitorCase(UserSession):
             4,    # Год
         )
 
-        data = _get_sample_data()
+        data = {"offset": 180}
         for t_flag in _time_flags:
             # ? отсутствие ключа 'timeFlag' возвращает 3549 значений
 
@@ -57,6 +52,9 @@ class MonitorCase(UserSession):
 
             resp = req.monitor_fast_graph_post(data)
             assert resp.status_code == 200, f"Ошибка, код: {resp.status_code}, post_data:{data}, resp: {resp.text}"
+            # DAT-5479
+            assert resp.text != '{"res":null}\n', f"status_code: {resp.status_code}\npost_data: {data}\nresp: {resp.text}"
+            assert len(json.loads(resp.text)["res"]) > 0, f"status_code: {resp.status_code}\npost_data: {data}\nresp: {resp.text}"
 
     def case_monitor_fast_info_get(self):
         req = Monitor(self.sess, self.host)

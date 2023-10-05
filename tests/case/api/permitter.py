@@ -498,17 +498,25 @@ class PermitterCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(resp.text)
 
-    def case_permitter_users_new_author_who_id_post(self):
+    def case_permitter_users_new_author_who_id_post(self, who_id, post_data):
         req = Permitter(self.sess, self.host)
         req.sess.headers.update({'ui': "2"})
-        who_id = 123    # fixme: принимает случайные значения
-        data = {
-            "delete": True,
-            "new_author": API_AUTO_TEST_
-        }
-        resp = req.permitter_users_new_author_who_id_post(who_id, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
+
+        # :delete: True - удалить личные элементы
+        # :delete: False - Не удалять личные элементы
+        # :new_author - id of new author    # как вариант self.get_self_user_id()
+        # :new_author: None - Не назначать нового автора (личные элементы присваиваются системе и открыты + опубликованы)
+
+        # look: who_id - id 'старого' пользователя; нет проверки на существование этого пользователя
+        # who_id = PeoplerCase().get_auto_test_user_id()
+
+        resp = req.permitter_users_new_author_who_id_post(who_id, post_data)
+        assert resp.status_code == 200, \
+            f"""Ошибка, 
+            who_id: {who_id}
+            post_data: {post_data}
+            status_code: {resp.status_code}
+            resp: {resp.text}"""
 
     def case_permitter_user_rules_who_id_get(self):
         req = Permitter(self.sess, self.host)

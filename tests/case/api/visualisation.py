@@ -3,7 +3,7 @@ import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_visualisation import Visualisation
-from resourses.constants import DB_picker_tables, API_AUTO_TEST_
+from resourses.constants import DB_picker_tables, DB_Shallow, API_AUTO_TEST_
 
 query_id = set()           # 'id' sql запроса
 report_id = set()          # 'id' отчета
@@ -103,10 +103,10 @@ class VisualisationCase(UserSession):
         str_random_num = str(random.randint(100, 999))
         self_user_id = self.get_self_user_id()
 
-        db_name = DB_picker_tables.name
+        db_name = DB_Shallow.name
         db_id = self.get_db_id_by_name(db_name)
-        db_tab_name = DB_picker_tables.tab_Weather_all_online
-        db_col_name = DB_picker_tables.col_Gorod
+        db_tab_name = DB_Shallow.tab_boulder_general
+        db_col_name = DB_Shallow.col_name
 
         self.asserts_check_db_and_table_is_exists(db_name, db_tab_name)
 
@@ -130,7 +130,7 @@ class VisualisationCase(UserSession):
                 "agregators": [],
                 "limit": 50
             },
-            "db_name": DB_picker_tables.name,
+            "db_name": db_name,
             "query": "",
             "auto": True,
             "editor_id": self_user_id,
