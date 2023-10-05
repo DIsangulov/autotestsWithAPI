@@ -39,7 +39,7 @@ def _print_debug_info():
 class SuiteName:
     NAVIGATION = "Навигация"
 
-    AUTH_PAGE = "Страница Авторизации"
+    AUTH_PAGE_COMMON = "Страница Авторизации"
 
     ADMINISTRATION_COMMON = "Раздел Администрирование"
 
@@ -55,7 +55,7 @@ class SuiteName:
     ROLE_MINING_COMMON = "Раздел Role Mining"
 
 
-@allure.suite(SuiteName.AUTH_PAGE)
+@allure.suite(SuiteName.AUTH_PAGE_COMMON)
 class TestAuth:
 
     @allure.title("Авторизация valid")
@@ -148,7 +148,7 @@ class TestAuth:
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationRoles:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Роли'")
     def test_open_page_by_steps(self, browser):
         RolesCase(browser).open_page_by_steps()
@@ -157,7 +157,7 @@ class TestAdministrationRoles:
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationUsers:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Пользователи'")
     def test_open_page_by_steps(self, browser):
         UsersCase(browser).open_page_by_steps()
@@ -166,7 +166,7 @@ class TestAdministrationUsers:
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSessions:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Сессии'")
     def test_open_page_by_steps(self, browser):
         SessionsCase(browser).open_page_by_steps()
@@ -175,7 +175,7 @@ class TestAdministrationSessions:
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationMonitoring:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Мониторинг'")
     def test_open_page_by_steps(self, browser):
         MonitoringCase(browser).open_page_by_steps()
@@ -184,7 +184,7 @@ class TestAdministrationMonitoring:
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationLicense:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Лицензии'")
     def test_open_page_by_steps(self, browser):
         LicenseCase(browser).open_page_by_steps()
@@ -193,7 +193,7 @@ class TestAdministrationLicense:
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationUpdates:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Обновление'")
     @allure.description("""
     Переход на страницу, используя UI элементы;
@@ -207,7 +207,7 @@ class TestAdministrationUpdates:
 @allure.title(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationNotificationList:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Журнал уведомлений'")
     def test_open_page_by_steps(self, browser):
         AdmNotificationListCase(browser).open_page_by_steps()
@@ -216,7 +216,7 @@ class TestAdministrationNotificationList:
 @allure.title(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSettings:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Настройки'")
     @allure.description("""
     Переход на страницу, используя UI элементы;
@@ -226,15 +226,16 @@ class TestAdministrationSettings:
         AdmSettingsCase(browser).open_page_by_steps()
 
 
-@allure.suite(SuiteName.DATA_SOURCES)
+@allure.suite(SuiteName.DATA_COMMON)
 class TestDataSources:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Источники'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
         DataSourcesCase(browser).open_page_by_steps()
 
+    @allure.sub_suite(SuiteName.DATA_SOURCES)
     @allure.title("Открыть модальное окно 'Детали'")
     @allure.description("""
     На странице 'Источники' в колонке 'Действие',
@@ -246,18 +247,18 @@ class TestDataSources:
     def test_open_modal_w_actions_details(self, browser):
         DataSourcesCase(browser).open_modal_w_actions_details()
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Создание источника в редакторе'")
     def test_open_new_source_editor_by_steps(self, browser):
         DataSourcesCase(browser).open_new_source_editor_by_steps()
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Подключение источника'")
     @allure.description("Подключить источник из коннектора")
     def test_open_new_source_connector_by_steps(self, browser):
         DataSourcesCase(browser).open_new_source_connector_by_steps()
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Элементы навигации библиотека Шаблонов/Коннекторов")
     @allure.description("""
     Переход на страницу 'Библиотека коннекторов' используя UI элементы, со страницы 'Источники данных';
@@ -269,6 +270,7 @@ class TestDataSources:
         DataSourcesCase(browser).library_connectors_navigation()
 
     @pytest.mark.skip   # todo: сделать
+    @allure.sub_suite(SuiteName.DATA_SOURCES)
     @allure.title("Создание источника в редакторе")
     @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
     @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
@@ -278,25 +280,25 @@ class TestDataSources:
     # https://team-6wwm.testit.software/projects/3/tests?isolatedSection=1ab5e96c-fcad-4238-bd9f-bb78f7d0e094
 
 
-@allure.suite(SuiteName.DATA_SCRIPTS)
+@allure.suite(SuiteName.DATA_COMMON)
 class TestDataScripts:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Скрипты'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
         DataScriptsCase(browser).open_page_by_steps()
 
 
-@allure.suite(SuiteName.DATA_STORAGE)
+@allure.suite(SuiteName.DATA_COMMON)
 class TestDataStorage:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Хранилище'")
     def test_open_page_by_steps(self, browser):
         DataStorageCase(browser).open_page_by_steps()
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Хранилище > переход по вкладкам")
     @allure.description("Проверка работы верхних вкладок \
     [Структура, Статистика, Поиск в Хранилище|по содержимому|по столбцам, Правила импорта]")
@@ -307,7 +309,7 @@ class TestDataStorage:
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsMailing:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Рассылки'")
     @allure.description("""
     Переход на страницу, используя UI элементы;
@@ -321,7 +323,7 @@ class TestAnalyticsMailing:
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsReports:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Отчеты'")
     def test_open_page_by_steps(self, browser):
         ReportsCase(browser).open_page_by_steps()
@@ -330,7 +332,7 @@ class TestAnalyticsReports:
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsVisualisation:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Визуализации'")
     def test_open_page_by_steps(self, browser):
         VisualisationCase(browser).open_page_by_steps()
@@ -339,7 +341,7 @@ class TestAnalyticsVisualisation:
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsQuery:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Запросы'")
     def test_open_page_by_steps(self, browser):
         QueriesCase(browser).open_page_by_steps()
@@ -348,7 +350,7 @@ class TestAnalyticsQuery:
 @allure.suite(SuiteName.XBA_COMMON)
 class TestXbaProfiles:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Профили xBA'")
     def test_open_page_by_steps(self, browser):
         XbaProfilesCase(browser).open_page_by_steps()
@@ -357,7 +359,7 @@ class TestXbaProfiles:
 @allure.suite(SuiteName.XBA_COMMON)
 class TestXbaMetaprofiles:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Метапрофили'")
     def test_open_page_by_steps(self, browser):
         XbaMetaprofilesCase(browser).open_page_by_steps()
@@ -366,7 +368,7 @@ class TestXbaMetaprofiles:
 @allure.suite(SuiteName.XBA_COMMON)
 class TestXbaStatistics:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Статистика xBA'")
     def test_open_page_by_steps(self, browser):
         XbaStatisticsCase(browser).open_page_by_steps()
@@ -380,16 +382,26 @@ class TestRoleMiningSettings:
     def test_open_page_by_steps(self, browser):
         RMSettingsCase(browser).open_page_by_steps()
 
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Настройки Role mining - работа вкладок навигации")
+    @allure.description("Работа вкладок 'Источники' | 'Настройка расчета'")
+    def test_rm_settings_navigation_tabs(self, browser):
+        RMSettingsCase(browser).rm_settings_navigation_tabs()
+
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
-class TestRoleMiningAD:
+class TestRoleMiningStateAD:
 
     @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Состояние Active Directory'")
     def test_open_page_by_steps(self, browser):
         RMStateADCase(browser).open_page_by_steps()
 
-    # TODO: работа вкладок Статистика | Рекомендации
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Состояние Active Directory - работа вкладок навигации")
+    @allure.description("Работа вкладок 'Статистика'|'Рекомендации'")
+    def test_rm_state_ad_navigation_tabs(self, browser):
+        RMStateADCase(browser).rm_state_ad_navigation_tabs()
 
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
@@ -399,6 +411,12 @@ class TestRoleMiningGroupsAndUsers:
     @allure.title("Переход на страницу 'Группы и пользователи Active Directory'")
     def test_open_page_by_steps(self, browser):
         RMGroupsAndUsersCase(browser).open_page_by_steps()
+
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Группы и пользователи Active Directory - работа вкладок навигации")
+    @allure.description("Работа вкладок 'Группы'|'Пользователи'")
+    def test_rm_groups_and_users_navigation_tabs(self, browser):
+        RMGroupsAndUsersCase(browser).rm_groups_and_users_navigation_tabs()
 
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)

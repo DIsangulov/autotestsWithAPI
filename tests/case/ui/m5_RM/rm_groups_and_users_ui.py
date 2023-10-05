@@ -5,7 +5,7 @@ import allure
 from playwright.sync_api import expect
 
 from pages.Helpers.base_case import BaseCase
-from pages.UI._5_RoleMining.rm_groups_and_users_page import RMGroupsAndUsersPage
+from pages.UI._5_RoleMining.rm_groups_and_users_page import RMGroupsAndUsersPage, RMGroupsPage, RMUsersPage
 
 
 class RMGroupsAndUsersCase(BaseCase):
@@ -27,3 +27,22 @@ class RMGroupsAndUsersCase(BaseCase):
         with allure.step("Открыта страница 'Группы и пользователи Active Directory'"):
             expect_reg = re.compile('^' + page.host + RMGroupsAndUsersPage.page_path + '(/.*)?$')
             expect(page.page).to_have_url(expect_reg)
+
+    def rm_groups_and_users_navigation_tabs(self):
+        page = RMGroupsPage(self._page)
+
+        with allure.step("Открыть страницу 'Группы и пользователи Active Directory' (Группы)"):
+            page.open()
+            expect(page.page).to_have_url(page.host + RMGroupsPage.page_path)
+
+        with allure.step("Клик по вкладке 'Пользователи'"):
+            page.TAB_USERS.click()
+
+        with allure.step("Открыта страница 'Группы и пользователи Active Directory' (Пользователи)"):
+            expect(page.page).to_have_url(page.host + RMUsersPage.page_path)
+
+        with allure.step("Клик по вкладке 'Группы'"):
+            page.TAB_GROUPS.click()
+
+        with allure.step("Открыта страница 'Группы и пользователи Active Directory' (Группы)"):
+            expect(page.page).to_have_url(page.host + RMGroupsPage.page_path)
