@@ -5,6 +5,8 @@ class Navigation:
     def __init__(self, page: Page):
         self.page = page
 
+        self.HEADER_LOGO = self.page.locator("//div[@class='n-app-navigation__header']")
+
         self.IS_LOADING = self.page.locator("//div[contains(@class, 'isLoading')]")
 
         self.PROFILE_BUTTON = self.page.locator("//button[@class='n-app-profile__ny n-app-button']")

@@ -2,7 +2,6 @@ import allure
 from playwright.sync_api import expect, Page
 
 from pages.UI._0_Auth.auth_page import AuthPage
-from resourses.locators import MainLocators
 
 
 @allure.step("Авторизация")
@@ -17,8 +16,7 @@ def valid_auth_no_steps(browser: Page, auth_data: dict):
     if auth_data.get("local"):
         page.CHECKBOX_LOCAL.click()
     page.ENTER_BUTTON.click()
-    logo = browser.locator(MainLocators.HEADER_LOGO)
-    expect(logo).to_be_visible(timeout=10000)
+    expect(page.HEADER_LOGO).to_be_visible(timeout=10000)
 
 
 @allure.step("Авторизация valid")
@@ -59,8 +57,7 @@ def valid_auth(browser: Page, auth_data: dict):
         page.ENTER_BUTTON.click()
 
     with allure.step("Авторизация прошла"):
-        logo = browser.locator(MainLocators.HEADER_LOGO)
-        expect(logo).to_be_visible(timeout=10000)
+        expect(page.HEADER_LOGO).to_be_visible(timeout=10000)
 
 
 @allure.step("Авторизация invalid")
@@ -101,9 +98,8 @@ def invalid_auth(browser: Page, auth_data: dict):
         page.ENTER_BUTTON.click()
 
     with allure.step("Авторизация не прошла"):
-        logo = browser.locator(MainLocators.HEADER_LOGO)
         expect(page.WRONG_LOGPASS_ALERT).to_be_visible()
-        expect(logo).to_be_visible(visible=False)
+        expect(page.HEADER_LOGO).to_be_visible(visible=False)
 
 
 def log_out(browser: Page, auth_data: dict):

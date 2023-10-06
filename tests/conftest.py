@@ -23,7 +23,7 @@ def browser():
         context = browser.new_context(
             ignore_https_errors=True,
             viewport=default_viewport,
-            extra_http_headers={"user-agent": "Super-test-machine-v30818"}
+            extra_http_headers={"user-agent": "Super-test-machine-v31006"}
         )
         page = context.new_page()
         BasePage(page).auth()
