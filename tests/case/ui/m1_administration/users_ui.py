@@ -8,7 +8,7 @@ from pages.UI._1_Administration.adm_users_page import UsersPage
 
 @allure.step("Открыть страницу Пользователи")
 def open_page_by_steps(browser: Page):
-    page = UsersPage(self._page)
+    page = UsersPage(browser)
 
     # шаг нужен, чтобы боковое меню было закрыто
     with allure.step("Перейти в 'Настройка уведомлений'"):
