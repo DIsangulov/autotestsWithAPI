@@ -1,3 +1,5 @@
+import time
+
 import allure
 from playwright.sync_api import Page
 
@@ -11,8 +13,6 @@ class DrivenPage:
 
         self.host = TARGET_URL
         self.page_path = "/"
-
-        self.page.set_default_timeout(10000)
 
         self.HEADER_LOGO = self.page.locator("//div[@class='n-app-navigation__header']")
 
@@ -82,27 +82,52 @@ class MainNavigation(DrivenPage):
 class BasePage(MainNavigation):
 
     # todo: __init__(): pass if check_auth else auth()
+    def __init__(self, page: Page, *, to_check_auth: bool = True):
+        super().__init__(page)
+        if to_check_auth:
+            if not self.check_auth():
+                print(f"auth?: {time.time()}")
+                self.auth()
+
+    def check_auth(self) -> bool:
+        print(f"check: {time.time()}")
+        if not self.HEADER_LOGO.is_visible(timeout=300):
+            print(f"check_auth:return FALSE: {time.time()}")
+            return False
+        else:
+            # self.HEADER_LOGO.is_visible(timeout=300)
+            print(f"check_auth:return TRUE: {time.time()}")
+            return True
 
     @allure.step("Авторизация")
-    # todo: прописать всё же шаги для аллюра
     def auth(self, *, auth_data: dict = TestUsers.DpQaaLocal):
 
         page = AuthPage(self.page)
-        page.open()
-        current_url = page.page.url
-        assert current_url.startswith(page.host + AuthPage.page_path), f"Страница авторизации не открылась"
 
-        page.LOGIN_INPUT.fill(auth_data.get("username"))
-        page.PASSWORD_INPUT.fill(auth_data.get("password"))
+        with allure.step("Перейти на страницу Авторизации"):
+            page.open()
+            current_url = self.page.url
+            assert current_url.startswith(page.host + AuthPage.page_path), f"Страница авторизации не открылась"
+
+        with allure.step("Ввести значение в поле 'Логин'"):
+            page.LOGIN_INPUT.fill(auth_data.get("username"))
+        with allure.step("Ввести значение в поле 'Пароль'"):
+            page.PASSWORD_INPUT.fill(auth_data.get("password"))
         if auth_data.get("local"):
-            page.CHECKBOX_LOCAL.click()
-        page.ENTER_BUTTON.click()
-        self.HEADER_LOGO.wait_for(state="visible", timeout=10000)
+            with allure.step("Выбрать чекбокс 'локально'"):
+                page.CHECKBOX_LOCAL.click()
+
+        with allure.step('Кликнуть по кнопке "Войти"'):
+            page.ENTER_BUTTON.click()
+        with allure.step("Авторизация прошла"):
+            self.HEADER_LOGO.wait_for(state="visible")
 
 
 class AuthPage(DrivenPage):
 
     page_path = "/auth"
+
+    # todo: +__init__(): pass if !check_auth else logout()
 
     def __init__(self, page: Page):
         super().__init__(page)
