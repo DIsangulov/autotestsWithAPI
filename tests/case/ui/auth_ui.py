@@ -1,7 +1,8 @@
 import allure
 from playwright.sync_api import expect, Page
 
-from pages.Helpers.base_page import BasePage, AuthPage
+from pages.Helpers.base_page import BasePage
+from pages.UI.Auth.auth_page import AuthPage
 
 
 @allure.step("Авторизация valid")
@@ -90,7 +91,7 @@ def invalid_auth(browser: Page, auth_data: dict):
 def log_out(browser: Page, auth_data: dict):
 
     page = BasePage(browser)
-    page.auth(auth_data=auth_data)
+    # page.auth(auth_data=auth_data)
 
     with allure.step("Кликнуть на выпадающее меню 'Пользователь'"):
         page.PROFILE_BUTTON.click()

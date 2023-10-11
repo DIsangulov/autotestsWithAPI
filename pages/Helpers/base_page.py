@@ -16,6 +16,11 @@ class DrivenPage:
 
         self.HEADER_LOGO = self.page.locator("//div[@class='n-app-navigation__header']")
 
+        self.AUTH_LOGIN_INPUT = page.locator("//input[@type='email']")
+        self.AUTH_PASSWORD_INPUT = page.locator("//input[@id='password']")
+        self.AUTH_CHECKBOX_LOCAL = page.locator("//input[@type='checkbox']/..")
+        self.AUTH_ENTER_BUTTON = page.locator("//button[span[contains(text(), 'Войти')]]")
+
     def open(self):
         self.page.goto(self.host + self.page_path)
         self.page.wait_for_url(self.host + self.page_path)
@@ -81,65 +86,46 @@ class MainNavigation(DrivenPage):
 
 class BasePage(MainNavigation):
 
-    # todo: __init__(): pass if check_auth else auth()
-    def __init__(self, page: Page, *, to_check_auth: bool = True):
+    def __init__(self, page: Page, *, auto_auth: bool = True):
         super().__init__(page)
-        if to_check_auth:
+        if auto_auth:
             if not self.check_auth():
-                print(f"auth?: {time.time()}")
                 self.auth()
 
     def check_auth(self) -> bool:
-        print(f"check: {time.time()}")
         if not self.HEADER_LOGO.is_visible(timeout=300):
             print(f"check_auth:return FALSE: {time.time()}")
             return False
         else:
-            # self.HEADER_LOGO.is_visible(timeout=300)
             print(f"check_auth:return TRUE: {time.time()}")
             return True
 
     @allure.step("Авторизация")
     def auth(self, *, auth_data: dict = TestUsers.DpQaaLocal):
 
-        page = AuthPage(self.page)
+        auth_page_path = "/auth"
 
         with allure.step("Перейти на страницу Авторизации"):
-            page.open()
+            self.goto_page(auth_page_path)
             current_url = self.page.url
-            assert current_url.startswith(page.host + AuthPage.page_path), f"Страница авторизации не открылась"
+            assert current_url.startswith(self.host + auth_page_path), f"Страница авторизации не открылась"
 
         with allure.step("Ввести значение в поле 'Логин'"):
-            page.LOGIN_INPUT.fill(auth_data.get("username"))
+            self.AUTH_LOGIN_INPUT.fill(auth_data.get("username"))
         with allure.step("Ввести значение в поле 'Пароль'"):
-            page.PASSWORD_INPUT.fill(auth_data.get("password"))
+            self.AUTH_PASSWORD_INPUT.fill(auth_data.get("password"))
         if auth_data.get("local"):
             with allure.step("Выбрать чекбокс 'локально'"):
-                page.CHECKBOX_LOCAL.click()
+                self.AUTH_CHECKBOX_LOCAL.click()
 
         with allure.step('Кликнуть по кнопке "Войти"'):
-            page.ENTER_BUTTON.click()
+            self.AUTH_ENTER_BUTTON.click()
         with allure.step("Авторизация прошла"):
             self.HEADER_LOGO.wait_for(state="visible")
 
-
-class AuthPage(DrivenPage):
-
-    page_path = "/auth"
-
-    # todo: +__init__(): pass if !check_auth else logout()
-
-    def __init__(self, page: Page):
-        super().__init__(page)
-        self.page_path = AuthPage.page_path
-
-        self.LOGIN_INPUT = page.locator("//input[@type='email']")
-        self.PASSWORD_INPUT = page.locator("//input[@id='password']")
-        self.PASSWORD_VISIBLE = page.locator("//span[@class='icon is-right has-text-primary is-clickable']")
-
-        self.CHECKBOX_LOCAL = page.locator("//input[@type='checkbox']/..")
-        self.ENTER_BUTTON = page.locator("//button[span[contains(text(), 'Войти')]]")
-
-        self.WRONG_LOGPASS_ALERT = page.locator("//div[@role='alert'][contains(text(), 'Неверный логин или пароль')]")
-
-        # self.REGISTER_LINK = page.locator()
+    @allure.step("Logout:")
+    def logout(self):
+        with allure.step("Кликнуть на выпадающее меню 'Пользователь'"):
+            self.PROFILE_BUTTON.click()
+        with allure.step("Кликнуть по кнопке 'Выйти'"):
+            self.PB_SIGN_OUT.click()
