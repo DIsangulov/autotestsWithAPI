@@ -1,27 +1,16 @@
 import allure
 from playwright.sync_api import expect, Page
 
-from pages.UI._0_Auth.auth_page import AuthPage
-
-
-@allure.step("Авторизация")
-def valid_auth_no_steps(browser: Page, auth_data: dict):
-    page = AuthPage(browser)
-    page.open()
-    current_url = page.page.url
-    assert current_url.startswith(page.host + AuthPage.page_path), f"Страница авторизации не открылась"
-
-    page.LOGIN_INPUT.fill(auth_data.get("username"))
-    page.PASSWORD_INPUT.fill(auth_data.get("password"))
-    if auth_data.get("local"):
-        page.CHECKBOX_LOCAL.click()
-    page.ENTER_BUTTON.click()
-    expect(page.HEADER_LOGO).to_be_visible(timeout=10000)
+from pages.Helpers.base_page import BasePage
+from pages.UI.Auth.auth_page import AuthPage
 
 
 @allure.step("Авторизация valid")
 def valid_auth(browser: Page, auth_data: dict):
     page = AuthPage(browser)
+
+    if page.check_auth():
+        page.logout()
 
     with allure.step("Перейти на страницу Авторизации"):
         page.open()
@@ -64,6 +53,9 @@ def valid_auth(browser: Page, auth_data: dict):
 def invalid_auth(browser: Page, auth_data: dict):
     page = AuthPage(browser)
 
+    if page.check_auth():
+        page.logout()
+
     with allure.step("Перейти на страницу Авторизации"):
         page.open()
         current_url = page.page.url
@@ -102,11 +94,9 @@ def invalid_auth(browser: Page, auth_data: dict):
         expect(page.HEADER_LOGO).to_be_visible(visible=False)
 
 
-def log_out(browser: Page, auth_data: dict):
-    # step.авторизация
-    valid_auth_no_steps(browser, auth_data)
+def log_out(browser: Page):
 
-    page = AuthPage(browser)
+    page = BasePage(browser)
 
     with allure.step("Кликнуть на выпадающее меню 'Пользователь'"):
         page.PROFILE_BUTTON.click()
