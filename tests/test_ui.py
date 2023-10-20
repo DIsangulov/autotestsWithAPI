@@ -132,9 +132,8 @@ class TestAuth:
 
     @allure.title("Авторизация | Выход из профиля пользователя")
     @allure.description("Выход по кнопке 'Выйти'")
-    @pytest.mark.parametrize('auth_data', [TestUsers.DpQaaLocal])
-    def test_log_out(self, browser, auth_data):
-        auth_ui.log_out(browser, auth_data)
+    def test_log_out(self, browser):
+        auth_ui.log_out(browser)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)

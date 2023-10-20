@@ -9,6 +9,9 @@ from pages.UI.Auth.auth_page import AuthPage
 def valid_auth(browser: Page, auth_data: dict):
     page = AuthPage(browser)
 
+    if page.check_auth():
+        page.logout()
+
     with allure.step("Перейти на страницу Авторизации"):
         page.open()
         current_url = browser.url
@@ -50,6 +53,9 @@ def valid_auth(browser: Page, auth_data: dict):
 def invalid_auth(browser: Page, auth_data: dict):
     page = AuthPage(browser)
 
+    if page.check_auth():
+        page.logout()
+
     with allure.step("Перейти на страницу Авторизации"):
         page.open()
         current_url = page.page.url
@@ -88,10 +94,9 @@ def invalid_auth(browser: Page, auth_data: dict):
         expect(page.HEADER_LOGO).to_be_visible(visible=False)
 
 
-def log_out(browser: Page, auth_data: dict):
+def log_out(browser: Page):
 
     page = BasePage(browser)
-    # page.auth(auth_data=auth_data)
 
     with allure.step("Кликнуть на выпадающее меню 'Пользователь'"):
         page.PROFILE_BUTTON.click()

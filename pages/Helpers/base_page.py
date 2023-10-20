@@ -1,5 +1,3 @@
-import time
-
 import allure
 from playwright.sync_api import Page
 
@@ -87,6 +85,7 @@ class MainNavigation(DrivenPage):
 class BasePage(MainNavigation):
 
     def __init__(self, page: Page, *, auto_auth: bool = True):
+        # TODO: --> luk at zis!! self.navigation = MainNavigation(page)
         super().__init__(page)
         if auto_auth:
             if not self.check_auth():
@@ -94,10 +93,10 @@ class BasePage(MainNavigation):
 
     def check_auth(self) -> bool:
         if not self.HEADER_LOGO.is_visible(timeout=300):
-            print(f"check_auth:return FALSE: {time.time()}")
+            # print(f"check_auth:return FALSE")
             return False
         else:
-            print(f"check_auth:return TRUE: {time.time()}")
+            # print(f"check_auth:return TRUE")
             return True
 
     @allure.step("Авторизация")
