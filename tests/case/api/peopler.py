@@ -1,11 +1,11 @@
 import json
-import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_peopler import Peopler
 from resourses.constants import API_AUTO_TEST_
+from resourses.static_methods import get_str_random_num
 
-officer_role_id = 3
+officer_role_id = 3         # or any test_role_id
 
 auto_test_user_id = set()   # список для пользователей, созданных автоматически
 
@@ -42,9 +42,8 @@ class PeoplerCase(UserSession):
         resp = req.peopler_mainpage_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # LOOK: работа ключей | name, rolename | под вопросом ещё (c) Swagger
-    # на фронте оно только меняет "роль" группе?
     def case_peopler_many_users_put(self):
+        # front: поменять роль группе пользователей
         req = Peopler(self.sess, self.host)
         # FIXME: может дважды выпасть один и тот же user_id
         auto_user_id_1 = self.get_auto_test_user_id()
@@ -52,7 +51,7 @@ class PeoplerCase(UserSession):
         body = {
             "users": [
                 {
-                    "id": auto_user_id_1
+                    "id": auto_user_id_1,
                 },
                 {
                     "id": auto_user_id_2
@@ -63,51 +62,48 @@ class PeoplerCase(UserSession):
 
         resp = req.peopler_many_users_put(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     def case_peopler_many_users_post(self):
         req = Peopler(self.sess, self.host)
 
-        random_num = random.randint(1500, 1996)
+        random_num = get_str_random_num(3)
         body = {
-            # "role_id": 76,
             "users": [
                 {
                     "role_id": officer_role_id,
-                    "name": API_AUTO_TEST_ + f"many_users_{random_num}",
+                    "name": API_AUTO_TEST_ + f"many_users_1_{random_num}",
                     # "is_admin":     True,
                     # "is_system":    True,
                     # "is_tech":      True
                 },
                 {
                     "role_id": officer_role_id,
-                    "name": API_AUTO_TEST_ + f"many_users_{random_num + 1}",
+                    "name": API_AUTO_TEST_ + f"many_users_2_{random_num}",
                 },
             ]
         }
         resp = req.peopler_many_users_post(body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     # == peopler/pin_page/x ========================================
-    # https://tasks.ngrsoftlab.ru/browse/DAT-4982
-    def _peopler_pin_page_current_user_path_post(self, pin_path):
-        # закрепить страницу "pin_path" за текущим пользователем
+    def case_peopler_pin_page_current_user_post(self, page_path):
+        # Закрепление страницы 'page_path' за текущим пользователем
         req = Peopler(self.sess, self.host)
-        data = {
+        post_data = {
             # "obj_id": 0,
             # "obj_type": "script",
-            "path": pin_path        # sample: "/scripts"
+            "path": page_path  # sample: "/scripts"
         }
-        resp = req.peopler_pin_page_current_user_post(data)
-        # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # todo: get_mainpage >> assert на ответ resp.text = pin_path
-        return resp
+        resp = req.peopler_pin_page_current_user_post(post_data)
+        assert resp.status_code == 200, f"1.Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_peopler_pin_page_current_user_post(self):
-        path = "/scripts"
-        self._peopler_pin_page_current_user_path_post(path)
+        # Проверка новой закрепленной страницы за текущим пользователем
+        resp_mainpage = req.peopler_mainpage_get()
+        expecting_resp = '{"res":\"' + page_path + '\"}\n'
+        assert resp_mainpage.text == expecting_resp, f"""0.Ошибка,
+            status_code: {resp_mainpage.status_code}
+            expecting_resp: {expecting_resp}
+            resp.text: {resp_mainpage.text}"""
 
     def case_peopler_pin_page_current_user_delete(self):
         # открепить закреп от текущего пользователя
@@ -116,47 +112,63 @@ class PeoplerCase(UserSession):
         # {"error":{"code":400,"msg":"страницу не удалось открепить (она не была закреплена для данного субъекта)"}}
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_peopler_pin_page_list_type_subject_post(self, type_subject, path):
-        # получить список закрепленных пользователей "user" или ролей "role" для "path"
+    def case_peopler_pin_page_list_type_subject_post(self, sub_type: str, page_path: str):
+        # получить список закрепленных пользователей (sub_type='user') или ролей (sub_type='role') для "page_path"
         req = Peopler(self.sess, self.host)
         data = {
-            "path": path
+            "path": page_path
         }
-        resp = req.peopler_pin_page_list_type_subject_post(type_subject, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        resp = req.peopler_pin_page_list_type_subject_post(sub_type, data)
+        assert resp.status_code == 200, f"""Ошибка,
+            subject_type:   {sub_type}
+            page_path:      {page_path}
+            
+            status_code:    {resp.status_code}
+            resp: {resp.text}"""
 
-    def case_peopler_pin_page_type_subject_post(self):
-        # закрепить у пользователя|роли (subject_id), что (path)
+    def case_peopler_pin_page_type_subject_post(self, sub_type: str, sub_id: int | None, replace_None: bool):
+        # закрепить у пользователя (sub_type='user') или роли (sub_type='role')
         req = Peopler(self.sess, self.host)
 
-        # todo: user / role
-        subject_type = "user"
-        # subject_type = "role"
+        if replace_None and sub_id is None:
+            if sub_type == "user":
+                sub_id = self.get_self_user_id()    # == peopler_pin_page_current_user_delete
+            if sub_type == "role":
+                sub_id = officer_role_id
 
-        data = {
+        post_data = {
             "obj_id": 0,                  # закрепление конкретной сущности
             "obj_type": "metaprofiles",   # тип этой сущности
             "path": "/metaprofiles",
-            "subject_id": self.get_self_user_id()
+            "subject_id": sub_id
         }
 
-        resp = req.peopler_pin_page_type_subject_post(subject_type, data)
-        # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        resp = req.peopler_pin_page_type_subject_post(sub_type, post_data)
+        assert resp.status_code == 200, f"""Ошибка,
+            subject_type:   {sub_type}
+            subject_id:     {sub_id}
+            
+            post_data:      {post_data}
+            status_code:    {resp.status_code}
+            resp: {resp.text}"""
 
-    def case_peopler_pin_page_type_subject_id_delete(self):
-        # убрать закреп у пользователя|роли (id)
+    def case_peopler_pin_page_type_subject_id_delete(self, sub_type: str, sub_id: int | None, replace_None: bool):
+        # убрать закреп у пользователя (sub_type='user') или роли (sub_type='role')
         req = Peopler(self.sess, self.host)
 
-        # todo: user \ role
-        # subject_type = "role"
-        subject_type = "user"
-        # subject_id = "5"  # sysop
-        subject_id = self.get_self_user_id()    # == peopler_pin_page_current_user_delete
+        if replace_None and sub_id is None:
+            if sub_type == "user":
+                sub_id = self.get_self_user_id()    # == peopler_pin_page_current_user_delete
+            if sub_type == "role":
+                sub_id = officer_role_id
 
-        resp = req.peopler_pin_page_type_subject_id_delete(subject_type, subject_id)
-        # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        resp = req.peopler_pin_page_type_subject_id_delete(sub_type, sub_id)
+        assert resp.status_code == 200, f"""Ошибка,
+            subject_type:   {sub_type}
+            subject_id:     {sub_id}
+            
+            status_code:    {resp.status_code}
+            resp: {resp.text}"""
         # {"error":{"code":400,"msg":"страницу не удалось открепить (она не была закреплена для данного субъекта)"}}
 
     def case_peopler_pinned_page_status_post(self, page_path):
@@ -190,9 +202,8 @@ class PeoplerCase(UserSession):
     def case_peopler_users_post(self):
         req = Peopler(self.sess, self.host)
 
-        str_random_num = str(random.randint(1000, 1500))
         body = {
-            "name": API_AUTO_TEST_ + str_random_num,
+            "name": API_AUTO_TEST_ + get_str_random_num(),
             "role_id": officer_role_id,
             # "is_admin":     True,
             # "is_system":    True,

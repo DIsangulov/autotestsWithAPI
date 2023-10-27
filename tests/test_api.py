@@ -613,23 +613,32 @@ class TestPeopler:
         PeoplerCase().case_peopler_many_users_put()
 
     def test_peopler_pin_page_current_user_post(self):
-        PeoplerCase().case_peopler_pin_page_current_user_post()
+        pin_page_path = "/scripts"
+        PeoplerCase().case_peopler_pin_page_current_user_post(pin_page_path)
 
     def test_peopler_pin_page_current_user_delete(self):
         PeoplerCase().case_peopler_pin_page_current_user_delete()
 
-    @pytest.mark.parametrize('type_subject,path', [
+    @pytest.mark.parametrize('subject_type,page_path', [
         ("user", "/scripts"),
         ("role", "/scripts")
     ])
-    def test_peopler_pin_page_list_type_subject_post(self, type_subject, path):
-        PeoplerCase().case_peopler_pin_page_list_type_subject_post(type_subject, path)
+    def test_peopler_pin_page_list_type_subject_post(self, subject_type, page_path):
+        PeoplerCase().case_peopler_pin_page_list_type_subject_post(subject_type, page_path)
 
-    def test_peopler_pin_page_type_subject_post(self):
-        PeoplerCase().case_peopler_pin_page_type_subject_post()
+    @pytest.mark.parametrize('subject_type,subject_id,replace_None', [
+        ("user", None, True),
+        ("role", None, True),
+    ])
+    def test_peopler_pin_page_type_subject_post(self, subject_type, subject_id, replace_None):
+        PeoplerCase().case_peopler_pin_page_type_subject_post(subject_type, subject_id, replace_None)
 
-    def test_peopler_pin_page_type_subject_id_delete(self):
-        PeoplerCase().case_peopler_pin_page_type_subject_id_delete()
+    @pytest.mark.parametrize('subject_type,subject_id,replace_None', [
+        ("user", None, True),
+        ("role", None, True),
+    ])
+    def test_peopler_pin_page_type_subject_id_delete(self, subject_type, subject_id, replace_None):
+        PeoplerCase().case_peopler_pin_page_type_subject_id_delete(subject_type, subject_id, replace_None)
 
     @pytest.mark.parametrize('page_path', [
         "/scripts"
