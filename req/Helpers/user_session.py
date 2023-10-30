@@ -61,6 +61,14 @@ class UserSession:
             self.user_id = int(dct['res']['user_id'])
         return self.user_id
 
+    def get_self_role_id(self) -> int:
+        """Возвращает 'role_id' текущего пользователя"""
+        resp = self.sess.get(f"{self.host}/back/dp.peopler/profile")
+        assert resp.status_code == 200, f"Ошибка при получении профиля пользователя {resp.status_code}, {resp.text}"
+
+        dct = json.loads(resp.text)
+        return int(dct['res']['role_id'])
+
     def _get_db_info_row_by_name(self, db_name: str) -> dict | None:
         """Получение всех БД, возвращает первое вхождение по 'name' в виде:
         {

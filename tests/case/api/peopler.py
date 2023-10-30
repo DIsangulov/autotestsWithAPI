@@ -7,7 +7,7 @@ from resourses.static_methods import get_str_random_num
 
 officer_role_id = 3         # or any test_role_id
 
-auto_test_user_id = set()   # список для пользователей, созданных автоматически
+test_user_id = set()   # список тестовых пользователей, созданных автоматически
 
 
 class PeoplerCase(UserSession):
@@ -20,14 +20,14 @@ class PeoplerCase(UserSession):
         for _row in all_users_info_rows:                            # фильтровать по API_AUTO_TEST_
             # .lower автоматически применяется при регистрации @доменных пользователей
             if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
-                auto_test_user_id.add(int(_row['id']))
+                test_user_id.add(int(_row['id']))
 
-    def get_auto_test_user_id(self) -> int:
+    def get_test_user_id(self) -> int:
         """get from global auto_user_id: API_AUTO_TEST_x"""
-        if len(auto_test_user_id) == 0:
+        if len(test_user_id) == 0:
             self._collect_auto_user_id()
 
-        if len(auto_test_user_id) == 0:
+        if len(test_user_id) == 0:
             resp_new_user = self.case_peopler_users_post()          # Создание нового @доменного пользователя
             assert resp_new_user.status_code == 200, \
                 f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
@@ -35,7 +35,7 @@ class PeoplerCase(UserSession):
             new_user_id = json.loads(resp_new_user.text)['res']     # {"res":12345}
             return int(new_user_id)                                 # вернуть 'id' нового пользователя
 
-        return auto_test_user_id.pop()                                   # возвращает случайное значение из auto_user_id
+        return test_user_id.pop()                                   # возвращает случайное значение из auto_user_id
 
     def case_peopler_mainpage_get(self):
         req = Peopler(self.sess, self.host)
@@ -46,8 +46,8 @@ class PeoplerCase(UserSession):
         # front: поменять роль группе пользователей
         req = Peopler(self.sess, self.host)
         # FIXME: может дважды выпасть один и тот же user_id
-        auto_user_id_1 = self.get_auto_test_user_id()
-        auto_user_id_2 = self.get_auto_test_user_id()
+        auto_user_id_1 = self.get_test_user_id()
+        auto_user_id_2 = self.get_test_user_id()
         body = {
             "users": [
                 {
@@ -221,7 +221,7 @@ class PeoplerCase(UserSession):
 
     def case_peopler_users_id_put(self):
         req = Peopler(self.sess, self.host)
-        user_id = self.get_auto_test_user_id()
+        user_id = self.get_test_user_id()
         body = {
                 "id": user_id,
                 "role_id":     officer_role_id,
@@ -234,7 +234,7 @@ class PeoplerCase(UserSession):
 
     def case_peopler_users_delete(self):
         req = Peopler(self.sess, self.host)
-        user_id = self.get_auto_test_user_id()
+        user_id = self.get_test_user_id()
         resp = req.peopler_users_id_delete(user_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(f"Пользователь {user_id}, был удален")
@@ -244,5 +244,5 @@ class PeoplerCase(UserSession):
     # Главное - не прострелить ногу # метод удаляет всех пользователей c приставкой API_AUTO_TEST_
     def all_api_auto_test_user_delete(self):
         self._collect_auto_user_id()
-        while len(auto_test_user_id) > 0:
-            Peopler(self.sess, self.host).peopler_users_id_delete(auto_test_user_id.pop())
+        while len(test_user_id) > 0:
+            Peopler(self.sess, self.host).peopler_users_id_delete(test_user_id.pop())

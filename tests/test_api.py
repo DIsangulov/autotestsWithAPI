@@ -694,99 +694,71 @@ class TestPermitter:
     def test_permitter_db_watcher_get_tab_name_id_get(self):
         PermitterCase().case_permitter_db_watcher_get_tab_name_id_get()
 
-    def test_permitter_element_flags_query_id_get(self):
-        PermitterCase().case_permitter_element_flags_query_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_flags_element_type_element_id_get(self, element_type):
+        PermitterCase().case_permitter_element_flags_element_type_element_id_get(element_type)
 
-    def test_permitter_element_flags_visualisation_id_get(self):
-        PermitterCase().case_permitter_element_flags_visualisation_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_flags_element_type_element_id_post(self, element_type):
+        PermitterCase().case_permitter_element_flags_element_type_element_id_post(element_type)
 
-    def test_permitter_element_flags_report_id_get(self):
-        PermitterCase().case_permitter_element_flags_report_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_all_element_type_element_id_get(self, element_type):
+        PermitterCase().case_permitter_element_rules_all_element_type_element_id_get(element_type)
 
-    def test_permitter_element_flags_mailing_id_get(self):
-        PermitterCase().case_permitter_element_flags_mailing_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_element_type_element_id_get(self, element_type):
+        PermitterCase().case_permitter_element_rules_element_type_element_id_get(element_type)
 
-    def test_permitter_element_flags_script_id_get(self):
-        PermitterCase().case_permitter_element_flags_script_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_element_type_element_id_post(self, element_type):
+        PermitterCase().case_permitter_element_rules_element_type_element_id_post(element_type)
 
-    def test_permitter_element_flags_script_sequence_id_get(self):
-        PermitterCase().case_permitter_element_flags_script_sequence_id_get()
-
-    def test_permitter_element_flags_query_id_post(self):
-        PermitterCase().case_permitter_element_flags_query_id_post()
-
-    def test_permitter_element_flags_visualisation_id_post(self):
-        PermitterCase().case_permitter_element_flags_visualisation_id_post()
-
-    def test_permitter_element_flags_report_id_post(self):
-        PermitterCase().case_permitter_element_flags_report_id_post()
-
-    def test_permitter_element_flags_mailing_id_post(self):
-        PermitterCase().case_permitter_element_flags_mailing_id_post()
-
-    def test_permitter_element_flags_script_id_post(self):
-        PermitterCase().case_permitter_element_flags_script_id_post()
-
-    def test_permitter_element_flags_script_sequence_id_post(self):
-        PermitterCase().case_permitter_element_flags_script_sequence_id_post()
-
-    def test_permitter_element_rules_all_query_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_query_id_get()
-
-    def test_permitter_element_rules_all_visualisation_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_visualisation_id_get()
-
-    def test_permitter_element_rules_all_report_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_report_id_get()
-
-    def test_permitter_element_rules_all_mailing_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_mailing_id_get()
-
-    def test_permitter_element_rules_all_script_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_script_id_get()
-
-    def test_permitter_element_rules_all_script_sequence_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_script_sequence_id_get()
-
-    def test_permitter_element_rules_query_id_get(self):
-        PermitterCase().case_permitter_element_rules_query_id_get()
-
-    def test_permitter_element_rules_visualisation_id_get(self):
-        PermitterCase().case_permitter_element_rules_visualisation_id_get()
-
-    def test_permitter_element_rules_report_get(self):
-        PermitterCase().case_permitter_element_rules_report_id_get()
-
-    def test_permitter_element_rules_mailing_get(self):
-        PermitterCase().case_permitter_element_rules_mailing_id_get()
-
-    def test_permitter_element_rules_script_get(self):
-        PermitterCase().case_permitter_element_rules_script_id_get()
-
-    def test_permitter_element_rules_script_sequence_get(self):
-        PermitterCase().case_permitter_element_rules_script_sequence_id_get()
-
-    def test_permitter_element_rules_query_id_post(self):
-        PermitterCase().case_permitter_element_rules_query_id_post()
-
-    def test_permitter_element_rules_visualisation_id_post(self):
-        PermitterCase().case_permitter_element_rules_visualisation_id_post()
-
-    def test_permitter_element_rules_report_id_post(self):
-        PermitterCase().case_permitter_element_rules_report_id_post()
-
-    def test_permitter_element_rules_mailing_id_post(self):
-        PermitterCase().case_permitter_element_rules_mailing_id_post()
-
-    def test_permitter_element_rules_script_id_post(self):
-        PermitterCase().case_permitter_element_rules_script_id_post()
-
-    def test_permitter_element_rules_script_sequence_id_post(self):
-        PermitterCase().case_permitter_element_rules_script_sequence_id_post()
-
-    # todo: 200 -> в сообщении 400 статус код
-    def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
-        PermitterCase().case_permitter_element_rules_delete_query_id_post()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_delete_element_type_element_id_post(self, element_type):
+        PermitterCase().case_permitter_element_rules_delete_element_type_element_id_post(element_type)
 
     def test_permitter_roles_editor_roles_get(self):
         PermitterCase().case_permitter_roles_editor_roles_get()
@@ -810,20 +782,20 @@ class TestPermitter:
         PermitterCase().case_permitter_users_elements_count_who_id_get()
 
     @pytest.mark.parametrize('who_id_getter,post_data', [
-        (PeoplerCase().get_auto_test_user_id,
+        (PeoplerCase().get_test_user_id,
          {
              "delete": False,
              "new_author": PeoplerCase().get_self_user_id()
          }),
 
         # DAT-5599
-        (PeoplerCase().get_auto_test_user_id,
+        (PeoplerCase().get_test_user_id,
          {
              "delete": False,
              "new_author": None
          }),
 
-        (PeoplerCase().get_auto_test_user_id,
+        (PeoplerCase().get_test_user_id,
          {
              "delete": True,
              "new_author": None

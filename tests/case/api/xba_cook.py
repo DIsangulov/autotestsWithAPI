@@ -769,7 +769,7 @@ class XbaCookCase(UserSession):
 
         xba_db_name = f"XBA_{prof_id}"
         # выдать права на изменение хранилища 'xba_db_name'
-        PermitterCase().permitter_sysop_add_permission_to_change_db_by_name(xba_db_name)
+        PermitterCase().add_role_permission_to_change_db(self.get_self_role_id(), xba_db_name)
 
         resp = req.xba_cook_profiles_id_delete(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -993,6 +993,6 @@ class XbaCookCase(UserSession):
             _pf_id = xba_profile_id.pop()
             xba_db_name = f"XBA_{_pf_id}"
             # выдать права на изменение хранилища 'xba_db_name'
-            PermitterCase().permitter_sysop_add_permission_to_change_db_by_name(xba_db_name)
+            PermitterCase().add_role_permission_to_change_db(self.get_self_role_id(), xba_db_name)
             delete_req.xba_cook_profiles_id_delete(_pf_id)
             # print(_pf_id)
