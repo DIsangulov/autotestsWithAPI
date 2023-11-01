@@ -3,6 +3,9 @@ import pytest
 
 from resourses.credentials import TARGET_URL
 from resourses.credentials import TestUsers
+from resourses.constants import UI_AUTO_TEST_
+from resourses.static_methods import get_str_random_num, get_random_string
+
 from tests.case.ui import auth_ui
 from tests.case.ui.m1_administration import roles_ui
 from tests.case.ui.m1_administration import users_ui
@@ -40,6 +43,7 @@ class SuiteName:
     NAVIGATION = "Навигация"
 
     AUTH_PAGE_COMMON = "Страница Авторизации"
+    AUTH_REGISTRATION = "Регистрация пользователя"
 
     ADMINISTRATION_COMMON = "Раздел Администрирование"
 
@@ -129,6 +133,107 @@ class TestAuth:
     }])
     def test_invalid_login_auth_local(self, browser, auth_data_no_checkbox):
         auth_ui.invalid_auth(browser, auth_data_no_checkbox)
+
+    @allure.sub_suite(SuiteName.AUTH_REGISTRATION)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707")
+    @allure.title("Регистрация пользователя valid")
+    @allure.description("Регистрация пользователя через форму регистрации на странице авторизации")
+    @pytest.mark.parametrize('registration_data', [
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="1234567809_-@"),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id = "sample",
+        ),
+
+        pytest.param(
+            {
+                "rusname": "Прикольное Имя",
+                "username": f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password": "a"*8,
+                "email": "sample@liam.com",
+                "mobile": "9999999999",
+                "department": "Отдел",
+                "title": "Должность",
+            },
+            id="min password length = 8",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     "m"*256,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id = "max password length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname": "Прикольное Имя",
+                "username": f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password": get_random_string(42, add_symbols="_-@", uppercase=False, lowercase=False),
+                "email": "sample@liam.com",
+                "mobile": "9999999999",
+                "department": "Отдел",
+                "title": "Должность",
+            },
+            id="pass special symbols only '_-@'",
+        ),
+
+        pytest.param(
+            {
+                "rusname": "Прикольное Имя",
+                "username": get_random_string(4),
+                "password": "12345678",
+                "email": "sample@liam.com",
+                "mobile": "9999999999",
+                "department": "Отдел",
+                "title": "Должность",
+            },
+            id="min username(login) length = 4",
+        ),
+
+        pytest.param(
+            {
+                "rusname": "Прикольное Имя",
+                "username": get_random_string(256),
+                "password": "12345678",
+                "email": "sample@liam.com",
+                "mobile": "9999999999",
+                "department": "Отдел",
+                "title": "Должность",
+            },
+            id="max username(login) length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname": "Прикольное Имя",
+                "username": f"{UI_AUTO_TEST_}@._-" + get_random_string(10, add_symbols="._-@"),
+                "password": "12345678",
+                "email": "sample@liam.com",
+                "mobile": "9999999999",
+                "department": "Отдел",
+                "title": "Должность",
+            },
+            id="username(login) contains special symbols = '._-@'",
+        ),
+    ])
+    def test_valid_registration(self, browser, registration_data):
+        auth_ui.valid_registration(browser, registration_data)
 
     @allure.title("Авторизация | Выход из профиля пользователя")
     @allure.description("Выход по кнопке 'Выйти'")
