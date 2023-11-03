@@ -10,4 +10,27 @@ class RMGroupsAndUsersPage(BasePage):
         super().__init__(page)
         self.page_path = self.__class__.page_path
 
-        # todo: добавить элементы взаимодействия
+        self.TAB_GROUPS = self.page.locator("//ul[contains(@class, 'ngr-tabs-ul')]/li/div[contains(text(), 'Группы')]")
+        self.TAB_USERS = self.page.locator("//ul[contains(@class, 'ngr-tabs-ul')]/li/div[contains(text(), 'Пользователи')]")
+
+
+class RMGroupsPage(RMGroupsAndUsersPage):
+
+    page_path = "/role-mining/groups-and-users/groups"
+
+    def __init__(self, page: Page):
+        super().__init__(page)
+        self.page_path = self.__class__.page_path
+
+        # self.SOMETHING = self.page.locator("//locator")
+
+
+class RMUsersPage(RMGroupsAndUsersPage):
+
+    page_path = "/role-mining/groups-and-users/users"
+
+    def __init__(self, page: Page):
+        super().__init__(page)
+        self.page_path = self.__class__.page_path
+
+        # self.SOMETHING = self.page.locator("//locator")

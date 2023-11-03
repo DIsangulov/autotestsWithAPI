@@ -3,29 +3,32 @@ import pytest
 
 from resourses.credentials import TARGET_URL
 from resourses.credentials import TestUsers
-from tests.case.ui.auth_ui import AuthCase
-from tests.case.ui.m1_administration.roles_ui import RolesCase
-from tests.case.ui.m1_administration.sessions_ui import SessionsCase
-from tests.case.ui.m1_administration.users_ui import UsersCase
-from tests.case.ui.m1_administration.monitoring_ui import MonitoringCase
-from tests.case.ui.m1_administration.license_ui import LicenseCase
-from tests.case.ui.m1_administration.updates_ui import UpdatesCase
-from tests.case.ui.m1_administration.adm_notification_list_ui import AdmNotificationListCase
-from tests.case.ui.m1_administration.adm_settings_ui import AdmSettingsCase
-from tests.case.ui.m2_data.scripts_ui import DataScriptsCase
-from tests.case.ui.m2_data.sources_ui import DataSourcesCase
-from tests.case.ui.m2_data.storage_ui import DataStorageCase
-from tests.case.ui.m3_analytics.mailing_ui import MailingsCase
-from tests.case.ui.m3_analytics.report_ui import ReportsCase
-from tests.case.ui.m3_analytics.visualisation_ui import VisualisationCase
-from tests.case.ui.m3_analytics.query_ui import QueriesCase
-from tests.case.ui.m4_xba.xba_profiles_ui import XbaProfilesCase
-from tests.case.ui.m4_xba.xba_metaprofiles_ui import XbaMetaprofilesCase
-from tests.case.ui.m4_xba.xba_statistics_ui import XbaStatisticsCase
-from tests.case.ui.m5_RM.rm_settings_ui import RMSettingsCase
-from tests.case.ui.m5_RM.rm_ad_ui import RMStateADCase
-from tests.case.ui.m5_RM.rm_groups_and_users_ui import RMGroupsAndUsersCase
-from tests.case.ui.m5_RM.rm_role_model_ui import RMRoleModelCase
+from resourses.constants import UI_AUTO_TEST_
+from resourses.static_methods import get_str_random_num, get_random_string
+
+from tests.case.ui import auth_ui
+from tests.case.ui.m1_administration import roles_ui
+from tests.case.ui.m1_administration import users_ui
+from tests.case.ui.m1_administration import sessions_ui
+from tests.case.ui.m1_administration import monitoring_ui
+from tests.case.ui.m1_administration import license_ui
+from tests.case.ui.m1_administration import updates_ui
+from tests.case.ui.m1_administration import adm_notification_list_ui
+from tests.case.ui.m1_administration import adm_settings_ui
+from tests.case.ui.m2_data import scripts_ui
+from tests.case.ui.m2_data import sources_ui
+from tests.case.ui.m2_data import storage_ui
+from tests.case.ui.m3_analytics import mailing_ui
+from tests.case.ui.m3_analytics import report_ui
+from tests.case.ui.m3_analytics import visualisation_ui
+from tests.case.ui.m3_analytics import query_ui
+from tests.case.ui.m4_xba import xba_profiles_ui
+from tests.case.ui.m4_xba import xba_metaprofiles_ui
+from tests.case.ui.m4_xba import xba_statistics_ui
+from tests.case.ui.m5_RM import rm_groups_and_users_ui
+from tests.case.ui.m5_RM import rm_settings_ui
+from tests.case.ui.m5_RM import rm_state_ad_ui
+from tests.case.ui.m5_RM import rm_role_model_ui
 
 
 @pytest.fixture(autouse=True, scope='session')
@@ -39,9 +42,12 @@ def _print_debug_info():
 class SuiteName:
     NAVIGATION = "Навигация"
 
-    AUTH_PAGE = "Страница Авторизации"
+    AUTH_PAGE_COMMON = "Страница Авторизации"
+    AUTH_PAGE_AUTH = "Авторизация"
+    AUTH_REGISTRATION = "Регистрация пользователя"
 
     ADMINISTRATION_COMMON = "Раздел Администрирование"
+    ADMINISTRATION_USERS = "Пользователи"
 
     DATA_COMMON = "Раздел Данные"
     DATA_SOURCES = "Источники"
@@ -55,15 +61,17 @@ class SuiteName:
     ROLE_MINING_COMMON = "Раздел Role Mining"
 
 
-@allure.suite(SuiteName.AUTH_PAGE)
+@allure.suite(SuiteName.AUTH_PAGE_COMMON)
 class TestAuth:
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация valid")
     @allure.description("Самая обычная авторизация")
     @pytest.mark.parametrize('auth_data_ad', [TestUsers.DpQaa])
-    def test_valid_auth(self, browser_without_auth, auth_data_ad):
-        AuthCase(browser_without_auth).valid_auth(auth_data_ad)
+    def test_valid_auth(self, browser, auth_data_ad):
+        auth_ui.valid_auth(browser, auth_data_ad)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Чекбокс | invalid")
     @allure.description("Проставлен чекбокс 'локально' для неЛокального пользователя")
     @pytest.mark.parametrize('auth_data_invalid', [{
@@ -71,9 +79,10 @@ class TestAuth:
         "password": TestUsers.DpQaa.get("password"),
         "local": True   # <- будет клик на чекбокс 'локально'
     }])
-    def test_invalid_checkbox_auth(self, browser_without_auth, auth_data_invalid):
-        AuthCase(browser_without_auth).invalid_auth(auth_data_invalid)
+    def test_invalid_checkbox_auth(self, browser, auth_data_invalid):
+        auth_ui.invalid_auth(browser, auth_data_invalid)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Неверный пароль | invalid")
     @allure.description("Попытка авторизации с неверным паролем")
     @pytest.mark.parametrize('auth_data_invalid', [{
@@ -81,17 +90,17 @@ class TestAuth:
         "password": TestUsers.DpQaa.get("password") + "mistake",
         "local": TestUsers.DpQaa.get("local")
     }])
-    def test_invalid_password_auth(self, browser_without_auth, auth_data_invalid):
-        AuthCase(browser_without_auth).invalid_auth(auth_data_invalid)
+    def test_invalid_password_auth(self, browser, auth_data_invalid):
+        auth_ui.invalid_auth(browser, auth_data_invalid)
 
-    # tit 203 323, 363
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | valid")
     @allure.description("Самая обычная авторизация Локальный пользователь")
     @pytest.mark.parametrize('auth_data_local', [TestUsers.DpQaaLocal])
-    def test_valid_auth_local(self, browser_without_auth, auth_data_local):
-        AuthCase(browser_without_auth).valid_auth(auth_data_local)
+    def test_valid_auth_local(self, browser, auth_data_local):
+        auth_ui.valid_auth(browser, auth_data_local)
 
-    # tit 240 332, 508, 861
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | invalid")
     @allure.description("Авторизация Локальный пользователь с неверными логином и паролем")
     @pytest.mark.parametrize('auth_data_invalid', [{
@@ -99,10 +108,10 @@ class TestAuth:
         "password": 'also_invalid@password',
         "local": True
     }])
-    def test_invalid_auth_local(self, browser_without_auth, auth_data_invalid):
-        AuthCase(browser_without_auth).invalid_auth(auth_data_invalid)
+    def test_invalid_auth_local(self, browser, auth_data_invalid):
+        auth_ui.invalid_auth(browser, auth_data_invalid)
 
-    # tit 371
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | Неправильный пароль")
     @allure.description("Авторизация Локальный пользователь с неверным паролем")
     @pytest.mark.parametrize('auth_data_wrong_password', [{
@@ -110,12 +119,10 @@ class TestAuth:
         "password": 'but_there_is@invalid@password',
         "local": True
     }])
-    def test_invalid_pass_auth_local(self, browser_without_auth, auth_data_wrong_password):
-        AuthCase(browser_without_auth).invalid_auth(auth_data_wrong_password)
+    def test_invalid_pass_auth_local(self, browser, auth_data_wrong_password):
+        auth_ui.invalid_auth(browser, auth_data_wrong_password)
 
-    # todo: tit 532
-
-    # tit 594
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | Без чекбокса")
     @allure.description("Локальный пользователь, не проставил чекбокс 'local'")
     @pytest.mark.parametrize('auth_data_no_checkbox', [{
@@ -123,10 +130,10 @@ class TestAuth:
         "password": TestUsers.DpQaaLocal.get("password"),
         "local": False  # <--не будет клика на чекбокс
     }])
-    def test_invalid_cuz_no_checkbox_auth_local(self, browser_without_auth, auth_data_no_checkbox):
-        AuthCase(browser_without_auth).invalid_auth(auth_data_no_checkbox)
+    def test_invalid_cuz_no_checkbox_auth_local(self, browser, auth_data_no_checkbox):
+        auth_ui.invalid_auth(browser, auth_data_no_checkbox)
 
-    # tit 638
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | Невалидный логин")
     @allure.description("Локальный пользователь, пароль верный, но не логин")
     @pytest.mark.parametrize('auth_data_no_checkbox', [{
@@ -134,66 +141,391 @@ class TestAuth:
         "password": TestUsers.DpQaaLocal.get("password"),
         "local": True
     }])
-    def test_invalid_login_auth_local(self, browser_without_auth, auth_data_no_checkbox):
-        AuthCase(browser_without_auth).invalid_auth(auth_data_no_checkbox)
+    def test_invalid_login_auth_local(self, browser, auth_data_no_checkbox):
+        auth_ui.invalid_auth(browser, auth_data_no_checkbox)
 
-    # tit 708
+    @allure.sub_suite(SuiteName.AUTH_REGISTRATION)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.title("Регистрация пользователя valid")
+    @allure.description("Регистрация пользователя через форму регистрации на странице авторизации")
+    @pytest.mark.parametrize('registration_data', [
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="1234567809_-@"),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id = "sample",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     "a"*8,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="min password length = 8",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     "m"*256,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id = "max password length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="_-@", uppercase=False, lowercase=False),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="pass special symbols only '_-@'",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     get_random_string(4),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="min username(login) length = 4",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     get_random_string(256),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="max username(login) length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}@._-" + get_random_string(10, add_symbols="._-@"),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="username(login) contains special symbols = '._-@'",
+        ),
+    ])
+    def test_valid_registration(self, browser, registration_data):
+        auth_ui.valid_registration(browser, registration_data)
+
     @allure.title("Авторизация | Выход из профиля пользователя")
     @allure.description("Выход по кнопке 'Выйти'")
-    @pytest.mark.parametrize('auth_data', [TestUsers.DpQaaLocal])
-    def test_log_out(self, browser_without_auth, auth_data):
-        AuthCase(browser_without_auth).log_out(auth_data)
+    def test_log_out(self, browser):
+        auth_ui.log_out(browser)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationRoles:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Роли'")
     def test_open_page_by_steps(self, browser):
-        RolesCase(browser).open_page_by_steps()
+        roles_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationUsers:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Пользователи'")
     def test_open_page_by_steps(self, browser):
-        UsersCase(browser).open_page_by_steps()
+        users_ui.open_page_by_steps(browser)
+
+    add_domain_user_test_rolename = "Офицер ИБ"
+
+    @allure.sub_suite(SuiteName.ADMINISTRATION_USERS)
+    @allure.title("Пользователи - добавление доменного пользователя")
+    @allure.description("""
+        Добавление доменного пользователя 
+        через форму 'Добавить вручную'
+        в разделе Администрирование > Пользователи
+        """)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2787")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @pytest.mark.parametrize('registration_data', [
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id = "sample",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     True,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="checkbox 'is_admin' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    True,
+                "is_tech":      False
+            },
+            id="checkbox 'is_system' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      True
+            },
+            id="checkbox 'is_tech' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     True,
+                "is_system":    True,
+                "is_tech":      True
+            },
+            id="checkboxes 'is_admin,is_system,is_tech' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     True,
+                "is_system":    True,
+                "is_tech":      True
+            },
+            id="checkboxes 'is_admin,is_system,is_tech' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     get_random_string(4),
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="min username(login) length = 4"
+        ),
+
+        pytest.param(
+            {
+                "username":     get_random_string(256),
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="max username(login) length = 256",
+            # marks=pytest.mark.skip  # look = no limits for max value
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}@._-" + get_random_string(10, add_symbols="._-@"),
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="username(login) contains special symbols = '._-@'",
+        ),
+
+    ])
+    def test_add_domain_user(self, browser, registration_data):
+        users_ui.add_domain_user(browser, registration_data)
+
+    @allure.sub_suite(SuiteName.ADMINISTRATION_USERS)
+    @allure.title("Пользователи - создание локального пользователя")
+    @allure.description("""
+        Добавление локального пользователя 
+        через форму 'Добавить вручную'
+        в разделе Администрирование > Пользователи
+        """)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2778")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @pytest.mark.parametrize('registration_data', [
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="1234567809_-@"),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="sample",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     "b" * 8,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="min password length = 8",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     "w" * 256,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="max password length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="_-@", uppercase=False, lowercase=False),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="pass special symbols only '_-@'",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     get_random_string(4),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="min username(login) length = 4",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     get_random_string(256),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="max username(login) length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_@._-" + get_random_string(10, add_symbols="._-@"),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="username(login) contains special symbols = '._-@'",
+        ),
+
+    ])
+    def test_add_local_user(self, browser, registration_data):
+        users_ui.add_local_user(browser, registration_data)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSessions:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Сессии'")
     def test_open_page_by_steps(self, browser):
-        SessionsCase(browser).open_page_by_steps()
+        sessions_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationMonitoring:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Мониторинг'")
     def test_open_page_by_steps(self, browser):
-        MonitoringCase(browser).open_page_by_steps()
+        monitoring_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationLicense:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Лицензии'")
     def test_open_page_by_steps(self, browser):
-        LicenseCase(browser).open_page_by_steps()
+        license_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationUpdates:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Обновление'")
     @allure.description("""
     Переход на страницу, используя UI элементы;
@@ -201,40 +533,41 @@ class TestAdministrationUpdates:
     Работа вкладки 'Дополнения'
     """)
     def test_open_page_by_steps(self, browser):
-        UpdatesCase(browser).open_page_by_steps()
+        updates_ui.open_page_by_steps(browser)
 
 
-@allure.title(SuiteName.ADMINISTRATION_COMMON)
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationNotificationList:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Журнал уведомлений'")
     def test_open_page_by_steps(self, browser):
-        AdmNotificationListCase(browser).open_page_by_steps()
+        adm_notification_list_ui.open_page_by_steps(browser)
 
 
-@allure.title(SuiteName.ADMINISTRATION_COMMON)
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSettings:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Настройки'")
     @allure.description("""
     Переход на страницу, используя UI элементы;
     Работа вкладок;
     """)
     def test_open_page_by_steps(self, browser):
-        AdmSettingsCase(browser).open_page_by_steps()
+        adm_settings_ui.open_page_by_steps(browser)
 
 
-@allure.suite(SuiteName.DATA_SOURCES)
+@allure.suite(SuiteName.DATA_COMMON)
 class TestDataSources:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Источники'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
-        DataSourcesCase(browser).open_page_by_steps()
+        sources_ui.open_page_by_steps(browser)
 
+    @allure.sub_suite(SuiteName.DATA_SOURCES)
     @allure.title("Открыть модальное окно 'Детали'")
     @allure.description("""
     На странице 'Источники' в колонке 'Действие',
@@ -244,20 +577,20 @@ class TestDataSources:
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
     @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/2866")
     def test_open_modal_w_actions_details(self, browser):
-        DataSourcesCase(browser).open_modal_w_actions_details()
+        sources_ui.open_modal_w_actions_details(browser)
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Создание источника в редакторе'")
     def test_open_new_source_editor_by_steps(self, browser):
-        DataSourcesCase(browser).open_new_source_editor_by_steps()
+        sources_ui.open_new_source_editor_by_steps(browser)
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Подключение источника'")
     @allure.description("Подключить источник из коннектора")
     def test_open_new_source_connector_by_steps(self, browser):
-        DataSourcesCase(browser).open_new_source_connector_by_steps()
+        sources_ui.open_new_source_connector_by_steps(browser)
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Элементы навигации библиотека Шаблонов/Коннекторов")
     @allure.description("""
     Переход на страницу 'Библиотека коннекторов' используя UI элементы, со страницы 'Источники данных';
@@ -266,48 +599,47 @@ class TestDataSources:
     Работа кнопки '<- Возврат', ( вернуться к Источникам данных )
     """)
     def test_library_connectors_navigation(self, browser):
-        DataSourcesCase(browser).library_connectors_navigation()
+        sources_ui.library_connectors_navigation(browser)
 
     @pytest.mark.skip   # todo: сделать
+    @allure.sub_suite(SuiteName.DATA_SOURCES)
     @allure.title("Создание источника в редакторе")
     @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
     @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
     def test_source_create_editor_syslog(self, browser):
-        DataSourcesCase(browser).source_create_editor_syslog()
-
-    # https://team-6wwm.testit.software/projects/3/tests?isolatedSection=1ab5e96c-fcad-4238-bd9f-bb78f7d0e094
+        sources_ui.source_create_editor_syslog(browser)
 
 
-@allure.suite(SuiteName.DATA_SCRIPTS)
+@allure.suite(SuiteName.DATA_COMMON)
 class TestDataScripts:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Скрипты'")
     @allure.description("Открыть страницу через боковое меню")
     def test_open_page_by_steps(self, browser):
-        DataScriptsCase(browser).open_page_by_steps()
+        scripts_ui.open_page_by_steps(browser)
 
 
-@allure.suite(SuiteName.DATA_STORAGE)
+@allure.suite(SuiteName.DATA_COMMON)
 class TestDataStorage:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Хранилище'")
     def test_open_page_by_steps(self, browser):
-        DataStorageCase(browser).open_page_by_steps()
+        storage_ui.open_page_by_steps(browser)
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Хранилище > переход по вкладкам")
     @allure.description("Проверка работы верхних вкладок \
     [Структура, Статистика, Поиск в Хранилище|по содержимому|по столбцам, Правила импорта]")
     def test_storage_navigation_tabs(self, browser):
-        DataStorageCase(browser).storage_navigation_tabs()
+        storage_ui.storage_navigation_tabs(browser)
 
 
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsMailing:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Рассылки'")
     @allure.description("""
     Переход на страницу, используя UI элементы;
@@ -315,61 +647,61 @@ class TestAnalyticsMailing:
     Работа вкладки 'Новых данных'
     """)
     def test_open_page_by_steps(self, browser):
-        MailingsCase(browser).open_page_by_steps()
+        mailing_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsReports:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Отчеты'")
     def test_open_page_by_steps(self, browser):
-        ReportsCase(browser).open_page_by_steps()
+        report_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsVisualisation:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Визуализации'")
     def test_open_page_by_steps(self, browser):
-        VisualisationCase(browser).open_page_by_steps()
+        visualisation_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ANALYTICS_COMMON)
 class TestAnalyticsQuery:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Запросы'")
     def test_open_page_by_steps(self, browser):
-        QueriesCase(browser).open_page_by_steps()
+        query_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.XBA_COMMON)
 class TestXbaProfiles:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Профили xBA'")
     def test_open_page_by_steps(self, browser):
-        XbaProfilesCase(browser).open_page_by_steps()
+        xba_profiles_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.XBA_COMMON)
 class TestXbaMetaprofiles:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Метапрофили'")
     def test_open_page_by_steps(self, browser):
-        XbaMetaprofilesCase(browser).open_page_by_steps()
+        xba_metaprofiles_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.XBA_COMMON)
 class TestXbaStatistics:
 
-    @allure.suite(SuiteName.NAVIGATION)
+    @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Статистика xBA'")
     def test_open_page_by_steps(self, browser):
-        XbaStatisticsCase(browser).open_page_by_steps()
+        xba_statistics_ui.open_page_by_steps(browser)
 
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
@@ -378,18 +710,28 @@ class TestRoleMiningSettings:
     @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Настройки Role mining'")
     def test_open_page_by_steps(self, browser):
-        RMSettingsCase(browser).open_page_by_steps()
+        rm_settings_ui.open_page_by_steps(browser)
+
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Настройки Role mining - работа вкладок навигации")
+    @allure.description("Работа вкладок 'Источники' | 'Настройка расчета'")
+    def test_rm_settings_navigation_tabs(self, browser):
+        rm_settings_ui.rm_settings_navigation_tabs(browser)
 
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
-class TestRoleMiningAD:
+class TestRoleMiningStateAD:
 
     @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Состояние Active Directory'")
     def test_open_page_by_steps(self, browser):
-        RMStateADCase(browser).open_page_by_steps()
+        rm_state_ad_ui.open_page_by_steps(browser)
 
-    # TODO: работа вкладок Статистика | Рекомендации
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Состояние Active Directory - работа вкладок навигации")
+    @allure.description("Работа вкладок 'Статистика'|'Рекомендации'")
+    def test_rm_state_ad_navigation_tabs(self, browser):
+        rm_state_ad_ui.rm_state_ad_navigation_tabs(browser)
 
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
@@ -398,7 +740,13 @@ class TestRoleMiningGroupsAndUsers:
     @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Группы и пользователи Active Directory'")
     def test_open_page_by_steps(self, browser):
-        RMGroupsAndUsersCase(browser).open_page_by_steps()
+        rm_groups_and_users_ui.open_page_by_steps(browser)
+
+    @allure.sub_suite(SuiteName.NAVIGATION)
+    @allure.title("Группы и пользователи Active Directory - работа вкладок навигации")
+    @allure.description("Работа вкладок 'Группы'|'Пользователи'")
+    def test_rm_groups_and_users_navigation_tabs(self, browser):
+        rm_groups_and_users_ui.navigation_tabs(browser)
 
 
 @allure.suite(SuiteName.ROLE_MINING_COMMON)
@@ -407,4 +755,4 @@ class TestRoleMiningRoleModel:
     @allure.sub_suite(SuiteName.NAVIGATION)
     @allure.title("Переход на страницу 'Ролевая модель'")
     def test_open_page_by_steps(self, browser):
-        RMRoleModelCase(browser).open_page_by_steps()
+        rm_role_model_ui.open_page_by_steps(browser)

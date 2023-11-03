@@ -613,23 +613,32 @@ class TestPeopler:
         PeoplerCase().case_peopler_many_users_put()
 
     def test_peopler_pin_page_current_user_post(self):
-        PeoplerCase().case_peopler_pin_page_current_user_post()
+        pin_page_path = "/scripts"
+        PeoplerCase().case_peopler_pin_page_current_user_post(pin_page_path)
 
     def test_peopler_pin_page_current_user_delete(self):
         PeoplerCase().case_peopler_pin_page_current_user_delete()
 
-    @pytest.mark.parametrize('type_subject,path', [
+    @pytest.mark.parametrize('subject_type,page_path', [
         ("user", "/scripts"),
         ("role", "/scripts")
     ])
-    def test_peopler_pin_page_list_type_subject_post(self, type_subject, path):
-        PeoplerCase().case_peopler_pin_page_list_type_subject_post(type_subject, path)
+    def test_peopler_pin_page_list_type_subject_post(self, subject_type, page_path):
+        PeoplerCase().case_peopler_pin_page_list_type_subject_post(subject_type, page_path)
 
-    def test_peopler_pin_page_type_subject_post(self):
-        PeoplerCase().case_peopler_pin_page_type_subject_post()
+    @pytest.mark.parametrize('subject_type,subject_id,replace_None', [
+        ("user", None, True),
+        ("role", None, True),
+    ])
+    def test_peopler_pin_page_type_subject_post(self, subject_type, subject_id, replace_None):
+        PeoplerCase().case_peopler_pin_page_type_subject_post(subject_type, subject_id, replace_None)
 
-    def test_peopler_pin_page_type_subject_id_delete(self):
-        PeoplerCase().case_peopler_pin_page_type_subject_id_delete()
+    @pytest.mark.parametrize('subject_type,subject_id,replace_None', [
+        ("user", None, True),
+        ("role", None, True),
+    ])
+    def test_peopler_pin_page_type_subject_id_delete(self, subject_type, subject_id, replace_None):
+        PeoplerCase().case_peopler_pin_page_type_subject_id_delete(subject_type, subject_id, replace_None)
 
     @pytest.mark.parametrize('page_path', [
         "/scripts"
@@ -685,99 +694,71 @@ class TestPermitter:
     def test_permitter_db_watcher_get_tab_name_id_get(self):
         PermitterCase().case_permitter_db_watcher_get_tab_name_id_get()
 
-    def test_permitter_element_flags_query_id_get(self):
-        PermitterCase().case_permitter_element_flags_query_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_flags_element_type_element_id_get(self, element_type):
+        PermitterCase().case_permitter_element_flags_element_type_element_id_get(element_type)
 
-    def test_permitter_element_flags_visualisation_id_get(self):
-        PermitterCase().case_permitter_element_flags_visualisation_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_flags_element_type_element_id_post(self, element_type):
+        PermitterCase().case_permitter_element_flags_element_type_element_id_post(element_type)
 
-    def test_permitter_element_flags_report_id_get(self):
-        PermitterCase().case_permitter_element_flags_report_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_all_element_type_element_id_get(self, element_type):
+        PermitterCase().case_permitter_element_rules_all_element_type_element_id_get(element_type)
 
-    def test_permitter_element_flags_mailing_id_get(self):
-        PermitterCase().case_permitter_element_flags_mailing_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_element_type_element_id_get(self, element_type):
+        PermitterCase().case_permitter_element_rules_element_type_element_id_get(element_type)
 
-    def test_permitter_element_flags_script_id_get(self):
-        PermitterCase().case_permitter_element_flags_script_id_get()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_element_type_element_id_post(self, element_type):
+        PermitterCase().case_permitter_element_rules_element_type_element_id_post(element_type)
 
-    def test_permitter_element_flags_script_sequence_id_get(self):
-        PermitterCase().case_permitter_element_flags_script_sequence_id_get()
-
-    def test_permitter_element_flags_query_id_post(self):
-        PermitterCase().case_permitter_element_flags_query_id_post()
-
-    def test_permitter_element_flags_visualisation_id_post(self):
-        PermitterCase().case_permitter_element_flags_visualisation_id_post()
-
-    def test_permitter_element_flags_report_id_post(self):
-        PermitterCase().case_permitter_element_flags_report_id_post()
-
-    def test_permitter_element_flags_mailing_id_post(self):
-        PermitterCase().case_permitter_element_flags_mailing_id_post()
-
-    def test_permitter_element_flags_script_id_post(self):
-        PermitterCase().case_permitter_element_flags_script_id_post()
-
-    def test_permitter_element_flags_script_sequence_id_post(self):
-        PermitterCase().case_permitter_element_flags_script_sequence_id_post()
-
-    def test_permitter_element_rules_all_query_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_query_id_get()
-
-    def test_permitter_element_rules_all_visualisation_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_visualisation_id_get()
-
-    def test_permitter_element_rules_all_report_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_report_id_get()
-
-    def test_permitter_element_rules_all_mailing_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_mailing_id_get()
-
-    def test_permitter_element_rules_all_script_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_script_id_get()
-
-    def test_permitter_element_rules_all_script_sequence_id_get(self):
-        PermitterCase().case_permitter_element_rules_all_script_sequence_id_get()
-
-    def test_permitter_element_rules_query_id_get(self):
-        PermitterCase().case_permitter_element_rules_query_id_get()
-
-    def test_permitter_element_rules_visualisation_id_get(self):
-        PermitterCase().case_permitter_element_rules_visualisation_id_get()
-
-    def test_permitter_element_rules_report_get(self):
-        PermitterCase().case_permitter_element_rules_report_id_get()
-
-    def test_permitter_element_rules_mailing_get(self):
-        PermitterCase().case_permitter_element_rules_mailing_id_get()
-
-    def test_permitter_element_rules_script_get(self):
-        PermitterCase().case_permitter_element_rules_script_id_get()
-
-    def test_permitter_element_rules_script_sequence_get(self):
-        PermitterCase().case_permitter_element_rules_script_sequence_id_get()
-
-    def test_permitter_element_rules_query_id_post(self):
-        PermitterCase().case_permitter_element_rules_query_id_post()
-
-    def test_permitter_element_rules_visualisation_id_post(self):
-        PermitterCase().case_permitter_element_rules_visualisation_id_post()
-
-    def test_permitter_element_rules_report_id_post(self):
-        PermitterCase().case_permitter_element_rules_report_id_post()
-
-    def test_permitter_element_rules_mailing_id_post(self):
-        PermitterCase().case_permitter_element_rules_mailing_id_post()
-
-    def test_permitter_element_rules_script_id_post(self):
-        PermitterCase().case_permitter_element_rules_script_id_post()
-
-    def test_permitter_element_rules_script_sequence_id_post(self):
-        PermitterCase().case_permitter_element_rules_script_sequence_id_post()
-
-    # todo: 200 -> в сообщении 400 статус код
-    def test_permitter_element_rules_delete_element_type_query_element_id_post(self):
-        PermitterCase().case_permitter_element_rules_delete_query_id_post()
+    @pytest.mark.parametrize('element_type', [
+        "query",
+        "visualisation",
+        "report",
+        "mailing",
+        "script",
+        "script_sequence"
+    ])
+    def test_permitter_element_rules_delete_element_type_element_id_post(self, element_type):
+        PermitterCase().case_permitter_element_rules_delete_element_type_element_id_post(element_type)
 
     def test_permitter_roles_editor_roles_get(self):
         PermitterCase().case_permitter_roles_editor_roles_get()
@@ -801,20 +782,20 @@ class TestPermitter:
         PermitterCase().case_permitter_users_elements_count_who_id_get()
 
     @pytest.mark.parametrize('who_id_getter,post_data', [
-        (PeoplerCase().get_auto_test_user_id,
+        (PeoplerCase().get_test_user_id,
          {
              "delete": False,
              "new_author": PeoplerCase().get_self_user_id()
          }),
 
         # DAT-5599
-        (PeoplerCase().get_auto_test_user_id,
+        (PeoplerCase().get_test_user_id,
          {
              "delete": False,
              "new_author": None
          }),
 
-        (PeoplerCase().get_auto_test_user_id,
+        (PeoplerCase().get_test_user_id,
          {
              "delete": True,
              "new_author": None
@@ -831,6 +812,10 @@ class TestPermitter:
 
 
 class TestRmCook:
+
+    # ! Поменять настройки источников Role mining
+    def test_rm_cook_settings_sources_post(self):
+        RmCookCase().case_rm_cook_settings_sources_post()
 
     def test_rm_cook_active_directory_groups_get(self):
         RmCookCase().case_rm_cook_active_directory_groups_get()
@@ -866,8 +851,11 @@ class TestRmCook:
     def test_rm_cook_rm_roles_id_alias_post(self):
         RmCookCase().case_rm_cook_rm_roles_id_alias_post()
 
-    def test_rm_cook_rm_roles_id_alias_ts_get(self):
-        RmCookCase().case_rm_cook_rm_roles_id_alias_ts_get()
+    @pytest.mark.parametrize('role_id,timestamp', [
+        (0, 0)
+    ])
+    def test_rm_cook_rm_roles_id_alias_ts_get(self, role_id, timestamp):
+        RmCookCase().case_rm_cook_rm_roles_id_alias_ts_get(role_id, timestamp)
 
     def test_rm_status_get(self):
         RmCookCase().case_rm_cook_rm_status_get()
@@ -875,32 +863,45 @@ class TestRmCook:
     def test_rm_cook_role_model_result_export_role_model_to_excel_post(self):
         RmCookCase().case_rm_cook_role_model_result_export_role_model_to_excel_post()
 
-    def test_rm_cook_role_model_result_groups_by_role_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_groups_by_role_id_get()
+    @pytest.mark.parametrize('role_id', [0])
+    def test_rm_cook_role_model_result_groups_by_role_id_get(self, role_id):
+        RmCookCase().case_rm_cook_role_model_result_groups_by_role_id_get(role_id)
 
-    @pytest.mark.skip   # fixme
+    @pytest.mark.skip(reason="Не используется")
     def test_rm_cook_role_model_result_resources_by_role_id_get(self):
         RmCookCase().case_rm_cook_role_model_result_resources_by_role_id_get()
 
-    def test_rm_cook_role_model_result_roles_by_source_source_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_roles_by_source_source_id_get()
+    @pytest.mark.parametrize('source_id', [0])
+    def test_rm_cook_role_model_result_roles_by_source_id_get(self, source_id):
+        RmCookCase().case_rm_cook_role_model_result_roles_by_source_id_get(source_id)
 
-    def test_rm_cook_role_model_result_source_source_id_users_by_role_role_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_source_0_users_by_role_0_get()
+    @pytest.mark.parametrize('source_id,role_id', [
+        (0, 0)
+    ])
+    def test_rm_cook_role_model_result_source_id_users_by_role_id_get(self, source_id, role_id):
+        RmCookCase().case_rm_cook_role_model_result_source_id_users_by_role_id_get(source_id, role_id)
 
-    @pytest.mark.skip   # fixme
-    def test_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get(self):  # Не используется
-        RmCookCase().case_rm_cook_role_model_result_table_role_role_id_resources_by_user_user_id_get()
+    @pytest.mark.skip(reason="Не используется")
+    def test_rm_cook_role_model_result_table_role_id_resources_by_user_id_get(self):
+        RmCookCase().case_rm_cook_role_model_result_table_role_id_resources_by_user_id_get()
 
-    @pytest.mark.skip   # fixme
-    def test_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get(self):  # Не используется
-        RmCookCase().case_rm_cook_role_model_result_table_role_role_id_users_by_resource_resource_id_get()
+    @pytest.mark.skip(reason="Не используется")
+    def test_rm_cook_role_model_result_table_role_id_users_by_resource_id_get(self):
+        RmCookCase().case_rm_cook_role_model_result_table_role_id_users_by_resource_id_get()
 
-    def test_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_form_role_role_id_groups_by_user_user_id_get()
+    @pytest.mark.parametrize('form', [
+        "table",
+        "graph"
+    ])
+    def test_rm_cook_role_model_result_form_role_id_groups_by_user_id_get(self, form):
+        RmCookCase().case_rm_cook_role_model_result_form_role_id_groups_by_user_id_get(form)
 
-    def test_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get(self):
-        RmCookCase().case_rm_cook_role_model_result_form_role_role_id_users_by_group_user_id_get1()
+    @pytest.mark.parametrize('form', [
+        "table",
+        "graph"
+    ])
+    def test_rm_cook_role_model_result_form_role_id_users_by_group_id_get(self, form):
+        RmCookCase().case_rm_cook_role_model_result_form_role_id_users_by_group_id_get1(form)
 
     def test_rm_cook_settings_calc_get(self):
         RmCookCase().case_rm_cook_settings_calc_get()
@@ -916,10 +917,6 @@ class TestRmCook:
 
     def test_rm_cook_settings_sources_get(self):
         RmCookCase().case_rm_cook_settings_sources_get()
-
-    @pytest.mark.skip   # Поменять настройки источников Role mining
-    def test_rm_cook_settings_sources_post(self):
-        RmCookCase().case_rm_cook_settings_sources_post()
 
 
 class TestStorageWorker:

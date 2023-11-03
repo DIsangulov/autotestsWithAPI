@@ -83,7 +83,6 @@ class Permitter(BaseReq):
 
     def permitter_user_rules_get(self) -> requests.Response:
         """process GET req for getting all user rights by token"""
-        # исп: Данные > скрипты
         return self.sess.get(f"{self.host}/back/dp.permitter/user_rules")
 
     def permitter_users_elements_count_who_id_get(self, who_id) -> requests.Response:

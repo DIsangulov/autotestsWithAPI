@@ -10,4 +10,4 @@ class XbaStatisticsPage(BasePage):
         super().__init__(page)
         self.page_path = self.__class__.page_path
 
-        # todo:
+        # self.SOMETHING = self.page.locator("//locator")

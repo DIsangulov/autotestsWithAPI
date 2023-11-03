@@ -1,5 +1,22 @@
 import random
+import string
 import datetime
+
+
+def get_random_string(
+        length: int = 8,
+        *,
+        add_symbols: str = "",
+        uppercase: bool = True,
+        lowercase: bool = True
+) -> str:
+    output_set = add_symbols
+    if uppercase:
+        output_set += string.ascii_uppercase
+    if lowercase:
+        output_set += string.ascii_lowercase
+
+    return ''.join(random.choice(output_set) for _ in range(length))
 
 
 def get_str_random_num(length: int = 4) -> str:
