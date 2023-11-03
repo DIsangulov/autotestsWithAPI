@@ -43,9 +43,11 @@ class SuiteName:
     NAVIGATION = "Навигация"
 
     AUTH_PAGE_COMMON = "Страница Авторизации"
+    AUTH_PAGE_AUTH = "Авторизация"
     AUTH_REGISTRATION = "Регистрация пользователя"
 
     ADMINISTRATION_COMMON = "Раздел Администрирование"
+    ADMINISTRATION_USERS = "Пользователи"
 
     DATA_COMMON = "Раздел Данные"
     DATA_SOURCES = "Источники"
@@ -62,12 +64,14 @@ class SuiteName:
 @allure.suite(SuiteName.AUTH_PAGE_COMMON)
 class TestAuth:
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация valid")
     @allure.description("Самая обычная авторизация")
     @pytest.mark.parametrize('auth_data_ad', [TestUsers.DpQaa])
     def test_valid_auth(self, browser, auth_data_ad):
         auth_ui.valid_auth(browser, auth_data_ad)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Чекбокс | invalid")
     @allure.description("Проставлен чекбокс 'локально' для неЛокального пользователя")
     @pytest.mark.parametrize('auth_data_invalid', [{
@@ -78,6 +82,7 @@ class TestAuth:
     def test_invalid_checkbox_auth(self, browser, auth_data_invalid):
         auth_ui.invalid_auth(browser, auth_data_invalid)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Неверный пароль | invalid")
     @allure.description("Попытка авторизации с неверным паролем")
     @pytest.mark.parametrize('auth_data_invalid', [{
@@ -88,12 +93,14 @@ class TestAuth:
     def test_invalid_password_auth(self, browser, auth_data_invalid):
         auth_ui.invalid_auth(browser, auth_data_invalid)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | valid")
     @allure.description("Самая обычная авторизация Локальный пользователь")
     @pytest.mark.parametrize('auth_data_local', [TestUsers.DpQaaLocal])
     def test_valid_auth_local(self, browser, auth_data_local):
         auth_ui.valid_auth(browser, auth_data_local)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | invalid")
     @allure.description("Авторизация Локальный пользователь с неверными логином и паролем")
     @pytest.mark.parametrize('auth_data_invalid', [{
@@ -104,6 +111,7 @@ class TestAuth:
     def test_invalid_auth_local(self, browser, auth_data_invalid):
         auth_ui.invalid_auth(browser, auth_data_invalid)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | Неправильный пароль")
     @allure.description("Авторизация Локальный пользователь с неверным паролем")
     @pytest.mark.parametrize('auth_data_wrong_password', [{
@@ -114,6 +122,7 @@ class TestAuth:
     def test_invalid_pass_auth_local(self, browser, auth_data_wrong_password):
         auth_ui.invalid_auth(browser, auth_data_wrong_password)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | Без чекбокса")
     @allure.description("Локальный пользователь, не проставил чекбокс 'local'")
     @pytest.mark.parametrize('auth_data_no_checkbox', [{
@@ -124,6 +133,7 @@ class TestAuth:
     def test_invalid_cuz_no_checkbox_auth_local(self, browser, auth_data_no_checkbox):
         auth_ui.invalid_auth(browser, auth_data_no_checkbox)
 
+    @allure.sub_suite(SuiteName.AUTH_PAGE_AUTH)
     @allure.title("Авторизация | Локальный пользователь | Невалидный логин")
     @allure.description("Локальный пользователь, пароль верный, но не логин")
     @pytest.mark.parametrize('auth_data_no_checkbox', [{
@@ -137,6 +147,7 @@ class TestAuth:
     @allure.sub_suite(SuiteName.AUTH_REGISTRATION)
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
     @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707")
+    @allure.severity(allure.severity_level.CRITICAL)
     @allure.title("Регистрация пользователя valid")
     @allure.description("Регистрация пользователя через форму регистрации на странице авторизации")
     @pytest.mark.parametrize('registration_data', [
@@ -156,13 +167,13 @@ class TestAuth:
 
         pytest.param(
             {
-                "rusname": "Прикольное Имя",
-                "username": f"{UI_AUTO_TEST_}{get_str_random_num()}",
-                "password": "a"*8,
-                "email": "sample@liam.com",
-                "mobile": "9999999999",
-                "department": "Отдел",
-                "title": "Должность",
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     "a"*8,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
             },
             id="min password length = 8",
         ),
@@ -182,52 +193,52 @@ class TestAuth:
 
         pytest.param(
             {
-                "rusname": "Прикольное Имя",
-                "username": f"{UI_AUTO_TEST_}{get_str_random_num()}",
-                "password": get_random_string(42, add_symbols="_-@", uppercase=False, lowercase=False),
-                "email": "sample@liam.com",
-                "mobile": "9999999999",
-                "department": "Отдел",
-                "title": "Должность",
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="_-@", uppercase=False, lowercase=False),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
             },
             id="pass special symbols only '_-@'",
         ),
 
         pytest.param(
             {
-                "rusname": "Прикольное Имя",
-                "username": get_random_string(4),
-                "password": "12345678",
-                "email": "sample@liam.com",
-                "mobile": "9999999999",
-                "department": "Отдел",
-                "title": "Должность",
+                "rusname":      "Прикольное Имя",
+                "username":     get_random_string(4),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
             },
             id="min username(login) length = 4",
         ),
 
         pytest.param(
             {
-                "rusname": "Прикольное Имя",
-                "username": get_random_string(256),
-                "password": "12345678",
-                "email": "sample@liam.com",
-                "mobile": "9999999999",
-                "department": "Отдел",
-                "title": "Должность",
+                "rusname":      "Прикольное Имя",
+                "username":     get_random_string(256),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
             },
             id="max username(login) length = 256",
         ),
 
         pytest.param(
             {
-                "rusname": "Прикольное Имя",
-                "username": f"{UI_AUTO_TEST_}@._-" + get_random_string(10, add_symbols="._-@"),
-                "password": "12345678",
-                "email": "sample@liam.com",
-                "mobile": "9999999999",
-                "department": "Отдел",
-                "title": "Должность",
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}@._-" + get_random_string(10, add_symbols="._-@"),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
             },
             id="username(login) contains special symbols = '._-@'",
         ),
@@ -257,6 +268,231 @@ class TestAdministrationUsers:
     @allure.title("Переход на страницу 'Пользователи'")
     def test_open_page_by_steps(self, browser):
         users_ui.open_page_by_steps(browser)
+
+    add_domain_user_test_rolename = "Офицер ИБ"
+
+    @allure.sub_suite(SuiteName.ADMINISTRATION_USERS)
+    @allure.title("Пользователи - добавление доменного пользователя")
+    @allure.description("""
+        Добавление доменного пользователя 
+        через форму 'Добавить вручную'
+        в разделе Администрирование > Пользователи
+        """)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2787")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @pytest.mark.parametrize('registration_data', [
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id = "sample",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     True,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="checkbox 'is_admin' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    True,
+                "is_tech":      False
+            },
+            id="checkbox 'is_system' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      True
+            },
+            id="checkbox 'is_tech' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     True,
+                "is_system":    True,
+                "is_tech":      True
+            },
+            id="checkboxes 'is_admin,is_system,is_tech' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     True,
+                "is_system":    True,
+                "is_tech":      True
+            },
+            id="checkboxes 'is_admin,is_system,is_tech' = True",
+        ),
+
+        pytest.param(
+            {
+                "username":     get_random_string(4),
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="min username(login) length = 4"
+        ),
+
+        pytest.param(
+            {
+                "username":     get_random_string(256),
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="max username(login) length = 256",
+            # marks=pytest.mark.skip  # look = no limits for max value
+        ),
+
+        pytest.param(
+            {
+                "username":     f"{UI_AUTO_TEST_}@._-" + get_random_string(10, add_symbols="._-@"),
+                "role_name":    add_domain_user_test_rolename,
+                "is_admin":     False,
+                "is_system":    False,
+                "is_tech":      False
+            },
+            id="username(login) contains special symbols = '._-@'",
+        ),
+
+    ])
+    def test_add_domain_user(self, browser, registration_data):
+        users_ui.add_domain_user(browser, registration_data)
+
+    @allure.sub_suite(SuiteName.ADMINISTRATION_USERS)
+    @allure.title("Пользователи - создание локального пользователя")
+    @allure.description("""
+        Добавление локального пользователя 
+        через форму 'Добавить вручную'
+        в разделе Администрирование > Пользователи
+        """)
+    @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2778")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @pytest.mark.parametrize('registration_data', [
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="1234567809_-@"),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="sample",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     "b" * 8,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="min password length = 8",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     "w" * 256,
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="max password length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_{get_str_random_num()}",
+                "password":     get_random_string(42, add_symbols="_-@", uppercase=False, lowercase=False),
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="pass special symbols only '_-@'",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     get_random_string(4),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="min username(login) length = 4",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Неприкольное Имя",
+                "username":     get_random_string(256),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="max username(login) length = 256",
+        ),
+
+        pytest.param(
+            {
+                "rusname":      "Прикольное Имя",
+                "username":     f"{UI_AUTO_TEST_}inner_add_@._-" + get_random_string(10, add_symbols="._-@"),
+                "password":     "12345678",
+                "email":        "sample@liam.com",
+                "mobile":       "9999999999",
+                "department":   "Отдел",
+                "title":        "Должность",
+            },
+            id="username(login) contains special symbols = '._-@'",
+        ),
+
+    ])
+    def test_add_local_user(self, browser, registration_data):
+        users_ui.add_local_user(browser, registration_data)
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)
@@ -300,7 +536,7 @@ class TestAdministrationUpdates:
         updates_ui.open_page_by_steps(browser)
 
 
-@allure.title(SuiteName.ADMINISTRATION_COMMON)
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationNotificationList:
 
     @allure.sub_suite(SuiteName.NAVIGATION)
@@ -309,7 +545,7 @@ class TestAdministrationNotificationList:
         adm_notification_list_ui.open_page_by_steps(browser)
 
 
-@allure.title(SuiteName.ADMINISTRATION_COMMON)
+@allure.suite(SuiteName.ADMINISTRATION_COMMON)
 class TestAdministrationSettings:
 
     @allure.sub_suite(SuiteName.NAVIGATION)

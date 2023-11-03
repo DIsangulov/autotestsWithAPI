@@ -6,13 +6,13 @@ from pages.Helpers.base_page import BasePage
 from pages.UI.Auth.auth_page import AuthPage
 
 RegistrationData = TypedDict('RegistrationData', {
-    "rusname": str,
-    "username": str,
-    "password": str,
-    "email": str,
-    "mobile": str,
-    "department": str,
-    "title": str,
+    "rusname":      str,
+    "username":     str,
+    "password":     str,
+    "email":        str,
+    "mobile":       str,
+    "department":   str,
+    "title":        str,
     # "local": bool
 })
 
