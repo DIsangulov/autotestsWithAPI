@@ -575,7 +575,7 @@ class TestDataSources:
     с информацией по источнику
     """)
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
-    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/2866")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2711")
     def test_open_modal_w_actions_details(self, browser):
         sources_ui.open_modal_w_actions_details(browser)
 

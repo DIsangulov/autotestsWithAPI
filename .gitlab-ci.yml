@@ -1,60 +1,99 @@
 stages:          # List of stages for jobs, and their order of execution
   - test
+  - test_it
   - history_copy
   - reports
   - deploy
 
+
 run_tests_api:
   image: registry.ngrsoftlab.ru:8888/ngr-chrome:v2
-  #image: registry.ngrsoftlab.ru:8888/ngr-yandex
-
-
   stage: test
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: never
+    - when: never
 
   before_script:
     - pip install -r requirements.txt
 
   script:
-    - pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
-    #- pytest -v -s --alluredir=./allure-results tests/test_ui.py
+    - pytest --testit -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
 
   allow_failure: true
-
-  #- pytest --testit --testrunid=${TEST_RUN_ID} --testit_url=${URL} --privatetoken=${PRIVATE_TOKEN} --configurationid=5aa0c7a7-4d2d-4547-aff3-3af8d0048fa2
 
   artifacts: # Сущность, с помощью которой, мы сохраним результат тестирования.
     when: always # Сохранять всегда
     paths:
       - ./allure-results # Здесь будет сохранен отчет
     expire_in: 1 day # Да, он будет удален через день. Нет смысла хранить его в течение длительного срока.
+
 
 run_tests_ui:
   image: registry.ngrsoftlab.ru:8888/ngr-chrome:v2
-  #image: registry.ngrsoftlab.ru:8888/ngr-yandex
-
   stage: test
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: never
+    - when: never
 
   before_script:
     - pip install -r requirements.txt
 
   script:
-    #- pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
-    - pytest --alluredir=./allure-results tests/test_ui.py
+    - pytest --testit --alluredir=./allure-results tests/test_ui.py
 
   allow_failure: true
-
-  #- pytest --testit --testrunid=${TEST_RUN_ID} --testit_url=${URL} --privatetoken=${PRIVATE_TOKEN} --configurationid=5aa0c7a7-4d2d-4547-aff3-3af8d0048fa2
 
   artifacts: # Сущность, с помощью которой, мы сохраним результат тестирования.
     when: always # Сохранять всегда
     paths:
       - ./allure-results # Здесь будет сохранен отчет
     expire_in: 1 day # Да, он будет удален через день. Нет смысла хранить его в течение длительного срока.
+
+
+test_it_api:
+  image: registry.ngrsoftlab.ru:8888/ngr-chrome:v2
+  stage: test_it
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: always
+    - when: never
+
+  before_script:
+    - pip install -r requirements.txt
+
+  script:
+    - pytest --testit -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
+    #- pytest --testit --testrunid=${TEST_RUN_ID} --testit_url=${URL} --privatetoken=${PRIVATE_TOKEN} --configurationid=5aa0c7a7-4d2d-4547-aff3-3af8d0048fa2
+
+  allow_failure: true
+
+
+test_it_ui:
+  image: registry.ngrsoftlab.ru:8888/ngr-chrome:v2
+  stage: test_it
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: always
+    - when: never
+
+  before_script:
+    - pip install -r requirements.txt
+
+  script:
+    - pytest --testit --alluredir=./allure-results tests/test_ui.py
+
+  allow_failure: true
+
 
 history_job: # Название job
   stage: history_copy # Это второй stage, который нужно выполнить
 
-  #image: storytel/alpine-bash-curl # Но теперь укажем раннеру использовать другой образ, для того чтобы скачать результаты теста из предыдущего пайплайна. Нам же нужна история тестов, верно?
   image: registry.ngrsoftlab.ru:8888/storytel
 
   script:
@@ -71,6 +110,8 @@ history_job: # Название job
       - ./allure-results # Сохраняем данные
     expire_in: 1 day
   rules:
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: never
     - when: always # Сохранять всегда
 
 
@@ -89,7 +130,10 @@ allure_job: # Название job
       - ./allure-report
     expire_in: 1 day
   rules:
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: never
     - when: always
+
 
 pages: # Названием этой job говорим гитлабу, чтобы захостил результат у себя в pages
     stage: deploy # третий stage, который будет выполнен
@@ -100,4 +144,6 @@ pages: # Названием этой job говорим гитлабу, чтоб
       paths:
         - public
     rules:
+      - if: $CI_PIPELINE_SOURCE == "trigger"
+        when: never
       - when: always
