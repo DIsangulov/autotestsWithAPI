@@ -19,7 +19,7 @@ run_tests_api:
     - pip install -r requirements.txt
 
   script:
-    - pytest --testit -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
+    - pytest -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
 
   allow_failure: true
 
@@ -43,7 +43,7 @@ run_tests_ui:
     - pip install -r requirements.txt
 
   script:
-    - pytest --testit --alluredir=./allure-results tests/test_ui.py
+    - pytest --alluredir=./allure-results tests/test_ui.py
 
   allow_failure: true
 
