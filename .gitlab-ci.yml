@@ -13,7 +13,7 @@ run_tests_api:
   rules:
     - if: $CI_PIPELINE_SOURCE == "trigger"
       when: never
-    - when: never
+    - when: always
 
   before_script:
     - pip install -r requirements.txt
@@ -37,7 +37,7 @@ run_tests_ui:
   rules:
     - if: $CI_PIPELINE_SOURCE == "trigger"
       when: never
-    - when: never
+    - when: always
 
   before_script:
     - pip install -r requirements.txt
