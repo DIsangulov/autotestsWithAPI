@@ -146,7 +146,7 @@ class TestAuth:
 
     @allure.sub_suite(SuiteName.AUTH_REGISTRATION)
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
-    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2797")
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.title("Регистрация пользователя valid")
     @allure.description("Регистрация пользователя через форму регистрации на странице авторизации")
