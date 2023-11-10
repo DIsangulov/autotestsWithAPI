@@ -605,7 +605,7 @@ class TestDataSources:
     @allure.sub_suite(SuiteName.DATA_SOURCES)
     @allure.title("Создание источника в редакторе")
     @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
-    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
+    @allure.testcase("")
     def test_source_create_editor_syslog(self, browser):
         sources_ui.source_create_editor_syslog(browser)
 
