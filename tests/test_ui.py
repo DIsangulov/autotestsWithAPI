@@ -5,6 +5,7 @@ from resourses.credentials import TARGET_URL
 from resourses.credentials import TestUsers
 from resourses.constants import UI_AUTO_TEST_
 from resourses.static_methods import get_str_random_num, get_random_string
+from tests.case.api.peopler import PeoplerCase
 
 from tests.case.ui import auth_ui
 from tests.case.ui.m1_administration import roles_ui
@@ -59,6 +60,8 @@ class SuiteName:
     XBA_COMMON = "Раздел xBA"
 
     ROLE_MINING_COMMON = "Раздел Role Mining"
+
+    _SERVICE = "Служебные штуки"
 
 
 @allure.suite(SuiteName.AUTH_PAGE_COMMON)
@@ -756,3 +759,11 @@ class TestRoleMiningRoleModel:
     @allure.title("Переход на страницу 'Ролевая модель'")
     def test_open_page_by_steps(self, browser):
         rm_role_model_ui.open_page_by_steps(browser)
+
+
+@allure.suite(SuiteName._SERVICE)
+class TestGarbageCollector2:
+
+    def test_delete_my_right_leg(self):
+        # удаление пользователей с приставкой в имени
+        PeoplerCase().all_users_with_prefix_delete(UI_AUTO_TEST_)

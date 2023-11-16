@@ -2,30 +2,45 @@ import json
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_peopler import Peopler
-from resourses.constants import API_AUTO_TEST_
+from resourses.constants import API_AUTO_TEST_, UI_AUTO_TEST_
 from resourses.static_methods import get_str_random_num
 
-officer_role_id = 3         # or any test_role_id
+officer_role_id = 3     # or any test_role_id
 
-test_user_id = set()   # список тестовых пользователей, созданных автоматически
+test_user_id = set()    # список тестовых пользователей, созданных автоматически
 
 
 class PeoplerCase(UserSession):
 
-    def _collect_auto_user_id(self):
-        resp = Peopler(self.sess, self.host).peopler_users_get()    # получить список ВСЕХ пользователей
-        assert resp.status_code == 200, f"assert::peopler_users_get, failed. status_code: {resp.status_code}, text: {resp.text}"
+    def _collect_auto_user_id(self, *, username_prefix) -> set:
+
+        if username_prefix not in (API_AUTO_TEST_, UI_AUTO_TEST_):
+            assert False, f"""
+            Not allowed to use function {self.__class__._collect_auto_user_id.__name__}
+            for prefix: '{username_prefix}'"""
+
+        # получить список ВСЕХ пользователей
+        resp = Peopler(self.sess, self.host).peopler_users_get()
+        assert resp.status_code == 200, f"""
+        assert::peopler_users_get, failed.
+        status_code: {resp.status_code}
+        resp.text: {resp.text}"""
+
+        collected_user_id = set()
 
         all_users_info_rows = json.loads(resp.text)['res']
-        for _row in all_users_info_rows:                            # фильтровать по API_AUTO_TEST_
+        # фильтровать по username_starts_with
+        for _row in all_users_info_rows:
             # .lower автоматически применяется при регистрации @доменных пользователей
-            if str(_row['name']).startswith(API_AUTO_TEST_.lower()) or str(_row['name']).startswith(API_AUTO_TEST_):
-                test_user_id.add(int(_row['id']))
+            if str(_row['name']).startswith(username_prefix.lower()) or str(_row['name']).startswith(username_prefix):
+                collected_user_id.add(int(_row['id']))
+        return collected_user_id
 
     def get_test_user_id(self) -> int:
         """get from global auto_user_id: API_AUTO_TEST_x"""
+        global test_user_id
         if len(test_user_id) == 0:
-            self._collect_auto_user_id()
+            test_user_id = self._collect_auto_user_id(username_prefix=API_AUTO_TEST_)
 
         if len(test_user_id) == 0:
             resp_new_user = self.case_peopler_users_post()          # Создание нового @доменного пользователя
@@ -33,9 +48,9 @@ class PeoplerCase(UserSession):
                 f"Ошибка при создании нового пользователя, код: {resp_new_user.status_code}, {resp_new_user.text}"
 
             new_user_id = json.loads(resp_new_user.text)['res']     # {"res":12345}
-            return int(new_user_id)                                 # вернуть 'id' нового пользователя
+            return int(new_user_id)
 
-        return test_user_id.pop()                                   # возвращает случайное значение из auto_user_id
+        return test_user_id.pop()
 
     def case_peopler_mainpage_get(self):
         req = Peopler(self.sess, self.host)
@@ -240,9 +255,9 @@ class PeoplerCase(UserSession):
         # print(f"Пользователь {user_id}, был удален")
 
     # __del__
+    # Главное - не прострелить ногу # метод удаляет всех пользователей с приставкой users_prefix
+    def all_users_with_prefix_delete(self, users_prefix):
+        user_id_set = self._collect_auto_user_id(username_prefix=users_prefix)
 
-    # Главное - не прострелить ногу # метод удаляет всех пользователей c приставкой API_AUTO_TEST_
-    def all_api_auto_test_user_delete(self):
-        self._collect_auto_user_id()
-        while len(test_user_id) > 0:
-            Peopler(self.sess, self.host).peopler_users_id_delete(test_user_id.pop())
+        while len(user_id_set) > 0:
+            Peopler(self.sess, self.host).peopler_users_id_delete(user_id_set.pop())

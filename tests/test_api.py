@@ -2,6 +2,7 @@ import pytest
 import urllib3
 
 from resourses.credentials import TARGET_URL
+from resourses.constants import API_AUTO_TEST_
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -1553,7 +1554,7 @@ class TestGarbageCollector:
     def test_all_api_auto_test_entity_delete(self):
         # удаление сущностей, оставленных после прогонки кейсов
         AbsorberCase().all_api_auto_test_entity_delete()
-        PeoplerCase().all_api_auto_test_user_delete()
+        PeoplerCase().all_users_with_prefix_delete(API_AUTO_TEST_)
         PermitterCase().all_temp_roles_delete()
         StorageWorkerCase().all_api_auto_test_regs_delete()
         XbaCookCase().all_api_auto_test_entity_delete()
