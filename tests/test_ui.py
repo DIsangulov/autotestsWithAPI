@@ -146,7 +146,7 @@ class TestAuth:
 
     @allure.sub_suite(SuiteName.AUTH_REGISTRATION)
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5762")
-    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2797")
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.title("Регистрация пользователя valid")
     @allure.description("Регистрация пользователя через форму регистрации на странице авторизации")
@@ -575,7 +575,7 @@ class TestDataSources:
     с информацией по источнику
     """)
     @allure.issue("https://tasks.ngrsoftlab.ru/browse/DAT-5410")
-    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/2866")
+    @allure.testcase("http://testit.ngrsoftlab.ru/projects/2707/tests/2711")
     def test_open_modal_w_actions_details(self, browser):
         sources_ui.open_modal_w_actions_details(browser)
 
@@ -605,7 +605,7 @@ class TestDataSources:
     @allure.sub_suite(SuiteName.DATA_SOURCES)
     @allure.title("Создание источника в редакторе")
     @allure.description("Источники - создание источника в редакторе (тип подключения: syslog)")
-    @allure.testcase("https://team-6wwm.testit.software/projects/3/tests/320")
+    @allure.testcase("")
     def test_source_create_editor_syslog(self, browser):
         sources_ui.source_create_editor_syslog(browser)
 

@@ -330,6 +330,7 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_storage_worker_statistics_storage_search_post(self):
+        # front: /storage/search/content
         req = StorageWorker(self.sess, self.host)
 
         db_name = DB_Shallow.name
@@ -379,6 +380,7 @@ class StorageWorkerCase(UserSession):
         resp = req.storage_worker_storage_db_put(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+    # TODO: Перевести в создание хранилища с передаваемым именем
     def case_storage_worker_storage_db_post(self):
         req = StorageWorker(self.sess, self.host)
         data = {
@@ -389,6 +391,7 @@ class StorageWorkerCase(UserSession):
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
         # доступ на изменение хранилища API_TEST_DB_BLINKING
+        # FIXME: убрать из кейса -> должно быть перед использованием, где требуется доступ
         PermitterCase().add_role_permission_to_change_db(self.get_self_role_id(), API_TEST_DB_BLINKING)
 
     def case_storage_worker_storage_db_delete(self):
