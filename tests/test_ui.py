@@ -4,7 +4,8 @@ import pytest
 from resourses.credentials import TARGET_URL
 from resourses.credentials import TestUsers
 from resourses.constants import UI_AUTO_TEST_
-from resourses.static_methods import get_str_random_num, get_random_string
+from resourses.static_methods import get_str_random_num
+from resourses.static_methods import get_random_string
 from tests.case.api.peopler import PeoplerCase
 
 from tests.case.ui import auth_ui
@@ -390,6 +391,15 @@ class TestAdministrationUsers:
     def test_add_domain_user(self, browser, registration_data):
         users_ui.add_domain_user(browser, registration_data)
 
+        try:
+            with allure.step("Удаление созданного пользователя"):
+                parameter_username = dict(registration_data).get("username")
+                expecting_username = users_ui.transform_username_to_domain_name(parameter_username)
+                user_id = PeoplerCase().get_user_id_by_username(expecting_username)
+                PeoplerCase().case_peopler_users_delete(user_id)
+        except Exception as e:
+            print(f"Exception: {e}")
+
     @allure.sub_suite(SuiteName.ADMINISTRATION_USERS)
     @allure.title("Пользователи - создание локального пользователя")
     @allure.description("""
@@ -496,6 +506,14 @@ class TestAdministrationUsers:
     ])
     def test_add_local_user(self, browser, registration_data):
         users_ui.add_local_user(browser, registration_data)
+
+        try:
+            with allure.step("Удаление созданного пользователя"):
+                expecting_username = dict(registration_data).get("username")
+                user_id = PeoplerCase().get_user_id_by_username(expecting_username)
+                PeoplerCase().case_peopler_users_delete(user_id)
+        except Exception as e:
+            print(f"Exception: {e}")
 
 
 @allure.suite(SuiteName.ADMINISTRATION_COMMON)

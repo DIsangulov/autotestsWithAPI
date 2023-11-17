@@ -24,6 +24,13 @@ LocalUserRegistrationData = TypedDict('LocalUserRegistrationData', {
 })
 
 
+def transform_username_to_domain_name(username: str) -> str:
+    # TODO: доменное имя меняется при наличии "/ или @"
+    #  добавить логики при "/" или "@"
+    domain_name = username + "@ngrsoftlab.ru"
+    return domain_name.lower()
+
+
 @allure.step("Открыть страницу Пользователи")
 def open_page_by_steps(browser: Page):
     page = UsersPage(browser)
@@ -90,9 +97,7 @@ def add_domain_user(browser: Page, registration_data):
         expect(page.add_user.MODAL_CARD).not_to_be_visible()
 
     with allure.step("Новый пользователь отображается на текущей странице"):
-        # FIXME: доменное имя меняется при наличии "/ или @"
-        expected_name = registration_data.get("username") + "@ngrsoftlab.ru"
-        expected_name = expected_name.lower()
+        expected_name = transform_username_to_domain_name(registration_data.get("username"))
         assert page.check_user_at_current_page(expected_name, timeout=600), \
             f"Новый пользователь не отображается на текущей странице\nexpected_name: {expected_name}"
 

@@ -52,6 +52,23 @@ class PeoplerCase(UserSession):
 
         return test_user_id.pop()
 
+    def get_user_id_by_username(self, name: str) -> int:
+        """Возвращает id пользователя с именем 'name'"""
+
+        # получить список ВСЕХ пользователей
+        all_users_resp = Peopler(self.sess, self.host).peopler_users_get()
+        assert all_users_resp.status_code == 200, f"""
+        assert::peopler_users_get, failed.
+        status_code: {all_users_resp.status_code}
+        resp.text: {all_users_resp.text}"""
+
+        all_users_list = json.loads(all_users_resp.text)['res']
+        case_user = next((user_info for user_info in all_users_list if user_info['name'] == name), None)
+        if case_user is None:
+            assert False, f"Пользователь с именем '{name}' не был найден"
+
+        return int(case_user['id'])
+
     def case_peopler_mainpage_get(self):
         req = Peopler(self.sess, self.host)
         resp = req.peopler_mainpage_get()
@@ -247,9 +264,11 @@ class PeoplerCase(UserSession):
         resp = req.peopler_users_id_put(user_id, body)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_peopler_users_delete(self):
+    def case_peopler_users_delete(self, user_id: int = None):
+        if user_id is None:
+            user_id = self.get_test_user_id()
+
         req = Peopler(self.sess, self.host)
-        user_id = self.get_test_user_id()
         resp = req.peopler_users_id_delete(user_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # print(f"Пользователь {user_id}, был удален")
