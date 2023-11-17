@@ -250,6 +250,14 @@ class TestAuth:
     def test_valid_registration(self, browser, registration_data):
         auth_ui.valid_registration(browser, registration_data)
 
+        try:
+            with allure.step("Удаление созданного пользователя"):
+                expecting_username = dict(registration_data).get("username")
+                user_id = PeoplerCase().get_user_id_by_username(expecting_username)
+                PeoplerCase().case_peopler_users_delete(user_id)
+        except Exception as e:
+            print(f"Exception: {e}")
+
     @allure.title("Авторизация | Выход из профиля пользователя")
     @allure.description("Выход по кнопке 'Выйти'")
     def test_log_out(self, browser):
