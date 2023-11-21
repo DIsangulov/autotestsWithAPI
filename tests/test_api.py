@@ -3,6 +3,7 @@ import urllib3
 
 from resourses.credentials import TARGET_URL
 from resourses.constants import API_AUTO_TEST_
+from resourses.static_methods import get_datetime_now_z
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -1066,6 +1067,13 @@ class TestStorageWorker:
 
 class TestXbaCook:
 
+    class EntityCategory:
+        user = "user"
+        host = "host"
+        process = "process"
+        department = "department"
+        other = "other"
+
     def test_xba_cook_profiles_post(self):
         XbaCookCase().case_xba_cook_profiles_post()
 
@@ -1082,11 +1090,37 @@ class TestXbaCook:
     def test_xba_cook_check_entity_type_post(self):
         XbaCookCase().case_xba_cook_check_entity_type_post()
 
-    def test_xba_cook_dashboard_entities_post(self):
-        XbaCookCase().case_xba_cook_dashboard_entities_post()
+    @pytest.mark.parametrize("entity_category", [
+        EntityCategory.user,
+        EntityCategory.host,
+        EntityCategory.process,
+        EntityCategory.department,
+        EntityCategory.other
+    ])
+    def test_xba_cook_dashboard_entities_post(self, entity_category):
+        # DAT-5251
+        post_data = {
+            "start": get_datetime_now_z(day_delta=-1),
+            "end": get_datetime_now_z(),
+            "entity_category": entity_category
+        }
+        XbaCookCase().case_xba_cook_dashboard_entities_post(post_data)
 
-    def test_xba_cook_dashboard_entities_more_post(self):
-        XbaCookCase().case_xba_cook_dashboard_entities_more_post()
+    @pytest.mark.parametrize("entity_category", [
+        EntityCategory.user,
+        EntityCategory.host,
+        EntityCategory.process,
+        EntityCategory.department,
+        EntityCategory.other
+    ])
+    def test_xba_cook_dashboard_entities_more_post(self, entity_category):
+        # DAT-5251
+        post_data = {
+            "start": get_datetime_now_z(day_delta=-1),
+            "end": get_datetime_now_z(),
+            "entity_category": entity_category
+        }
+        XbaCookCase().case_xba_cook_dashboard_entities_more_post(post_data)
 
     def test_xba_cook_dashboard_groups_post(self):
         XbaCookCase().case_xba_cook_dashboard_groups_post()
@@ -1094,11 +1128,40 @@ class TestXbaCook:
     def test_xba_cook_dashboard_groups_more_post(self):
         XbaCookCase().case_xba_cook_dashboard_groups_more_post()
 
-    def test_xba_cook_dashboard_profiles_post(self):
-        XbaCookCase().case_xba_cook_dashboard_profiles_post()
+    @pytest.mark.parametrize("entity_category", [
+        EntityCategory.user,
+        EntityCategory.host,
+        EntityCategory.process,
+        EntityCategory.department,
+        EntityCategory.other
+    ])
+    def test_xba_cook_dashboard_profiles_post(self, entity_category):
+        # DAT-5245
+        # "profile_category_id" # id of xba profile category (use get profile category list request)
+        post_data = {
+            "start": get_datetime_now_z(day_delta=-1),
+            "end": get_datetime_now_z(),
+            "entity_category": entity_category,
+            "profile_category_id": 0,  # 0  # 1-11
+        }
+        XbaCookCase().case_xba_cook_dashboard_profiles_post(post_data)
 
-    def test_xba_cook_dashboard_profiles_more_post(self):
-        XbaCookCase().case_xba_cook_dashboard_profiles_more_post()
+    @pytest.mark.parametrize("entity_category", [
+        EntityCategory.user,
+        EntityCategory.host,
+        EntityCategory.process,
+        EntityCategory.department,
+        EntityCategory.other
+    ])
+    def test_xba_cook_dashboard_profiles_more_post(self, entity_category):
+        # DAT-5245
+        post_data = {
+            "start": get_datetime_now_z(day_delta=-1),
+            "end": get_datetime_now_z(),
+            "entity_category": entity_category,
+            "profile_category_id": 0,  # 0  # 1-11
+        }
+        XbaCookCase().case_xba_cook_dashboard_profiles_more_post(post_data)
 
     def test_xba_cook_entity_post(self):
         XbaCookCase().case_xba_cook_entity_post()
@@ -1155,14 +1218,15 @@ class TestXbaCook:
 
     # fixme: хк
     @pytest.mark.parametrize('xba_profile_id,post_data', [
-        (34,
+        (216,
          {
-            "name": "kuta",
-            "time": "2023-09-15T03:00:00Z",
+            "name": "emerald",
+            "time": "2023-11-21T09:00:00Z",
             "columns": [
-                "TimeStamp",
-                "Gorod",
-                "TemnepaTypa"
+                "timestamp",
+                "name",
+                "price",
+                "item_group"
             ]
          })
     ])
@@ -1232,11 +1296,13 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_whitelist_element_post(self):
         XbaCookCase().case_xba_cook_profiles_id_whitelist_element_post()
 
-    def test_xba_cook_profiles_id_string_whitelist_get(self):
-        XbaCookCase().case_xba_cook_profiles_id_string_whitelist_get()
-
-    def test_xba_cook_profiles_id_list_whitelist_get(self):
-        XbaCookCase().case_xba_cook_profiles_id_list_whitelist_get()
+    @pytest.mark.parametrize('form', [
+        "string",
+        "list"
+    ])
+    def test_xba_cook_profiles_id_form_whitelist_get(self, form):
+        xba_profile_id = XbaCookCase()._get_xba_profile_id()
+        XbaCookCase().case_xba_cook_profiles_id_form_whitelist_get(xba_profile_id, form)
 
     @pytest.mark.skip   # todo
     def test_xba_cook_profiles_profile_id_whitelist_element_id_delete(self):

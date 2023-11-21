@@ -12,14 +12,6 @@ xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
 
 
-class EntityCategory:
-    user = "user"
-    host = "host"
-    process = "process"
-    department = "department"
-    other = "other"
-
-
 class XbaIdFunction:
     """Функция построения профиля"""
     count = 1
@@ -249,30 +241,14 @@ class XbaCookCase(UserSession):
         # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_dashboard_entities_post(self):
-        # DAT-5251
+    def case_xba_cook_dashboard_entities_post(self, post_data: dict):
         req = XbaCook(self.sess, self.host)
-        data = {
-            "start": get_datetime_now_z(day_delta=-1),
-            "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.other    # todo: user|host|process|department|other
-        }
-        # data = {}   # :400
-        resp = req.xba_cook_dashboard_entities_post(data)
-        # print(resp.text)
+        resp = req.xba_cook_dashboard_entities_post(post_data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_dashboard_entities_more_post(self):
-        # DAT-5251
+    def case_xba_cook_dashboard_entities_more_post(self, post_data: dict):
         req = XbaCook(self.sess, self.host)
-        data = {
-            "start": get_datetime_now_z(day_delta=-1),
-            "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.other  # todo: user|host|process|department|other
-        }
-        # data = {}   # :200
-        resp = req.xba_cook_dashboard_entities_more_post(data)
-        # print(resp.text)
+        resp = req.xba_cook_dashboard_entities_more_post(post_data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # 200: {"res":{"entities_for_top":[]}}
 
@@ -325,37 +301,15 @@ class XbaCookCase(UserSession):
             # print(resp.text)
             assert resp.status_code == 200, f"c.key: {key}. Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_dashboard_profiles_post(self):
-        # DAT-5245
-        # "entity_category" # user, host, process, department, other, etc... # ?"entity_type"
-        # "profile_category_id" # id of xba profile category (use get profile category list request)
+    def case_xba_cook_dashboard_profiles_post(self, post_data: dict):
         req = XbaCook(self.sess, self.host)
-
-        data = {
-            "start": get_datetime_now_z(day_delta=-1),
-            "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
-            "profile_category_id": 0,  # 0  # 1-11
-        }
-        # data = {}
-        resp = req.xba_cook_dashboard_profiles_post(data)
-        # print(resp.text)
+        resp = req.xba_cook_dashboard_profiles_post(post_data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"res":{"top_profiles_table":null,"profile_categories_chart":null,"entity_categories_chart":null,"risky_profiles_graph":null}}
 
-    def case_xba_cook_dashboard_profiles_more_post(self):
-        # DAT-5245
+    def case_xba_cook_dashboard_profiles_more_post(self, post_data: dict):
         req = XbaCook(self.sess, self.host)
-
-        data = {
-            "start": get_datetime_now_z(day_delta=-1),
-            "end": get_datetime_now_z(),
-            "entity_category": EntityCategory.process,  # todo: user|host|process|department|other
-            "profile_category_id": 0,  # 0  # 1-11
-        }
-        # data = {}
-        resp = req.xba_cook_dashboard_profiles_more_post(data)
-        # print(resp.text)
+        resp = req.xba_cook_dashboard_profiles_more_post(post_data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         # {"res":{"top_profiles_table":null}}
 
@@ -368,7 +322,6 @@ class XbaCookCase(UserSession):
             "type": ""
         }
         resp = req.xba_cook_entity_post(data)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_entity_details_post(self):
@@ -381,7 +334,6 @@ class XbaCookCase(UserSession):
         }
         resp = req.xba_cook_entity_details_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-        # print(resp.text)
 
     # todo: пока возвращает заглушку DAT-5186, пункт 6
     # type"user" > возвращает {"res":{"name":"","type":""}}
@@ -889,17 +841,8 @@ class XbaCookCase(UserSession):
             else:
                 assert resp_res_entities is None, f"Фильтрация возвращает больше значений чем ожидалось | post_data = {data}, resp: {resp.text}"
 
-    def case_xba_cook_profiles_id_string_whitelist_get(self):
+    def case_xba_cook_profiles_id_form_whitelist_get(self, prof_id: int, form: str):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
-        form = "string"
-        resp = req.xba_cook_profiles_id_form_whitelist_get(prof_id, form)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-    def case_xba_cook_profiles_id_list_whitelist_get(self):
-        req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
-        form = "list"
         resp = req.xba_cook_profiles_id_form_whitelist_get(prof_id, form)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
