@@ -1516,15 +1516,37 @@ class TestScripter:
 
 class TestTaskplan:
 
-    def test_taskplan_add_task_post(self):
-        TaskplanCase().case_taskplan_add_task_post()
+    def _get_element_id_by_type(self, element_type) -> int:
+        match element_type:
+            case "script_exec":
+                return ScripterCase().get_script_id()
+            case "mailing":
+                return ReporterCase().get_mailing_id()
+            case _:
+                assert False, f"Неверно выбран тип для {self.__class__.__name__}::{self._get_element_id_by_type.__name__}, element_type: {element_type}"
 
-    @pytest.mark.skip   # TODO: check
+    @pytest.mark.parametrize('sched_type', [
+        # sched_type=alarm,source,xba,rm_calc,mailing,script_exec,sequence
+        "script_exec",  # front: скрипты
+        "mailing"       # front: рассылки из отчетов
+    ])
+    def test_taskplan_add_task_post(self, sched_type):
+        object_id = self._get_element_id_by_type(sched_type)
+        TaskplanCase().case_taskplan_add_task_post(sched_type, object_id)
+
+    @pytest.mark.parametrize('sched_type', [
+        "mailing"
+    ])
+    def test_taskplan_get_shedule_post(self, sched_type):
+        object_id = self._get_element_id_by_type(sched_type)
+        # Прежде чем получить данные, ?нужно добавить таск > 'add_task'
+        TaskplanCase().case_taskplan_add_task_post(sched_type, object_id)
+        # Затем, непосредственно получение таскплана
+        TaskplanCase().case_taskplan_get_shedule_post(sched_type, object_id)
+
+    @pytest.mark.skip   # TODO: empty
     def test_taskplan_delete_task(self):
         TaskplanCase().case_taskplan_delete_task()
-
-    def test_taskplan_get_shedule_post(self):
-        TaskplanCase().case_taskplan_get_shedule_post()
 
 
 class TestUpdater:
