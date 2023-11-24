@@ -2,6 +2,7 @@ pytest
 requests~=2.28.1
 testit-api-client
 testit-adapter-pytest
+testit-importer-allure==1.4.0
 self~=2020.12.3
 urllib3~=1.26.12
 datetime~=4.9
