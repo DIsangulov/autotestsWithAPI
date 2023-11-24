@@ -119,10 +119,74 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         "filter_settings": [],
         # "time_last_executed": "2023-07-20T12:50:32.074704Z",
         # "log_last_executed": "",
-        "group_info": None  # настройка метапрофиля
+        "group_info": None,  # настройка метапрофиля
+        "stat_type": "ind_and_group_stats"  # group_stats | ind_stats
     }
 
     return sample_data.copy()
+
+
+def _xba_profile_info_checklist(xba_profile_info: dict):
+    _full_assertion_message = []
+
+    def _check_key_in_dict(key_, dict_: dict):
+        if key_ not in dict_:
+            _full_assertion_message.append(f"\nDict: {dict_}\n doesn't have a key: {key_}")
+
+    def _check_key_value_in_list(key_, values_list, dict_: dict):
+        if key_ not in dict_:
+            _full_assertion_message.append(f"\nDict: {dict_}\n doesn't have a key: {key_}")
+            return
+        if dict_[key_] not in values_list:
+            _full_assertion_message.append(f"\nDict: {xba_profile_info}\n key: {key_}, key_value: {dict_[key_]} not in {values_list}")
+
+    _check_key_in_dict('stat_type', xba_profile_info)   # DAT-5856  # DAT-5824
+    _check_key_value_in_list('stat_type', ('ind_and_group_stats', 'group_stats', 'ind_stats'), xba_profile_info)
+
+    _check_key_in_dict('author', xba_profile_info)
+    _check_key_in_dict('author_id', xba_profile_info)
+    _check_key_in_dict('created', xba_profile_info)
+    _check_key_in_dict('db_id', xba_profile_info)
+    _check_key_in_dict('db_name', xba_profile_info)
+    _check_key_in_dict('description', xba_profile_info)
+    _check_key_in_dict('editor', xba_profile_info)
+    _check_key_in_dict('editor_id', xba_profile_info)
+    _check_key_in_dict('entity_settings', xba_profile_info)
+    _check_key_in_dict('entity_settings', xba_profile_info)
+    _check_key_in_dict('entity_column', xba_profile_info['entity_settings'])
+    _check_key_in_dict('entity_column_name', xba_profile_info['entity_settings'])
+    _check_key_in_dict('entity_type', xba_profile_info['entity_settings'])
+    _check_key_in_dict('obj_column', xba_profile_info['entity_settings'])
+    _check_key_in_dict('obj_column_name', xba_profile_info['entity_settings'])
+    _check_key_in_dict('additional_column', xba_profile_info['entity_settings'])
+    _check_key_in_dict('levels', xba_profile_info['entity_settings'])
+    _check_key_in_dict('level1', xba_profile_info['entity_settings']['levels'])
+    _check_key_in_dict('level2', xba_profile_info['entity_settings']['levels'])
+    _check_key_in_dict('level3', xba_profile_info['entity_settings']['levels'])
+    _check_key_in_dict('level4', xba_profile_info['entity_settings']['levels'])
+    _check_key_in_dict('filter_settings', xba_profile_info)
+    _check_key_in_dict('func_name', xba_profile_info)
+    _check_key_in_dict('group_info', xba_profile_info)
+    _check_key_in_dict('id', xba_profile_info)
+    _check_key_in_dict('id_category', xba_profile_info)
+    _check_key_in_dict('id_function', xba_profile_info)
+    _check_key_in_dict('log_last_executed', xba_profile_info)
+    _check_key_in_dict('modified', xba_profile_info)
+    _check_key_in_dict('name', xba_profile_info)
+    _check_key_in_dict('opened', xba_profile_info)
+    _check_key_in_dict('profile_type', xba_profile_info)
+    _check_key_in_dict('published', xba_profile_info)
+    _check_key_in_dict('status', xba_profile_info)
+    _check_key_in_dict('table_name', xba_profile_info)
+    _check_key_in_dict('time_last_executed', xba_profile_info)
+    _check_key_in_dict('time_settings', xba_profile_info)
+    _check_key_in_dict('time_column', xba_profile_info['time_settings'])
+    _check_key_in_dict('time_start', xba_profile_info['time_settings'])
+    _check_key_in_dict('time_end', xba_profile_info['time_settings'])
+    _check_key_in_dict('discretization_period', xba_profile_info['time_settings'])
+    _check_key_in_dict('stat_period', xba_profile_info['time_settings'])
+
+    assert len(_full_assertion_message) == 0, "".join(_full_assertion_message)
 
 
 class XbaCookCase(UserSession):
@@ -437,6 +501,11 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
+        # Брать случайный результат(профиль) и проверять наличие обязательных полей
+        xba_profile_list = json.loads(resp.text)['res']
+        xba_profile_info: dict = random.choice(xba_profile_list)
+        _xba_profile_info_checklist(xba_profile_info)
+
     def case_xba_cook_profiles_post(self):
         # создать xba_профиль
         req = XbaCook(self.sess, self.host)
@@ -694,6 +763,9 @@ class XbaCookCase(UserSession):
         prof_id = self._get_xba_profile_id()
         resp = req.xba_cook_profiles_id_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+
+        xba_profile_info = json.loads(resp.text)['res']
+        _xba_profile_info_checklist(xba_profile_info)
 
     def case_xba_cook_profiles_id_post(self):
         # изменить xba_профиль
