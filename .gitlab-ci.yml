@@ -67,9 +67,11 @@ test_it_api:
     - pip install -r requirements.txt
 
   script:
-    - pytest --testit -v -s
+    - pytest --testit -v -s --alluredir=./allure-results tests/test_api.py -p no:warnings
     #- pytest --testit --testrunid=${TEST_RUN_ID} --testit_url=${URL} --privatetoken=${PRIVATE_TOKEN} --configurationid=5aa0c7a7-4d2d-4547-aff3-3af8d0048fa2
-
+  after_script:
+    - testit -u $TIT_URL -pt $TIT_PRIVATE_TOKEN -pi $TIT_PROJECT_ID -ci 5286e898-451f-497c-9e68-df9bd91b550f
+    - testit --resultsdir allure-results
   allow_failure: true
 
 
@@ -86,8 +88,10 @@ test_it_ui:
     - pip install -r requirements.txt
 
   script:
-    - pytest --testit
-
+    - pytest --testit --alluredir=./allure-results tests/test_ui.py
+  after_script:
+    - testit -u $TIT_URL -pt $TIT_PRIVATE_TOKEN -pi $TIT_PROJECT_ID -ci 5286e898-451f-497c-9e68-df9bd91b550f
+    - testit --resultsdir allure-results
   allow_failure: true
 
 
