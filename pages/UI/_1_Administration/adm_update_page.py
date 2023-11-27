@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class UpdatesPage(BasePage):
 
-    page_path = "/system-update/versions"
+    page_path = "/administration/system-update/versions"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -16,7 +16,7 @@ class UpdatesPage(BasePage):
 
 class UpdatesVersionsPage(UpdatesPage):
 
-    page_path = "/system-update/versions"
+    page_path = "/administration/system-update/versions"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -27,7 +27,7 @@ class UpdatesVersionsPage(UpdatesPage):
 
 class UpdatesAdditionsPage(UpdatesPage):
 
-    page_path = "/system-update/additions"
+    page_path = "/administration/system-update/additions"
 
     def __init__(self, page: Page):
         super().__init__(page)

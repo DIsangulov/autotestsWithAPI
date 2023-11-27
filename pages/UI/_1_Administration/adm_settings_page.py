@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class AdmSettingsPage(BasePage):
 
-    page_path = "/settings/common"
+    page_path = "/administration/settings/common"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -23,7 +23,7 @@ class AdmSettingsPage(BasePage):
 
 class AdmSettingsCommonPage(AdmSettingsPage):
 
-    page_path = "/settings/common"
+    page_path = "/administration/settings/common"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -34,7 +34,7 @@ class AdmSettingsCommonPage(AdmSettingsPage):
 
 class AdmSettingsClusterPage(AdmSettingsPage):
 
-    page_path = "/settings/cluster"
+    page_path = "/administration/settings/cluster"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -45,7 +45,7 @@ class AdmSettingsClusterPage(AdmSettingsPage):
 
 class AdmSettingsDomainPage(AdmSettingsPage):
 
-    page_path = "/settings/domain"
+    page_path = "/administration/settings/domain"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -56,7 +56,7 @@ class AdmSettingsDomainPage(AdmSettingsPage):
 
 class AdmSettingsStoragePage(AdmSettingsPage):
 
-    page_path = "/settings/storage"
+    page_path = "/administration/settings/storage"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -67,7 +67,7 @@ class AdmSettingsStoragePage(AdmSettingsPage):
 
 class AdmSettingsCollectorPage(AdmSettingsPage):
 
-    page_path = "/settings/collector"
+    page_path = "/administration/settings/collector"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -78,7 +78,7 @@ class AdmSettingsCollectorPage(AdmSettingsPage):
 
 class AdmSettingsMlPage(AdmSettingsPage):
 
-    page_path = "/settings/ml"
+    page_path = "/administration/settings/ml"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -89,7 +89,7 @@ class AdmSettingsMlPage(AdmSettingsPage):
 
 class AdmSettingsMsPage(AdmSettingsPage):
 
-    page_path = "/settings/ms"
+    page_path = "/administration/settings/ms"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -100,7 +100,7 @@ class AdmSettingsMsPage(AdmSettingsPage):
 
 class AdmSettingsSyslogPage(AdmSettingsPage):
 
-    page_path = "/settings/sys"
+    page_path = "/administration/settings/sys"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -111,7 +111,7 @@ class AdmSettingsSyslogPage(AdmSettingsPage):
 
 class AdmSettingsSecretsPage(AdmSettingsPage):
 
-    page_path = "/settings/secrets"
+    page_path = "/administration/settings/secrets"
 
     def __init__(self, page: Page):
         super().__init__(page)

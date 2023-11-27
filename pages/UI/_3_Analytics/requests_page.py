@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class QueriesPage(BasePage):
 
-    page_path = "/query-list"
+    page_path = "/datasets/query-list"
 
     def __init__(self, page: Page):
         super().__init__(page)

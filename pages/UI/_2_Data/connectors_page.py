@@ -5,7 +5,7 @@ from pages.Helpers.base_page import BasePage
 # abc -> ConnectorsPage & LogoPage
 class LibraryPage(BasePage):
 
-    page_path = "/library"
+    page_path = "/data/datasource/library"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -17,7 +17,7 @@ class LibraryPage(BasePage):
 
 class ConnectorsPage(LibraryPage):
 
-    page_path = "/library/connectors"
+    page_path = "/data/datasource/library/connectors"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -35,21 +35,21 @@ class ConnectorsPage(LibraryPage):
 
 class ConnectorsCreatePage(BasePage):
 
-    page_path = "/library/connectors/create"
+    page_path = "/data/datasource/library/connectors/create"
 
     def __init__(self, page: Page):
         super().__init__(page)
         self.page_path = self.__class__.page_path
 
         self.YES_BUTTON = page.locator("(//button[contains(@class,'ngr-button ngr-promt__btn')])[2]")
-        self.NAME_FILED = page.locator("//input[contains(@class,'ngr-input__input ngr-field__input')]")
+        self.NAME_FIELD = page.locator("//input[contains(@class,'ngr-input__input ngr-field__input')]")
 
         # todo:
 
 
 class LogoPage(LibraryPage):
 
-    page_path = "/library/logo"
+    page_path = "/data/datasource/library/logo"
 
     def __init__(self, page: Page):
         super().__init__(page)

@@ -101,7 +101,7 @@ def open_new_source_connector_by_steps(browser: Page):
         page.NSB_FROM_CONNECTOR.click()
 
     with allure.step("Открылась страница 'Подключение источника'"):
-        browser.wait_for_url(page.host + "/datasource/create/connector")
+        browser.wait_for_url(page.host + SourcesPage.page_path + "/create/connector")
 
 
 def library_connectors_navigation(browser: Page):
@@ -145,15 +145,15 @@ def library_connectors_navigation(browser: Page):
 
     page = ConnectorsCreatePage(browser)
 
-    with allure.step("Ввод текста в инпут для появления 'Вы уверены?'"):
-        page.NAME_FILED.fill("Текст")
+    with allure.step("Ввод текста в инпут для появления модального окна: 'Вы уверены?'"):
+        page.NAME_FIELD.fill("Текст")
 
     with allure.step("Клик по кнопке <- назад"):
         page.BACK_BUTTON.click()
 
     with allure.step("Появилось модальное окно:'Вы уверены?'"):
-        expect(page.YES_BUTTON).to_be_visible()
-    with allure.step("В модалке 'Вы точно уверены?' Клик по кнопке ДА"):
+        expect(page.YES_BUTTON).to_be_visible(timeout=300)
+    with allure.step("В модальном окне клик по кнопке 'ДА'"):
         page.YES_BUTTON.click()
 
     page = ConnectorsPage(browser)

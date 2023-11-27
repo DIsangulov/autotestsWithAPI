@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class XbaMetaprofilesListPage(BasePage):
 
-    page_path = "/metaprofiles"
+    page_path = "/xba/metaprofiles"
 
     def __init__(self, page: Page):
         super().__init__(page)

@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class SessionsPage(BasePage):
 
-    page_path = "/sessions"
+    page_path = "/administration/sessions"
 
     def __init__(self, page: Page):
         super().__init__(page)

@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class VisualisationPage(BasePage):
 
-    page_path = "/visualisations"
+    page_path = "/analytics/visualisations"
 
     def __init__(self, page: Page):
         super().__init__(page)

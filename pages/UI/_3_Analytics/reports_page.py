@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class ReportsPage(BasePage):
 
-    page_path = "/report"
+    page_path = "/analytics/report"
 
     def __init__(self, page: Page):
         super().__init__(page)

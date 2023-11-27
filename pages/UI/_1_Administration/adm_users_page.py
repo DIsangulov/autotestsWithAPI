@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 
 class UsersPage(BasePage):
-    page_path = "/users"
+    page_path = "/administration/users"
 
     def __init__(self, page: Page):
         self.add_user = UsersPageAddUserModalCard(page)

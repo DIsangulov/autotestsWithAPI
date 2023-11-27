@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class SourcesPage(BasePage):
 
-    page_path = "/datasource"
+    page_path = "/data/datasource"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -48,7 +48,7 @@ class SourcesPage(BasePage):
 
 class SourcesEditorPage(BasePage):
 
-    page_path = "/datasource/create/editor"
+    page_path = "/data/datasource/create/editor"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -60,6 +60,6 @@ class SourcesEditorPage(BasePage):
         self.open()
 
     def edit_source(self, source_id: int):
-        target_path = f"/datasource/{source_id}/editor"
+        target_path = f"/data/datasource/{source_id}/editor"
         self.goto_page(target_path)
         self.page.wait_for_url(self.host + target_path)

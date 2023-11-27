@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class StoragePage(BasePage):
 
-    page_path = "/storage"
+    page_path = "/data/storage"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -20,7 +20,7 @@ class StoragePage(BasePage):
 
 class StorageStructurePage(StoragePage):
 
-    page_path = "/storage/structure"
+    page_path = "/data/storage/structure"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -32,7 +32,7 @@ class StorageStructurePage(StoragePage):
 
 class StorageStatisticPage(StoragePage):
 
-    page_path = "/storage/statistic"
+    page_path = "/data/storage/statistic"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -45,7 +45,7 @@ class StorageStatisticPage(StoragePage):
 
 class StorageSearchContentPage(StoragePage):
 
-    page_path = "/storage/search/content"
+    page_path = "/data/storage/search/content"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -59,7 +59,7 @@ class StorageSearchContentPage(StoragePage):
 
 class StorageSearchColumnPage(StoragePage):
 
-    page_path = "/storage/search/column"
+    page_path = "/data/storage/search/column"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -71,7 +71,7 @@ class StorageSearchColumnPage(StoragePage):
 
 class StorageRulesPage(StoragePage):
 
-    page_path = "/storage/rules"
+    page_path = "/data/storage/rules"
 
     def __init__(self, page: Page):
         super().__init__(page)

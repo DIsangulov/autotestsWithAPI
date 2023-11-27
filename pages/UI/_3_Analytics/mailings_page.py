@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class MailingsPage(BasePage):
 
-    page_path = "/mailings/report"
+    page_path = "/analytics/mailings/report"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -18,7 +18,7 @@ class MailingsPage(BasePage):
 
 class MailingsReportPage(MailingsPage):
 
-    page_path = "/mailings/report"
+    page_path = "/analytics/mailings/report"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -29,7 +29,7 @@ class MailingsReportPage(MailingsPage):
 
 class MailingNewData(MailingsPage):
 
-    page_path = "/mailings/new"
+    page_path = "/analytics/mailings/new"
 
     def __init__(self, page: Page):
         super().__init__(page)

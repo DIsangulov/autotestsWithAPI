@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class MonitoringPage(BasePage):
 
-    page_path = "/system-state/webserver"
+    page_path = "/administration/system-state/webserver"
 
     def __init__(self, page: Page):
         super().__init__(page)

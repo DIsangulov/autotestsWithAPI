@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class ScriptsPage(BasePage):
 
-    page_path = "/scripts"
+    page_path = "/data/scripts"
 
     def __init__(self, page: Page):
         super().__init__(page)

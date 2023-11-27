@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class LicensesPage(BasePage):
 
-    page_path = "/license"
+    page_path = "/administration/license"
 
     def __init__(self, page: Page):
         super().__init__(page)

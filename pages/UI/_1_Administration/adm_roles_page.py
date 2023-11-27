@@ -4,7 +4,7 @@ from pages.Helpers.base_page import BasePage
 
 class RolesPage(BasePage):
 
-    page_path = "/roles"
+    page_path = "/administration/roles"
 
     def __init__(self, page: Page):
         super().__init__(page)
