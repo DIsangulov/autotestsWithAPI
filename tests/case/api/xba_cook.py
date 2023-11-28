@@ -1,5 +1,6 @@
 import json
 import random
+import re
 import time
 
 from req.Helpers.user_session import UserSession
@@ -515,6 +516,33 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
         return resp
+
+    def validation_xba_cook_profiles_post(self, validation_fields: dict, expected_code: int, expected_message: str | re.Pattern):
+        # check validation for post: /back/dp.xba_cook/profiles
+        req = XbaCook(self.sess, self.host)
+
+        data = _get_sample_xba_profile_data(self)
+        data.update(validation_fields)
+
+        resp = req.xba_cook_profiles_post(data)
+
+        match type(expected_message):
+            case re.Pattern:
+                assert resp.status_code == expected_code and len(re.findall(expected_message, resp.text)) != 0, \
+                    f"""
+                    expected_code: {expected_code}
+                    current_code_: {resp.status_code}
+                    expected_regexp: {expected_message.pattern}
+                    actual_response: {resp.text}
+                    """
+            case _:
+                assert resp.status_code == expected_code and resp.text == expected_message, \
+                    f"""
+                    expected_code: {expected_code}
+                    current_code_: {resp.status_code}
+                    expected_resp__: {expected_message}
+                    actual_response: {resp.text}
+                    """
 
     def case_xba_cook_profiles_categories_get(self):
         req = XbaCook(self.sess, self.host)

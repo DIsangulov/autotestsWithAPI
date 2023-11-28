@@ -1,3 +1,4 @@
+import re
 import pytest
 import urllib3
 
@@ -1076,6 +1077,14 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_post(self):
         XbaCookCase().case_xba_cook_profiles_post()
+
+    @pytest.mark.parametrize('field_replace,ex_code,ex_message', [
+        ({'stat_type': None}, 200, re.compile('^{"res":\\d+}\\n$')),
+        ({'stat_type': 'one_of_wrong'}, 400, '{"error":{"code":0,"msg":"ProfileStatType: stat_type must be one of [ind_stats group_stats ind_and_group_stats]; "}}\n'),
+        # ({'name': None}, 400, '{Ошибка: нет имени или типа того}\n'),
+    ])
+    def test_validation_xba_cook_profiles_post(self, field_replace, ex_code, ex_message):
+        XbaCookCase().validation_xba_cook_profiles_post(field_replace, ex_code, ex_message)
 
     def test_xba_cook_profiles_import_profiles_post(self):
         XbaCookCase().case_xba_cook_profiles_import_profiles_post()
