@@ -4,7 +4,7 @@ import urllib3
 
 from resourses.credentials import TARGET_URL
 from resourses.constants import API_AUTO_TEST_
-from resourses.static_methods import get_datetime_now_z
+from resourses.static_methods import get_datetime_now_z, get_str_random_num
 from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
@@ -1245,8 +1245,9 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
 
-    def test_xba_cook_profiles_graph_id_post(self):
-        XbaCookCase().case_xba_cook_profiles_graph_id_post()
+    # # DAT-5941 - удален
+    # def test_xba_cook_profiles_graph_id_post(self):
+    #     XbaCookCase().case_xba_cook_profiles_graph_id_post()
 
     def test_xba_cook_profiles_groups_post(self):
         XbaCookCase().case_xba_cook_profiles_groups_post()
@@ -1340,8 +1341,15 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_delete(self):
         XbaCookCase().case_xba_cook_profiles_id_delete()
 
-    def test_xba_cook_profiles_id_post(self):
-        XbaCookCase().case_xba_cook_profiles_id_post()
+    @pytest.mark.parametrize('xba_profile_id,changes_dict', [
+        (None, {"name": API_AUTO_TEST_ + "changed_" + get_str_random_num()})
+    ])
+    def test_xba_cook_profiles_id_post(self, xba_profile_id, changes_dict):
+        # изменить xba_профиль
+        if xba_profile_id is None:
+            xba_profile_id = XbaCookCase()._get_xba_profile_id()
+        XbaCookCase().case_xba_cook_profiles_id_post(xba_profile_id, changes_dict)
+        # TODO: постусловие: измененные значения применились
 
 
 class TestMonitor:

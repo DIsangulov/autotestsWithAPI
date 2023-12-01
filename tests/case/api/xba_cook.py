@@ -614,18 +614,18 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_graph_personal_id_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_profiles_graph_id_post(self):
-        req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
-        data = {
-            "end": "2023-02-14T00:00:00Z",
-            "name": "",
-            "start": "2023-02-13T00:00:00Z",
-            "timeFlag": "",
-            "timezone": "Europe/Moscow"
-        }
-        resp = req.xba_cook_profiles_graph_id_post(prof_id, data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+    # def case_xba_cook_profiles_graph_id_post(self):
+    #     req = XbaCook(self.sess, self.host)
+    #     prof_id = self._get_xba_profile_id()
+    #     data = {
+    #         "end": "2023-02-14T00:00:00Z",
+    #         "name": "",
+    #         "start": "2023-02-13T00:00:00Z",
+    #         "timeFlag": "",
+    #         "timezone": "Europe/Moscow"
+    #     }
+    #     resp = req.xba_cook_profiles_graph_id_post(prof_id, data)
+    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_groups_get(self):
         req = XbaCook(self.sess, self.host)
@@ -795,20 +795,30 @@ class XbaCookCase(UserSession):
         xba_profile_info = json.loads(resp.text)['res']
         _xba_profile_info_checklist(xba_profile_info)
 
-    def case_xba_cook_profiles_id_post(self):
+    def case_xba_cook_profiles_id_post(self, prof_id: int, prof_changes: dict):
         # изменить xba_профиль
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
 
         assert self._wait_for_profile_status(profile_id=prof_id, not_equal=True, expect_status_id=1), \
             "Профиль не вышел из статуса 'запущен' за отведенное время"
 
-        data = _get_sample_xba_profile_data(self)
-        data.update({"name": API_AUTO_TEST_ + "changed_" + get_str_random_num()})
+        # забрать текущие настройки по xba-профилю
+        actual_profile_resp = req.xba_cook_profiles_id_get(prof_id)
+        assert actual_profile_resp.status_code == 200, f"Ошибка, код {actual_profile_resp.status_code}, {actual_profile_resp.text}"
 
-        resp = req.xba_cook_profiles_id_post(prof_id, data)
-        # print(resp.text)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        # post_data = _get_sample_xba_profile_data(self)
+        # добавить текущие настройки xba-профиля к запросу, изменить значения полей, которые хотим поменять
+        post_data = json.loads(actual_profile_resp.text)['res']
+        post_data.update(prof_changes)
+
+        resp = req.xba_cook_profiles_id_post(prof_id, post_data)
+        assert resp.status_code == 200, \
+            f"""Ошибка, 
+            xba_profile_id: {prof_id}
+            expected_changes: {prof_changes}
+            result_post_data: {post_data}
+            response_code: {resp.status_code}
+            response_text: {resp.text}"""
         # 400: {"error":{"code":400,"msg":"Пожалуйста, дождитесь окончания расчета профиля"}}
 
     def case_xba_cook_profiles_id_delete(self):
