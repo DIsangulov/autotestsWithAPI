@@ -925,6 +925,7 @@ class TestRmCook:
 class TestStorageWorker:
 
     def test_storage_worker_storage_db_post(self):
+        # Создание нового Хранилища
         StorageWorkerCase().case_storage_worker_storage_db_post()
 
     def test_storage_worker_ask_one_sql_post(self):
@@ -1010,6 +1011,7 @@ class TestStorageWorker:
         StorageWorkerCase().case_storage_worker_storage_db_get()
 
     def test_storage_worker_storage_db_put(self):
+        # Изменение Хранилища (имя и описание)
         StorageWorkerCase().case_storage_worker_storage_db_put()
 
     # ! Кейс не отправляет реальные данные, только смотрит, что api отзывается

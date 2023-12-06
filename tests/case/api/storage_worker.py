@@ -1,5 +1,4 @@
 import json
-import random
 
 from req.Helpers.user_session import UserSession
 from req.Api.req_storage_worker import StorageWorker
@@ -11,12 +10,6 @@ from tests.case.api.permitter import PermitterCase
 API_TEST_DB_BLINKING = "API_TEST_DB_BLINKING"
 
 API_TEST_TAB_PREFIX = "Stones_"
-test_db_tables = {
-    # db_name: []table_name
-    API_TEST_DB_BLINKING: [],
-    DB_Shallow.name: []
-}
-
 reg_pid = set()        # список, содержащий id новосозданных регулярных выражений
 
 
@@ -26,16 +19,27 @@ class StorageWorkerCase(UserSession):
         """Получение имени тестовой таблицы (в тестовой БД); либо создание новой"""
         assert db_name in (DB_Shallow.name, API_TEST_DB_BLINKING), f"Попытка работы вне тестовой БД, db_name: {db_name}"
 
-        # TODO: сбор уже существующих таблиц # _collect
-        #   get_table_names . startswith(API_TEST_TAB_PREFIX)
+        # Запрос на получение структуры Хранилища
+        curr_tables = StorageWorker(self.sess, self.host).storage_worker_show_base_db_name_get(db_name)
+        assert curr_tables.status_code == 200, \
+            f"""Ошибка при получении структуры БД
+            debug:  {StorageWorkerCase.__name__}::{self._get_random_test_table_name.__name__}
+            status_code: {curr_tables.status_code}
+            resp:   {curr_tables.text}
+            """
+        # Поиск тестовой таблицы в хранилище
+        test_tab_name: str | None = None
+        tab_info_rows = json.loads(curr_tables.text)['res']['tables']
+        if tab_info_rows is not None:
+            test_tab_name = next((tab_info['tab_name'] for tab_info in tab_info_rows if str(tab_info['tab_name']).startswith(API_TEST_TAB_PREFIX)), None)
 
-        if len(test_db_tables.get(db_name)) == 0:
+        if test_tab_name is None:
             # создать новую таблицу
             new_test_table_name = API_TEST_TAB_PREFIX + get_str_random_num(5)
             self.case_storage_worker_storage_table_db_name_post(db_name, new_test_table_name)
             return new_test_table_name
 
-        return ""
+        return test_tab_name
 
     def _collect_reg_pid(self):
         resp = StorageWorker(self.sess, self.host).storage_worker_psevdo_namer_regs_get()
@@ -50,8 +54,10 @@ class StorageWorkerCase(UserSession):
         if len(reg_pid) == 0:
             self._collect_reg_pid()
 
-        if len(reg_pid) == 0:                               # global reg_pid # id регулярного выражения
-            r_new_reg_pid = self.case_storage_worker_psevdo_namer_regs_post()    # если нет, создай новую
+        if len(reg_pid) == 0:
+            # global reg_pid # id регулярного выражения
+            # если нет, создай новую
+            r_new_reg_pid = self.case_storage_worker_psevdo_namer_regs_post()
             new_reg_pid = json.loads(r_new_reg_pid.text)['res']
             return int(new_reg_pid)
 
@@ -121,7 +127,7 @@ class StorageWorkerCase(UserSession):
 
         self.asserts_check_db_and_table_is_exists(db_name, tab_name)
 
-        data = {}   # look: swagger description looks unfinished
+        data = {}
 
         resp = req.storage_worker_backups_table_db_name_table_name_post(db_name, tab_name, data)
         # print(resp.text)    # {"res":{"id":1693848451839,"result":"accepted"}}
@@ -253,7 +259,7 @@ class StorageWorkerCase(UserSession):
             # "start": "2023-08-13T00:00:00Z",
             # "end": get_datetime_now_z(),
             "offset": 0,
-            "timeFlag": 0   # look:? flag и в data, и в post-пути
+            "timeFlag": 0
         }
         for flag in flag_keys:
             resp = req.storage_worker_statistics_db_event_stats_db_name_flag_post(db_name, flag, data)
@@ -309,7 +315,7 @@ class StorageWorkerCase(UserSession):
             # "start": "2023-08-13T00:00:00Z",
             # "end": get_datetime_now_z(),
             "offset": 0,
-            "timeFlag": 0   # look: ?flag и в data, и в post-пути
+            "timeFlag": 0
         }
 
         for flag in flag_keys:
@@ -371,32 +377,35 @@ class StorageWorkerCase(UserSession):
         resp = req.storage_worker_storage_db_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_storage_worker_storage_db_put(self):
+    def case_storage_worker_storage_db_put(self, db_name: str = API_TEST_DB_BLINKING):
         req = StorageWorker(self.sess, self.host)
+
+        # доступ на изменение хранилища db_name
+        PermitterCase().add_role_permission_to_change_db(self.get_self_role_id(), db_name)
+
         data = {
-            "base_name": API_TEST_DB_BLINKING,
+            "base_name": db_name,
             "description": "Thank you I'm here until wednesday"
         }
         resp = req.storage_worker_storage_db_put(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # TODO: Перевести в создание хранилища с передаваемым именем
-    def case_storage_worker_storage_db_post(self):
+    def case_storage_worker_storage_db_post(self, new_db_name: str = API_TEST_DB_BLINKING):
         req = StorageWorker(self.sess, self.host)
         data = {
-            "base_name": API_TEST_DB_BLINKING,
+            "base_name": new_db_name,
             "description": f"..for api test things"
         }
         resp = req.storage_worker_storage_db_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-        # доступ на изменение хранилища API_TEST_DB_BLINKING
-        # FIXME: убрать из кейса -> должно быть перед использованием, где требуется доступ
-        PermitterCase().add_role_permission_to_change_db(self.get_self_role_id(), API_TEST_DB_BLINKING)
-
     def case_storage_worker_storage_db_delete(self):
         req = StorageWorker(self.sess, self.host)
+
         db_name = API_TEST_DB_BLINKING
+        # доступ на изменение хранилища API_TEST_DB_BLINKING
+        PermitterCase().add_role_permission_to_change_db(self.get_self_role_id(), API_TEST_DB_BLINKING)
+
         resp = req.storage_worker_storage_db_delete(db_name)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -517,7 +526,8 @@ class StorageWorkerCase(UserSession):
     def case_storage_worker_storage_table_db_name_table_name_delete(self):
         req = StorageWorker(self.sess, self.host)
 
-        db_name = API_TEST_DB_BLINKING
+        # db_name = API_TEST_DB_BLINKING
+        db_name = DB_Shallow.name
         table_name = self._get_random_test_table_name(db_name)
 
         # TODO: добавить разрешение на удаление таблицы
