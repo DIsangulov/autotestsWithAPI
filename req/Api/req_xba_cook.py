@@ -121,10 +121,6 @@ class XbaCook(BaseReq):
         """process POST to get profile personal data (personal level)"""
         return self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/personal/{prof_id}", json=data)
 
-    # def xba_cook_profiles_graph_id_post(self, prof_id, data):
-    #     """process GET to get profile data for visualisation on front"""
-    #     return self.sess.post(f"{self.host}/back/dp.xba_cook/profiles/graph/{prof_id}", json=data)
-
     def xba_cook_profiles_groups_get(self):
         """process GET req to get groups list"""
         return self.sess.get(f"{self.host}/back/dp.xba_cook/profiles/groups")

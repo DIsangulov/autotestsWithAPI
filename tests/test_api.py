@@ -9,6 +9,7 @@ from tests.case.api.auth import AuthApiCase
 from tests.case.api.absorber import AbsorberCase
 from tests.case.api.alarmer import AlarmerCase
 from tests.case.api.core import CoreCase
+from tests.case.api.datapie_baker import DatapieBakerCase
 from tests.case.api.elements_eater import ElementsEaterCase
 from tests.case.api.licenser import LicenserCase
 from tests.case.api.log_eater import LogEaterCase
@@ -570,6 +571,49 @@ class TestCore:
 
     def test_core_syslog_post(self):
         CoreCase().case_core_syslog_post()
+
+
+@pytest.mark.skip
+class TestDatapieBacker:
+
+    def test_datapie_baker_model_get(self):
+        DatapieBakerCase().case_datapie_baker_model_get()
+
+    def test_datapie_baker_model_post(self):
+        DatapieBakerCase().case_datapie_baker_model_post()
+
+    def test_datapie_baker_model_case_get(self):
+        DatapieBakerCase().case_datapie_baker_model_case_get()
+
+    def test_datapie_baker_model_case_post(self):
+        DatapieBakerCase().case_datapie_baker_model_case_post()
+
+    def test_datapie_baker_model_case_play_post(self):
+        DatapieBakerCase().case_datapie_baker_model_case_play_post()
+
+    def test_datapie_baker_model_case_usage_id_delete(self):
+        DatapieBakerCase().case_datapie_baker_model_case_usage_id_delete()
+
+    def test_datapie_baker_model_case_id_settings_get(self):
+        DatapieBakerCase().case_datapie_baker_model_case_id_settings_get()
+
+    def test_datapie_baker_model_case_id_delete(self):
+        DatapieBakerCase().case_datapie_baker_model_case_id_delete()
+
+    def test_datapie_baker_model_case_id_usage_get(self):
+        DatapieBakerCase().case_datapie_baker_model_case_id_usage_get()
+
+    def test_datapie_baker_model_case_id_auto_post(self):
+        DatapieBakerCase().case_datapie_baker_model_case_id_auto_post()
+
+    def test_datapie_baker_model_id_get(self):
+        DatapieBakerCase().case_datapie_baker_model_id_get()
+
+    def test_datapie_baker_model_id_delete(self):
+        DatapieBakerCase().case_datapie_baker_model_id_delete()
+
+    def test_datapie_baker_model_id_case_id_match_get(self):
+        DatapieBakerCase().case_datapie_baker_model_id_case_id_match_get()
 
 
 class TestElementsEater:
@@ -1246,10 +1290,6 @@ class TestXbaCook:
 
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
-
-    # # DAT-5941 - удален
-    # def test_xba_cook_profiles_graph_id_post(self):
-    #     XbaCookCase().case_xba_cook_profiles_graph_id_post()
 
     def test_xba_cook_profiles_groups_post(self):
         XbaCookCase().case_xba_cook_profiles_groups_post()

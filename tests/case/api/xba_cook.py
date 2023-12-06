@@ -614,19 +614,6 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_graph_personal_id_post(prof_id, data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    # def case_xba_cook_profiles_graph_id_post(self):
-    #     req = XbaCook(self.sess, self.host)
-    #     prof_id = self._get_xba_profile_id()
-    #     data = {
-    #         "end": "2023-02-14T00:00:00Z",
-    #         "name": "",
-    #         "start": "2023-02-13T00:00:00Z",
-    #         "timeFlag": "",
-    #         "timezone": "Europe/Moscow"
-    #     }
-    #     resp = req.xba_cook_profiles_graph_id_post(prof_id, data)
-    #     assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
     def case_xba_cook_profiles_groups_get(self):
         req = XbaCook(self.sess, self.host)
         resp = req.xba_cook_profiles_groups_get()
