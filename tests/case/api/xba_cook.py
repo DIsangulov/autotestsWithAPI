@@ -13,8 +13,16 @@ xba_profile_id = set()  # 'id' профиля xBA
 xba_group_id = set()    # 'id' метапрофиля // API_AUTO_TEST_x
 
 
+class XbaStatType:
+    """Виды статистики xba-профилей, xba-метапрофилей"""
+    default = "ind_and_group_stats"
+    ind_stats = "ind_stats"
+    group_stats = "group_stats"
+    ind_and_group_stats = "ind_and_group_stats"
+
+
 class XbaIdFunction:
-    """Функция построения профиля"""
+    """Функция построения xba-профиля"""
     count = 1
     count_distinct = 2
 
@@ -121,7 +129,7 @@ def _get_sample_xba_profile_data(u_session: UserSession) -> dict:
         # "time_last_executed": "2023-07-20T12:50:32.074704Z",
         # "log_last_executed": "",
         "group_info": None,  # настройка метапрофиля
-        "stat_type": "ind_and_group_stats"  # group_stats | ind_stats
+        "stat_type": XbaStatType.default
     }
 
     return sample_data.copy()
@@ -192,7 +200,7 @@ def _xba_profile_info_checklist(xba_profile_info: dict):
 
 class XbaCookCase(UserSession):
 
-    def _collect_xba_group_id(self):
+    def _collect_test_xba_group_id(self):
         resp = XbaCook(self.sess, self.host).xba_cook_profiles_groups_get()
         assert resp.status_code == 200, f"assert::xba_cook_profiles_groups_get, failed. status_code: {resp.status_code}, resp.text: {resp.text}"
 
@@ -201,17 +209,31 @@ class XbaCookCase(UserSession):
             if str(_row['name']).startswith(API_AUTO_TEST_):                # фильтрация по шаблону > добавление в group_id
                 xba_group_id.add(int(_row['id']))
 
-    def _get_xba_group_id(self) -> int:
-        """get from global group_id : API_AUTO_TEST_x"""
+    def get_test_xba_group_id(self) -> int:
+        """Get from global xba_group_id : API_AUTO_TEST_x
+        Получение id тестового Метапрофиля
+        """
         if len(xba_group_id) == 0:
-            self._collect_xba_group_id()
+            self._collect_test_xba_group_id()
 
         if len(xba_group_id) == 0:
-            resp_new_group_id = self.case_xba_cook_profiles_groups_post()   # запрос на создание нового метапрофиля
+            # запрос на создание нового метапрофиля
+            req = XbaCook(self.sess, self.host)
+            new_xba_group_data = {
+                "name": API_AUTO_TEST_ + get_str_random_num(),
+                "stat_type": XbaStatType.default
+            }
+            resp_new_group_id = req.xba_cook_profiles_groups_post(new_xba_group_data)
+            assert resp_new_group_id.status_code == 200, \
+                f"""Ошибка,
+                post_data: {new_xba_group_data}
+                resp_code: {resp_new_group_id.status_code}
+                resp_text: {resp_new_group_id.text}
+                """
             new_group_id = json.loads(resp_new_group_id.text)['res']
-            return int(new_group_id)                                        # вернуть 'id' нового метапрофиля
+            return int(new_group_id)
 
-        return xba_group_id.pop()                                           # возвращает случайное значение из group_id
+        return xba_group_id.pop()
 
     def _collect_xba_profile_id_(self):
         resp = XbaCook(self.sess, self.host).xba_cook_profiles_get()
@@ -222,8 +244,9 @@ class XbaCookCase(UserSession):
             if str(_row['name']).startswith(API_AUTO_TEST_):                # фильтр по шаблону > добавление в profile_id
                 xba_profile_id.add(int(_row['id']))
 
-    def _get_xba_profile_id(self) -> int:
-        """get from global profile_id : API_AUTO_TEST_x"""
+    def get_test_xba_profile_id(self) -> int:
+        """Get from global profile_id : API_AUTO_TEST_x
+        Получение id тестового xba-Профиля"""
         if len(xba_profile_id) == 0:
             self._collect_xba_profile_id_()
 
@@ -551,7 +574,7 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_export_profiles_post(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         data = {"profile_ids": [prof_id]}
         resp = req.xba_cook_profiles_export_profiles_post(data)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -563,7 +586,7 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_graph_drilldown_statement_id_post(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         data = {
             "columns": [
                 ""
@@ -590,7 +613,7 @@ class XbaCookCase(UserSession):
     def case_xba_cook_profiles_max_min_id_get(self):
         req = XbaCook(self.sess, self.host)
 
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
 
         # запустить профиль прежде чем получить max_min:
         # новый профиль может ещё рассчитываться -> 400: нет данных
@@ -603,7 +626,7 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_graph_personal_id_post(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         data = {
             "end": "2023-02-14T00:00:00Z",
             "name": "",
@@ -619,32 +642,39 @@ class XbaCookCase(UserSession):
         resp = req.xba_cook_profiles_groups_get()
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
-    def case_xba_cook_profiles_groups_put(self):
-        # Поменять имя Метапрофиля
+    def case_xba_cook_profiles_groups_put(self, _group_id: int, ch_name: str, ch_stat_type: str):
         req = XbaCook(self.sess, self.host)
-        rand_num = random.randint(100, 999)
-        _group_id = self._get_xba_group_id()
         data = {
             "id": _group_id,
-            "name": API_AUTO_TEST_ + f"changed_{rand_num}",
-            "weight": ""
+            "name": ch_name,
+            # "weight": ""
+            "stat_type": ch_stat_type
         }
         resp = req.xba_cook_profiles_groups_put(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
+        assert resp.status_code == 200, \
+            f"""Ошибка,
+            post_data: {data}
+            resp_code: {resp.status_code}
+            resp_text: {resp.text}
+            """
 
-    def case_xba_cook_profiles_groups_post(self):
+    def case_xba_cook_profiles_groups_post(self, new_xba_group_name: str, stat_type: str):
         # Создание метапрофиля
         req = XbaCook(self.sess, self.host)
-        str_rand_num = str(random.randint(1000, 9999))
         data = {
             # "id": str_rand_num,
-            "name": API_AUTO_TEST_ + str_rand_num,
-            "weight": ""
+            "name": new_xba_group_name,
+            # "weight": "",
+            "stat_type": stat_type
         }
         resp = req.xba_cook_profiles_groups_post(data)
-        assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
-
-        return resp  # возвращает также ид новой группы
+        assert resp.status_code == 200, \
+            f"""Ошибка,
+            post_data: {data}
+            resp_code: {resp.status_code}
+            resp_text: {resp.text}
+            """
+        # 400: {"error":{"code":0,"msg":"StatType: stat_type must be one of [ind_stats group_stats ind_and_group_stats]; "}}
 
     def case_xba_cook_profiles_groups_info_get(self):
         req = XbaCook(self.sess, self.host)
@@ -653,13 +683,13 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_groups_id_delete(self):
         req = XbaCook(self.sess, self.host)
-        _group_id = self._get_xba_group_id()
+        _group_id = self.get_test_xba_group_id()
         resp = req.xba_cook_profiles_groups_id_delete(_group_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_groups_group_id_profiles_get(self):
         req = XbaCook(self.sess, self.host)
-        _group_id = self._get_xba_group_id()
+        _group_id = self.get_test_xba_group_id()
         resp = req.xba_cook_profiles_groups_group_id_profiles_get(_group_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -667,11 +697,11 @@ class XbaCookCase(UserSession):
         # нужен group_id хотя бы с одним профилем
         req = XbaCook(self.sess, self.host)
 
-        group_id = self._get_xba_group_id()
+        group_id = self.get_test_xba_group_id()
 
         # todo: вынести метод привязки метапрофиля к профилю
         # Получить данные профиля, для изменения
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         prof_id_data_resp = req.xba_cook_profiles_id_get(prof_id)
         assert prof_id_data_resp.status_code == 200, \
             f"3.Ошибка при получении данных профиля, code: {prof_id_data_resp.status_code}, text: {prof_id_data_resp.text}"
@@ -704,14 +734,13 @@ class XbaCookCase(UserSession):
             "timezone": "Europe/Moscow"
         }
         resp = req.xba_cook_profiles_groups_id_post(group_id, data)
-        # print(resp.text)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_groups_id_max_min_get(self):
         req = XbaCook(self.sess, self.host)
 
         # нужен метапрофиль с профилем
-        _group_id = self._get_xba_group_id()
+        _group_id = self.get_test_xba_group_id()
 
         resp = req.xba_cook_profiles_groups_id_max_min_get(_group_id)
         print(resp.text)
@@ -759,7 +788,7 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_start_id_get(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         resp = req.xba_cook_profiles_start_id_get(prof_id)
         if resp.status_code == 400:
             assert resp.text == '{"error":{"code":400,"msg":"Задание уже запустили"}}\n', f"Ошибка, код {resp.status_code}, {resp.text}"
@@ -769,13 +798,13 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_stop_id_get(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         resp = req.xba_cook_profiles_stop_id_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_id_get(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         resp = req.xba_cook_profiles_id_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
@@ -811,7 +840,7 @@ class XbaCookCase(UserSession):
     def case_xba_cook_profiles_id_delete(self):
         req = XbaCook(self.sess, self.host)
 
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
 
         assert self._wait_for_profile_status(profile_id=prof_id), \
             "Статус профиля не перешел в состояние 'выполнен' за отведенное время"
@@ -826,7 +855,7 @@ class XbaCookCase(UserSession):
     def case_xba_cook_profiles_id_graph_post(self):
         req = XbaCook(self.sess, self.host)
 
-        prof_id = self._get_xba_profile_id()    # status: запущен | выполнен
+        prof_id = self.get_test_xba_profile_id()    # status: запущен | выполнен
 
         # entity <- [post] /summary <- prof_id
         data = {
@@ -841,14 +870,14 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_id_log_last_get(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         resp = req.xba_cook_profiles_id_log_last_get(prof_id)
         assert resp.status_code == 200, f"Ошибка, код {resp.status_code}, {resp.text}"
 
     def case_xba_cook_profiles_id_summary_post(self):
 
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         data = {
             # "entity_group": "string", # optional,
             "start": get_datetime_now_z(day_delta=-1),    # <- get| graph/max_min
@@ -864,7 +893,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         str_rand_num = str(random.randint(1000, 9999))
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
 
         cur_whitelist_resp = req.xba_cook_profiles_id_form_whitelist_get(prof_id, "list")
         assert cur_whitelist_resp.status_code == 200, f"Ошибка, код {cur_whitelist_resp.status_code}, {cur_whitelist_resp.text}"
@@ -884,7 +913,7 @@ class XbaCookCase(UserSession):
         req = XbaCook(self.sess, self.host)
 
         str_random_num = str(random.randint(100, 999))
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
 
         assert self._wait_for_profile_status(profile_id=prof_id, not_equal=True, expect_status_id=1), \
             "Статус профиля 'запущен' и не изменился за отведенное время"
@@ -916,7 +945,7 @@ class XbaCookCase(UserSession):
             # }
         }
 
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
         resp = req.xba_cook_profiles_id_zones_post(prof_id, data)
         # print(resp.text)
         assert resp.status_code == 200, f"1.Ошибка, код {resp.status_code}, {resp.text}"
@@ -945,7 +974,7 @@ class XbaCookCase(UserSession):
 
     def case_xba_cook_profiles_profile_id_whitelist_element_id_delete(self):
         req = XbaCook(self.sess, self.host)
-        prof_id = self._get_xba_profile_id()
+        prof_id = self.get_test_xba_profile_id()
 
         # профиль должен содержать хотя-бы 1 элемент в whitelist
         # todo: >> добавить элемент в whitelist
@@ -1024,7 +1053,7 @@ class XbaCookCase(UserSession):
     # __del__
     def all_api_auto_test_entity_delete(self):
         delete_req = XbaCook(self.sess, self.host)
-        self._collect_xba_group_id()
+        self._collect_test_xba_group_id()
         while len(xba_group_id) > 0:
             delete_req.xba_cook_profiles_groups_id_delete(xba_group_id.pop())
 

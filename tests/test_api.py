@@ -24,6 +24,7 @@ from tests.case.api.taskplan import TaskplanCase
 from tests.case.api.updater import UpdaterCase
 from tests.case.api.visualisation import VisualisationCase
 from tests.case.api.xba_cook import XbaCookCase
+from tests.case.api.xba_cook import XbaStatType
 
 urllib3.disable_warnings()
 
@@ -1291,14 +1292,35 @@ class TestXbaCook:
     def test_xba_cook_profiles_graph_personal_id_post(self):
         XbaCookCase().case_xba_cook_profiles_graph_personal_id_post()
 
-    def test_xba_cook_profiles_groups_post(self):
-        XbaCookCase().case_xba_cook_profiles_groups_post()
+    @pytest.mark.parametrize('p_stat_type', [
+        XbaStatType.ind_stats,
+        XbaStatType.group_stats,
+        XbaStatType.ind_and_group_stats,
+        None
+    ])
+    def test_xba_cook_profiles_groups_post(self, p_stat_type):
+        # Создание метапрофиля
+        xba_group_name = API_AUTO_TEST_ + str(p_stat_type) + "_" + get_str_random_num(5)
+        xba_stat_type = p_stat_type
+        XbaCookCase().case_xba_cook_profiles_groups_post(xba_group_name, xba_stat_type)
+        # TODO: постусловие, что метапрофиль создан
 
     def test_xba_cook_profiles_groups_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_get()
 
-    def test_xba_cook_profiles_groups_put(self):
-        XbaCookCase().case_xba_cook_profiles_groups_put()
+    @pytest.mark.parametrize('p_stat_type', [
+        None,
+        XbaStatType.ind_stats,
+        XbaStatType.group_stats,
+        XbaStatType.ind_and_group_stats,
+    ])
+    def test_xba_cook_profiles_groups_put(self, p_stat_type):
+        # Изменить Метапрофиль
+        xba_group_id = XbaCookCase().get_test_xba_group_id()
+        new_group_name = API_AUTO_TEST_ + f"changed_{get_str_random_num(3)}"
+        new_stat_type = p_stat_type
+        XbaCookCase().case_xba_cook_profiles_groups_put(xba_group_id, new_group_name, new_stat_type)
+        # TODO: постусловие, что изменения применились
 
     def test_xba_cook_profiles_groups_info_get(self):
         XbaCookCase().case_xba_cook_profiles_groups_info_get()
@@ -1353,7 +1375,7 @@ class TestXbaCook:
         "list"
     ])
     def test_xba_cook_profiles_id_form_whitelist_get(self, form):
-        xba_profile_id = XbaCookCase()._get_xba_profile_id()
+        xba_profile_id = XbaCookCase().get_test_xba_profile_id()
         XbaCookCase().case_xba_cook_profiles_id_form_whitelist_get(xba_profile_id, form)
 
     @pytest.mark.skip   # todo
@@ -1389,7 +1411,7 @@ class TestXbaCook:
     def test_xba_cook_profiles_id_post(self, xba_profile_id, changes_dict):
         # изменить xba_профиль
         if xba_profile_id is None:
-            xba_profile_id = XbaCookCase()._get_xba_profile_id()
+            xba_profile_id = XbaCookCase().get_test_xba_profile_id()
         XbaCookCase().case_xba_cook_profiles_id_post(xba_profile_id, changes_dict)
         # TODO: постусловие: измененные значения применились
 
